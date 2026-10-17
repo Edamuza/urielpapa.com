@@ -14,5 +14,9 @@
 !.vscode
 
 # Ignore MDX files
-*.mdx.vercel
+*.mdx
+.vercel
+
+# Content is saved by Keystatic in its own Markdown style
+src/content/
 pnpm-lock.yaml
