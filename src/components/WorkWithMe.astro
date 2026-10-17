@@ -8,11 +8,11 @@ const {
 } = Astro.props;
 ---
 
-<p class="my-8 text-lg">
+<p class="max-w-read mx-auto my-8 text-center text-lg">
   {text}{" "}
   <a
     href="/contact?topic=work"
-    class="font-semibold"
+    class="font-semibold whitespace-nowrap"
     data-event="work_with_me_click"
     data-event-from={from}>{linkText}</a
   >

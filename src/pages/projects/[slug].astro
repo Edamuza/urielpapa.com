@@ -145,13 +145,11 @@ const schema = [
       )
     }
 
-    <div class="max-w-read">
-      <p class="mt-8"><a href="/projects">← All projects</a></p>
-      <WorkWithMe
-        text="Want to work together?"
-        linkText="Get in touch."
-        from={`project:${project.id}`}
-      />
-    </div>
+    <p class="mt-8"><a href="/projects">← All projects</a></p>
+    <WorkWithMe
+      text="Want to work together?"
+      linkText="Get in touch."
+      from={`project:${project.id}`}
+    />
   </article>
 </Layout>

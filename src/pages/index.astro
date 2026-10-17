@@ -4,6 +4,7 @@ import Avatar from "@/components/Avatar.astro";
 import PostCard from "@/components/PostCard.astro";
 import HubCard from "@/components/HubCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
+import WorkWithMe from "@/components/WorkWithMe.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
@@ -230,16 +231,11 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
       </section>
     </div>
 
-    <div class="max-w-read">
-      <NewsletterBox from="home" />
-      <p class="text-lg">
-        Want to work together? <a
-          href="/contact?topic=work"
-          class="font-semibold"
-          data-event="work_with_me_click"
-          data-event-from="home">Get in touch →</a
-        >
-      </p>
-    </div>
+    <NewsletterBox from="home" />
+    <WorkWithMe
+      text="Want to work together?"
+      linkText="Get in touch →"
+      from="home"
+    />
   </div>
 </Layout>

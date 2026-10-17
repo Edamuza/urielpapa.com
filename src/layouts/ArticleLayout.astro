@@ -337,10 +337,8 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
         }
       </section>
 
-      <div class="max-w-read">
-        <NewsletterBox from={`${kind}-end`} />
-        {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
-      </div>
+      <NewsletterBox from={`${kind}-end`} />
+      {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
     </article>
   </div>
 </Layout>
