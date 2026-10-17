@@ -298,18 +298,18 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
       }
 
       {data.faq.length > 0 && <FAQ items={data.faq} />}
-
-      <div class="max-w-read mt-12">
-        <AuthorBox />
-        <StackChips items={data.stack} />
-        <Syndication links={data.syndication} />
-        <ShareLinks url={url} title={data.title} />
-      </div>
     </article>
   </div>
 
   <!-- Centered on the page, not in the article column, to match other pages -->
   <div class="app-layout">
+    <div class="max-w-read mx-auto mt-12">
+      <AuthorBox />
+      <StackChips items={data.stack} />
+      <Syndication links={data.syndication} />
+      <ShareLinks url={url} title={data.title} />
+    </div>
+
     <section
       class="max-w-read border-border mx-auto mt-10 border-t pt-8"
       aria-labelledby="keep-reading"

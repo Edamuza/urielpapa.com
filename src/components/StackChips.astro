@@ -10,8 +10,10 @@ const entries = (await getEntries(
 {
   entries.length > 0 && (
     <div class="my-6">
-      <p class="label-caps text-muted-foreground mb-2">Tools in this post</p>
-      <ul class="flex flex-wrap gap-2">
+      <p class="label-caps text-muted-foreground mb-2 text-center">
+        Tools in this post
+      </p>
+      <ul class="flex flex-wrap justify-center gap-2">
         {entries.map(e => (
           <li>
             <a
