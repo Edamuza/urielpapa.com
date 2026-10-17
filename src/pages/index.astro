@@ -94,14 +94,6 @@ const hubCount = (id: string) =>
           I've learned and the mistakes I've made as a founder, along with my takes
           on tech news and notes from seminars.
         </p>
-        <button
-          type="button"
-          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
-          aria-controls="intro-more"
-          aria-expanded="false"
-        >
-          See more
-        </button>
         <p id="intro-more" class="intro-more mt-4 text-lg">
           That excitement comes down to a few simple things. Why technology? It
           keeps changing what's possible, and I like being close to that. Why
@@ -113,6 +105,14 @@ const hubCount = (id: string) =>
           work or for society, and I love that. The uncertainty is the exciting
           part, and I'd rather be in the middle of it, learning out loud.
         </p>
+        <button
+          type="button"
+          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
+          aria-controls="intro-more"
+          aria-expanded="false"
+        >
+          See more
+        </button>
         <p class="mt-6 flex flex-wrap gap-3">
           <a href="/blog" class="btn">Read the writing</a>
           <a href="/about" class="btn">About me</a>
@@ -231,14 +231,18 @@ const hubCount = (id: string) =>
 </Layout>
 
 <style>
-  /* Phones only: the second intro paragraph starts collapsed behind "See more".
-     Without JavaScript (no .js class) it simply shows. */
+  /* Phones only: the second intro paragraph starts collapsed, with the toggle
+     after it, so "See more" sits under paragraph one and "See less" under
+     paragraph two. Without JavaScript (no .js class) it simply shows. */
   .see-more {
     display: none;
   }
   @media (max-width: 39.99rem) {
     :global(.js) .see-more {
       display: inline-flex;
+    }
+    :global(.js) .intro-more {
+      margin-top: 0.75rem;
     }
     :global(.js) .intro-more:not(.is-open) {
       display: none;
