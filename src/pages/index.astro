@@ -32,59 +32,66 @@ const allNotes = await getNotes();
 const hubCount = (id: string) =>
   allBlog.filter(p => p.data.hub === id).length +
   allNotes.filter(n => n.data.hub === id).length;
+// Phones show the city only, so the line under the name fits on one row.
+const [city, country] = SITE.location.split(", ");
 ---
 
 <Layout>
   {
     latestNews && (
       <div class="app-layout">
-        {/* Latest news take: one line under the header on wide screens, two rows on phones. */}
+        {/* Latest news take: always one line under the header; phones drop the date. */}
         <aside
           aria-label="Latest news take"
-          class="border-border grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 border-b py-3 text-sm sm:flex"
+          class="border-border flex items-baseline gap-x-3 border-b py-2 text-sm sm:py-3"
         >
           <span class="label-caps text-muted-foreground">News</span>
           <a
             href={postUrl(latestNews)}
-            class="line-clamp-2 min-w-0 font-semibold sm:line-clamp-none sm:flex-1 sm:truncate"
+            class="min-w-0 flex-1 truncate font-semibold"
           >
             {latestNews.data.title}
           </a>
-          <span class="col-start-2 flex items-baseline justify-between gap-3 sm:contents">
-            <time
-              datetime={isoDate(latestNews.data.published)}
-              class="text-muted-foreground shrink-0"
-            >
-              {formatDate(latestNews.data.published)}
-              {latestNews.data.draft && " · Draft"}
-            </time>
-            <a href="/news" class="shrink-0 whitespace-nowrap">
-              All news →
-            </a>
-          </span>
+          <time
+            datetime={isoDate(latestNews.data.published)}
+            class="text-muted-foreground hidden shrink-0 sm:inline"
+          >
+            {formatDate(latestNews.data.published)}
+            {latestNews.data.draft && " · Draft"}
+          </time>
+          <a
+            href="/news"
+            aria-label="All news"
+            class="shrink-0 whitespace-nowrap"
+          >
+            <span class="sm:hidden">All →</span>
+            <span class="hidden sm:inline">All news →</span>
+          </a>
         </aside>
       </div>
     )
   }
   <div class="app-layout">
     <section
-      class="border-border border-b py-10 sm:py-14"
+      class="border-border border-b pt-6 pb-10 sm:py-14"
       aria-labelledby="intro-h"
     >
       <div class="max-w-read">
-        <div class="mb-5 flex items-center gap-3">
-          <Avatar size={56} eager />
+        <div class="mb-3 flex items-center gap-3 sm:mb-5">
+          <Avatar size={56} eager class="max-sm:size-10!" />
           <p class="font-semibold">
             {SITE.name}<span
               class="text-muted-foreground block text-sm font-normal"
-              >{SITE.jobTitle} · {SITE.location}</span
+              >{SITE.jobTitle} · {city}{
+                country && <span class="max-sm:hidden">, {country}</span>
+              }</span
             >
           </p>
         </div>
         <h1 id="intro-h" class="h1">
           A technical founder rebuilding everything, and sharing the journey.
         </h1>
-        <p class="mt-5 text-lg">
+        <p class="mt-4 text-lg sm:mt-5">
           <strong
             >I'm Uriel Papa, a technical founder from Metro Manila, and I love
             technology.</strong
