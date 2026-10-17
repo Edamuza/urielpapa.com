@@ -70,6 +70,20 @@ Until the Resend and Buttondown keys are set, the forms answer with a polite mes
 
 Production builds use GitHub storage for `Edamuza/urielpapa.com`. After the first deploy, open `https://urielpapa.com/keystatic` and follow Keystatic's prompt to create its GitHub App; it gives you `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET` and `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` to add in Vercel. Saving in the editor then commits to the repository and Vercel redeploys.
 
+### Upgrading Keystatic
+
+Keystatic's versions are locked in `pnpm-lock.yaml` and never update by themselves. The Preview link in each entry's editor comes from Keystatic's `previewUrl` setting in `keystatic.config.ts`, plus our own redirect at `src/pages/preview/blog/[slug].ts` that sends posts to `/blog`, `/news` or `/events`.
+
+To upgrade:
+
+1. Work on a branch and run `pnpm update @keystatic/core @keystatic/astro`.
+2. Run `pnpm build`. If a new version removes or renames a setting we use, the type check fails and names the exact line.
+3. Run `pnpm dev`, open a post in `/keystatic`, save it, and click Preview to confirm it opens the right page.
+
+After changing `astro.config.ts` or `keystatic.config.ts`, stop and start `pnpm dev` again. The dev server's automatic restart stops picking up content edits, so saved changes would not show.
+
+If a future version ever drops `previewUrl`, the preview URLs keep working when typed in (for example `/preview/blog/<slug>`), and a "View on site" link can be added to the entries another way.
+
 ## SEO and AI visibility
 
 - JSON-LD on every page (WebSite + Person), plus BlogPosting, BreadcrumbList, CollectionPage, ProfilePage, ContactPage and FAQPage where the content is visible.
