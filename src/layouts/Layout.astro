@@ -172,6 +172,8 @@ const robots =
         ).matches;
         const theme = stored ?? (prefersDark ? "dark" : "light");
         document.documentElement.setAttribute("data-theme", theme);
+        // Lets CSS hide content that a script can reveal again (progressive enhancement).
+        document.documentElement.classList.add("js");
         window.__theme = { value: theme };
       })();
     </script>

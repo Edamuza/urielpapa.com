@@ -94,7 +94,15 @@ const hubCount = (id: string) =>
           I've learned and the mistakes I've made as a founder, along with my takes
           on tech news and notes from seminars.
         </p>
-        <p class="mt-4 text-lg">
+        <button
+          type="button"
+          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
+          aria-controls="intro-more"
+          aria-expanded="false"
+        >
+          See more
+        </button>
+        <p id="intro-more" class="intro-more mt-4 text-lg">
           That excitement comes down to a few simple things. Why technology? It
           keeps changing what's possible, and I like being close to that. Why
           programming? It lets me turn an idea into something people can
@@ -221,3 +229,32 @@ const hubCount = (id: string) =>
     />
   </div>
 </Layout>
+
+<style>
+  /* Phones only: the second intro paragraph starts collapsed behind "See more".
+     Without JavaScript (no .js class) it simply shows. */
+  .see-more {
+    display: none;
+  }
+  @media (max-width: 39.99rem) {
+    :global(.js) .see-more {
+      display: inline-flex;
+    }
+    :global(.js) .intro-more:not(.is-open) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const more = document.getElementById("intro-more");
+  const toggle = document.querySelector<HTMLButtonElement>(
+    '[aria-controls="intro-more"]'
+  );
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "See less" : "See more";
+    more?.classList.toggle("is-open", open);
+  });
+</script>
