@@ -76,7 +76,10 @@ const [city, country] = SITE.location.split(", ");
       class="border-border border-b pt-6 pb-10 sm:py-14"
       aria-labelledby="intro-h"
     >
-      <div class="max-w-read">
+      {
+        /* Phones reorder visually so the CTAs sit right under the H1; the DOM keeps the desktop order. */
+      }
+      <div class="max-w-read max-sm:flex max-sm:flex-col">
         <div class="mb-3 flex items-center gap-3 sm:mb-5">
           <Avatar size={56} eager class="max-sm:size-10!" />
           <p class="font-semibold">
@@ -91,7 +94,7 @@ const [city, country] = SITE.location.split(", ");
         <h1 id="intro-h" class="h1">
           A technical founder rebuilding everything, and sharing the journey.
         </h1>
-        <p class="mt-4 text-lg sm:mt-5">
+        <p class="mt-4 text-lg max-sm:order-2 sm:mt-5">
           <strong
             >I'm Uriel Papa, a technical founder from Metro Manila, and I love
             technology.</strong
@@ -101,7 +104,7 @@ const [city, country] = SITE.location.split(", ");
           I've learned and the mistakes I've made as a founder, along with my takes
           on tech news and notes from seminars.
         </p>
-        <p id="intro-more" class="intro-more mt-4 text-lg">
+        <p id="intro-more" class="intro-more mt-4 text-lg max-sm:order-2">
           That excitement comes down to a few simple things. Why technology? It
           keeps changing what's possible, and I like being close to that. Why
           programming? It lets me turn an idea into something people can
@@ -114,17 +117,17 @@ const [city, country] = SITE.location.split(", ");
         </p>
         <button
           type="button"
-          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
+          class="see-more mt-2 min-h-11 items-center self-start font-semibold underline underline-offset-[3px] max-sm:order-2"
           aria-controls="intro-more"
           aria-expanded="false"
         >
           See more
         </button>
-        <p class="mt-6 flex flex-wrap gap-3">
+        <p class="mt-6 flex flex-wrap gap-3 max-sm:order-1 max-sm:mt-4">
           <a href="/blog" class="btn">Read the writing</a>
           <a href="/about" class="btn">About me</a>
         </p>
-        <p class="meta mt-6">
+        <p class="meta mt-6 max-sm:order-2">
           What I've built: an ERP, an NFC card platform, a tourism portal,
           WordPress SEO plugins and AI chatbots. <a href="/about"
             >More about my work</a
