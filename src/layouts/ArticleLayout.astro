@@ -337,8 +337,8 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
         }
       </section>
 
-      <NewsletterBox from={`${kind}-end`} />
-      {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
+      <NewsletterBox from={`${kind}-end`} align="start" />
+      {kind === "post" && <WorkWithMe from={`post:${post.id}`} align="start" />}
     </article>
   </div>
 </Layout>
