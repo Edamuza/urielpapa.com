@@ -27,6 +27,7 @@ const SITEMAP_EXCLUDE = [
   "/contact/thanks",
   "/newsletter/thanks",
   "/keystatic",
+  "/preview",
   "/404",
 ];
 
@@ -66,7 +67,7 @@ function localFont(
 export default defineConfig({
   site: SITE_URL,
   trailingSlash: "never",
-  // Static pages on Vercel's CDN; only /api/* and /keystatic run on demand.
+  // Static pages on Vercel's CDN; only /api/*, /keystatic and /preview/* run on demand.
   output: "static",
   adapter: vercel(),
   integrations: [

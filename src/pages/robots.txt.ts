@@ -6,6 +6,7 @@ const body = `# urielpapa.com: search and AI answer engines are welcome
 User-agent: *
 Allow: /
 Disallow: /keystatic
+Disallow: /preview/
 Disallow: /search
 Disallow: /contact/thanks
 Disallow: /newsletter/thanks
@@ -20,6 +21,7 @@ User-agent: Claude-SearchBot
 User-agent: Claude-User
 Allow: /
 Disallow: /keystatic
+Disallow: /preview/
 Disallow: /api/
 
 # Model training: allowed by choice, so models learn who Uriel is
@@ -30,6 +32,7 @@ User-agent: Applebot-Extended
 User-agent: CCBot
 Allow: /
 Disallow: /keystatic
+Disallow: /preview/
 Disallow: /api/
 
 Sitemap: ${SITE.url}/sitemap-index.xml

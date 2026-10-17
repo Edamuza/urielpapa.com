@@ -71,6 +71,8 @@ export default config({
       label: "Posts, news takes and event notes",
       slugField: "title",
       path: "src/content/blog/*",
+      // Posts, news takes and event notes live in different sections; this route redirects to the right one.
+      previewUrl: "/preview/blog/{slug}",
       format: { contentField: "body" },
       entryLayout: "content",
       columns: ["title", "published"],
@@ -165,6 +167,7 @@ export default config({
       label: "Notes",
       slugField: "title",
       path: "src/content/notes/*",
+      previewUrl: "/notes/{slug}",
       format: { contentField: "body" },
       entryLayout: "content",
       schema: {
@@ -183,6 +186,7 @@ export default config({
       label: "Newsletter issues",
       slugField: "title",
       path: "src/content/newsletter/*",
+      previewUrl: "/newsletter/{slug}",
       format: { contentField: "body" },
       entryLayout: "content",
       schema: {
@@ -198,6 +202,7 @@ export default config({
       label: "Topic hubs",
       slugField: "title",
       path: "src/content/hubs/*",
+      previewUrl: "/topics/{slug}",
       format: { contentField: "body" },
       schema: {
         title: fields.slug({ name: { label: "Hub name (H1)" }, slug: { label: "Slug", description: "Don't change: posts refer to it." } }),
@@ -220,6 +225,7 @@ export default config({
       label: "Projects",
       slugField: "title",
       path: "src/content/projects/*",
+      previewUrl: "/projects/{slug}",
       format: { contentField: "body" },
       entryLayout: "content",
       schema: {
@@ -253,6 +259,7 @@ export default config({
       label: "Stack items",
       slugField: "name",
       path: "src/content/stack/*",
+      previewUrl: "/stack#{slug}",
       format: { data: "yaml" },
       columns: ["name", "group"],
       schema: {
@@ -273,6 +280,7 @@ export default config({
     now: singleton({
       label: "Now page",
       path: "src/content/pages/now",
+      previewUrl: "/now",
       format: { contentField: "body" },
       entryLayout: "content",
       schema: {
