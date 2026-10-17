@@ -188,7 +188,10 @@ const robots =
     <p
       class="bg-accent text-accent-foreground sticky top-0 z-50 flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
     >
-      <q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)
+      <!-- One inline box, so flex layout keeps the spaces between the parts. -->
+      <span
+        ><q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)</span
+      >
     </p>
     {
       draft && (
