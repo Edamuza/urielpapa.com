@@ -1,0 +1,5 @@
+name: "PHP"
+group: languages-frameworks
+use: "The Laravel apps and the five WordPress SEO plugins."
+url: https://www.php.net
+order: 3

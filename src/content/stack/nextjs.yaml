@@ -1,0 +1,5 @@
+name: "Next.js"
+group: languages-frameworks
+use: "The ERP's interface and the client quotation portal."
+url: https://nextjs.org
+order: 7

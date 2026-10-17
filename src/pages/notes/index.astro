@@ -1,0 +1,56 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getNotes, noteUrl } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+const notes = await getNotes();
+const title = "Notes";
+const intro =
+  "Short posts: quick tips, small lessons and links with commentary.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: title, href: "/notes" },
+];
+const schema = [
+  collectionNode({
+    path: "/notes",
+    name: title,
+    description: intro,
+    items: notes.map(n => ({ name: n.data.title, href: noteUrl(n) })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title="Notes"
+  description="Short notes by Uriel Papa: quick tips, small lessons and links with commentary on AI, automation, SEO, tech stacks and marketing."
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro} />
+    {
+      notes.length > 0 ? (
+        <ul class="max-w-read">
+          {notes.map(n => (
+            <PostCard
+              href={noteUrl(n)}
+              title={n.data.title}
+              summary={n.data.description}
+              hub={n.data.hub}
+              date={n.data.published}
+              draft={n.data.draft}
+              headingLevel="h2"
+            />
+          ))}
+        </ul>
+      ) : (
+        <p>No notes yet.</p>
+      )
+    }
+  </div>
+</Layout>

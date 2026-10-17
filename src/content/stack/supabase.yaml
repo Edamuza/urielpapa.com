@@ -1,0 +1,5 @@
+name: "Supabase"
+group: databases
+use: "Sign-in for TravelEase, through Supabase Auth."
+url: https://supabase.com
+order: 3

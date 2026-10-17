@@ -1,0 +1,84 @@
+---
+title: 'Astro 7 Is Out: What It Means for Business Content Sites'
+seoTitle: 'Astro 7 Is Out: What It Means for Content Sites'
+description: >-
+  Astro 7 is out. What changed for content sites like blogs and docs, why it
+  matters for speed and search, and what I noticed building this site on Astro
+  7.
+dek: >-
+  Astro has a new major version. Here is what changed, in plain words, and what
+  it means if you run a blog, a docs site or a personal site.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    Astro 7 is the latest major version of Astro, a web framework built for
+    content-driven sites such as blogs, docs and marketing pages.
+  - >-
+    Astro 7 moves to Vite 8 and a .astro compiler rewritten in Rust, and the
+    Astro team reports builds 15 to 61 percent faster in its benchmarks.
+  - >-
+    Astro 7 changes the defaults for Markdown and HTML: a new Rust-based
+    Markdown processor called Sätteri, and a stricter compiler that reports
+    invalid HTML instead of quietly fixing it.
+  - >-
+    This site, urielpapa.com, is built on Astro 7, so these notes come from a
+    working build.
+businessImpact: []
+sourceUrl: https://astro.build/blog/astro-7/
+published: 2026-10-14
+related:
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - astro
+  - tailwind-css
+  - keystatic
+  - vercel
+faq: []
+event: {}
+syndication: []
+draft: true
+---
+Astro 7, the latest major version of the Astro web framework, is out. For content sites such as blogs, docs and personal sites, the main question is what it changes in speed, authoring and upkeep, and whether existing sites should upgrade now.
+
+This site is built on Astro 7, so this take comes from a working build. It is part of my [Tech Stacks](/topics/tech-stacks) writing.
+
+## What happened?
+
+The Astro team released Astro 7.0 on June 22, 2026, and announced it in the post [Astro 7.0](https://astro.build/blog/astro-7/) on the official Astro blog.
+
+## What changed, in plain words?
+
+Astro 7 is mostly a speed and tooling release. These are the main changes from the [official announcement](https://astro.build/blog/astro-7/) and the [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/):
+
+* **Faster builds.** Astro 7 runs on Vite 8, which uses the Rolldown bundler, and the `.astro` compiler is rewritten in Rust. The Astro team reports builds 15 to 61 percent faster in its own benchmarks.
+* **A new default Markdown processor.** Markdown and MDX now go through Sätteri, a Rust-based processor. Sites that rely on remark or rehype plugins can keep the older unified pipeline through `@astrojs/markdown-remark`.
+* **Caching and routing become stable.** Route caching is stable, with experimental cache providers for Netlify, Vercel and Cloudflare. A new `src/fetch.ts` entry point gives control over the request pipeline.
+* **Breaking changes.** The new compiler reports unclosed tags and invalid HTML nesting as errors instead of fixing them silently. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
+
+## Why does it matter for content sites?
+
+Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines.
+
+Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
+
+For a business, the practical questions are build time, hosting cost and how much upkeep a site needs between major versions. In my view, Astro 7 helps with the first two and asks for some care with the third. On this site, the Astro step of a production build takes about 16 seconds for around 30 pages, so build time is not something I think about. A mostly static site also stays cheap to host, because static pages are served from a CDN and only a few routes run on demand. Upkeep is where I plan ahead: each major version brings breaking changes, so I upgrade on a branch soon after a release instead of skipping versions and doing it all at once later.
+
+## What did I notice building this site on Astro 7?
+
+This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. Most pages ship no JavaScript, with small islands for the theme toggle, search, code copy buttons and form enhancement.
+
+One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
+
+What worked well was the daily editing loop. Running `astro dev --background` kept the site running while I wrote and edited posts in Keystatic, and the production build stayed fast the whole time.
+
+Two things confused me, and both were dev server issues, not production ones. Once, the Keystatic editor loaded as a blank page. The cause was a stale Vite dependency cache in `node_modules/.vite`, and clearing it fixed the problem. Another time, after I changed a config file, the dev server restarted on its own but stopped picking up post edits until I fully stopped and started it again.
+
+## Should you do anything now?
+
+* **Starting a new content site:** I would start on Astro 7. It is built for this kind of site, builds are fast, and you skip an upgrade later.
+* **Running an older Astro version:** read the official [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/) before upgrading, run `npx @astrojs/upgrade` (or `pnpm dlx @astrojs/upgrade`), and test the build on a branch first.
+* **On another framework:** Astro 7 is worth a look if your site is mostly content, such as a blog, docs or marketing pages, and you want pages that ship little or no JavaScript. For an app with logins, dashboards and lots of data, like the ERP I built with Laravel and Next.js, I would stay with an app framework.
+
+If you are comparing frameworks for something more data-heavy than a content site, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.

@@ -1,0 +1,5 @@
+name: "OpenRouter"
+group: ai
+use: "Model access for the Messenger and Instagram chatbot and the ERP."
+url: https://openrouter.ai
+order: 5

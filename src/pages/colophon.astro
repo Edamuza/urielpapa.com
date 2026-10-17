@@ -1,0 +1,93 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Colophon", href: "/colophon" },
+];
+---
+
+<Layout
+  title="Colophon: How This Site Is Built"
+  description="How urielpapa.com is built: Astro static pages, Tailwind CSS, the Keystatic git-based CMS, Vercel hosting, JSON-LD, Markdown copies and llms.txt for AI tools."
+>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1">Colophon</h1>
+    <div class="app-prose mt-6">
+      <p>
+        This page explains how urielpapa.com is put together. It doubles as a
+        small, working example of the SEO, GEO and AEO ideas I write about.
+      </p>
+      <h2 id="stack">What is it built with?</h2>
+      <ul>
+        <li>
+          <strong>Framework:</strong>
+          <a href="https://astro.build">Astro</a>, started from the open-source <a
+            href="https://github.com/satnaing/astro-paper">AstroPaper</a
+          > theme by Sat Naing and reworked into a black and white design.
+        </li>
+        <li>
+          <strong>Styling:</strong> Tailwind CSS 4, with light and dark themes that
+          follow your system setting.
+        </li>
+        <li>
+          <strong>Content and CMS:</strong> posts are Markdown and MDX files in the
+          Git repository, edited through <a href="https://keystatic.com"
+            >Keystatic</a
+          >.
+        </li>
+        <li>
+          <strong>Hosting:</strong> static pages on Vercel's CDN. Only the contact
+          form and newsletter signup run on the server.
+        </li>
+        <li>
+          <strong>Search:</strong>
+          <a href="https://pagefind.app">Pagefind</a>, a static search index
+          built at deploy time.
+        </li>
+        <li>
+          <strong>Fonts:</strong> Bricolage Grotesque for headings, Albert Sans for
+          text and JetBrains Mono for code, all self-hosted.
+        </li>
+      </ul>
+      <h2 id="speed">Why is it so light?</h2>
+      <p>
+        Pages are plain HTML and CSS. The only JavaScript is small and optional:
+        the theme switch, search, copying code, sharing, and progressive
+        enhancement for the forms. Everything still works without it.
+      </p>
+      <h2 id="machines">
+        How is it made readable for search engines and AI tools?
+      </h2>
+      <ul>
+        <li>
+          Structured data (JSON-LD) on every page: WebSite and Person
+          everywhere, BlogPosting on posts, breadcrumbs, and FAQ only where the
+          questions are visible.
+        </li>
+        <li>
+          A plain Markdown copy of every post at the same address plus <code
+            >.md</code
+          >, marked noindex so it never competes with the page.
+        </li>
+        <li>
+          A generated <a href="/llms.txt">llms.txt</a> summary, a full <a
+            href="/rss.xml">RSS feed</a
+          > and an XML <a href="/sitemap-index.xml">sitemap</a>.
+        </li>
+        <li>
+          A <a href="/robots.txt">robots.txt</a> that welcomes search, AI search and
+          AI training crawlers.
+        </li>
+      </ul>
+      <h2 id="privacy">What does it track?</h2>
+      <p>
+        Nothing by default. If analytics is switched on, it loads only after you
+        interact with the page and records page views plus a few events such as
+        newsletter signups.
+      </p>
+    </div>
+  </div>
+</Layout>

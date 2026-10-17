@@ -1,0 +1,153 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import Avatar from "@/components/Avatar.astro";
+import WorkWithMe from "@/components/WorkWithMe.astro";
+import { SITE, SOCIALS } from "@/config";
+import { HUBS } from "@/data/hubs";
+import events from "@/data/events.json";
+import { getHubs } from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
+
+const hubs = await getHubs();
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+];
+
+const proof = [
+  "Co-developed an ERP with 115 pages, 144 data models and 5,241 automated tests in under 3 months.",
+  "Built 5 WordPress SEO plugins, about 11,700 lines of code.",
+  "Contributed about two-thirds of TravelEase's 316 commits; the project has 411 automated tests.",
+  "Ran Meta ads at about US$8 a day that started 33 inbound conversations in 5 days, about US$1 each.",
+  "Built a multi-agent Claude Code pipeline that audits a production codebase in under 6 minutes.",
+];
+
+const schema = [
+  {
+    "@type": "ProfilePage",
+    "@id": `${abs("/about")}#page`,
+    url: abs("/about"),
+    name: `About ${SITE.name}`,
+    mainEntity: { "@id": PERSON_ID },
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title="About Uriel Papa, Technical Founder"
+  description="Uriel Papa is a technical founder in Metro Manila who shares knowledge on AI, automation, tech stacks, SEO, GEO and AEO, marketing and how technology affects business."
+  ogType="profile"
+  schema={schema}
+>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <div class="flex items-center gap-4">
+      <Avatar size={72} eager />
+      <h1 class="h1">About {SITE.name}</h1>
+    </div>
+
+    <div class="mt-6 space-y-4 text-lg">
+      <p>
+        <strong
+          >I'm Uriel Papa, a technical founder in Metro Manila, Philippines.</strong
+        >{" "}
+        I'm rebuilding everything and sharing the journey here: what I've learned
+        and the mistakes I've made as a founder. I graduated cum laude with a BS in
+        Information Systems from the Technological University of the Philippines in
+        2026.
+      </p>
+      <p>
+        This site is where I share what I learn: how AI and large language
+        models work, the automations I build, how technology affects business
+        and society, how search is changing, what's new in tech stacks,
+        marketing basics, and what I've learned as a founder.
+      </p>
+    </div>
+
+    <section class="mt-10" aria-labelledby="now-h">
+      <h2 id="now-h" class="h2 mb-3">What I do now</h2>
+      <p>
+        I'm a {SITE.jobTitle.toLowerCase()} sharing here what I've learned along the
+        way. For what I'm working on this month, see <a href="/now">Now</a>; for
+        the tools I use, see <a href="/stack">Stack</a>.
+      </p>
+      <p class="mt-4">
+        More detail on the systems themselves is on the <a href="/projects"
+          >Projects</a
+        > page.
+      </p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="proof-h">
+      <h2 id="proof-h" class="h2 mb-4">In numbers</h2>
+      <ul class="list-disc space-y-2 ps-5">{proof.map(p => <li>{p}</li>)}</ul>
+    </section>
+
+    <section class="mt-10" aria-labelledby="write-h">
+      <h2 id="write-h" class="h2 mb-4">What I write about</h2>
+      <ul class="space-y-2">
+        {
+          HUBS.map(h => (
+            <li>
+              <a href={`/topics/${h.id}`} class="font-semibold">
+                {h.name}
+              </a>
+              : {hubs.find(e => e.id === h.id)?.data.summary}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-4">
+        I also write <a href="/news">takes on tech news</a> and <a
+          href="/events">notes from seminars and trainings</a
+        >.
+      </p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="ev-h">
+      <h2 id="ev-h" class="h2 mb-4">Seminars and training</h2>
+      <ul class="list-disc space-y-1 ps-5">
+        {
+          events.attended.map(e => (
+            <li>
+              {e.name}, {e.organizer} ({e.dateLabel})
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="mt-10" aria-labelledby="lang-h">
+      <h2 id="lang-h" class="h2 mb-3">Languages</h2>
+      <p>Filipino (native) and English (professional working proficiency).</p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="reach-h">
+      <h2 id="reach-h" class="h2 mb-3">How to reach me</h2>
+      <p>
+        Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or use the <a
+          href="/contact">contact form</a
+        >. I'm also on:
+      </p>
+      <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+        {
+          SOCIALS.map(s => (
+            <li>
+              <a href={s.url} rel="me noopener">
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <WorkWithMe
+      text="Want to work together?"
+      linkText="Get in touch."
+      from="about"
+    />
+  </div>
+</Layout>

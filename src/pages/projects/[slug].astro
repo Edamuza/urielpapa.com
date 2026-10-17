@@ -1,0 +1,155 @@
+---
+import {
+  getCollection,
+  getEntries,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PostCard from "@/components/PostCard.astro";
+import WorkWithMe from "@/components/WorkWithMe.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SHOW_DRAFTS } from "@/config";
+import {
+  getProjects,
+  postUrl,
+  projectUrl,
+  type Project,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map(project => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+type Props = { project: Project };
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const stack = (await getEntries(data.stack)) as CollectionEntry<"stack">[];
+
+// "Written about in": posts whose FromTheBuild boxes or frontmatter point here.
+const writtenIn = (await getCollection("blog")).filter(
+  p =>
+    (SHOW_DRAFTS || !p.data.draft) &&
+    p.data.projects.some(r => r.id === project.id)
+);
+
+const url = abs(projectUrl(project));
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Projects", href: "/projects" },
+  { name: data.title, href: projectUrl(project) },
+];
+const schema = [
+  {
+    "@type": data.kind,
+    "@id": `${url}#project`,
+    name: data.title,
+    description: data.description,
+    url: data.liveUrl ?? url,
+    creator: { "@id": PERSON_ID },
+    ...(data.kind === "SoftwareApplication" && {
+      applicationCategory: "WebApplication",
+      operatingSystem: "Web",
+    }),
+    keywords: stack.map(s => s.data.name).join(", "),
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={data.title}
+  description={data.description}
+  schema={schema}
+  draft={data.draft}
+>
+  <article class="app-layout pt-8" data-pagefind-body>
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1 max-w-read">{data.title}</h1>
+    <p class="max-w-read mt-4 text-lg">{data.summary}</p>
+
+    <dl
+      class="max-w-read border-border mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 rounded-lg border p-4 text-[0.95rem]"
+    >
+      <dt class="font-semibold">When</dt><dd>{data.period}</dd>
+      <dt class="font-semibold">Role</dt><dd>{data.role}</dd>
+      {
+        data.team && (
+          <>
+            <>
+              <dt class="font-semibold">Team</dt>
+              <dd>{data.team}</dd>
+            </>
+          </>
+        )
+      }
+      <dt class="font-semibold">Status</dt><dd>{data.status}</dd>
+      {
+        data.liveUrl && (
+          <>
+            <>
+              <dt class="font-semibold">Live</dt>
+              <dd>
+                <a href={data.liveUrl} rel="noopener">
+                  {new URL(data.liveUrl).hostname}
+                </a>
+              </dd>
+            </>
+          </>
+        )
+      }
+      {
+        stack.length > 0 && (
+          <>
+            <dt class="font-semibold">Stack</dt>
+            <dd>
+              {stack.map((s, i) => (
+                <>
+                  {i > 0 && ", "}
+                  <a href={`/stack#${s.id}`}>{s.data.name}</a>
+                </>
+              ))}
+            </dd>
+          </>
+        )
+      }
+    </dl>
+
+    <div class="app-prose mt-8"><Content components={mdxComponents} /></div>
+
+    {
+      writtenIn.length > 0 && (
+        <section class="max-w-read mt-10" aria-labelledby="written-h">
+          <h2 id="written-h" class="h2 mb-4">
+            Written about in
+          </h2>
+          <ul>
+            {writtenIn.map(p => (
+              <PostCard
+                href={postUrl(p)}
+                title={p.data.title}
+                hub={p.data.hub}
+                date={p.data.published}
+                draft={p.data.draft}
+              />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <p class="mt-8"><a href="/projects">← All projects</a></p>
+    <WorkWithMe
+      text="Want to work together?"
+      linkText="Get in touch."
+      from={`project:${project.id}`}
+    />
+  </article>
+</Layout>

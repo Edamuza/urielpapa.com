@@ -1,0 +1,5 @@
+name: "PHPUnit"
+group: infrastructure
+use: "Automated tests for PHP and Laravel code."
+url: https://phpunit.de
+order: 5

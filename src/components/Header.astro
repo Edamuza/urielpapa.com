@@ -1,0 +1,143 @@
+---
+import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+import IconSearch from "@/assets/icons/IconSearch.svg";
+import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconX from "@/assets/icons/IconX.svg";
+import { NAV, SITE } from "@/config";
+
+const path = Astro.url.pathname.replace(/\.html$/, "");
+const section = "/" + (path.split("/")[1] ?? "");
+const isActive = (href: string) =>
+  section === href ||
+  // Notes are part of "Writing"
+  (href === "/blog" && section === "/notes");
+---
+
+<a
+  href="#main-content"
+  class="bg-accent text-accent-foreground absolute start-4 -top-full z-50 rounded px-3 py-2 no-underline focus:top-4"
+>
+  Skip to content
+</a>
+
+<header class="app-layout">
+  <div
+    class="border-border flex items-center justify-between gap-4 border-b py-4 sm:py-5"
+  >
+    <a
+      href="/"
+      class="font-display text-xl font-bold whitespace-nowrap no-underline sm:text-2xl"
+    >
+      {SITE.name}
+    </a>
+
+    <nav aria-label="Main" class="hidden md:block">
+      <ul class="flex items-center gap-x-1 lg:gap-x-2">
+        {
+          NAV.map(item => (
+            <li>
+              <a
+                href={item.href}
+                class:list={[
+                  "block px-2 py-2 font-medium",
+                  isActive(item.href)
+                    ? "underline decoration-2 underline-offset-8"
+                    : "no-underline hover:underline",
+                ]}
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href="/contact"
+            class:list={[
+              "lg:border-foreground ms-1 block rounded-lg px-2 py-2 font-medium lg:border lg:px-3 lg:py-1.5",
+              isActive("/contact")
+                ? "underline decoration-2 underline-offset-8 lg:no-underline"
+                : "no-underline hover:underline",
+            ]}
+            aria-current={isActive("/contact") ? "page" : undefined}
+          >
+            Contact
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1">
+      <a
+        href="/search"
+        class="flex size-11 items-center justify-center rounded-lg no-underline"
+        aria-label="Search"
+        title="Search"
+      >
+        <IconSearch class="size-6" aria-hidden="true" />
+      </a>
+      <button
+        id="theme-btn"
+        type="button"
+        class="flex size-11 items-center justify-center rounded-lg"
+        title="Toggle light and dark theme"
+        aria-label="Toggle theme"
+      >
+        <IconMoon class="size-6 dark:hidden" aria-hidden="true" />
+        <IconSunHigh class="hidden size-6 dark:block" aria-hidden="true" />
+      </button>
+
+      <!-- Mobile menu: a native <details> so it works without JavaScript -->
+      <details class="group md:hidden" id="mobile-menu">
+        <summary
+          class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg [&::-webkit-details-marker]:hidden"
+          aria-label="Menu"
+        >
+          <IconMenuDeep class="size-6 group-open:hidden" aria-hidden="true" />
+          <IconX class="hidden size-6 group-open:block" aria-hidden="true" />
+        </summary>
+        <nav
+          aria-label="Main"
+          class="bg-background fixed inset-x-0 top-[4.75rem] bottom-0 z-40 overflow-y-auto px-4 pb-8"
+        >
+          <ul class="border-border divide-border divide-y border-y text-lg">
+            {
+              [
+                ...NAV,
+                { href: "/contact", label: "Contact" },
+                { href: "/notes", label: "Notes" },
+                { href: "/newsletter", label: "Newsletter" },
+              ].map(item => (
+                <li>
+                  <a
+                    href={item.href}
+                    class:list={[
+                      "flex min-h-12 items-center py-3 font-medium",
+                      isActive(item.href) ? "underline" : "no-underline",
+                    ]}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu with Escape.
+  const menu = document.querySelector<HTMLDetailsElement>("#mobile-menu");
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && menu?.open) {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+</script>

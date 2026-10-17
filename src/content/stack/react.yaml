@@ -1,0 +1,5 @@
+name: "React"
+group: languages-frameworks
+use: "The ERP's interface and the TravelEase front end, both on React 19."
+url: https://react.dev
+order: 8

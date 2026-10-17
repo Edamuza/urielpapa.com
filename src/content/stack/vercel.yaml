@@ -1,0 +1,5 @@
+name: "Vercel"
+group: infrastructure
+use: "Hosting for TravelEase."
+url: https://vercel.com
+order: 2

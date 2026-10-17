@@ -1,0 +1,206 @@
+---
+import { Font } from "astro:assets";
+import {
+  PUBLIC_GOOGLE_SITE_VERIFICATION,
+  PUBLIC_BING_SITE_VERIFICATION,
+  PUBLIC_GA4_ID,
+} from "astro:env/client";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Analytics from "@/components/Analytics.astro";
+import { SITE } from "@/config";
+import { graph, personNode, websiteNode } from "@/utils/schema";
+import "@/styles/global.css";
+
+type Props = {
+  /** Page title without the site suffix. Omit on the home page. */
+  title?: string;
+  description?: string;
+  /** Absolute or root-relative URL of the 1200×630 social image. */
+  ogImage?: string;
+  ogType?: "website" | "article" | "profile";
+  noindex?: boolean;
+  /** Extra JSON-LD nodes for this page; WebSite and Person are always added. */
+  schema?: object[];
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  /** Optional canonical override (e.g. for paginated or alternate URLs). */
+  canonical?: string;
+  /** Marks the page as a draft preview. */
+  draft?: boolean;
+};
+
+const {
+  title,
+  description = SITE.description,
+  ogImage = "/og.png",
+  ogType = "website",
+  noindex = false,
+  schema = [],
+  publishedTime,
+  modifiedTime,
+  canonical,
+  draft = false,
+} = Astro.props;
+
+const fullTitle = title
+  ? `${title} | ${SITE.name}`
+  : `${SITE.name}: ${SITE.jobTitle}`;
+const path =
+  Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+const canonicalURL = canonical ?? new URL(path, SITE.url).href;
+const socialImageURL = new URL(ogImage, SITE.url).href;
+const jsonLd = graph(websiteNode(), personNode(), ...schema);
+const robots =
+  noindex || draft
+    ? "noindex, follow"
+    : "index, follow, max-image-preview:large, max-snippet:-1";
+---
+
+<!doctype html>
+<html lang={SITE.lang} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content={robots} />
+
+    <Font
+      cssVariable="--ff-body"
+      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    />
+    <Font
+      cssVariable="--ff-display"
+      preload={[{ subset: "latin", weight: 700, style: "normal" }]}
+    />
+    <Font cssVariable="--ff-mono" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.name} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={title ?? fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {
+      publishedTime && (
+        <meta
+          property="article:published_time"
+          content={publishedTime.toISOString()}
+        />
+      )
+    }
+    {
+      modifiedTime && (
+        <meta
+          property="article:modified_time"
+          content={modifiedTime.toISOString()}
+        />
+      )
+    }
+    {
+      ogType === "article" && (
+        <meta
+          property="article:author"
+          content={new URL("/about", SITE.url).href}
+        />
+      )
+    }
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE.name}
+      href={new URL("/rss.xml", SITE.url)}
+    />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0a0a0a"
+      media="(prefers-color-scheme: dark)"
+    />
+
+    {
+      PUBLIC_GOOGLE_SITE_VERIFICATION && (
+        <meta
+          name="google-site-verification"
+          content={PUBLIC_GOOGLE_SITE_VERIFICATION}
+        />
+      )
+    }
+    {
+      PUBLIC_BING_SITE_VERIFICATION && (
+        <meta name="msvalidate.01" content={PUBLIC_BING_SITE_VERIFICATION} />
+      )
+    }
+
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(jsonLd)}
+    />
+
+    <slot name="head" />
+
+    <!-- Set the theme before first paint to avoid a flash of the wrong theme. -->
+    <script is:inline>
+      (function () {
+        let stored = null;
+        try {
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = stored ?? (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        window.__theme = { value: theme };
+      })();
+    </script>
+  </head>
+  <body
+    class="bg-background font-app text-foreground selection:bg-accent selection:text-accent-foreground flex min-h-svh flex-col"
+  >
+    {
+      draft && (
+        <div
+          class="bg-accent text-accent-foreground px-4 py-2 text-center text-sm font-semibold"
+          role="status"
+        >
+          Draft preview: this page is not published and is hidden in production
+          builds.
+        </div>
+      )
+    }
+    <Header />
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import "@/scripts/theme";
+    </script>
+    {PUBLIC_GA4_ID && <Analytics id={PUBLIC_GA4_ID} />}
+    <script>
+      import "@/scripts/events";
+    </script>
+  </body>
+</html>

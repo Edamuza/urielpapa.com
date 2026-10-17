@@ -1,0 +1,29 @@
+---
+type Props = { links: { network: string; url: string }[] };
+const { links } = Astro.props;
+const names: Record<string, string> = {
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  threads: "Threads",
+  x: "X",
+  reddit: "Reddit",
+  devto: "DEV",
+};
+---
+
+{
+  links.length > 0 && (
+    <p class="meta my-4 text-center">
+      Also on:{" "}
+      {links.map((l, i) => (
+        <>
+          {i > 0 && " · "}
+          <a href={l.url} rel="syndication noopener">
+            {names[l.network] ?? l.network}
+          </a>
+        </>
+      ))}
+    </p>
+  )
+}

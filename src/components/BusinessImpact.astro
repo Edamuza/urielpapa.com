@@ -1,0 +1,16 @@
+---
+type Props = { lines: string[] };
+const { lines } = Astro.props;
+---
+
+<aside
+  class="border-foreground my-10 rounded-lg border p-5"
+  aria-labelledby="business-impact"
+>
+  <h2 id="business-impact" class="label-caps mb-3 font-sans">
+    How this affects business
+  </h2>
+  <ul class="space-y-2">
+    {lines.map(line => <li>{line}</li>)}
+  </ul>
+</aside>

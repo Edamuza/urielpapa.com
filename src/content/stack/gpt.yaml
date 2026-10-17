@@ -1,0 +1,5 @@
+name: "GPT"
+group: ai
+use: "Reached through the ERP's OpenAI integration."
+url: https://openai.com
+order: 2

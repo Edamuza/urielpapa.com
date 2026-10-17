@@ -1,0 +1,5 @@
+name: "Gemma"
+group: ai
+use: "The on-device model in Tell Liora."
+url: https://ai.google.dev/gemma
+order: 4

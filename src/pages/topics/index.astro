@@ -1,0 +1,59 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import { getAllBlogEntries, getHubs, getNotes } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+const hubs = await getHubs();
+const blog = await getAllBlogEntries();
+const notes = await getNotes();
+const count = (id: string) =>
+  blog.filter(p => p.data.hub === id).length +
+  notes.filter(n => n.data.hub === id).length;
+
+const title = "Topics";
+const intro =
+  "Everything here belongs to one subject: technology and how it shapes the way we build and do business. These are the seven areas I write about.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: title, href: "/topics" },
+];
+const schema = [
+  collectionNode({
+    path: "/topics",
+    name: title,
+    description: intro,
+    items: hubs.map(h => ({ name: h.data.title, href: `/topics/${h.id}` })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title="Topics: AI, Automation, SEO, Tech Stacks and More"
+  description="The seven topics Uriel Papa writes about: AI in depth, automation, technology and business, SEO, GEO and AEO, tech stacks, marketing and the founder's journey."
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro} />
+    <ul class="max-w-read">
+      {
+        hubs.map(h => (
+          <li class="border-border border-b py-6 first:pt-0">
+            <h2 class="h2">
+              <a href={`/topics/${h.id}`}>{h.data.title}</a>
+            </h2>
+            <p class="mt-2">{h.data.description}</p>
+            <p class="meta mt-2">
+              {count(h.id) === 0
+                ? "First posts coming soon"
+                : `${count(h.id)} ${count(h.id) === 1 ? "post" : "posts"}`}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>

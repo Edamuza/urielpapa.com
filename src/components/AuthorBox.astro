@@ -1,0 +1,32 @@
+---
+import Avatar from "./Avatar.astro";
+import { SITE, SOCIALS } from "@/config";
+
+const linkedin = SOCIALS.find(s => s.name === "linkedin");
+---
+
+<aside
+  class="border-border flex gap-4 rounded-lg border p-5"
+  aria-label="About the author"
+>
+  <Avatar size={56} />
+  <div>
+    <p class="font-semibold">
+      Written by <a href="/about" rel="author">{SITE.name}</a>
+    </p>
+    <p class="mt-1 text-[0.95rem]">
+      {SITE.jobTitle} in {SITE.location}. I write about what I build and learn,
+      for anyone interested in the same topics.
+    </p>
+    <p class="meta mt-2 flex flex-wrap gap-x-4">
+      <a href="/about">More about me</a>
+      {
+        linkedin && (
+          <a href={linkedin.url} rel="me noopener">
+            LinkedIn
+          </a>
+        )
+      }
+    </p>
+  </div>
+</aside>

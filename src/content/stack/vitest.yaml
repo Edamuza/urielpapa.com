@@ -1,0 +1,5 @@
+name: "Vitest"
+group: infrastructure
+use: "The 411 automated tests in TravelEase."
+url: https://vitest.dev
+order: 6

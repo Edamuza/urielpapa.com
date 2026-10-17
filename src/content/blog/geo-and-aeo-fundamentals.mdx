@@ -1,0 +1,115 @@
+---
+title: "GEO and AEO Fundamentals: What Everyone Should Know About AI Search"
+seoTitle: "GEO and AEO Fundamentals: A Plain Guide to AI Search"
+description: GEO and AEO explained in plain words, how AI search finds and cites websites, what still matters from SEO, and how this site is set up for AI answers.
+dek: AI assistants now answer questions by quoting websites. GEO and AEO are the practices that help your pages get understood, quoted and cited.
+hub: seo-geo-aeo
+frame: explainer
+takeaways:
+  - GEO (generative engine optimization) is the practice of making content easy for AI systems such as ChatGPT search, Google AI Overviews and Perplexity to understand and cite.
+  - AEO (answer engine optimization) focuses on giving clear, direct answers that search engines and assistants can lift into a reply.
+  - GEO and AEO build on SEO, so crawlable pages, clear structure and trustworthy content still come first.
+  - AI search crawlers can only cite pages they are allowed to fetch, so robots.txt and CDN bot settings matter.
+  - Structured data such as JSON-LD helps search engines and AI systems understand who wrote a page and what it is about.
+businessImpact:
+  - More people get answers from AI assistants, so a site that is never cited loses visibility even if it ranks.
+  - Most GEO and AEO work is also good SEO work, so it rarely needs a separate budget.
+  - This site is newly launched, so I will share what changes in traffic and AI citations after a few months of data.
+published: 2026-10-07
+related: []
+projects:
+  - wordpress-seo-plugins
+stack:
+  - google-search-console
+  - ga4
+  - yoast-seo
+  - rank-math
+  - astro
+faq:
+  - q: Is GEO replacing SEO?
+    a: No. AI search systems still rely on crawling, indexing and ranking signals, so SEO remains the foundation. GEO and AEO add a focus on being quoted and cited in AI answers.
+  - q: What is the difference between GEO and AEO?
+    a: The terms overlap. AEO usually means structuring content as clear answers to questions, while GEO usually means improving how generative AI systems understand, summarize and cite your content.
+  - q: Does llms.txt help a site show up in AI answers?
+    a: "Not on its own. llms.txt is a proposed standard, and no major search or AI company has committed to using it. Google says you don't need AI text files or special markup to appear in AI Overviews or AI Mode. It is cheap to generate, so this site has one, but it is not a substitute for good, indexable pages."
+syndication: []
+draft: true
+---
+
+GEO (generative engine optimization) and AEO (answer engine optimization) are the practices of making your content easy for AI systems to understand, quote and cite in their answers. They build on SEO rather than replace it: an assistant can only cite a page it can find, fetch and understand.
+
+This explainer is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I have worked in SEO since 2023, and this site itself is set up as a working example of the ideas below.
+
+## What are GEO and AEO, in plain words?
+
+Search used to mean a page of links. Now many people ask ChatGPT, Perplexity, Google AI Overviews or another assistant, and get a written answer that quotes a few sources. GEO and AEO are about being one of those sources.
+
+- **AEO** is about answers. Put a direct answer to the question near the top of the page, phrase headings as the questions people ask, and keep each section focused on one question.
+- **GEO** is about how generative systems read your content. Make it clear who wrote it, what entities it covers, what evidence supports it, and where each fact comes from.
+
+The two overlap so much that most people use them together.
+
+## How do AI search systems find and cite pages?
+
+Most AI answers that cite websites follow a similar path: the system searches an index, fetches a handful of pages, reads the passages that look relevant, and writes an answer that quotes or links some of them. Some assistants use their own search index, and others use a partner's:
+
+- **Google AI Overviews and AI Mode** draw on Google Search's own index, and Google says there are [no extra requirements](https://developers.google.com/search/docs/appearance/ai-features) beyond being indexed and eligible for a snippet.
+- **Microsoft Copilot** runs on Bing. Bing's [webmaster guidelines](https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a) say its AI experiences share the same crawling, indexing and ranking foundation as Bing Search.
+- **ChatGPT search** uses OpenAI's own crawler, [OAI-SearchBot](https://developers.openai.com/api/docs/bots), together with [third-party search providers](https://help.openai.com/en/articles/9237897-chatgpt-search) that OpenAI does not name.
+- **Perplexity** crawls and indexes the web with its own [PerplexityBot](https://docs.perplexity.ai/guides/bots).
+- **Claude** web search has used Brave Search, which Anthropic [added to its subprocessor list](https://simonwillison.net/2025/Mar/21/anthropic-use-brave/) in March 2025.
+
+In practice, being indexed in both Google and Bing, and not blocking these crawlers in robots.txt, covers most of them.
+
+That means three things matter:
+
+1. **Access.** The crawler or fetcher must be allowed by robots.txt and not blocked by a firewall or CDN bot setting.
+2. **Passages.** Each section should make sense when read on its own, because an assistant may quote only one passage.
+3. **Trust.** Clear authorship, sources for figures and consistent information across the web make a page safer to cite.
+
+## What still matters from SEO?
+
+Nearly everything. Pages still need to be crawlable and indexable, load quickly, have a clear title and meta description, use headings that match what the page covers, and link to related pages on the same site. Google Search Console is still the first place to check whether pages are indexed and which queries bring people in.
+
+<FromTheBuild project="wordpress-seo-plugins">
+
+I led and co-developed 5 in-house WordPress plugins, about 11,700 lines of code, including a publish guard that refuses a post without an SEO title, a meta description and schema.
+
+</FromTheBuild>
+The habit from my SEO work since 2023 that matters even more now is answering the question in the first sentence. Pages that answered plainly near the top tended to win featured snippets, and that same habit makes a passage easy for an AI assistant to quote. I also learned that a plugin can check for a title, a description and schema, but it cannot write a clear answer for you. That part still comes down to the writer.
+
+## What can you do on your own site today?
+
+- **Answer the question in the first two sentences** of each page.
+- **Phrase headings as questions**, one question per section.
+- **Name things clearly**: people, products, tools and places, using the same names everywhere.
+- **Cite sources** for figures and claims, and date anything that changes.
+- **Add structured data** (JSON-LD) for the page type and the author.
+- **Check robots.txt and your CDN** so the crawlers you want are not blocked.
+- **Keep your profiles consistent** so the author entity is easy to recognize.
+
+<Callout type="warning">
+
+Some CDNs and firewalls have their own AI bot blocking settings that override robots.txt. Check them, not only the robots.txt file.
+
+</Callout>
+## How is this site set up for AI search?
+
+These are facts about how urielpapa.com is built:
+
+- **robots.txt allows AI crawlers.** It welcomes search and AI answer crawlers, including OAI-SearchBot, ChatGPT-User, PerplexityBot and Claude-SearchBot, and also allows training crawlers such as GPTBot, ClaudeBot and Google-Extended. Only the CMS and a few utility routes are disallowed.
+- **JSON-LD structured data** on every page type, describing the site, the author and each post.
+- **Markdown copies of posts** at /blog/post-slug.md. Each copy points back to the original page as the canonical version and is marked noindex, so it never competes with the HTML page.
+- **An llms.txt file** that summarizes the site, its topics and its latest posts for AI tools. It is a proposal rather than an adopted standard, so it is generated at build time and kept simple.
+- **A full-content RSS feed** of posts and notes.
+- **Direct answers and question headings** in every post, like this one.
+
+This site is newly launched, so there is not enough Search Console or AI answer data yet to say what works. I will share what I see after a few months of data, including whether AI assistants cite these posts and which pages they pick.
+
+## How do you know if it is working?
+
+There is no single report for AI citations yet. Useful signals include referral traffic from AI assistants in your analytics, Search Console data for queries and pages, and simply asking the assistants questions your pages answer and noting whether you are cited.
+
+Google added a [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) to Search Console in June 2026 and rolled it out to all websites by August 31, 2026. It shows how often your pages appeared in AI Overviews and AI Mode, by page, country, device and date. It reports impressions only, not clicks, and clicks from these features are still counted inside the regular Performance report under the Web search type. Bing Webmaster Tools has a similar [AI Performance report](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c) that counts citations in Microsoft Copilot.
+
+To check whether this site gets cited, I ask a few assistants the same plain questions my posts answer, such as "What is tokenization in AI?", "What are GEO and AEO?" and "What changed in Astro 7 for content sites?". I run them in ChatGPT, Perplexity, Gemini and Claude about once a month, and I note whether urielpapa.com shows up as a source. It is a manual check, but it shows what a real reader would see.
