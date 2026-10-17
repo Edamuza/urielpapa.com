@@ -21,8 +21,8 @@ export const SITE = {
   email: "work@urielpapa.com",
   /** One-line bio used in the footer and author box. */
   bio: "Technical founder in Metro Manila. I share what I've learned building and running a company: AI, automation, tech stacks, SEO, GEO and AEO, marketing and how technology affects business, plus tech news.",
-  /** Path under /public. Replace with a real photo (plan: "A real photo for About"). */
-  photo: null as string | null,
+  /** Path under /public: a 480×480 square crop, shown round by Avatar. */
+  photo: "/images/uriel-papa.jpg" as string | null,
 } as const;
 
 /** The Macro statement from content-network.md §1, reused on Home, About and llms.txt. */
