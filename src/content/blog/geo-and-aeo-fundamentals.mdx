@@ -31,7 +31,7 @@ faq:
   - q: What is the difference between GEO and AEO?
     a: The terms overlap. AEO usually means structuring content as clear answers to questions, while GEO usually means improving how generative AI systems understand, summarize and cite your content.
   - q: Does llms.txt help a site show up in AI answers?
-    a: "It is a proposed standard, and major search and AI companies have not committed to using it. It is cheap to generate, so this site has one, but it is not a substitute for good pages. [verify: current status of llms.txt support]"
+    a: "Not on its own. llms.txt is a proposed standard, and no major search or AI company has committed to using it. Google says you don't need AI text files or special markup to appear in AI Overviews or AI Mode. It is cheap to generate, so this site has one, but it is not a substitute for good, indexable pages."
 syndication: []
 draft: true
 ---
@@ -51,7 +51,15 @@ The two overlap so much that most people use them together.
 
 ## How do AI search systems find and cite pages?
 
-Most AI answers that cite websites follow a similar path: the system searches an index, fetches a handful of pages, reads the passages that look relevant, and writes an answer that quotes or links some of them. Some assistants use their own search index, and others use a partner's. [verify: which assistants use which search index]
+Most AI answers that cite websites follow a similar path: the system searches an index, fetches a handful of pages, reads the passages that look relevant, and writes an answer that quotes or links some of them. Some assistants use their own search index, and others use a partner's:
+
+- **Google AI Overviews and AI Mode** draw on Google Search's own index, and Google says there are [no extra requirements](https://developers.google.com/search/docs/appearance/ai-features) beyond being indexed and eligible for a snippet.
+- **Microsoft Copilot** runs on Bing. Bing's [webmaster guidelines](https://www.bing.com/webmasters/help/webmaster-guidelines-30fba23a) say its AI experiences share the same crawling, indexing and ranking foundation as Bing Search.
+- **ChatGPT search** uses OpenAI's own crawler, [OAI-SearchBot](https://developers.openai.com/api/docs/bots), together with [third-party search providers](https://help.openai.com/en/articles/9237897-chatgpt-search) that OpenAI does not name.
+- **Perplexity** crawls and indexes the web with its own [PerplexityBot](https://docs.perplexity.ai/guides/bots).
+- **Claude** web search has used Brave Search, which Anthropic [added to its subprocessor list](https://simonwillison.net/2025/Mar/21/anthropic-use-brave/) in March 2025.
+
+In practice, being indexed in both Google and Bing, and not blocking these crawlers in robots.txt, covers most of them.
 
 That means three things matter:
 
@@ -100,6 +108,8 @@ These are facts about how urielpapa.com is built:
 
 ## How do you know if it is working?
 
-There is no single report for AI citations yet. Useful signals include referral traffic from AI assistants in your analytics, Search Console data for queries and pages, and simply asking the assistants questions your pages answer and noting whether you are cited. [verify: whether Google Search Console reports AI Overviews traffic separately]
+There is no single report for AI citations yet. Useful signals include referral traffic from AI assistants in your analytics, Search Console data for queries and pages, and simply asking the assistants questions your pages answer and noting whether you are cited.
+
+Google added a [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) to Search Console in June 2026 and rolled it out to all websites by August 31, 2026. It shows how often your pages appeared in AI Overviews and AI Mode, by page, country, device and date. It reports impressions only, not clicks, and clicks from these features are still counted inside the regular Performance report under the Web search type. Bing Webmaster Tools has a similar [AI Performance report](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c) that counts citations in Microsoft Copilot.
 
 [Uriel to add: the prompts you use to check whether this site gets cited]

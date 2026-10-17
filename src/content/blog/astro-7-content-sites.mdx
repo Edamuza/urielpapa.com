@@ -15,16 +15,17 @@ takeaways:
     Astro 7 is the latest major version of Astro, a web framework built for
     content-driven sites such as blogs, docs and marketing pages.
   - >-
-    [Uriel to add / verify: the most important change in Astro 7, in one
-    sentence]
+    Astro 7 moves to Vite 8 and a .astro compiler rewritten in Rust, and the
+    Astro team reports builds 15 to 61 percent faster in its benchmarks.
   - >-
-    [Uriel to add / verify: the second most important change in Astro 7, in one
-    sentence]
+    Astro 7 changes the defaults for Markdown and HTML: a new Rust-based
+    Markdown processor called Sätteri, and a stricter compiler that reports
+    invalid HTML instead of quietly fixing it.
   - >-
     This site, urielpapa.com, is built on Astro 7, so these notes come from a
     working build.
 businessImpact: []
-sourceUrl: https://astro.build/blog/
+sourceUrl: https://astro.build/blog/astro-7/
 published: 2026-10-14
 related:
   - laravel-vs-nextjs
@@ -45,22 +46,22 @@ This site is built on Astro 7, so this take comes from a working build. It is pa
 
 ## What happened?
 
-The Astro team released Astro 7 on \[Uriel to add / verify: release date]. The official announcement is on the [Astro blog](https://astro.build/blog/). \[Uriel to add / verify: the exact announcement post URL, and update sourceUrl to it]
+The Astro team released Astro 7.0 on June 22, 2026, and announced it in the post [Astro 7.0](https://astro.build/blog/astro-7/) on the official Astro blog.
 
 ## What changed, in plain words?
 
-\[Uriel to add / verify: the main changes from the official release notes, each in one or two plain sentences]
+Astro 7 is mostly a speed and tooling release. These are the main changes from the [official announcement](https://astro.build/blog/astro-7/) and the [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/):
 
-* \[Uriel to add / verify: change 1]
-* \[Uriel to add / verify: change 2]
-* \[Uriel to add / verify: change 3]
-* \[Uriel to add / verify: any breaking changes or removed features]
+* **Faster builds.** Astro 7 runs on Vite 8, which uses the Rolldown bundler, and the `.astro` compiler is rewritten in Rust. The Astro team reports builds 15 to 61 percent faster in its own benchmarks.
+* **A new default Markdown processor.** Markdown and MDX now go through Sätteri, a Rust-based processor. Sites that rely on remark or rehype plugins can keep the older unified pipeline through `@astrojs/markdown-remark`.
+* **Caching and routing become stable.** Route caching is stable, with experimental cache providers for Netlify, Vercel and Cloudflare. A new `src/fetch.ts` entry point gives control over the request pipeline.
+* **Breaking changes.** The new compiler reports unclosed tags and invalid HTML nesting as errors instead of fixing them silently. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
 
 ## Why does it matter for content sites?
 
 Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines.
 
-\[Uriel to add / verify: how the Astro 7 changes affect that, for example build speed, content collections, images or deployment]
+Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
 
 For a business, the practical questions are build time, hosting cost and how much upkeep a site needs between major versions. \[Uriel to add: your view on how Astro 7 affects these]
 
@@ -68,12 +69,14 @@ For a business, the practical questions are build time, hosting cost and how muc
 
 This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. Most pages ship no JavaScript, with small islands for the theme toggle, search, code copy buttons and form enhancement.
 
+One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
+
 \[Uriel to add: what worked well, what was confusing, and anything that broke during the build]
 
 ## Should you do anything now?
 
 * **Starting a new content site:** \[Uriel to add: your recommendation]
-* **Running an older Astro version:** read the official upgrade guide before upgrading, and test the build on a branch first. \[Uriel to add / verify: link to the Astro 7 upgrade guide]
+* **Running an older Astro version:** read the official [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/) before upgrading, run `npx @astrojs/upgrade` (or `pnpm dlx @astrojs/upgrade`), and test the build on a branch first.
 * **On another framework:** \[Uriel to add: whether Astro 7 is worth a look, and for what kind of site]
 
 If you are comparing frameworks for something more data-heavy than a content site, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.

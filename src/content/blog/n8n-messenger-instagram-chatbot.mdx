@@ -26,7 +26,7 @@ faq:
   - q: Do I need to code to build this chatbot?
     a: Not much. n8n builds the workflow visually, but you will write a system prompt, set up a Meta app and webhook, and may write small expressions or a short code node to shape the data.
   - q: Can one workflow handle both Messenger and Instagram?
-    a: "Yes. Both channels can send messages to the same webhook through the Meta platform, and the workflow can branch on which channel a message came from. [verify: current Meta setup for Instagram messaging]"
+    a: "Yes, if the Instagram professional account is connected to your Facebook Page. In that setup, Instagram messages run through the Messenger Platform, so one Meta app and one webhook receive both channels, and the workflow branches on which channel a message came from. Instagram-only accounts use a separate Instagram Login setup instead."
   - q: When should a human take over from the chatbot?
     a: When the person asks for a human, when the question is sensitive or outside what the bot knows, or when the conversation turns into a complaint. The workflow can flag these and notify a person.
 syndication: []
@@ -40,7 +40,7 @@ I built a chatbot like this at VITE SEO Digital Advertising, the agency I founde
 ## What do you need before you start?
 
 - **A Facebook Page**, and an Instagram professional account connected to it.
-- **A Meta developer account** and an app with messaging access. [verify: current permission names and app review steps on the Meta for Developers docs]
+- **A Meta developer account** and an app with messaging access. The app needs the `pages_messaging` permission for Messenger and `instagram_manage_messages` for Instagram. Standard Access works for Pages and accounts you own or manage. To serve accounts you don't manage, Meta requires [Advanced Access, which needs App Review and Business Verification](https://developers.facebook.com/docs/instagram-platform/overview).
 - **An n8n instance**, either n8n Cloud or self-hosted, reachable over HTTPS so Meta can call its webhook.
 - **An OpenRouter account and API key**, with credit for the model you pick.
 - **A place to log leads**, such as a Google Sheet or a database table.
@@ -49,13 +49,13 @@ I built a chatbot like this at VITE SEO Digital Advertising, the agency I founde
 
 ## How do you build it, step by step?
 
-1. **Create a Meta app.** In Meta for Developers, create an app, add the messaging products for Messenger and Instagram, and connect your Facebook Page and Instagram account. [verify: current menu names]
+1. **Create a Meta app.** In [Meta for Developers](https://developers.facebook.com/apps/), create a business app, add the **Messenger** product, and connect your Facebook Page. Then open Messenger's Instagram settings and connect the Instagram professional account linked to that Page. Meta renames menus from time to time, so follow the current [Messenger Platform docs](https://developers.facebook.com/docs/messenger-platform) if a label differs.
 2. **Connect the webhook to n8n.** Add a Webhook node in n8n, copy its production URL into the Meta app's webhook settings, and set a verify token. Add a branch that answers Meta's verification request so the webhook is accepted.
 3. **Parse the incoming message.** Pull out the sender ID, the channel (Messenger or Instagram) and the message text. Ignore echoes of your own replies so the bot does not answer itself.
 4. **Add the AI reply node through OpenRouter.** Use an HTTP Request node or an AI model node pointed at OpenRouter, pass the system prompt and the recent messages, and read back the reply.
 5. **Write the system prompt.** Tell the model who it speaks for, what it knows, the tone to use, what it must not answer, and the exact phrase or flag to return when a human should take over.
 6. **Add booking and logging branches.** When the person wants a consultation, send the booking link. For every conversation, write the sender, channel, message and outcome to your lead log.
-7. **Send the reply.** Call the Meta Send API with the sender ID and the reply text. [verify: current endpoint and required fields]
+7. **Send the reply.** Call the [Send API](https://developers.facebook.com/docs/messenger-platform/send-messages) with a `POST` to `https://graph.facebook.com/v25.0/{PAGE-ID}/messages`, using the Page access token. The body needs `recipient.id` (the sender's ID from the webhook), `messaging_type: "RESPONSE"` and `message.text`. You can reply freely within 24 hours of the person's last message. After that, Meta only allows specific message types.
 8. **Test.** Message the Page and the Instagram account from a test account. Try normal questions, off-topic questions, a request for a human and a message in another language.
 9. **Go live.** Switch the Meta app to live mode, complete any app review Meta requires, and watch the first real conversations closely.
 

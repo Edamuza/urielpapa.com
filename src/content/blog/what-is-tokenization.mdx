@@ -28,7 +28,7 @@ stack:
   - lm-studio
 faq:
   - q: How many words is a token?
-    a: "It depends on the tokenizer and the language. For English text, a token is often a bit less than one word on average, and other languages can use more tokens for the same meaning. [verify: current rule of thumb from an official tokenizer guide]"
+    a: "It depends on the tokenizer and the language. OpenAI's rule of thumb is that one token is about 4 characters, or about three quarters of a word, in English text, so 100 tokens is roughly 75 words. Other languages, code and unusual words often take more tokens for the same meaning."
   - q: Why do output tokens cost more than input tokens?
     a: Most providers price output higher because the model generates output one token at a time, which takes more compute than reading the input. Check each provider's pricing page for the actual rates.
   - q: Do local models use tokens too?
@@ -66,7 +66,7 @@ Sentence: "Tokenization isn't magic, it's math."
 | 9   | " math"  |                                                      |
 | 10  | .        |                                                      |
 
-So a 5-word sentence becomes about 10 tokens in this example. Most providers offer a tokenizer tool or a token-counting API, and that is the reliable way to count tokens for a specific model.
+So a 5-word sentence becomes about 10 tokens in this example. Short sentences with contractions and punctuation split more than average. For ordinary English prose, [OpenAI's rule of thumb](https://developers.openai.com/api/docs/concepts) is that one token is about 4 characters, or 0.75 words, so 1,000 words come to roughly 1,300 tokens. Most providers offer a tokenizer tool or a token-counting API, and that is the reliable way to count tokens for a specific model.
 
 <Callout type="note">
 
@@ -111,6 +111,11 @@ To estimate the cost of an AI feature before you build it:
 - **Trim the conversation history.** Send the last few messages or a short summary instead of the full chat.
 - **Ask for short, structured replies.** Output tokens usually cost the most.
 - **Pick the right model size.** A smaller model can handle simple tasks like classification for a fraction of the cost.
-- **Use caching where the provider offers it.** Some providers discount repeated input, such as a long system prompt. [verify: which providers offer prompt caching and on what terms]
+- **Use caching where the provider offers it.** Most major providers discount repeated input, such as a long system prompt, when it is sent again within a short time. As of October 2026:
+  - **OpenAI** caches prompts of 1,024 tokens or more automatically, and cached input is [discounted by up to 95 percent](https://developers.openai.com/api/docs/guides/prompt-caching) depending on the model.
+  - **Anthropic** caches what you mark with `cache_control`. A cache read costs [0.1 times the normal input price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) or less, writing to the cache costs a little more than normal input, and the cache lasts 5 minutes by default, with a paid 1-hour option.
+  - **Google Gemini** applies [implicit caching](https://ai.google.dev/gemini-api/docs/caching) by default on Gemini 2.5 and newer models and passes the savings on automatically, with explicit caching available for more control.
+
+  Rates change often, so check each provider's pricing page before you budget around them.
 
 Context windows deserve a post of their own, and they are one of the topics in this hub.

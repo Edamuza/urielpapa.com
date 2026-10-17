@@ -58,11 +58,11 @@ Next.js is built on React and runs JavaScript or TypeScript on both the server a
 | Purpose        | Back-end framework for APIs and full web apps                    | React framework for interfaces, web apps and content sites |
 | Language       | PHP                                                              | JavaScript or TypeScript                                   |
 | Best at        | Data-heavy business logic, permissions, background jobs          | Fast, interactive interfaces and server-rendered pages     |
-| Hosting        | A PHP server or VPS, or a managed PHP platform                   | A Node.js host or a platform such as Vercel                |
+| Hosting        | A PHP 8.3+ server or VPS, Laravel Forge, or Laravel Cloud        | A Node.js server, Docker, a static export, or Vercel       |
 | Learning curve | Gentle if you know PHP and MVC                                   | Gentle if you know React                                   |
-| Ecosystem      | First-party packages for queues, real-time events, auth and more | The React ecosystem of components and libraries            |
+| Ecosystem      | First-party Horizon (queues), Reverb (real-time), Sanctum (auth) | The React ecosystem of components and libraries            |
 
-[verify: hosting options and first-party package names against the current Laravel and Next.js docs before publishing]
+Hosting details come from the official docs as of October 2026. Laravel 13 needs [PHP 8.3 or newer](https://laravel.com/framework/docs/deployment) and can run on any server you manage, on a VPS set up through Laravel Forge, or on Laravel Cloud, the fully managed platform from the Laravel team. Next.js [deploys](https://nextjs.org/docs/app/getting-started/deploying) as a Node.js server or a Docker container with every feature, as a static export with fewer features, or on platforms with adapters such as Vercel. For background jobs, real-time events and API authentication, Laravel's own packages are [Horizon](https://laravel.com/framework/docs/horizon), [Reverb](https://laravel.com/framework/docs/reverb) and [Sanctum](https://laravel.com/framework/docs/sanctum).
 
 ## Which is quicker for building data-heavy systems?
 
