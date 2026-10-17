@@ -32,8 +32,6 @@ const allNotes = await getNotes();
 const hubCount = (id: string) =>
   allBlog.filter(p => p.data.hub === id).length +
   allNotes.filter(n => n.data.hub === id).length;
-
-const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
 ---
 
 <Layout>
@@ -95,21 +93,6 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
           really work. I'm rebuilding everything and sharing the journey here: what
           I've learned and the mistakes I've made as a founder, along with my takes
           on tech news and notes from seminars.
-          {
-            startWith.length > 0 && (
-              <>
-                {" "}
-                New here? Start with{" "}
-                {startWith.map((p, i) => (
-                  <>
-                    {i > 0 && " or "}
-                    <a href={postUrl(p)}>{p.data.title}</a>
-                  </>
-                ))}
-                .
-              </>
-            )
-          }
         </p>
         <p class="mt-4 text-lg">
           That excitement comes down to a few simple things. Why technology? It
