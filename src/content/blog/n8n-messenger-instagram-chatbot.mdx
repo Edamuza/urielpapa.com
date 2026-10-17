@@ -1,20 +1,41 @@
 ---
 title: How I Built an AI Chatbot for Messenger and Instagram with n8n
 seoTitle: Build an AI Chatbot for Messenger and Instagram with n8n
-description: A step-by-step guide to an n8n and OpenRouter chatbot for Facebook Messenger and Instagram that answers inquiries, books calls and logs leads, plus costs.
-dek: An AI chatbot can answer Messenger and Instagram inquiries at any hour, book consultations and log every lead. Here is how to build one with n8n and OpenRouter, and what to watch.
+description: >-
+  A step-by-step guide to an n8n and OpenRouter chatbot for Facebook Messenger
+  and Instagram that answers inquiries, books calls and logs leads, plus costs.
+dek: >-
+  An AI chatbot can answer Messenger and Instagram inquiries at any hour, book
+  consultations and log every lead. Here is how to build one with n8n and
+  OpenRouter, and what to watch.
 hub: automation
 frame: guide
 takeaways:
-  - An n8n workflow can receive Facebook Messenger and Instagram messages through a Meta webhook, reply with an AI model, and log every conversation.
-  - OpenRouter lets one n8n workflow reach many AI models through a single API, so you can switch models without rebuilding the chatbot.
-  - The system prompt decides most of the chatbot's behavior, including what it answers, what it refuses and when it hands over to a human.
-  - A chatbot like this should hand sensitive or unclear conversations to a person instead of guessing.
-  - My setup cost about US$10 a month to run in early 2026, mostly a small VPS for self-hosted n8n plus AI tokens.
+  - >-
+    An n8n workflow can receive Facebook Messenger and Instagram messages
+    through a Meta webhook, reply with an AI model, and log every conversation.
+  - >-
+    OpenRouter lets one n8n workflow reach many AI models through a single API,
+    so you can switch models without rebuilding the chatbot.
+  - >-
+    The system prompt decides most of the chatbot's behavior, including what it
+    answers, what it refuses and when it hands over to a human.
+  - >-
+    A chatbot like this should hand sensitive or unclear conversations to a
+    person instead of guessing.
+  - >-
+    My setup cost about US$10 a month to run in early 2026, mostly a small VPS
+    for self-hosted n8n plus AI tokens.
 businessImpact:
-  - Inquiries get a reply outside office hours instead of waiting until the next working day.
-  - Repetitive questions about services, prices and booking stop taking up a person's time.
-  - "Running cost is mostly AI tokens plus n8n hosting: about US$10 a month for my setup in early 2026."
+  - >-
+    Inquiries get a reply outside office hours instead of waiting until the next
+    working day.
+  - >-
+    Repetitive questions about services, prices and booking stop taking up a
+    person's time.
+  - >-
+    Running cost is mostly AI tokens plus n8n hosting: about US$10 a month for
+    my setup in early 2026.
 published: 2026-10-05
 related:
   - what-is-tokenization
@@ -24,28 +45,39 @@ stack:
   - openrouter
 faq:
   - q: Do I need to code to build this chatbot?
-    a: Not much. n8n builds the workflow visually, but you will write a system prompt, set up a Meta app and webhook, and may write small expressions or a short code node to shape the data.
+    a: >-
+      Not much. n8n builds the workflow visually, but you will write a system
+      prompt, set up a Meta app and webhook, and may write small expressions or
+      a short code node to shape the data.
   - q: Can one workflow handle both Messenger and Instagram?
-    a: "Yes, if the Instagram professional account is connected to your Facebook Page. In that setup, Instagram messages run through the Messenger Platform, so one Meta app and one webhook receive both channels, and the workflow branches on which channel a message came from. Instagram-only accounts use a separate Instagram Login setup instead."
+    a: >-
+      Yes, if the Instagram professional account is connected to your Facebook
+      Page. In that setup, Instagram messages run through the Messenger
+      Platform, so one Meta app and one webhook receive both channels, and the
+      workflow branches on which channel a message came from. Instagram-only
+      accounts use a separate Instagram Login setup instead.
   - q: When should a human take over from the chatbot?
-    a: When the person asks for a human, when the question is sensitive or outside what the bot knows, or when the conversation turns into a complaint. The workflow can flag these and notify a person.
+    a: >-
+      When the person asks for a human, when the question is sensitive or
+      outside what the bot knows, or when the conversation turns into a
+      complaint. The workflow can flag these and notify a person.
+event: {}
 syndication: []
-draft: true
+draft: false
 ---
-
 At the end of this guide you will have an AI chatbot for Facebook Messenger and Instagram that answers inquiries, books consultations and logs leads automatically. It runs on n8n for the workflow, the Meta messaging platform for the two channels, and OpenRouter for the AI model.
 
 I built a chatbot like this at VITE SEO Digital Advertising, the agency I founded and have since closed, and this guide is based on that build. The steps below follow the order I built it in. It is part of my [Automation](/topics/automation) writing. I built it because inquiries from our ads often came in at night and on weekends, and I wanted every person to get a reply right away instead of the next morning.
 
 ## What do you need before you start?
 
-- **A Facebook Page**, and an Instagram professional account connected to it.
-- **A Meta developer account** and an app with messaging access. The app needs the `pages_messaging` permission for Messenger and `instagram_manage_messages` for Instagram. Standard Access works for Pages and accounts you own or manage. To serve accounts you don't manage, Meta requires [Advanced Access, which needs App Review and Business Verification](https://developers.facebook.com/docs/instagram-platform/overview).
-- **An n8n instance**, either n8n Cloud or self-hosted, reachable over HTTPS so Meta can call its webhook.
-- **An OpenRouter account and API key**, with credit for the model you pick.
-- **A place to log leads**, such as a Google Sheet or a database table.
-- **A booking link**, such as a calendar scheduling page.
-- **A written list of what the bot should know**: services, prices, hours, FAQs and when to hand over to a person.
+* **A Facebook Page**, and an Instagram professional account connected to it.
+* **A Meta developer account** and an app with messaging access. The app needs the `pages_messaging` permission for Messenger and `instagram_manage_messages` for Instagram. Standard Access works for Pages and accounts you own or manage. To serve accounts you don't manage, Meta requires [Advanced Access, which needs App Review and Business Verification](https://developers.facebook.com/docs/instagram-platform/overview).
+* **An n8n instance**, either n8n Cloud or self-hosted, reachable over HTTPS so Meta can call its webhook.
+* **An OpenRouter account and API key**, with credit for the model you pick.
+* **A place to log leads**, such as a Google Sheet or a database table.
+* **A booking link**, such as a calendar scheduling page.
+* **A written list of what the bot should know**: services, prices, hours, FAQs and when to hand over to a person.
 
 ## How do you build it, step by step?
 
@@ -73,10 +105,9 @@ Here is my workflow node by node, in the order a message passes through it:
 10. **Gmail:** on a handover, emails a person with the conversation so far.
 
 <Callout type="tip">
-
-Keep the system prompt short and specific. It is sent with every message, so every extra sentence adds tokens to every reply. My post on [what tokenization is](/blog/what-is-tokenization) explains why that matters for cost.
-
+  Keep the system prompt short and specific. It is sent with every message, so every extra sentence adds tokens to every reply. My post on [what tokenization is](/blog/what-is-tokenization) explains why that matters for cost.
 </Callout>
+
 ## What does it cost to run?
 
 | Item                         | Monthly cost       | Notes                                                                                  |
@@ -105,10 +136,10 @@ Build the handover in from the start. Have the model return a clear flag when it
 
 ## What should you check before going live?
 
-- The webhook answers Meta's verification request.
-- The bot ignores its own messages.
-- The system prompt lists what the bot must not answer.
-- Handover to a person works and sends a notification.
-- Every conversation is logged with its channel and outcome.
-- You know your expected monthly token use and have set a spending limit where your provider allows it.
-- Your privacy notice covers storing messages and contact details.
+* The webhook answers Meta's verification request.
+* The bot ignores its own messages.
+* The system prompt lists what the bot must not answer.
+* Handover to a person works and sends a notification.
+* Every conversation is logged with its channel and outcome.
+* You know your expected monthly token use and have set a spending limit where your provider allows it.
+* Your privacy notice covers storing messages and contact details.
