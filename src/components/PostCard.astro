@@ -1,0 +1,51 @@
+---
+import HubChip from "./HubChip.astro";
+import { formatDate, isoDate } from "@/utils/content";
+import { frameLabel } from "@/data/hubs";
+
+type Props = {
+  href: string;
+  title: string;
+  summary?: string;
+  hub?: string;
+  date: Date;
+  minutes?: number;
+  frame?: string;
+  draft?: boolean;
+  headingLevel?: "h2" | "h3";
+  showHub?: boolean;
+};
+
+const {
+  href,
+  title,
+  summary,
+  hub,
+  date,
+  minutes,
+  frame,
+  draft,
+  headingLevel: Heading = "h3",
+  showHub = true,
+} = Astro.props;
+---
+
+<li class="border-border border-b py-5 first:pt-0 last:border-b-0">
+  <Heading class="text-lg leading-snug font-semibold sm:text-xl">
+    <a href={href}>{title}</a>
+  </Heading>
+  {summary && <p class="mt-1.5">{summary}</p>}
+  <p class="meta mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+    {showHub && hub && <HubChip hub={hub} />}
+    {frame && <span>{frameLabel(frame)}</span>}
+    <time datetime={isoDate(date)}>{formatDate(date)}</time>
+    {minutes && <span>{minutes} min read</span>}
+    {
+      draft && (
+        <span class="border-foreground rounded border border-dashed px-1.5 text-xs font-semibold">
+          Draft
+        </span>
+      )
+    }
+  </p>
+</li>

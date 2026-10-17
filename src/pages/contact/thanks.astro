@@ -1,0 +1,35 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { CONTACT } from "@/config";
+import { getPosts, postUrl } from "@/utils/content";
+
+const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
+---
+
+<Layout title="Message sent" description="Your message was sent." noindex>
+  <div class="app-layout max-w-read pt-12">
+    <h1 class="h1">Thanks, your message is on its way</h1>
+    <p class="mt-4 text-lg">
+      It went straight to my inbox. {CONTACT.replyTime}
+    </p>
+    {
+      latest.length > 0 && (
+        <section class="mt-10">
+          <h2 class="h2 mb-4">While you wait</h2>
+          <ul>
+            {latest.map(p => (
+              <PostCard
+                href={postUrl(p)}
+                title={p.data.title}
+                hub={p.data.hub}
+                date={p.data.published}
+              />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    <p class="mt-8"><a href="/">Back to the home page</a></p>
+  </div>
+</Layout>

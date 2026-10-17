@@ -1,0 +1,79 @@
+---
+import { getEntries, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import WorkWithMe from "@/components/WorkWithMe.astro";
+import { getProjects, projectUrl } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+const projects = await getProjects();
+const stacks = await Promise.all(
+  projects.map(
+    async p =>
+      (await getEntries(p.data.stack.slice(0, 5))) as CollectionEntry<"stack">[]
+  )
+);
+
+const title = "Projects";
+const intro =
+  "Things I've built. Most are internal systems, so they're described rather than linked.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: title, href: "/projects" },
+];
+const schema = [
+  collectionNode({
+    path: "/projects",
+    name: title,
+    description: intro,
+    items: projects.map(p => ({ name: p.data.title, href: projectUrl(p) })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title="Projects"
+  description="Projects Uriel Papa has built: an ERP, an NFC card platform, the TravelEase tourism portal, a quotation portal, WordPress SEO plugins and more."
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro} />
+    <ul class="max-w-read">
+      {
+        projects.map((p, i) => (
+          <li class="border-border border-b py-5 first:pt-0">
+            <h2 class="text-xl font-semibold">
+              <a href={projectUrl(p)}>{p.data.title}</a>{" "}
+              <span class="meta font-normal">{p.data.year}</span>
+            </h2>
+            <p class="mt-1">{p.data.outcome}</p>
+            {stacks[i].length > 0 && (
+              <ul class="mt-2 flex flex-wrap gap-2">
+                {stacks[i].map(s => (
+                  <li>
+                    <a
+                      href={`/stack#${s.id}`}
+                      class="bg-muted inline-block rounded-full px-2.5 py-0.5 text-xs no-underline hover:underline"
+                    >
+                      {s.data.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <div class="max-w-read">
+      <WorkWithMe
+        text="Want to work together?"
+        linkText="Get in touch."
+        from="projects"
+      />
+    </div>
+  </div>
+</Layout>

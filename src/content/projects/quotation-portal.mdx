@@ -1,0 +1,51 @@
+---
+title: Client Quotation Portal
+description: A private Next.js portal where clients sign in with a one-time code to view, accept or reject quotations and download them as PDFs, with 174 tests.
+summary: >-
+  Sending quotations as email attachments makes it hard to know which version a client saw and whether they accepted it. For VITE SEO Digital Advertising, the agency I founded and have since closed, I built a private portal where clients sign in with a one-time code to view, accept or reject quotations and download them as PDFs, with an admin side for clients, quotes, access codes and sessions. It shipped with audit logs and 174 automated tests.
+outcome: Clients review, accept or reject quotations in one private place, covered by 174 automated tests.
+period: February 2026
+year: 2026
+role: Built the portal
+status: Private client portal (the agency has closed)
+kind: CreativeWork
+stack:
+  - nextjs
+  - prisma
+  - postgresql
+  - redis
+  - playwright
+hubs:
+  - tech-stacks
+order: 4
+draft: false
+---
+
+## The problem
+
+Quotations need to reach the right person, stay private, and leave a clear record of what was accepted or rejected. Email attachments do none of that well.
+
+[Uriel to add: what the quotation process looked like before the portal]
+
+## What we built
+
+- **Client side:** clients sign in with a one-time code, then view, accept or reject quotations and download them as PDFs.
+- **Admin side:** management of clients, quotes, access codes and sessions, with Clerk for admin sign-in.
+- **Security:** access codes hashed with Argon2, Redis rate limiting, and audit logs.
+- **PDFs:** quotations rendered to PDF with Playwright.
+
+## Stack and why
+
+- **Application:** Next.js 14.
+- **Data:** Prisma on PostgreSQL.
+- **Admin sign-in:** Clerk.
+- **Rate limiting:** Redis.
+- **PDF rendering:** Playwright.
+
+[Uriel to add: why this stack]
+
+## Results
+
+- 174 automated tests.
+- One private place for clients to review, accept or reject quotations.
+- Audit logs that record what happened to each quotation.

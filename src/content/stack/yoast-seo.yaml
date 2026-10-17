@@ -1,0 +1,5 @@
+name: "Yoast SEO"
+group: seo-marketing
+use: "SEO setup on client WordPress sites."
+url: https://yoast.com
+order: 6

@@ -1,0 +1,5 @@
+name: "Playwright"
+group: infrastructure
+use: "PDF rendering in the client quotation portal."
+url: https://playwright.dev
+order: 7

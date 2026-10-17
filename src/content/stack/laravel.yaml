@@ -1,0 +1,5 @@
+name: "Laravel"
+group: languages-frameworks
+use: "The API behind the ERP and the NFC card platform."
+url: https://laravel.com
+order: 6

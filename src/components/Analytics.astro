@@ -1,0 +1,27 @@
+---
+/** GA4, loaded after the first interaction or 4 seconds so it never blocks reading. */
+type Props = { id: string };
+const { id } = Astro.props;
+---
+
+<script is:inline define:vars={{ id }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+  let loaded = false;
+  const load = () => {
+    if (loaded) return;
+    loaded = true;
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+    document.head.appendChild(s);
+    window.gtag("js", new Date());
+    window.gtag("config", id);
+  };
+  ["scroll", "pointerdown", "keydown"].forEach(e =>
+    addEventListener(e, load, { once: true, passive: true })
+  );
+  setTimeout(load, 4000);
+</script>

@@ -1,0 +1,5 @@
+name: "MySQL"
+group: databases
+use: "The ERP's database."
+url: https://www.mysql.com
+order: 1

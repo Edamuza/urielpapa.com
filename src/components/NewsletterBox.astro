@@ -1,0 +1,108 @@
+---
+import { NEWSLETTER } from "@/config";
+
+type Props = { heading?: string; from: string };
+const { heading = "Get new posts by email", from } = Astro.props;
+const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
+---
+
+<section
+  class="border-foreground my-12 rounded-lg border p-5 sm:p-6"
+  aria-labelledby={`${id}-h`}
+>
+  <h2 id={`${id}-h`} class="h3">{heading}</h2>
+  <p class="mt-1">
+    One email {NEWSLETTER.frequency} with {NEWSLETTER.what}. No spam,
+    unsubscribe any time.
+  </p>
+  <form
+    method="post"
+    action="/api/subscribe"
+    class="mt-4 flex flex-col gap-2 sm:flex-row"
+    data-newsletter
+    data-from={from}
+    novalidate
+  >
+    <label for={`${id}-email`} class="sr-only">Email address</label>
+    <input
+      id={`${id}-email`}
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      placeholder="you@example.com"
+      class="border-foreground bg-background min-h-11 flex-1 rounded-lg border px-3 py-2"
+    />
+    <!-- Honeypot: people never see or fill this -->
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      class="hidden"
+      aria-hidden="true"
+    />
+    <input type="hidden" name="from" value={from} />
+    <button type="submit" class="btn">Subscribe</button>
+  </form>
+  <p
+    class="mt-2 text-sm"
+    role="status"
+    aria-live="polite"
+    data-newsletter-status
+  >
+  </p>
+  <p class="meta mt-2">
+    Prefer a feed? <a href="/rss.xml">Follow by RSS</a>. <a href="/newsletter"
+      >About the newsletter</a
+    >.
+  </p>
+</section>
+
+<script>
+  import { track } from "@/scripts/events";
+
+  for (const form of document.querySelectorAll<HTMLFormElement>(
+    "form[data-newsletter]"
+  )) {
+    const status = form.parentElement?.querySelector<HTMLElement>(
+      "[data-newsletter-status]"
+    );
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const email = form.querySelector<HTMLInputElement>("input[name=email]");
+      if (!email?.value || !email.checkValidity()) {
+        if (status) status.textContent = "Please enter a valid email address.";
+        email?.focus();
+        return;
+      }
+      const button = form.querySelector<HTMLButtonElement>(
+        "button[type=submit]"
+      );
+      if (button) button.disabled = true;
+      if (status) status.textContent = "Subscribing…";
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" },
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          message?: string;
+        };
+        if (!res.ok) throw new Error(data.message ?? "Something went wrong.");
+        if (status)
+          status.textContent =
+            data.message ?? "Almost done: check your inbox to confirm.";
+        form.reset();
+        track("newsletter_signup", { from: form.dataset.from ?? "" });
+      } catch (err) {
+        if (status)
+          status.textContent =
+            err instanceof Error ? err.message : "Something went wrong.";
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+</script>

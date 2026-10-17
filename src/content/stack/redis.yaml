@@ -1,0 +1,5 @@
+name: "Redis"
+group: databases
+use: "Caching and rate limiting in TravelEase, and rate limiting in the client quotation portal."
+url: https://redis.io
+order: 5

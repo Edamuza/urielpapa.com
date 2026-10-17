@@ -1,0 +1,29 @@
+---
+/**
+ * MDX: <FromTheBuild project="vite-seo-erp">Evidence with a real number.</FromTheBuild>
+ * Evidence beside the claim it supports (ux-ui-spec.md §6).
+ */
+import { getEntry } from "astro:content";
+
+type Props = { project?: string };
+const { project } = Astro.props;
+const entry = project ? await getEntry("projects", project) : undefined;
+---
+
+<aside class="not-prose border-foreground my-8 border-s-[3px] py-1 ps-5">
+  <p class="label-caps mb-2">From the build</p>
+  <div class="[&_p]:my-2"><slot /></div>
+  {
+    entry && (
+      <p class="mt-2 text-sm">
+        <a
+          href={`/projects/${entry.id}`}
+          data-event="fromthebuild_click"
+          data-event-project={entry.id}
+        >
+          See the project: {entry.data.title} →
+        </a>
+      </p>
+    )
+  }
+</aside>

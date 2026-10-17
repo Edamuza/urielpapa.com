@@ -1,0 +1,61 @@
+{
+  "talks": [],
+  "attended": [
+    {
+      "name": "Level-Up Leadership: Agile, Able, Adapt",
+      "organizer": "Francis Kong",
+      "date": "2026-06",
+      "dateLabel": "June 2026",
+      "hub": "founder-journey",
+      "note": ""
+    },
+    {
+      "name": "Philippine SME Business Expo",
+      "organizer": "Philippine SME Business Expo",
+      "date": "2026-05",
+      "dateLabel": "May 2026",
+      "hub": "tech-and-business",
+      "note": "philippine-sme-business-expo-technology-adoption"
+    },
+    {
+      "name": "Franchise & Business Seminars Asia Philippines 2026",
+      "organizer": "Franchise & Business Seminars Asia",
+      "date": "2026-04",
+      "dateLabel": "April 2026",
+      "hub": "tech-and-business",
+      "note": ""
+    },
+    {
+      "name": "The Premier Branding and Marketing Conference of 2026",
+      "organizer": "Speakerscon",
+      "date": "2026-02",
+      "dateLabel": "February 2026",
+      "hub": "marketing",
+      "note": ""
+    },
+    {
+      "name": "Breakfast Club",
+      "organizer": "Philippine Business Network",
+      "date": "2026-02",
+      "dateLabel": "February 2026",
+      "hub": "founder-journey",
+      "note": ""
+    },
+    {
+      "name": "International Women's Day 2026",
+      "organizer": "Break The Pattern",
+      "date": "2026-02",
+      "dateLabel": "February 2026",
+      "hub": "tech-and-business",
+      "note": ""
+    },
+    {
+      "name": "Philippine SME Business Expo",
+      "organizer": "Philippine SME Business Expo",
+      "date": "2025-11",
+      "dateLabel": "November 2025",
+      "hub": "tech-and-business",
+      "note": "philippine-sme-business-expo-technology-adoption"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./typography.css";
+@import "rehype-callouts/theme/obsidian";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+  * {
+    @apply border-border;
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-muted) transparent;
+  }
+  html {
+    font-size: 106.25%; /* 17px body */
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 112.5%; /* 18px body */
+    }
+  }
+  body {
+    line-height: 1.65;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--ff-display);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  /* Links are always underlined: the accent equals the text colour. */
+  a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: text-decoration-thickness 150ms;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+  a.no-underline,
+  .no-underline a {
+    text-decoration-line: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0ms !important;
+      animation-duration: 0ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility max-w-app {
+  max-width: 70rem; /* 1120px page */
+}
+
+@utility app-layout {
+  @apply max-w-app mx-auto w-full px-4 sm:px-6;
+}
+
+@utility max-w-read {
+  max-width: 68ch;
+}
+
+@utility h1 {
+  font-family: var(--ff-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+@utility h2 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.6rem;
+}
+
+@utility h3 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+@utility label-caps {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@utility meta {
+  @apply text-muted-foreground text-sm;
+}
+
+/* The one filled button on the site (ux-ui-spec.md §5.9) and outlined buttons */
+@utility btn {
+  @apply border-foreground inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-4 py-2 font-semibold no-underline;
+}
+
+@utility btn-filled {
+  @apply bg-accent text-accent-foreground border-accent;
+}
+
+:target {
+  scroll-margin-block: 1.5rem;
+}

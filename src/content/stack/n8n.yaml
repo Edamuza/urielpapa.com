@@ -1,0 +1,5 @@
+name: "n8n"
+group: automation
+use: "The Messenger and Instagram chatbot and the ERP's 5 outreach workflows."
+url: https://n8n.io
+order: 1

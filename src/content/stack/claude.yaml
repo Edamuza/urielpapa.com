@@ -1,0 +1,5 @@
+name: "Claude (Opus, Sonnet)"
+group: ai
+use: "The models behind my custom Claude skills and my Claude Code work."
+url: https://www.anthropic.com/claude
+order: 1

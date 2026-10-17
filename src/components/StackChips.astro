@@ -1,0 +1,28 @@
+---
+import { getEntries, type CollectionEntry } from "astro:content";
+
+type Props = { items: { collection: "stack"; id: string }[] };
+const entries = (await getEntries(
+  Astro.props.items
+)) as CollectionEntry<"stack">[];
+---
+
+{
+  entries.length > 0 && (
+    <div class="my-6">
+      <p class="label-caps text-muted-foreground mb-2">Tools in this post</p>
+      <ul class="flex flex-wrap gap-2">
+        {entries.map(e => (
+          <li>
+            <a
+              href={`/stack#${e.id}`}
+              class="bg-muted inline-block rounded-full px-3 py-1 text-sm no-underline hover:underline"
+            >
+              {e.data.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}

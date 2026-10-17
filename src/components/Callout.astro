@@ -1,0 +1,17 @@
+---
+/** MDX: <Callout type="note|tip|warning">…</Callout>. Max 2 per post. */
+type Props = { type?: "note" | "tip" | "warning"; title?: string };
+const { type = "note", title } = Astro.props;
+const label = title ?? { note: "Note", tip: "Tip", warning: "Warning" }[type];
+---
+
+<aside
+  class:list={[
+    "not-prose my-8 rounded-lg p-4",
+    type === "warning" ? "border-foreground border border-dashed" : "bg-muted",
+  ]}
+  role="note"
+>
+  <p class="label-caps mb-1">{label}</p>
+  <div class="[&_p]:my-1.5"><slot /></div>
+</aside>

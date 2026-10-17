@@ -1,0 +1,66 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import PostCard from "@/components/PostCard.astro";
+import { NEWSLETTER } from "@/config";
+import { getNewsletterIssues } from "@/utils/content";
+import { breadcrumbNode } from "@/utils/schema";
+
+const issues = await getNewsletterIssues();
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Newsletter", href: "/newsletter" },
+];
+---
+
+<Layout
+  title="Newsletter"
+  description={`Uriel Papa's newsletter: ${NEWSLETTER.what}, ${NEWSLETTER.frequency}, on AI, automation, SEO, tech stacks and marketing. Free, double opt-in.`}
+  schema={[breadcrumbNode(crumbs)]}
+>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1">Newsletter</h1>
+    <div class="mt-4 space-y-3 text-lg">
+      <p>
+        If you're interested in the same things I write about, this is the
+        easiest way to keep up. You get {NEWSLETTER.what}, {
+          NEWSLETTER.frequency
+        }.
+      </p>
+      <p>
+        It's free. You'll get one email to confirm your address, and every issue
+        has an unsubscribe link.
+      </p>
+    </div>
+    <NewsletterBox heading="Subscribe" from="newsletter-page" />
+
+    <section aria-labelledby="past-h">
+      <h2 id="past-h" class="h2 mb-4">Past issues</h2>
+      {
+        issues.length > 0 ? (
+          <ul>
+            {issues.map(i => (
+              <PostCard
+                href={`/newsletter/${i.id}`}
+                title={i.data.title}
+                summary={i.data.description}
+                date={i.data.published}
+                draft={i.data.draft}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p>
+            The first issue hasn't gone out yet. Past issues will be listed
+            here.
+          </p>
+        )
+      }
+    </section>
+    <p class="mt-8">
+      Prefer not to give an email address? <a href="/rss.xml">Follow by RSS</a> instead.
+    </p>
+  </div>
+</Layout>

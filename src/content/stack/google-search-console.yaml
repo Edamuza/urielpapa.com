@@ -1,0 +1,5 @@
+name: "Google Search Console"
+group: seo-marketing
+use: "Tracking search performance on client sites, and one of the data sources for a 23-page semantic SEO plan."
+url: https://search.google.com/search-console
+order: 2
