@@ -34,7 +34,7 @@ export const MACRO =
 
 /**
  * Profiles listed in the footer, About, Contact and Person `sameAs`.
- * Add X, Threads, Instagram, Facebook and Reddit once confirmed.
+ * Add Threads, Instagram and Reddit once confirmed.
  */
 export const SOCIALS: { name: string; label: string; url: string }[] = [
   {
@@ -43,6 +43,17 @@ export const SOCIALS: { name: string; label: string; url: string }[] = [
     url: "https://www.linkedin.com/in/uriel-papa-vitese01/",
   },
   { name: "github", label: "GitHub", url: "https://github.com/Edamuza" },
+  { name: "x", label: "X", url: "https://x.com/its_uriel26" },
+  {
+    name: "tiktok",
+    label: "TikTok",
+    url: "https://www.tiktok.com/@its_uriel26",
+  },
+  {
+    name: "facebook",
+    label: "Facebook",
+    url: "https://www.facebook.com/itsuriel26",
+  },
 ];
 
 export const NEWSLETTER = {
