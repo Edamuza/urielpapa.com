@@ -77,11 +77,15 @@ Tokenizers differ between models. The same text can be a different number of tok
 
 Providers charge per token, usually quoted per million tokens, with one price for input (what you send) and a higher price for output (what the model writes back). Every request is billed as input tokens times the input price plus output tokens times the output price.
 
-| Model               | Input price per 1M tokens                     | Output price per 1M tokens                    | Context window                                | Source and date                               |
-| ------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| Claude [model name] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] |
-| GPT [model name]    | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] |
-| Gemini [model name] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] | [fill from official pricing pages, with date] |
+These are the standard API prices for one mid-range model from each of the three big providers, checked on October 17, 2026:
+
+| Model                                | Input per 1M tokens | Output per 1M tokens | Cached input per 1M tokens | Source                                                                        |
+| ------------------------------------ | ------------------- | -------------------- | -------------------------- | ----------------------------------------------------------------------------- |
+| Claude Sonnet 5.5                    | US$2.00             | US$10.00             | US$0.10                    | [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| OpenAI gpt-6.1-sol                   | US$2.00             | US$10.00             | US$0.10                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
+| Gemini 3.1 Pro Preview (up to 200K)  | US$2.00             | US$12.00             | US$0.20, plus storage      | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)           |
+
+Output costs five to six times as much as input on all three, which is why long replies drive most of a bill. Prices change often, so check the source pages before you budget.
 
 The input side includes more than your question. A chatbot request often carries a system prompt, the conversation so far and any documents you added, and all of that is counted every time.
 
