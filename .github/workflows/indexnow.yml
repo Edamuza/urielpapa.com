@@ -2,17 +2,22 @@ name: IndexNow
 
 # After Vercel finishes a production deploy, tell Bing and the other IndexNow
 # engines which pages changed since the previous production deploy.
+# Vercel reports deploys as a "Vercel" commit status; a successful one on main
+# means production is live.
 on:
-  deployment_status:
+  status:
 
 permissions:
   contents: read
-  deployments: read
+  statuses: read
 
 jobs:
   submit:
     name: Submit changed URLs
-    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    if: >-
+      github.event.context == 'Vercel' &&
+      github.event.state == 'success' &&
+      contains(github.event.branches.*.name, 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -20,7 +25,7 @@ jobs:
       - name: "☁️ Checkout repository"
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.deployment.sha }}
+          ref: ${{ github.event.sha }}
           fetch-depth: 0
 
       - name: Use Node.js
@@ -32,11 +37,15 @@ jobs:
         id: prev
         env:
           GH_TOKEN: ${{ github.token }}
-          CURRENT: ${{ github.event.deployment.id }}
+          SHA: ${{ github.event.sha }}
         run: |
-          sha=$(gh api "repos/${{ github.repository }}/deployments?environment=Production&per_page=10" \
-            --jq "[.[] | select(.id != ${CURRENT})][0].sha // empty")
-          echo "sha=${sha:-${{ github.event.deployment.sha }}~1}" >> "$GITHUB_OUTPUT"
+          prev=""
+          for c in $(git rev-list --first-parent --skip=1 --max-count=30 "$SHA"); do
+            state=$(gh api "repos/${{ github.repository }}/commits/$c/statuses" \
+              --jq '[.[] | select(.context == "Vercel")][0].state // empty')
+            if [ "$state" = "success" ]; then prev="$c"; break; fi
+          done
+          echo "sha=${prev:-$SHA~1}" >> "$GITHUB_OUTPUT"
 
       - name: "📣 Submit to IndexNow"
-        run: node scripts/indexnow.mjs "${{ steps.prev.outputs.sha }}" "${{ github.event.deployment.sha }}"
+        run: node scripts/indexnow.mjs "${{ steps.prev.outputs.sha }}" "${{ github.event.sha }}"
