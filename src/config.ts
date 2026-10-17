@@ -21,7 +21,10 @@ export const SITE = {
   email: "work@urielpapa.com",
   /** One-line bio used in the footer and author box. */
   bio: "Technical founder in Metro Manila. I share what I've learned building and running a company: AI, automation, tech stacks, SEO, GEO and AEO, marketing and how technology affects business, plus tech news.",
-  /** Path under /public: a 480×480 square crop, shown round by Avatar. */
+  /**
+   * Public URL of the 480×480 photo, used in the Person schema. Avatar shows an
+   * optimized copy (src/assets/images/uriel-papa.jpg); set null for the monogram.
+   */
   photo: "/images/uriel-papa.jpg" as string | null,
 } as const;
 
