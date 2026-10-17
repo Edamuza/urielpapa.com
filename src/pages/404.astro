@@ -1,0 +1,55 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { HUBS } from "@/data/hubs";
+import { getPosts, postUrl } from "@/utils/content";
+
+const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
+---
+
+<Layout title="Page not found" description="This page doesn't exist." noindex>
+  <div class="app-layout max-w-read pt-12">
+    <h1 class="h1">That page doesn't exist</h1>
+    <p class="mt-4 text-lg">
+      It may have moved, or the link has a typo. Try searching:
+    </p>
+    <form action="/search" method="get" role="search" class="mt-4 flex gap-2">
+      <label for="nf-q" class="sr-only">Search the site</label>
+      <input
+        id="nf-q"
+        name="q"
+        type="search"
+        class="border-foreground bg-background min-h-11 flex-1 rounded-lg border px-3"
+        placeholder="Search posts"
+      />
+      <button class="btn" type="submit">Search</button>
+    </form>
+    <h2 class="h2 mt-10 mb-3">Or browse a topic</h2>
+    <ul class="space-y-1">
+      {
+        HUBS.map(h => (
+          <li>
+            <a href={`/topics/${h.id}`}>{h.name}</a>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      latest.length > 0 && (
+        <>
+          <h2 class="h2 mt-10 mb-3">Latest posts</h2>
+          <ul>
+            {latest.map(p => (
+              <PostCard
+                href={postUrl(p)}
+                title={p.data.title}
+                hub={p.data.hub}
+                date={p.data.published}
+              />
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </div>
+</Layout>

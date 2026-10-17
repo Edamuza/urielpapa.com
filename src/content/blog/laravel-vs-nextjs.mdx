@@ -1,0 +1,106 @@
+---
+title: "Laravel vs Next.js: What I Learned Using Both in One System"
+seoTitle: Laravel vs Next.js for Business Web Apps
+description: Laravel or Next.js? A side-by-side on what each is good at, hosting and upkeep, plus why our ERP used Laravel for the API and Next.js for the interface.
+dek: Laravel and Next.js are often compared as rivals, but they solve different problems. Here is what each is good at, and how one ERP used both.
+hub: tech-stacks
+frame: comparison
+takeaways:
+  - Laravel is a back-end PHP framework that suits data-heavy business logic, such as payroll, accounting and permissions.
+  - Next.js is a React framework that suits fast, interactive interfaces and content sites.
+  - Many systems use Laravel for the API and Next.js for the interface, and the two work well together over a REST API.
+  - The VITE SEO Digital Advertising ERP used a Laravel 13 API with a Next.js 16 and React 19 front end, and shipped 115 pages and 5,241 automated tests in under 3 months.
+  - Choosing between Laravel and Next.js changes build time, hosting and long-term upkeep, so the decision is a business one as much as a technical one.
+businessImpact:
+  - The framework choice shapes how quickly a data-heavy system can be built and changed.
+  - Using both means two codebases to host and maintain, which adds running cost and skills the team needs.
+  - "[Uriel to add: what the split meant for the ERP team's speed or cost]"
+published: 2026-10-01
+related:
+  - astro-7-content-sites
+projects:
+  - vite-seo-erp
+stack:
+  - laravel
+  - nextjs
+  - react
+  - php
+  - mysql
+  - vercel
+faq:
+  - q: Is Laravel better than Next.js?
+    a: Neither is better overall. Laravel is a back-end PHP framework built for data-heavy logic, while Next.js is a React framework built for interfaces and content sites. Many systems use both.
+  - q: Can Laravel and Next.js work together?
+    a: Yes. A common setup has Laravel serve a REST API with the database, authentication and business rules, while Next.js renders the interface and calls that API.
+  - q: Which is easier to learn, Laravel or Next.js?
+    a: "It depends on what you already know. Developers comfortable with PHP usually find Laravel familiar, and developers who know React usually find Next.js familiar. [Uriel to add: which one felt easier to pick up, and why]"
+syndication: []
+draft: true
+---
+
+Laravel is a back-end PHP framework suited to data-heavy logic, while Next.js is a React framework suited to fast, interactive interfaces and content sites. They are not really rivals: many systems use Laravel for the API and Next.js for the interface, and that is exactly how our ERP was built.
+
+I led the team that built a four-module ERP on Laravel and Next.js in 2026, so this comparison comes from using both in one system. It is part of my [Tech Stacks](/topics/tech-stacks) writing.
+
+<FromTheBuild project="vite-seo-erp">
+
+The VITE SEO Digital Advertising ERP used a Laravel 13 API with a Next.js 16 and React 19 front end on MySQL. With the in-house team, we shipped 115 pages, 144 data models and 5,241 automated tests in under 3 months.
+
+</FromTheBuild>
+## What is the difference between Laravel and Next.js?
+
+Laravel runs on the server and is written in PHP. It gives you routing, a database layer (Eloquent), migrations, queues, authentication, validation and testing tools out of the box, so most of the work of a business system, the rules and the data, has a clear home.
+
+Next.js is built on React and runs JavaScript or TypeScript on both the server and the browser. Its strength is the interface: pages that load fast, render on the server when it helps search and speed, and stay interactive once loaded.
+
+|                | Laravel                                                          | Next.js                                                    |
+| -------------- | ---------------------------------------------------------------- | ---------------------------------------------------------- |
+| Purpose        | Back-end framework for APIs and full web apps                    | React framework for interfaces, web apps and content sites |
+| Language       | PHP                                                              | JavaScript or TypeScript                                   |
+| Best at        | Data-heavy business logic, permissions, background jobs          | Fast, interactive interfaces and server-rendered pages     |
+| Hosting        | A PHP server or VPS, or a managed PHP platform                   | A Node.js host or a platform such as Vercel                |
+| Learning curve | Gentle if you know PHP and MVC                                   | Gentle if you know React                                   |
+| Ecosystem      | First-party packages for queues, real-time events, auth and more | The React ecosystem of components and libraries            |
+
+[verify: hosting options and first-party package names against the current Laravel and Next.js docs before publishing]
+
+## Which is quicker for building data-heavy systems?
+
+For systems with many related records and strict rules, Laravel gives a lot for free: models, relationships, migrations, validation and queues all follow one set of conventions. In the ERP, the payroll rules (SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay) and the double-entry accounting all lived in the Laravel API.
+
+Next.js can talk to a database directly too, but you usually assemble more of the pieces yourself: an ORM, an auth library, a job runner. That flexibility is useful for smaller apps, as in the client quotation portal I built on Next.js 14 with Prisma and PostgreSQL.
+
+[Uriel to add: where Laravel felt faster or slower than expected while building the ERP]
+
+## What do hosting and maintenance look like for each?
+
+A Laravel app needs a PHP runtime, a database, and often a queue worker and a scheduler running in the background. A Next.js app needs a Node.js runtime or a platform built for it, and much of it can be served as static or cached pages.
+
+Running both means two deployments, two sets of dependencies to keep updated, and two places where something can break. The upside is that each side can be updated, scaled and tested on its own.
+
+[Uriel to add: how the ERP was hosted and what upkeep looked like]
+
+## Can you use Laravel and Next.js together?
+
+Yes, and it is a common pattern. Laravel serves a REST API with the database, authentication and business rules. Next.js renders the interface and calls that API. Real-time features can go through Laravel too: the ERP used Laravel Reverb for real-time events, and its project management module had real-time updates.
+
+The cost of this split is coordination. Every feature touches two codebases, and the API contract between them has to stay in sync.
+
+## Why did we use both in our ERP?
+
+The ERP had four modules behind one login: HRIS (TeamOra), CRM (Zerem), project management (Sprintly) and accounting. The back end had to handle 144 data models, role-based access and integrations with Gmail, Twilio Voice, Meta messaging webhooks, OpenAI, OpenRouter and 5 n8n outreach workflows. The front end had 115 pages.
+
+[Uriel to add: why this stack, in your own words]
+
+<Callout type="note">
+
+This post compares the frameworks as used in one system. Version details change quickly, so check the official Laravel and Next.js docs for what is current.
+
+</Callout>
+## When would I pick Laravel, Next.js, or both?
+
+- **Pick Laravel if** the hard part is the data and the rules: payroll, accounting, permissions, approvals, background jobs.
+- **Pick Next.js if** the hard part is the interface or the content: a marketing site, a portal with a few clear screens, or an app where speed and search visibility matter most.
+- **Pick both if** you have a data-heavy system and also need a modern, interactive interface, and your team can maintain two codebases.
+
+[Uriel to add: your own verdict after building the ERP]

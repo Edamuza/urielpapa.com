@@ -1,0 +1,61 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import { SITE } from "@/config";
+import { formatDate, getNewsletterIssues, isoDate } from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
+
+export async function getStaticPaths() {
+  const issues = await getNewsletterIssues();
+  return issues.map(issue => ({
+    params: { slug: issue.id },
+    props: { issue },
+  }));
+}
+
+type Props = { issue: CollectionEntry<"newsletter"> };
+const { issue } = Astro.props;
+const { Content } = await render(issue);
+const path = `/newsletter/${issue.id}`;
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Newsletter", href: "/newsletter" },
+  { name: issue.data.title, href: path },
+];
+const schema = [
+  {
+    "@type": "BlogPosting",
+    headline: issue.data.title,
+    description: issue.data.description,
+    url: abs(path),
+    datePublished: issue.data.published.toISOString(),
+    author: { "@id": PERSON_ID },
+    articleSection: "Newsletter",
+    inLanguage: SITE.lang,
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={issue.data.title}
+  description={issue.data.description}
+  ogType="article"
+  publishedTime={issue.data.published}
+  schema={schema}
+  draft={issue.data.draft}
+>
+  <article class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1">{issue.data.title}</h1>
+    <p class="meta mt-3">
+      <time datetime={isoDate(issue.data.published)}
+        >{formatDate(issue.data.published)}</time
+      >
+    </p>
+    <div class="app-prose mt-6"><Content /></div>
+    <NewsletterBox heading="Get the next issue" from="newsletter-issue" />
+  </article>
+</Layout>

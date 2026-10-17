@@ -1,0 +1,5 @@
+name: "LM Studio"
+group: ai
+use: "Running local LLMs on my own machine."
+url: https://lmstudio.ai
+order: 6

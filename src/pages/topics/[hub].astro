@@ -1,0 +1,181 @@
+---
+import { getEntries, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PostCard from "@/components/PostCard.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import { SHOW_DRAFTS } from "@/config";
+import {
+  getAllBlogEntries,
+  getHubs,
+  getNotes,
+  getProjects,
+  noteUrl,
+  postUrl,
+  projectUrl,
+  readingTime,
+  type Hub,
+  type Post,
+} from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+export async function getStaticPaths() {
+  const hubs = await getHubs();
+  return hubs.map(hub => ({ params: { hub: hub.id }, props: { hub } }));
+}
+
+type Props = { hub: Hub };
+const { hub } = Astro.props;
+const { Content } = await render(hub);
+
+const blog = (await getAllBlogEntries()).filter(p => p.data.hub === hub.id);
+const notes = (await getNotes()).filter(n => n.data.hub === hub.id);
+const articles = blog.filter(p => p.data.frame !== "event-note");
+const eventNotes = blog.filter(p => p.data.frame === "event-note");
+const projects = (await getProjects())
+  .filter(p => (p.data.hubs as string[]).includes(hub.id))
+  .slice(0, 3);
+
+const picks = await getEntries(hub.data.startHere.map(s => s.post));
+const startHere = hub.data.startHere
+  .map((s, i) => ({ ...s, entry: picks[i] as Post | undefined }))
+  .filter(s => s.entry && (SHOW_DRAFTS || !s.entry.data.draft));
+
+// Posts and notes together, newest first, each with its format label.
+const all = [
+  ...articles.map(p => ({
+    href: postUrl(p),
+    title: p.data.title,
+    summary: p.data.dek,
+    date: p.data.published,
+    frame: p.data.frame as string,
+    minutes: readingTime(p.body),
+    draft: p.data.draft,
+  })),
+  ...notes.map(n => ({
+    href: noteUrl(n),
+    title: n.data.title,
+    summary: n.data.description,
+    date: n.data.published,
+    frame: "Note",
+    minutes: undefined,
+    draft: n.data.draft,
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Topics", href: "/topics" },
+  { name: hub.data.title, href: `/topics/${hub.id}` },
+];
+const schema = [
+  collectionNode({
+    path: `/topics/${hub.id}`,
+    name: hub.data.title,
+    description: hub.data.description,
+    items: all.map(a => ({ name: a.title, href: a.href })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={hub.data.seoTitle}
+  description={hub.data.description}
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1">{hub.data.title}</h1>
+    <div class="app-prose mt-4 text-lg"><Content /></div>
+
+    {
+      startHere.length > 0 && (
+        <section class="max-w-read mt-10" aria-labelledby="start-h">
+          <h2 id="start-h" class="h2 mb-4">
+            Start here
+          </h2>
+          <ol class="space-y-4">
+            {startHere.map(s => (
+              <li class="bg-muted rounded-lg p-4">
+                <a href={postUrl(s.entry!)} class="font-semibold">
+                  {s.entry!.data.title}
+                </a>
+                <p class="mt-1 text-[0.95rem]">{s.reason}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <section class="max-w-read mt-10" aria-labelledby="all-h">
+      <h2 id="all-h" class="h2 mb-4">
+        All posts on {hub.data.title.replace(/^The /, "the ")}
+      </h2>
+      {
+        all.length > 0 ? (
+          <ul>
+            {all.map(a => (
+              <PostCard
+                href={a.href}
+                title={a.title}
+                summary={a.summary}
+                date={a.date}
+                minutes={a.minutes}
+                frame={a.frame}
+                draft={a.draft}
+                showHub={false}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p>
+            The first posts on this topic are being written. Subscribe below to
+            get them by email.
+          </p>
+        )
+      }
+    </section>
+
+    {
+      projects.length > 0 && (
+        <section class="max-w-read mt-10" aria-labelledby="proj-h">
+          <h2 id="proj-h" class="h2 mb-4">
+            Related projects
+          </h2>
+          <ul class="space-y-2">
+            {projects.map(p => (
+              <li>
+                <a href={projectUrl(p)}>{p.data.title}</a>: {p.data.outcome}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      eventNotes.length > 0 && (
+        <section class="max-w-read mt-10" aria-labelledby="ev-h">
+          <h2 id="ev-h" class="h2 mb-4">
+            Events on this topic
+          </h2>
+          <ul>
+            {eventNotes.map(e => (
+              <PostCard
+                href={postUrl(e)}
+                title={e.data.title}
+                date={e.data.published}
+                draft={e.data.draft}
+                showHub={false}
+              />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="max-w-read"><NewsletterBox from={`hub:${hub.id}`} /></div>
+  </div>
+</Layout>

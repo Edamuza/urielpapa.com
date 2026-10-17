@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import { STACK_GROUPS } from "@/data/hubs";
+import {
+  getAllBlogEntries,
+  getProjects,
+  postUrl,
+  projectUrl,
+} from "@/utils/content";
+
+const items = (await getCollection("stack")).sort(
+  (a, b) =>
+    a.data.order - b.data.order || a.data.name.localeCompare(b.data.name)
+);
+const posts = await getAllBlogEntries();
+const projects = await getProjects();
+const usedIn = (id: string) => [
+  ...posts
+    .filter(p => p.data.stack.some(s => s.id === id))
+    .map(p => ({ href: postUrl(p), title: p.data.title })),
+  ...projects
+    .filter(p => p.data.stack.some(s => s.id === id))
+    .map(p => ({ href: projectUrl(p), title: p.data.title })),
+];
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Stack", href: "/stack" },
+];
+---
+
+<Layout
+  title="Stack: The Tools and Technologies I Use"
+  description="The languages, frameworks, databases, AI models and harnesses, automation, SEO and infrastructure tools Uriel Papa uses, each linked to the posts and projects that use it."
+>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro
+      title="Stack"
+      intro="The tools and technologies I use, grouped, with what I use each one for and where I've written about it."
+    />
+    {
+      STACK_GROUPS.map(g => {
+        const list = items.filter(i => i.data.group === g.id);
+        return (
+          list.length > 0 && (
+            <section class="mt-10" aria-labelledby={`g-${g.id}`}>
+              <h2 id={`g-${g.id}`} class="h2 mb-3">
+                {g.label}
+              </h2>
+              <dl class="divide-border divide-y">
+                {list.map(i => {
+                  const refs = usedIn(i.id);
+                  return (
+                    <div id={i.id} class="py-3">
+                      <dt class="font-semibold">
+                        {i.data.url ? (
+                          <a href={i.data.url} rel="noopener">
+                            {i.data.name}
+                          </a>
+                        ) : (
+                          i.data.name
+                        )}
+                      </dt>
+                      {!i.data.use.startsWith("[") && (
+                        <dd class="text-[0.95rem]">{i.data.use}</dd>
+                      )}
+                      {refs.length > 0 && (
+                        <dd class="meta mt-1">
+                          Used in:{" "}
+                          {refs.map((r, n) => (
+                            <>
+                              {n > 0 && " · "}
+                              <a href={r.href}>{r.title}</a>
+                            </>
+                          ))}
+                        </dd>
+                      )}
+                    </div>
+                  );
+                })}
+              </dl>
+            </section>
+          )
+        );
+      })
+    }
+  </div>
+</Layout>

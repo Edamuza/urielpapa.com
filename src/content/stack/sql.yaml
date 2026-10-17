@@ -1,0 +1,4 @@
+name: "SQL"
+group: languages-frameworks
+use: "Working with the MySQL and PostgreSQL databases behind my projects."
+order: 5

@@ -1,0 +1,5 @@
+name: "Tailwind CSS"
+group: languages-frameworks
+use: "Styling for the NFC card platform, TravelEase and this site."
+url: https://tailwindcss.com
+order: 10

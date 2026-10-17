@@ -1,0 +1,236 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Avatar from "@/components/Avatar.astro";
+import PostCard from "@/components/PostCard.astro";
+import HubCard from "@/components/HubCard.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import { SITE } from "@/config";
+import { HUBS } from "@/data/hubs";
+import {
+  formatDate,
+  getAllBlogEntries,
+  getEventNotes,
+  getHubs,
+  getNewsTakes,
+  getNotes,
+  getPosts,
+  isoDate,
+  noteUrl,
+  postUrl,
+  readingTime,
+} from "@/utils/content";
+
+const posts = await getPosts();
+const news = (await getNewsTakes()).slice(0, 3);
+const notes = (await getNotes()).slice(0, 3);
+const events = (await getEventNotes()).slice(0, 2);
+const hubEntries = await getHubs();
+const allBlog = await getAllBlogEntries();
+const allNotes = await getNotes();
+
+const hubCount = (id: string) =>
+  allBlog.filter(p => p.data.hub === id).length +
+  allNotes.filter(n => n.data.hub === id).length;
+
+const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
+---
+
+<Layout>
+  <div class="app-layout">
+    <section
+      class="border-border grid gap-10 border-b py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_20rem]"
+      aria-labelledby="intro-h"
+    >
+      <div class="max-w-read">
+        <div class="mb-5 flex items-center gap-3">
+          <Avatar size={56} />
+          <p class="font-semibold">
+            {SITE.name}<span
+              class="text-muted-foreground block text-sm font-normal"
+              >{SITE.jobTitle} · {SITE.location}</span
+            >
+          </p>
+        </div>
+        <h1 id="intro-h" class="h1">
+          Notes on building with technology, and what it changes.
+        </h1>
+        <p class="mt-5 text-lg">
+          <strong
+            >I'm Uriel Papa, a full-stack developer from Metro Manila who writes
+            about technology and how it changes the way things get built and
+            run.</strong
+          >{" "}
+          I've led the build of a four-module ERP (HR and payroll, CRM, project management
+          and accounting), written WordPress SEO plugins, built AI chatbots and agent
+          pipelines, and founded and ran a digital agency, VITE SEO Digital Advertising,
+          which has since closed. Here I share what I learn from that work, my takes
+          on the latest tech news, and notes from seminars and trainings.
+          {
+            startWith.length > 0 && (
+              <>
+                {" "}
+                New here? Start with{" "}
+                {startWith.map((p, i) => (
+                  <>
+                    {i > 0 && " or "}
+                    <a href={postUrl(p)}>{p.data.title}</a>
+                  </>
+                ))}
+                .
+              </>
+            )
+          }
+        </p>
+        <p class="mt-6 flex flex-wrap gap-3">
+          <a href="/blog" class="btn">Read the writing</a>
+          <a href="/about" class="btn">About me</a>
+        </p>
+        <p class="meta mt-6">
+          What I've built: an ERP, an NFC card platform, a tourism portal,
+          WordPress SEO plugins and AI chatbots. <a href="/about"
+            >More about my work</a
+          >.
+        </p>
+      </div>
+
+      <aside
+        aria-labelledby="home-news-h"
+        class="lg:border-border lg:border-s lg:ps-8"
+      >
+        <h2 id="home-news-h" class="h3 mb-3">Latest news takes</h2>
+        {
+          news.length > 0 ? (
+            <ul class="space-y-4">
+              {news.map(n => (
+                <li>
+                  <a href={postUrl(n)} class="font-semibold">
+                    {n.data.title}
+                  </a>
+                  <p class="meta mt-1">
+                    <time datetime={isoDate(n.data.published)}>
+                      {formatDate(n.data.published)}
+                    </time>
+                    {n.data.draft && " · Draft"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="meta">
+              Recent releases and announcements, with what they mean in
+              practice. The first takes are on the way.
+            </p>
+          )
+        }
+        <p class="mt-4 text-sm"><a href="/news">All news →</a></p>
+      </aside>
+    </section>
+
+    <section class="py-10" aria-labelledby="latest-h">
+      <h2 id="latest-h" class="h2 mb-5">Latest writing</h2>
+      {
+        posts.length > 0 ? (
+          <ul class="max-w-read">
+            {posts.slice(0, 6).map(p => (
+              <PostCard
+                href={postUrl(p)}
+                title={p.data.title}
+                summary={p.data.dek}
+                hub={p.data.hub}
+                date={p.data.published}
+                minutes={readingTime(p.body)}
+                draft={p.data.draft}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p class="max-w-read">
+            The first posts are being written. Subscribe below to get them when
+            they're out.
+          </p>
+        )
+      }
+      <p class="mt-4"><a href="/blog">All writing →</a></p>
+    </section>
+
+    <section class="border-border border-t py-10" aria-labelledby="topics-h">
+      <h2 id="topics-h" class="h2 mb-2">Topics</h2>
+      <p class="max-w-read mb-6">
+        Seven areas I write about, all about technology and what it changes.
+      </p>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          HUBS.map(h => {
+            const entry = hubEntries.find(e => e.id === h.id);
+            return (
+              <HubCard
+                href={`/topics/${h.id}`}
+                name={h.name}
+                summary={entry?.data.summary ?? ""}
+                count={hubCount(h.id)}
+              />
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <div class="border-border grid gap-10 border-t py-10 md:grid-cols-2">
+      <section aria-labelledby="notes-h">
+        <h2 id="notes-h" class="h2 mb-4">Recent notes</h2>
+        {
+          notes.length > 0 ? (
+            <ul>
+              {notes.map(n => (
+                <PostCard
+                  href={noteUrl(n)}
+                  title={n.data.title}
+                  hub={n.data.hub}
+                  date={n.data.published}
+                  draft={n.data.draft}
+                />
+              ))}
+            </ul>
+          ) : (
+            <p>Short notes and quick tips will show up here.</p>
+          )
+        }
+        <p class="mt-4"><a href="/notes">All notes →</a></p>
+      </section>
+
+      <section aria-labelledby="events-h">
+        <h2 id="events-h" class="h2 mb-4">Seminars and events</h2>
+        {
+          events.length > 0 ? (
+            <ul>
+              {events.map(e => (
+                <PostCard
+                  href={postUrl(e)}
+                  title={e.data.title}
+                  hub={e.data.hub}
+                  date={e.data.published}
+                  draft={e.data.draft}
+                />
+              ))}
+            </ul>
+          ) : (
+            <p>Notes from the seminars and trainings I attend.</p>
+          )
+        }
+        <p class="mt-4"><a href="/events">All events →</a></p>
+      </section>
+    </div>
+
+    <div class="max-w-read">
+      <NewsletterBox from="home" />
+      <p class="text-lg">
+        Want to work together? <a
+          href="/contact?topic=work"
+          class="font-semibold"
+          data-event="work_with_me_click"
+          data-event-from="home">Get in touch →</a
+        >
+      </p>
+    </div>
+  </div>
+</Layout>

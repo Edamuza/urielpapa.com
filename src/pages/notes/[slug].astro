@@ -1,0 +1,92 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import HubChip from "@/components/HubChip.astro";
+import Syndication from "@/components/Syndication.astro";
+import ShareLinks from "@/components/ShareLinks.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SHOW_DRAFTS, SITE } from "@/config";
+import {
+  formatDate,
+  getNotes,
+  isoDate,
+  noteUrl,
+  postUrl,
+  type Note,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID, WEBSITE_ID } from "@/utils/schema";
+import { hubName } from "@/data/hubs";
+
+export async function getStaticPaths() {
+  const notes = await getNotes();
+  return notes.map(note => ({ params: { slug: note.id }, props: { note } }));
+}
+
+type Props = { note: Note };
+const { note } = Astro.props;
+const { data } = note;
+const { Content } = await render(note);
+const related = data.related ? await getEntry(data.related) : undefined;
+const showRelated = related && (!related.data.draft || SHOW_DRAFTS);
+const url = abs(noteUrl(note));
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Notes", href: "/notes" },
+  { name: data.title, href: noteUrl(note) },
+];
+const schema = [
+  {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    mainEntityOfPage: url,
+    headline: data.title,
+    description: data.description,
+    image: abs("/og.png"),
+    datePublished: data.published.toISOString(),
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    articleSection: hubName(data.hub),
+    inLanguage: SITE.lang,
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={data.title}
+  description={data.description}
+  ogType="article"
+  publishedTime={data.published}
+  schema={schema}
+  draft={data.draft}
+>
+  <article class="app-layout max-w-read pt-8" data-pagefind-body>
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="h1">{data.title}</h1>
+    <p class="meta mt-3 flex flex-wrap items-center gap-x-3">
+      <HubChip hub={data.hub} />
+      <span>By <a href="/about" rel="author">{SITE.name}</a></span>
+      <time datetime={isoDate(data.published)}
+        >{formatDate(data.published)}</time
+      >
+    </p>
+    <div class="app-prose mt-6"><Content components={mdxComponents} /></div>
+    {
+      showRelated && related && (
+        <p class="mt-6">
+          The longer version:{" "}
+          <a href={postUrl(related)}>{related.data.title}</a>.
+        </p>
+      )
+    }
+    <p class="mt-6">
+      More in <a href={`/topics/${data.hub}`}>{hubName(data.hub)}</a> · <a
+        href="/notes">All notes</a
+      >
+    </p>
+    <Syndication links={data.syndication} />
+    <ShareLinks url={url} title={data.title} />
+  </article>
+</Layout>

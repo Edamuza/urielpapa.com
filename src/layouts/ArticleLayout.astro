@@ -1,0 +1,385 @@
+---
+/**
+ * Template for long posts (/blog), news takes (/news) and event notes (/events).
+ * Structure follows ux-ui-spec.md §5.2, §5.5 and §5.8.
+ */
+import { getEntries, render } from "astro:content";
+import { Image } from "astro:assets";
+import Layout from "./Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import HubChip from "@/components/HubChip.astro";
+import KeyTakeaways from "@/components/KeyTakeaways.astro";
+import BusinessImpact from "@/components/BusinessImpact.astro";
+import FAQ from "@/components/FAQ.astro";
+import AuthorBox from "@/components/AuthorBox.astro";
+import StackChips from "@/components/StackChips.astro";
+import Syndication from "@/components/Syndication.astro";
+import ShareLinks from "@/components/ShareLinks.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import WorkWithMe from "@/components/WorkWithMe.astro";
+import TOC from "@/components/TOC.astro";
+import PostCard from "@/components/PostCard.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SITE } from "@/config";
+import { hubName } from "@/data/hubs";
+import {
+  formatDate,
+  getAllBlogEntries,
+  isoDate,
+  postUrl,
+  readingTime,
+  type Post,
+} from "@/utils/content";
+import {
+  abs,
+  breadcrumbNode,
+  PERSON_ID,
+  WEBSITE_ID,
+  type Crumb,
+} from "@/utils/schema";
+
+type Props = { post: Post };
+const { post } = Astro.props;
+const { data } = post;
+const { Content, headings } = await render(post);
+
+const kind =
+  data.frame === "news-take"
+    ? "news"
+    : data.frame === "event-note"
+      ? "event"
+      : "post";
+const url = abs(postUrl(post));
+const minutes = readingTime(post.body);
+const hub = hubName(data.hub);
+
+const crumbs: Crumb[] =
+  kind === "news"
+    ? [
+        { name: "Home", href: "/" },
+        { name: "News", href: "/news" },
+        { name: data.title, href: postUrl(post) },
+      ]
+    : kind === "event"
+      ? [
+          { name: "Home", href: "/" },
+          { name: "Events", href: "/events" },
+          { name: data.title, href: postUrl(post) },
+        ]
+      : [
+          { name: "Home", href: "/" },
+          { name: "Topics", href: "/topics" },
+          { name: hub, href: `/topics/${data.hub}` },
+          { name: data.title, href: postUrl(post) },
+        ];
+
+// Keep reading: chosen related posts, otherwise the newest in the same hub.
+const all = await getAllBlogEntries();
+let related = (await getEntries(data.related)).filter(Boolean) as Post[];
+if (related.length === 0) {
+  related = all
+    .filter(p => p.id !== post.id && p.data.hub === data.hub)
+    .slice(0, 2);
+}
+
+const ogImage = data.hero ? data.hero.src : `/og/${post.id}.png`;
+
+const article = {
+  "@type": "BlogPosting",
+  "@id": `${url}#article`,
+  mainEntityOfPage: url,
+  url,
+  headline: data.title,
+  description: data.description,
+  image: abs(ogImage),
+  datePublished: data.published.toISOString(),
+  ...(data.updated && { dateModified: data.updated.toISOString() }),
+  author: { "@id": PERSON_ID },
+  publisher: { "@id": PERSON_ID },
+  isPartOf: { "@id": WEBSITE_ID },
+  articleSection: hub,
+  inLanguage: SITE.lang,
+  wordCount: (post.body ?? "").split(/\s+/).filter(Boolean).length,
+  ...(data.event && {
+    about: {
+      "@type": "Event",
+      name: data.event.name,
+      startDate: data.event.startDate,
+      ...(data.event.endDate && { endDate: data.event.endDate }),
+      ...((data.event.venue || data.event.city) && {
+        location: {
+          "@type": "Place",
+          name: data.event.venue ?? data.event.city,
+          address: [data.event.city, "PH"].filter(Boolean).join(", "),
+        },
+      }),
+      ...(data.event.organizer && {
+        organizer: { "@type": "Organization", name: data.event.organizer },
+      }),
+      ...(data.event.url && { url: data.event.url }),
+    },
+  }),
+};
+
+const faqNode = data.faq.length
+  ? {
+      "@type": "FAQPage",
+      mainEntity: data.faq.map(f => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    }
+  : null;
+
+const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
+---
+
+<Layout
+  title={data.seoTitle}
+  description={data.description}
+  ogImage={ogImage}
+  ogType="article"
+  publishedTime={data.published}
+  modifiedTime={data.updated}
+  schema={schema}
+  draft={data.draft}
+>
+  <link
+    slot="head"
+    rel="alternate"
+    type="text/markdown"
+    href={`${postUrl(post)}.md`}
+    title="Markdown copy"
+  />
+
+  <div
+    class="app-layout pt-8 xl:grid xl:grid-cols-[14rem_minmax(0,68ch)] xl:gap-12"
+  >
+    <div class="hidden xl:block">
+      {kind === "post" && <TOC headings={headings} />}
+    </div>
+
+    <article data-pagefind-body class="min-w-0">
+      <Breadcrumbs crumbs={crumbs} />
+
+      <header>
+        <p class="meta mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <HubChip hub={data.hub} />
+          {kind === "news" && <span>News take</span>}
+          {kind === "event" && <span>Event note</span>}
+          <span>{minutes} min read</span>
+        </p>
+        <h1 class="h1 max-w-read">{data.title}</h1>
+        <p class="max-w-read mt-3 text-xl leading-snug">{data.dek}</p>
+        <p class="meta mt-4">
+          By <a href="/about" rel="author">{SITE.name}</a>{" · "}
+          {
+            kind === "news" ? (
+              <strong class="text-foreground">
+                <time datetime={isoDate(data.published)}>
+                  {formatDate(data.published, "D MMMM YYYY")}
+                </time>
+              </strong>
+            ) : (
+              <>
+                Published{" "}
+                <time datetime={isoDate(data.published)}>
+                  {formatDate(data.published)}
+                </time>
+              </>
+            )
+          }
+          {
+            data.updated && kind !== "news" && (
+              <>
+                {" "}
+                · Updated{" "}
+                <time datetime={isoDate(data.updated)}>
+                  {formatDate(data.updated)}
+                </time>
+              </>
+            )
+          }
+        </p>
+        {
+          data.updated && data.updateNote && kind !== "news" && (
+            <p class="bg-muted mt-4 rounded-lg px-4 py-2 text-sm">
+              <strong>Updated {formatDate(data.updated)}:</strong>{" "}
+              {data.updateNote}
+            </p>
+          )
+        }
+        {
+          kind === "news" && data.sourceUrl && (
+            <p class="mt-3 text-[0.95rem]">
+              Source:{" "}
+              <a href={data.sourceUrl} rel="noopener">
+                {new URL(data.sourceUrl).hostname.replace(/^www\./, "")}
+              </a>
+            </p>
+          )
+        }
+      </header>
+
+      {
+        data.event && (
+          <dl class="border-border mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 rounded-lg border p-4 text-[0.95rem]">
+            <dt class="font-semibold">Event</dt>
+            <dd>
+              {data.event.url ? (
+                <a href={data.event.url} rel="noopener">
+                  {data.event.name}
+                </a>
+              ) : (
+                data.event.name
+              )}
+            </dd>
+            <dt class="font-semibold">Date</dt>
+            <dd>
+              {data.event.startDate}
+              {data.event.endDate && ` to ${data.event.endDate}`}
+            </dd>
+            {data.event.organizer && (
+              <>
+                <dt class="font-semibold">Organizer</dt>
+                <dd>{data.event.organizer}</dd>
+              </>
+            )}
+            {(data.event.venue || data.event.city) && (
+              <>
+                <dt class="font-semibold">Where</dt>
+                <dd>
+                  {[data.event.venue, data.event.city]
+                    .filter(Boolean)
+                    .join(", ")}
+                </dd>
+              </>
+            )}
+          </dl>
+        )
+      }
+
+      {
+        data.hero && (
+          <figure class="my-8">
+            <Image
+              src={data.hero}
+              alt={data.heroAlt ?? ""}
+              widths={[720, 1080, 1440]}
+              sizes="(min-width: 768px) 68ch, 100vw"
+              loading="eager"
+              class="rounded-lg"
+            />
+          </figure>
+        )
+      }
+
+      {kind !== "news" && <KeyTakeaways items={data.takeaways} />}
+
+      <p class="meta mb-6">Part of <a href={`/topics/${data.hub}`}>{hub}</a></p>
+
+      {
+        kind === "post" && (
+          <div class="xl:hidden">
+            <TOC headings={headings} />
+          </div>
+        )
+      }
+
+      <div id="article-body" class="app-prose">
+        <Content components={mdxComponents} />
+      </div>
+
+      {
+        data.businessImpact.length > 0 && (
+          <BusinessImpact lines={data.businessImpact} />
+        )
+      }
+
+      {data.faq.length > 0 && <FAQ items={data.faq} />}
+
+      <div class="max-w-read mt-12">
+        <AuthorBox />
+        <StackChips items={data.stack} />
+        <Syndication links={data.syndication} />
+        <ShareLinks url={url} title={data.title} />
+      </div>
+
+      <section
+        class="max-w-read border-border mt-10 border-t pt-8"
+        aria-labelledby="keep-reading"
+      >
+        <h2 id="keep-reading" class="h2 mb-2">Keep reading</h2>
+        <p class="mb-4">
+          More in <a
+            href={`/topics/${data.hub}`}
+            data-event="next_post_click"
+            data-event-to="hub">{hub}</a
+          >.
+        </p>
+        {
+          related.length > 0 && (
+            <ul>
+              {related.map(p => (
+                <PostCard
+                  href={postUrl(p)}
+                  title={p.data.title}
+                  summary={p.data.dek}
+                  hub={p.data.hub}
+                  date={p.data.published}
+                  draft={p.data.draft}
+                  showHub={p.data.hub !== data.hub}
+                />
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <div class="max-w-read">
+        <NewsletterBox from={`${kind}-end`} />
+        {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
+      </div>
+    </article>
+  </div>
+</Layout>
+
+<script>
+  // "#" anchor on every section heading so a single passage can be shared and cited.
+  for (const h of document.querySelectorAll<HTMLElement>(
+    "#article-body :is(h2, h3)[id]"
+  )) {
+    const a = document.createElement("a");
+    a.href = `#${h.id}`;
+    a.className =
+      "heading-anchor ms-2 no-underline opacity-60 hover:opacity-100 focus:opacity-100";
+    a.setAttribute("aria-label", `Link to section: ${h.textContent}`);
+    a.textContent = "#";
+    h.appendChild(a);
+  }
+
+  // Copy button on code blocks.
+  for (const pre of document.querySelectorAll<HTMLPreElement>(
+    "#article-body pre"
+  )) {
+    const wrap = document.createElement("div");
+    wrap.className = "relative";
+    pre.parentNode?.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+    pre.tabIndex = 0;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className =
+      "bg-background border-border absolute end-2 top-2 rounded border px-2 py-0.5 text-xs font-medium";
+    btn.textContent = "Copy";
+    btn.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(
+        pre.querySelector("code")?.innerText ?? ""
+      );
+      btn.textContent = "Copied";
+      setTimeout(() => (btn.textContent = "Copy"), 1000);
+    });
+    wrap.appendChild(btn);
+  }
+</script>

@@ -1,0 +1,141 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import { hubName } from "@/data/hubs";
+import events from "@/data/events.json";
+import { getEventNotes, postUrl } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+type Talk = {
+  date: string;
+  dateLabel: string;
+  event: string;
+  topic: string;
+  slides?: string;
+  video?: string;
+};
+const talks = events.talks as Talk[];
+const notes = await getEventNotes();
+const noteFor = (slug: string) => notes.find(n => n.id === slug);
+
+const title = "Talks, Seminars and Training";
+const intro =
+  "The seminars, conferences and trainings I attend, with notes on what I learned and what I changed afterward.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Events", href: "/events" },
+];
+const schema = [
+  collectionNode({
+    path: "/events",
+    name: title,
+    description: intro,
+    items: notes.map(n => ({ name: n.data.title, href: postUrl(n) })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={title}
+  description="Seminars, conferences and trainings Uriel Papa has attended in the Philippines, with event notes on technology adoption, leadership, branding and marketing."
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro} />
+
+    {
+      talks.length > 0 && (
+        <section class="mb-12" aria-labelledby="talks-h">
+          <h2 id="talks-h" class="h2 mb-4">
+            Talks I've given
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-[0.95rem]">
+              <thead>
+                <tr class="border-foreground border-b">
+                  <>
+                    <th scope="col" class="py-2 pe-4">
+                      Date
+                    </th>
+                    <th scope="col" class="py-2 pe-4">
+                      Event
+                    </th>
+                    <th scope="col" class="py-2 pe-4">
+                      Topic
+                    </th>
+                    <th scope="col" class="py-2">
+                      Slides and video
+                    </th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {talks.map(t => (
+                  <tr class="border-border border-b">
+                    <td class="py-2 pe-4 whitespace-nowrap">{t.dateLabel}</td>
+                    <td class="py-2 pe-4">{t.event}</td>
+                    <td class="py-2 pe-4">{t.topic}</td>
+                    <td class="py-2">
+                      {t.slides && <a href={t.slides}>Slides</a>}{" "}
+                      {t.video && <a href={t.video}>Video</a>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="attended-h">
+      <h2 id="attended-h" class="h2 mb-4">Events I attended</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[36rem] text-left text-[0.95rem]">
+          <thead>
+            <tr class="border-foreground border-b">
+              <th scope="col" class="py-2 pe-4">Date</th>
+              <th scope="col" class="py-2 pe-4">Event</th>
+              <th scope="col" class="py-2 pe-4">Organizer</th>
+              <th scope="col" class="py-2">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              events.attended.map(e => {
+                const note = e.note ? noteFor(e.note) : undefined;
+                return (
+                  <tr class="border-border border-b align-top">
+                    <td class="py-2 pe-4 whitespace-nowrap">{e.dateLabel}</td>
+                    <td class="py-2 pe-4">{e.name}</td>
+                    <td class="py-2 pe-4">{e.organizer}</td>
+                    <td class="py-2">
+                      {note ? (
+                        <a href={postUrl(note)}>
+                          {note.data.draft ? "Draft note" : "Read my notes"}
+                        </a>
+                      ) : (
+                        <span class="text-muted-foreground">
+                          {hubName(e.hub)}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="max-w-read mt-10">
+      Organizing an event and want a speaker on AI, automation or SEO? <a
+        href="/contact?topic=speaking">Invite me to speak</a
+      >.
+    </p>
+  </div>
+</Layout>

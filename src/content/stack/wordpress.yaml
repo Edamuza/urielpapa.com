@@ -1,0 +1,5 @@
+name: "WordPress"
+group: languages-frameworks
+use: "Client websites since 2023, the five in-house SEO plugins and the Archive Downloader's theme layout."
+url: https://wordpress.org
+order: 14

@@ -1,0 +1,79 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PostCard from "@/components/PostCard.astro";
+import HubChip from "@/components/HubChip.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import { HUBS } from "@/data/hubs";
+import { getPosts, postUrl, readingTime } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+
+const posts = await getPosts();
+const title = "Writing";
+const intro =
+  "Guides, comparisons, explainers and build stories, newest first. Each one answers one question from first-hand work.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: title, href: "/blog" },
+];
+const schema = [
+  collectionNode({
+    path: "/blog",
+    name: title,
+    description: intro,
+    items: posts.map(p => ({ name: p.data.title, href: postUrl(p) })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title="Writing on AI, Automation, SEO and Tech Stacks"
+  description="All long posts by Uriel Papa: guides, comparisons and build stories on AI, automation, technology and business, SEO, GEO and AEO, tech stacks and marketing."
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro}>
+      <nav aria-label="Browse by topic" class="mt-5">
+        <ul class="flex flex-wrap gap-2">
+          {
+            HUBS.map(h => (
+              <li>
+                <HubChip hub={h.id} size="md" />
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <p class="meta mt-4">
+        Looking for something shorter? See <a href="/notes">notes</a> and <a
+          href="/news">news takes</a
+        >.
+      </p>
+    </PageIntro>
+    {
+      posts.length > 0 ? (
+        <ul class="max-w-read">
+          {posts.map(p => (
+            <PostCard
+              href={postUrl(p)}
+              title={p.data.title}
+              summary={p.data.dek}
+              hub={p.data.hub}
+              date={p.data.published}
+              minutes={readingTime(p.body)}
+              frame={p.data.frame}
+              draft={p.data.draft}
+              headingLevel="h2"
+            />
+          ))}
+        </ul>
+      ) : (
+        <p class="max-w-read">The first posts are being written.</p>
+      )
+    }
+    <div class="max-w-read"><NewsletterBox from="blog-index" /></div>
+  </div>
+</Layout>

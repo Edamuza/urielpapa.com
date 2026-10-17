@@ -1,0 +1,4 @@
+name: "JavaScript"
+group: languages-frameworks
+use: "The language under the React, Next.js and Node.js parts of my web projects."
+order: 1

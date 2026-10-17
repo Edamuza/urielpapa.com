@@ -1,0 +1,19 @@
+---
+/** Quiet "work with me" line (ux-ui-spec.md §5.10): end of long posts, About, Projects only. */
+type Props = { text?: string; linkText?: string; from: string };
+const {
+  text = "Building something like this?",
+  linkText = "Let's talk →",
+  from,
+} = Astro.props;
+---
+
+<p class="my-8 text-lg">
+  {text}{" "}
+  <a
+    href="/contact?topic=work"
+    class="font-semibold"
+    data-event="work_with_me_click"
+    data-event-from={from}>{linkText}</a
+  >
+</p>

@@ -1,0 +1,5 @@
+name: "PostgreSQL"
+group: databases
+use: "The TravelEase and client quotation portal databases."
+url: https://www.postgresql.org
+order: 2

@@ -1,0 +1,5 @@
+name: "Keystatic"
+group: infrastructure
+use: "This site's CMS."
+url: https://keystatic.com
+order: 8

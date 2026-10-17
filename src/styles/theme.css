@@ -1,0 +1,36 @@
+/* Register design tokens for Tailwind v4 (ux-ui-spec.md §7) */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-app: var(--ff-body);
+  --font-display: var(--ff-display);
+  --font-mono: var(--ff-mono);
+}
+
+/* Light theme: black and white */
+:root,
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --muted: #f2f2f2;
+  --muted-foreground: #5c5c5c;
+  --border: #e5e5e5;
+}
+
+/* Dark theme: white on near-black */
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --accent: #ffffff;
+  --accent-foreground: #000000;
+  --muted: #1f1f1f;
+  --muted-foreground: #a3a3a3;
+  --border: #262626;
+}

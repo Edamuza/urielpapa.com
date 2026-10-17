@@ -1,0 +1,5 @@
+name: "TypeScript"
+group: languages-frameworks
+use: "The TravelEase front end."
+url: https://www.typescriptlang.org
+order: 2

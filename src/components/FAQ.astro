@@ -1,0 +1,16 @@
+---
+type Props = { items: { q: string; a: string }[] };
+const { items } = Astro.props;
+---
+
+<section class="my-12" aria-labelledby="faq">
+  <h2 id="faq" class="h2 mb-4">Questions people ask</h2>
+  {
+    items.map(({ q, a }) => (
+      <div class="border-border border-t py-4">
+        <h3 class="h3 mb-2">{q}</h3>
+        <p>{a}</p>
+      </div>
+    ))
+  }
+</section>

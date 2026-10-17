@@ -1,0 +1,96 @@
+---
+import IconRss from "@/assets/icons/IconRss.svg";
+import Avatar from "./Avatar.astro";
+import { SITE, SOCIALS } from "@/config";
+import { HUBS } from "@/data/hubs";
+
+const year = new Date().getFullYear();
+
+const siteLinks = [
+  { href: "/blog", label: "Writing" },
+  { href: "/notes", label: "Notes" },
+  { href: "/news", label: "News" },
+  { href: "/events", label: "Events" },
+  { href: "/projects", label: "Projects" },
+  { href: "/now", label: "Now" },
+  { href: "/stack", label: "Stack" },
+  { href: "/about", label: "About" },
+  { href: "/colophon", label: "Colophon" },
+];
+---
+
+<footer class="app-layout mt-16">
+  <div
+    class="border-border grid gap-10 border-t py-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]"
+  >
+    <div class="max-w-sm">
+      <div class="flex items-center gap-3">
+        <Avatar size={40} />
+        <a href="/about" class="font-display text-lg font-bold no-underline"
+          >{SITE.name}</a
+        >
+      </div>
+      <p class="meta mt-3">{SITE.bio}</p>
+      <p class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        <a href="/newsletter">Newsletter</a>
+        <a href="/rss.xml" class="inline-flex items-center gap-1"
+          ><IconRss class="size-4" aria-hidden="true" />RSS</a
+        >
+        <a href="/contact">Contact</a>
+        <a
+          href="/contact?topic=work"
+          data-event="work_with_me_click"
+          data-event-from="footer">Work with me</a
+        >
+      </p>
+    </div>
+
+    <nav aria-label="Topics">
+      <h2 class="label-caps text-muted-foreground mb-3">Topics</h2>
+      <ul class="space-y-2 text-sm">
+        {
+          HUBS.map(h => (
+            <li>
+              <a href={`/topics/${h.id}`}>{h.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <nav aria-label="Site">
+      <h2 class="label-caps text-muted-foreground mb-3">Site</h2>
+      <ul class="space-y-2 text-sm">
+        {
+          siteLinks.map(l => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="label-caps text-muted-foreground mb-3">Elsewhere</h2>
+      <ul class="space-y-2 text-sm">
+        {
+          SOCIALS.map(s => (
+            <li>
+              <a
+                href={s.url}
+                rel="me noopener"
+                data-event="outbound_profile_click"
+                data-event-network={s.name}
+              >
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+        <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="meta border-border border-t py-6">© {year} {SITE.name}</p>
+</footer>
