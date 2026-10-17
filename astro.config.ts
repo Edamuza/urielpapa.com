@@ -99,6 +99,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    // Pre-bundle the search UI at dev startup. Found mid-session (first visit to
+    // /search), it triggers a re-bundle that leaves open tabs with stale chunks.
+    optimizeDeps: { include: ["@pagefind/default-ui"] },
   },
   // Self-hosted from @fontsource packages so builds never depend on a font CDN.
   fonts: [
