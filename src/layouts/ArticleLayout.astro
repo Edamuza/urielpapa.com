@@ -305,41 +305,44 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
         <Syndication links={data.syndication} />
         <ShareLinks url={url} title={data.title} />
       </div>
-
-      <section
-        class="max-w-read border-border mt-10 border-t pt-8"
-        aria-labelledby="keep-reading"
-      >
-        <h2 id="keep-reading" class="h2 mb-2">Keep reading</h2>
-        <p class="mb-4">
-          More in <a
-            href={`/topics/${data.hub}`}
-            data-event="next_post_click"
-            data-event-to="hub">{hub}</a
-          >.
-        </p>
-        {
-          related.length > 0 && (
-            <ul>
-              {related.map(p => (
-                <PostCard
-                  href={postUrl(p)}
-                  title={p.data.title}
-                  summary={p.data.dek}
-                  hub={p.data.hub}
-                  date={p.data.published}
-                  draft={p.data.draft}
-                  showHub={p.data.hub !== data.hub}
-                />
-              ))}
-            </ul>
-          )
-        }
-      </section>
-
-      <NewsletterBox from={`${kind}-end`} align="start" />
-      {kind === "post" && <WorkWithMe from={`post:${post.id}`} align="start" />}
     </article>
+  </div>
+
+  <!-- Centered on the page, not in the article column, to match other pages -->
+  <div class="app-layout">
+    <section
+      class="max-w-read border-border mx-auto mt-10 border-t pt-8"
+      aria-labelledby="keep-reading"
+    >
+      <h2 id="keep-reading" class="h2 mb-2 text-center">Keep reading</h2>
+      <p class="mb-4 text-center">
+        More in <a
+          href={`/topics/${data.hub}`}
+          data-event="next_post_click"
+          data-event-to="hub">{hub}</a
+        >.
+      </p>
+      {
+        related.length > 0 && (
+          <ul>
+            {related.map(p => (
+              <PostCard
+                href={postUrl(p)}
+                title={p.data.title}
+                summary={p.data.dek}
+                hub={p.data.hub}
+                date={p.data.published}
+                draft={p.data.draft}
+                showHub={p.data.hub !== data.hub}
+              />
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <NewsletterBox from={`${kind}-end`} />
+    {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
   </div>
 </Layout>
 

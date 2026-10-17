@@ -1,26 +1,14 @@
 ---
 /** Quiet "work with me" line (ux-ui-spec.md §5.10): end of long posts, About, Projects only. */
-type Props = {
-  text?: string;
-  linkText?: string;
-  from: string;
-  /** "start" lines it up with left-aligned post text; elsewhere it is centered. */
-  align?: "center" | "start";
-};
+type Props = { text?: string; linkText?: string; from: string };
 const {
   text = "Building something like this?",
   linkText = "Let's talk →",
   from,
-  align = "center",
 } = Astro.props;
 ---
 
-<p
-  class:list={[
-    "max-w-read my-8 text-lg",
-    align === "center" && "mx-auto text-center",
-  ]}
->
+<p class="max-w-read mx-auto my-8 text-center text-lg">
   {text}{" "}
   <a
     href="/contact?topic=work"
