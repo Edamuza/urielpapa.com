@@ -2,8 +2,10 @@
 // Used by the sitemap (lastmod) in astro.config.ts and by scripts/indexnow.mjs.
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+// fileURLToPath decodes %20 and friends, so checkouts with spaces in the path work.
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** Reads `key: value` lines from a file's YAML frontmatter (top-level scalars only). */
 function frontmatter(file) {
@@ -41,8 +43,9 @@ export function contentEntries() {
     let files = [];
     try {
       files = readdirSync(join(ROOT, dir));
-    } catch {
-      continue;
+    } catch (err) {
+      if (err.code === "ENOENT") continue;
+      throw err;
     }
     for (const name of files) {
       if (!/\.(md|mdx)$/.test(name) || name.startsWith("_")) continue;
