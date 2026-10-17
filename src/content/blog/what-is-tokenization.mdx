@@ -1,20 +1,41 @@
 ---
 title: What Is Tokenization, and Why Does It Decide What AI Costs?
 seoTitle: What Is Tokenization in LLMs, and Why It Sets AI Cost
-description: Tokenization is how a language model splits text into tokens. Here is how it works, why models limit and charge by tokens, and how to estimate AI costs.
-dek: Every AI model reads, writes, limits and bills you in tokens, not words. Once you understand tokens, AI pricing and limits start to make sense.
+description: >-
+  Tokenization is how a language model splits text into tokens. Here is how it
+  works, why models limit and charge by tokens, and how to estimate AI costs.
+dek: >-
+  Every AI model reads, writes, limits and bills you in tokens, not words. Once
+  you understand tokens, AI pricing and limits start to make sense.
 hub: ai
 frame: explainer
 takeaways:
-  - Tokenization is how a large language model splits text into small pieces called tokens, which can be whole words, parts of words or punctuation.
-  - Different models use different tokenizers, so the same sentence can become a different number of tokens in Claude, GPT or Gemini.
-  - Model providers charge per token, usually with separate prices for input tokens and output tokens.
-  - A model's context window is measured in tokens, so tokenization also decides how much text a model can work with at once.
-  - What surprised me on real bills was how much of the cost came from the system prompt and chat history sent with every message, not from the question itself.
+  - >-
+    Tokenization is how a large language model splits text into small pieces
+    called tokens, which can be whole words, parts of words or punctuation.
+  - >-
+    Different models use different tokenizers, so the same sentence can become a
+    different number of tokens in Claude, GPT or Gemini.
+  - >-
+    Model providers charge per token, usually with separate prices for input
+    tokens and output tokens.
+  - >-
+    A model's context window is measured in tokens, so tokenization also decides
+    how much text a model can work with at once.
+  - >-
+    What surprised me on real bills was how much of the cost came from the
+    system prompt and chat history sent with every message, not from the
+    question itself.
 businessImpact:
-  - AI bills vary because token counts vary with language, formatting and how long the replies are.
-  - Estimating tokens per task before building gives a realistic monthly cost for an AI feature.
-  - Output tokens usually cost more than input tokens, so short, structured replies save money.
+  - >-
+    AI bills vary because token counts vary with language, formatting and how
+    long the replies are.
+  - >-
+    Estimating tokens per task before building gives a realistic monthly cost
+    for an AI feature.
+  - >-
+    Output tokens usually cost more than input tokens, so short, structured
+    replies save money.
 published: 2026-10-02
 related:
   - n8n-messenger-instagram-chatbot
@@ -28,15 +49,25 @@ stack:
   - lm-studio
 faq:
   - q: How many words is a token?
-    a: "It depends on the tokenizer and the language. OpenAI's rule of thumb is that one token is about 4 characters, or about three quarters of a word, in English text, so 100 tokens is roughly 75 words. Other languages, code and unusual words often take more tokens for the same meaning."
+    a: >-
+      It depends on the tokenizer and the language. OpenAI's rule of thumb is
+      that one token is about 4 characters, or about three quarters of a word,
+      in English text, so 100 tokens is roughly 75 words. Other languages, code
+      and unusual words often take more tokens for the same meaning.
   - q: Why do output tokens cost more than input tokens?
-    a: Most providers price output higher because the model generates output one token at a time, which takes more compute than reading the input. Check each provider's pricing page for the actual rates.
+    a: >-
+      Most providers price output higher because the model generates output one
+      token at a time, which takes more compute than reading the input. Check
+      each provider's pricing page for the actual rates.
   - q: Do local models use tokens too?
-    a: Yes. A local model running in a tool like LM Studio still tokenizes text and still has a context window measured in tokens. You pay in hardware and electricity instead of per-token fees.
+    a: >-
+      Yes. A local model running in a tool like LM Studio still tokenizes text
+      and still has a context window measured in tokens. You pay in hardware and
+      electricity instead of per-token fees.
+event: {}
 syndication: []
-draft: true
+draft: false
 ---
-
 Tokenization is how a language model splits text into small pieces called tokens; models read, write, limit and charge by tokens, not words. That is why two prompts of the same length in words can cost different amounts, and why a long document can suddenly be "too long" for a model.
 
 This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations, so token counts are something I watch on real bills. I first noticed token costs when I built a Messenger and Instagram chatbot with n8n and OpenRouter, where every customer message also carried the full system prompt.
@@ -53,37 +84,36 @@ Here is an illustrative example. The exact split depends on the tokenizer, and e
 
 Sentence: "Tokenization isn't magic, it's math."
 
-| #   | Token    | Note                                                 |
-| --- | -------- | ---------------------------------------------------- |
-| 1   | Token    | A common word piece                                  |
-| 2   | ization  | A common suffix                                      |
-| 3   | " isn"   | Many tokenizers attach the leading space to the word |
-| 4   | 't       | Contractions are often split                         |
-| 5   | " magic" | A common word becomes one token                      |
-| 6   | ,        | Punctuation is usually its own token                 |
-| 7   | " it"    |                                                      |
-| 8   | 's       |                                                      |
-| 9   | " math"  |                                                      |
-| 10  | .        |                                                      |
+| #  | Token    | Note                                                 |
+| -- | -------- | ---------------------------------------------------- |
+| 1  | Token    | A common word piece                                  |
+| 2  | ization  | A common suffix                                      |
+| 3  | " isn"   | Many tokenizers attach the leading space to the word |
+| 4  | 't       | Contractions are often split                         |
+| 5  | " magic" | A common word becomes one token                      |
+| 6  | ,        | Punctuation is usually its own token                 |
+| 7  | " it"    |                                                      |
+| 8  | 's       |                                                      |
+| 9  | " math"  |                                                      |
+| 10 | .        |                                                      |
 
 So a 5-word sentence becomes about 10 tokens in this example. Short sentences with contractions and punctuation split more than average. For ordinary English prose, [OpenAI's rule of thumb](https://developers.openai.com/api/docs/concepts) is that one token is about 4 characters, or 0.75 words, so 1,000 words come to roughly 1,300 tokens. Most providers offer a tokenizer tool or a token-counting API, and that is the reliable way to count tokens for a specific model.
 
 <Callout type="note">
-
-Tokenizers differ between models. The same text can be a different number of tokens in Claude, GPT, Gemini or Gemma, so always count with the tokenizer of the model you plan to use.
-
+  Tokenizers differ between models. The same text can be a different number of tokens in Claude, GPT, Gemini or Gemma, so always count with the tokenizer of the model you plan to use.
 </Callout>
+
 ## Why do tokens decide what AI costs?
 
 Providers charge per token, usually quoted per million tokens, with one price for input (what you send) and a higher price for output (what the model writes back). Every request is billed as input tokens times the input price plus output tokens times the output price.
 
 These are the standard API prices for one mid-range model from each of the three big providers, checked on October 17, 2026:
 
-| Model                                | Input per 1M tokens | Output per 1M tokens | Cached input per 1M tokens | Source                                                                        |
-| ------------------------------------ | ------------------- | -------------------- | -------------------------- | ----------------------------------------------------------------------------- |
-| Claude Sonnet 5.5                    | US$2.00             | US$10.00             | US$0.10                    | [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
-| OpenAI gpt-6.1-sol                   | US$2.00             | US$10.00             | US$0.10                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
-| Gemini 3.1 Pro Preview (up to 200K)  | US$2.00             | US$12.00             | US$0.20, plus storage      | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)           |
+| Model                               | Input per 1M tokens | Output per 1M tokens | Cached input per 1M tokens | Source                                                                        |
+| ----------------------------------- | ------------------- | -------------------- | -------------------------- | ----------------------------------------------------------------------------- |
+| Claude Sonnet 5.5                   | US$2.00             | US$10.00             | US$0.10                    | [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| OpenAI gpt-6.1-sol                  | US$2.00             | US$10.00             | US$0.10                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
+| Gemini 3.1 Pro Preview (up to 200K) | US$2.00             | US$12.00             | US$0.20, plus storage      | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)           |
 
 Output costs five to six times as much as input on all three, which is why long replies drive most of a bill. Prices change often, so check the source pages before you budget.
 
@@ -113,14 +143,15 @@ To estimate the cost of an AI feature before you build it:
 
 ## How can you use fewer tokens?
 
-- **Keep the system prompt short.** It is sent with every request, so every extra sentence costs you on every message.
-- **Trim the conversation history.** Send the last few messages or a short summary instead of the full chat.
-- **Ask for short, structured replies.** Output tokens usually cost the most.
-- **Pick the right model size.** A smaller model can handle simple tasks like classification for a fraction of the cost.
-- **Use caching where the provider offers it.** Most major providers discount repeated input, such as a long system prompt, when it is sent again within a short time. As of October 2026:
-  - **OpenAI** caches prompts of 1,024 tokens or more automatically, and cached input is [discounted by up to 95 percent](https://developers.openai.com/api/docs/guides/prompt-caching) depending on the model.
-  - **Anthropic** caches what you mark with `cache_control`. A cache read costs [0.1 times the normal input price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) or less, writing to the cache costs a little more than normal input, and the cache lasts 5 minutes by default, with a paid 1-hour option.
-  - **Google Gemini** applies [implicit caching](https://ai.google.dev/gemini-api/docs/caching) by default on Gemini 2.5 and newer models and passes the savings on automatically, with explicit caching available for more control.
+* **Keep the system prompt short.** It is sent with every request, so every extra sentence costs you on every message.
+* **Trim the conversation history.** Send the last few messages or a short summary instead of the full chat.
+* **Ask for short, structured replies.** Output tokens usually cost the most.
+* **Pick the right model size.** A smaller model can handle simple tasks like classification for a fraction of the cost.
+* **Use caching where the provider offers it.** Most major providers discount repeated input, such as a long system prompt, when it is sent again within a short time. As of October 2026:
+
+  * **OpenAI** caches prompts of 1,024 tokens or more automatically, and cached input is [discounted by up to 95 percent](https://developers.openai.com/api/docs/guides/prompt-caching) depending on the model.
+  * **Anthropic** caches what you mark with `cache_control`. A cache read costs [0.1 times the normal input price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) or less, writing to the cache costs a little more than normal input, and the cache lasts 5 minutes by default, with a paid 1-hour option.
+  * **Google Gemini** applies [implicit caching](https://ai.google.dev/gemini-api/docs/caching) by default on Gemini 2.5 and newer models and passes the savings on automatically, with explicit caching available for more control.
 
   Rates change often, so check each provider's pricing page before you budget around them.
 
