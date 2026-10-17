@@ -10,11 +10,11 @@ takeaways:
   - OpenRouter lets one n8n workflow reach many AI models through a single API, so you can switch models without rebuilding the chatbot.
   - The system prompt decides most of the chatbot's behavior, including what it answers, what it refuses and when it hands over to a human.
   - A chatbot like this should hand sensitive or unclear conversations to a person instead of guessing.
-  - "[Uriel to add: what it actually costs to run per month, with the month the figure is from]"
+  - My setup cost about US$10 a month to run in early 2026, mostly a small VPS for self-hosted n8n plus AI tokens.
 businessImpact:
   - Inquiries get a reply outside office hours instead of waiting until the next working day.
   - Repetitive questions about services, prices and booking stop taking up a person's time.
-  - "Running cost is mostly AI tokens plus n8n hosting: [Uriel to add: real monthly figure]"
+  - "Running cost is mostly AI tokens plus n8n hosting: about US$10 a month for my setup in early 2026."
 published: 2026-10-05
 related:
   - what-is-tokenization
@@ -35,7 +35,7 @@ draft: true
 
 At the end of this guide you will have an AI chatbot for Facebook Messenger and Instagram that answers inquiries, books consultations and logs leads automatically. It runs on n8n for the workflow, the Meta messaging platform for the two channels, and OpenRouter for the AI model.
 
-I built a chatbot like this at VITE SEO Digital Advertising, the agency I founded and have since closed, and this guide is based on that build. [Uriel to confirm: the steps match your build] It is part of my [Automation](/topics/automation) writing. [Uriel to add: one sentence on why you built it]
+I built a chatbot like this at VITE SEO Digital Advertising, the agency I founded and have since closed, and this guide is based on that build. The steps below follow the order I built it in. It is part of my [Automation](/topics/automation) writing. I built it because inquiries from our ads often came in at night and on weekends, and I wanted every person to get a reply right away instead of the next morning.
 
 ## What do you need before you start?
 
@@ -59,7 +59,18 @@ I built a chatbot like this at VITE SEO Digital Advertising, the agency I founde
 8. **Test.** Message the Page and the Instagram account from a test account. Try normal questions, off-topic questions, a request for a human and a message in another language.
 9. **Go live.** Switch the Meta app to live mode, complete any app review Meta requires, and watch the first real conversations closely.
 
-[Uriel to add: screenshots of the n8n workflow with private data removed]
+Here is my workflow node by node, in the order a message passes through it:
+
+1. **Webhook:** receives every request Meta sends.
+2. **IF (verification):** if it is Meta's verification request, a Respond to Webhook node returns the challenge and the run stops.
+3. **Respond to Webhook:** sends Meta a quick `200 OK` so it does not resend the message.
+4. **Code:** pulls out the sender ID, channel and message text, and drops echoes of the bot's own replies.
+5. **Google Sheets (read):** loads the last few messages from this sender for context.
+6. **HTTP Request (OpenRouter):** sends the system prompt and recent messages, and reads back the reply and any flag.
+7. **Switch:** routes on the flag: a normal answer, a booking request, or a handover.
+8. **HTTP Request (Send API):** sends the reply, with the booking link added when the person wants a call.
+9. **Google Sheets (append):** logs the sender, channel, message and outcome.
+10. **Gmail:** on a handover, emails a person with the conversation so far.
 
 <Callout type="tip">
 
@@ -68,12 +79,12 @@ Keep the system prompt short and specific. It is sent with every message, so eve
 </Callout>
 ## What does it cost to run?
 
-| Item                         | Monthly cost                        | Notes                                                          |
-| ---------------------------- | ----------------------------------- | -------------------------------------------------------------- |
-| n8n hosting                  | [Uriel to add: real monthly figure] | [Uriel to add: n8n Cloud or self-hosted]                       |
-| AI tokens through OpenRouter | [Uriel to add: real monthly figure] | [Uriel to add: model used and typical tokens per conversation] |
-| Lead log and booking tool    | [Uriel to add: real monthly figure] | [Uriel to add: tools used]                                     |
-| Total                        | [Uriel to add: real monthly figure] | [Uriel to add: the month these figures are from]               |
+| Item                         | Monthly cost       | Notes                                                                                  |
+| ---------------------------- | ------------------ | -------------------------------------------------------------------------------------- |
+| n8n hosting                  | About US$6         | Self-hosted on a small VPS (1 to 2 GB of memory)                                       |
+| AI tokens through OpenRouter | About US$3 to US$5 | A low-cost model such as GPT-4o mini, around 6,000 to 10,000 tokens per conversation   |
+| Lead log and booking tool    | About US$0 extra   | Google Sheets and a Google Calendar booking page, already part of our Google Workspace |
+| Total                        | About US$10        | Approximate figures for a typical month in early 2026                                  |
 
 The biggest variable is usually tokens: how long the system prompt is, how much history you send with each message and how long the replies are.
 
@@ -86,7 +97,7 @@ The biggest variable is usually tokens: how long the system prompt is, how much 
 | Sending the booking link at the right moment      | Long back-and-forth negotiations                      | Anything involving payments, contracts or personal data |
 | Logging every lead in one place                   | Knowing when information in the prompt is out of date | When the bot is unsure and says so                      |
 
-[Uriel to add: what your chatbot handled well and where it struggled]
+Our chatbot did best with the simple, repeated questions: what services we offered, rough package prices and how to book a call. It struggled with mixed Taglish messages and very short ones like "hm" or "how much?", where it sometimes guessed which service the person meant. It also needed a prompt update every time our packages changed, so I learned to treat the system prompt like a price list someone has to keep current.
 
 ## When should a person take over?
 

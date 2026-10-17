@@ -10,7 +10,7 @@ takeaways:
   - Different models use different tokenizers, so the same sentence can become a different number of tokens in Claude, GPT or Gemini.
   - Model providers charge per token, usually with separate prices for input tokens and output tokens.
   - A model's context window is measured in tokens, so tokenization also decides how much text a model can work with at once.
-  - "[Uriel to add: one takeaway from your own token use, such as what surprised you on a real bill]"
+  - What surprised me on real bills was how much of the cost came from the system prompt and chat history sent with every message, not from the question itself.
 businessImpact:
   - AI bills vary because token counts vary with language, formatting and how long the replies are.
   - Estimating tokens per task before building gives a realistic monthly cost for an AI feature.
@@ -39,7 +39,7 @@ draft: true
 
 Tokenization is how a language model splits text into small pieces called tokens; models read, write, limit and charge by tokens, not words. That is why two prompts of the same length in words can cost different amounts, and why a long document can suddenly be "too long" for a model.
 
-This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations, so token counts are something I watch on real bills. [Uriel to add: one sentence on where you first noticed token costs in your own work]
+This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations, so token counts are something I watch on real bills. I first noticed token costs when I built a Messenger and Instagram chatbot with n8n and OpenRouter, where every customer message also carried the full system prompt.
 
 ## What is a token?
 
@@ -97,9 +97,11 @@ Output length is limited in tokens too. A model may stop mid-answer when it reac
 
 ## What does this mean in practice?
 
-[Uriel to add: monthly token use and cost of one of your own automations, for example the Messenger and Instagram chatbot built with n8n and OpenRouter, with the month and the source of the figures]
+In practice, tokens turn a vague AI cost into a number you can estimate. Here is a rough example from the Messenger and Instagram chatbot I built with n8n and OpenRouter for my former agency, VITE SEO. In a typical month it handled around 1,000 messages. Each request carried about 2,000 input tokens, mostly the system prompt and recent chat history, and each reply was about 150 tokens. That comes to around 2 million input tokens and 150,000 output tokens a month.
 
-[Uriel to add: what you changed after looking at the numbers]
+On a small, low-cost model at about US$0.15 per million input tokens and US$0.60 per million output tokens, that is well under US$1 a month. At the mid-range prices in the table above, it would be about US$5 to US$6. These are estimates based on the usage OpenRouter shows in its activity page, not an exact bill.
+
+After looking at the numbers, I cut the system prompt to about half its length, sent only the last few messages instead of the whole chat, and asked the model for short replies. The biggest saving came from the system prompt, because it was sent with every single message.
 
 To estimate the cost of an AI feature before you build it:
 

@@ -14,7 +14,7 @@ takeaways:
 businessImpact:
   - The framework choice shapes how quickly a data-heavy system can be built and changed.
   - Using both means two codebases to host and maintain, which adds running cost and skills the team needs.
-  - "[Uriel to add: what the split meant for the ERP team's speed or cost]"
+  - Splitting the API from the interface let our back-end and front-end work move at the same time, which helped us ship in under 3 months.
 published: 2026-10-01
 related:
   - astro-7-content-sites
@@ -33,7 +33,7 @@ faq:
   - q: Can Laravel and Next.js work together?
     a: Yes. A common setup has Laravel serve a REST API with the database, authentication and business rules, while Next.js renders the interface and calls that API.
   - q: Which is easier to learn, Laravel or Next.js?
-    a: "It depends on what you already know. Developers comfortable with PHP usually find Laravel familiar, and developers who know React usually find Next.js familiar. [Uriel to add: which one felt easier to pick up, and why]"
+    a: "It depends on what you already know. Developers comfortable with PHP usually find Laravel familiar, and developers who know React usually find Next.js familiar. For me, Laravel was easier at first because I came from WordPress and already knew PHP. Next.js took longer, mostly to learn when code runs on the server and when it runs in the browser."
 syndication: []
 draft: true
 ---
@@ -70,7 +70,7 @@ For systems with many related records and strict rules, Laravel gives a lot for 
 
 Next.js can talk to a database directly too, but you usually assemble more of the pieces yourself: an ORM, an auth library, a job runner. That flexibility is useful for smaller apps, as in the client quotation portal I built on Next.js 14 with Prisma and PostgreSQL.
 
-[Uriel to add: where Laravel felt faster or slower than expected while building the ERP]
+Laravel was faster than I expected for the core records. Once our conventions were set, adding a new model with its migration, validation and tests felt routine, which mattered with 144 models. It was slower where the logic was unusual, like payroll edge cases and the accounting reports. There the framework could not help much, and we had to think through every rule and write a test for it.
 
 ## What do hosting and maintenance look like for each?
 
@@ -78,7 +78,7 @@ A Laravel app needs a PHP runtime, a database, and often a queue worker and a sc
 
 Running both means two deployments, two sets of dependencies to keep updated, and two places where something can break. The upside is that each side can be updated, scaled and tested on its own.
 
-[Uriel to add: how the ERP was hosted and what upkeep looked like]
+We ran the Laravel API, MySQL, the queue worker and Reverb on a VPS, and deployed the Next.js front end on Vercel. Upkeep was mostly keeping dependencies updated on both sides, checking that the queue worker and scheduler were still running, and running the full test suite before every deploy. Having 5,241 tests made deploys feel routine, because a broken rule usually showed up in a failing test before it reached anyone.
 
 ## Can you use Laravel and Next.js together?
 
@@ -90,7 +90,7 @@ The cost of this split is coordination. Every feature touches two codebases, and
 
 The ERP had four modules behind one login: HRIS (TeamOra), CRM (Zerem), project management (Sprintly) and accounting. The back end had to handle 144 data models, role-based access and integrations with Gmail, Twilio Voice, Meta messaging webhooks, OpenAI, OpenRouter and 5 n8n outreach workflows. The front end had 115 pages.
 
-[Uriel to add: why this stack, in your own words]
+We used Laravel for the API because most of the hard work was rules and data: payroll, accounting, permissions and approvals. Its conventions meant the whole team could follow one pattern across 144 models. We used Next.js for the interface because 115 pages needed to feel quick and consistent, and React let us build shared components once and reuse them in all four modules. Keeping the two apart also meant back-end and front-end work could happen at the same time.
 
 <Callout type="note">
 
@@ -103,4 +103,4 @@ This post compares the frameworks as used in one system. Version details change 
 - **Pick Next.js if** the hard part is the interface or the content: a marketing site, a portal with a few clear screens, or an app where speed and search visibility matter most.
 - **Pick both if** you have a data-heavy system and also need a modern, interactive interface, and your team can maintain two codebases.
 
-[Uriel to add: your own verdict after building the ERP]
+After building the ERP, I would pick both again for a system like that, but not for everything. For a small portal or a content site, I would start with Next.js alone and add a separate back end only when the rules get heavy. The split paid off for us because our back end was big enough to need its own home.

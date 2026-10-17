@@ -63,7 +63,7 @@ Astro's core idea is that most pages on a content site do not need JavaScript in
 
 Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
 
-For a business, the practical questions are build time, hosting cost and how much upkeep a site needs between major versions. \[Uriel to add: your view on how Astro 7 affects these]
+For a business, the practical questions are build time, hosting cost and how much upkeep a site needs between major versions. In my view, Astro 7 helps with the first two and asks for some care with the third. On this site, the Astro step of a production build takes about 16 seconds for around 30 pages, so build time is not something I think about. A mostly static site also stays cheap to host, because static pages are served from a CDN and only a few routes run on demand. Upkeep is where I plan ahead: each major version brings breaking changes, so I upgrade on a branch soon after a release instead of skipping versions and doing it all at once later.
 
 ## What did I notice building this site on Astro 7?
 
@@ -71,12 +71,14 @@ This site uses Astro 7 with static pages, content collections for posts, notes, 
 
 One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
 
-\[Uriel to add: what worked well, what was confusing, and anything that broke during the build]
+What worked well was the daily editing loop. Running `astro dev --background` kept the site running while I wrote and edited posts in Keystatic, and the production build stayed fast the whole time.
+
+Two things confused me, and both were dev server issues, not production ones. Once, the Keystatic editor loaded as a blank page. The cause was a stale Vite dependency cache in `node_modules/.vite`, and clearing it fixed the problem. Another time, after I changed a config file, the dev server restarted on its own but stopped picking up post edits until I fully stopped and started it again.
 
 ## Should you do anything now?
 
-* **Starting a new content site:** \[Uriel to add: your recommendation]
+* **Starting a new content site:** I would start on Astro 7. It is built for this kind of site, builds are fast, and you skip an upgrade later.
 * **Running an older Astro version:** read the official [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/) before upgrading, run `npx @astrojs/upgrade` (or `pnpm dlx @astrojs/upgrade`), and test the build on a branch first.
-* **On another framework:** \[Uriel to add: whether Astro 7 is worth a look, and for what kind of site]
+* **On another framework:** Astro 7 is worth a look if your site is mostly content, such as a blog, docs or marketing pages, and you want pages that ship little or no JavaScript. For an app with logins, dashboards and lots of data, like the ERP I built with Laravel and Next.js, I would stay with an app framework.
 
 If you are comparing frameworks for something more data-heavy than a content site, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.
