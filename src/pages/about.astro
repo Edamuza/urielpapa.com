@@ -15,31 +15,7 @@ const crumbs = [
   { name: "About", href: "/about" },
 ];
 
-const timeline = [
-  {
-    when: "2023",
-    what: "Part-time marketing specialist for a service that connects car owners with repair shops, then freelance WordPress developer for international marketing clients.",
-  },
-  {
-    when: "2024",
-    what: "Team leader of a remote team of WordPress developers, SEO specialists, a content writer and a designer, then project manager across several client teams.",
-  },
-  {
-    when: "2025",
-    what: "Founded VITE SEO Digital Advertising at 21, while still an undergraduate, and led it to a team of up to 22 across sales, development, project management, marketing and SEO. The agency has since closed.",
-  },
-  {
-    when: "2025 to 2026",
-    what: "Led development of TravelEase, a tourism portal for Tagaytay, as my capstone thesis.",
-  },
-  {
-    when: "2026",
-    what: "Led the build of a four-module ERP on Laravel and Next.js, an NFC business card platform and a suite of WordPress SEO plugins. Graduated cum laude with a BS in Information Systems from the Technological University of the Philippines.",
-  },
-];
-
 const proof = [
-  "Led a team of up to 22 people at VITE SEO Digital Advertising.",
   "Co-developed an ERP with 115 pages, 144 data models and 5,241 automated tests in under 3 months.",
   "Built 5 WordPress SEO plugins, about 11,700 lines of code.",
   "Contributed about two-thirds of TravelEase's 316 commits; the project has 411 automated tests.",
@@ -77,17 +53,16 @@ const schema = [
         <strong
           >I'm Uriel Papa, a technical founder in Metro Manila, Philippines.</strong
         >{" "}
-        I started in 2023 with freelance WordPress and marketing work, led a remote
-        team, and at 21 founded a digital agency, VITE SEO Digital Advertising, which
-        has since closed. Since then I've built business systems, SEO tools and AI
-        automations. I graduated cum laude with a BS in Information Systems from the
-        Technological University of the Philippines in 2026.
+        I'm rebuilding everything and sharing the journey here: what I've learned
+        and the mistakes I've made as a founder. I graduated cum laude with a BS in
+        Information Systems from the Technological University of the Philippines in
+        2026.
       </p>
       <p>
         This site is where I share what I learn: how AI and large language
         models work, the automations I build, how technology affects business
         and society, how search is changing, what's new in tech stacks,
-        marketing basics, and what founding and closing an agency taught me.
+        marketing basics, and what I've learned as a founder.
       </p>
     </div>
 
@@ -98,20 +73,6 @@ const schema = [
         way. For what I'm working on this month, see <a href="/now">Now</a>; for
         the tools I use, see <a href="/stack">Stack</a>.
       </p>
-    </section>
-
-    <section class="mt-10" aria-labelledby="tl-h">
-      <h2 id="tl-h" class="h2 mb-4">Timeline</h2>
-      <ol class="border-foreground space-y-5 border-s ps-5">
-        {
-          timeline.map(t => (
-            <li>
-              <p class="font-semibold">{t.when}</p>
-              <p>{t.what}</p>
-            </li>
-          ))
-        }
-      </ol>
       <p class="mt-4">
         More detail on the systems themselves is on the <a href="/projects"
           >Projects</a
