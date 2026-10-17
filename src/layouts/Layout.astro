@@ -181,8 +181,9 @@ const robots =
   <body
     class="bg-background font-app text-foreground selection:bg-accent selection:text-accent-foreground flex min-h-svh flex-col"
   >
+    <!-- Always visible: sticks to the top; the header below hides on scroll down. -->
     <p
-      class="bg-accent text-accent-foreground px-4 py-2 text-center text-sm font-semibold"
+      class="bg-accent text-accent-foreground sticky top-0 z-50 flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
     >
       <q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)
     </p>

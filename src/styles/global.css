@@ -13,6 +13,8 @@
   }
   html {
     font-size: 106.25%; /* 17px body */
+    /* Keep anchor targets clear of the sticky quote bar and header. */
+    scroll-padding-top: 7.5rem;
   }
   @media (min-width: 768px) {
     html {
