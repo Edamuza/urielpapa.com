@@ -22,7 +22,7 @@ import {
 } from "@/utils/content";
 
 const posts = await getPosts();
-const news = (await getNewsTakes()).slice(0, 3);
+const latestNews = (await getNewsTakes())[0];
 const notes = (await getNotes()).slice(0, 3);
 const events = (await getEventNotes()).slice(0, 2);
 const hubEntries = await getHubs();
@@ -37,9 +37,40 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
 ---
 
 <Layout>
+  {
+    latestNews && (
+      <div class="app-layout">
+        {/* Latest news take: one line under the header on wide screens, two rows on phones. */}
+        <aside
+          aria-label="Latest news take"
+          class="border-border grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 border-b py-3 text-sm sm:flex"
+        >
+          <span class="label-caps text-muted-foreground">News</span>
+          <a
+            href={postUrl(latestNews)}
+            class="line-clamp-2 min-w-0 font-semibold sm:line-clamp-none sm:flex-1 sm:truncate"
+          >
+            {latestNews.data.title}
+          </a>
+          <span class="col-start-2 flex items-baseline justify-between gap-3 sm:contents">
+            <time
+              datetime={isoDate(latestNews.data.published)}
+              class="text-muted-foreground shrink-0"
+            >
+              {formatDate(latestNews.data.published)}
+              {latestNews.data.draft && " · Draft"}
+            </time>
+            <a href="/news" class="shrink-0 whitespace-nowrap">
+              All news →
+            </a>
+          </span>
+        </aside>
+      </div>
+    )
+  }
   <div class="app-layout">
     <section
-      class="border-border grid gap-10 border-b py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_20rem]"
+      class="border-border border-b py-10 sm:py-14"
       aria-labelledby="intro-h"
     >
       <div class="max-w-read">
@@ -102,42 +133,6 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
           >.
         </p>
       </div>
-
-      <aside
-        aria-labelledby="home-news-h"
-        class="border-border max-w-read rounded-lg border p-5 sm:p-6 lg:max-w-none lg:rounded-none lg:border-y-0 lg:border-e-0 lg:p-0 lg:ps-8"
-      >
-        <h2 id="home-news-h" class="h3 mb-3">Latest news takes</h2>
-        {
-          news.length > 0 ? (
-            <ul class="space-y-4">
-              {news.map(n => (
-                <li>
-                  <a href={postUrl(n)} class="font-semibold">
-                    {n.data.title}
-                  </a>
-                  {/* The sidebar on wide screens stays compact; phones get the summary. */}
-                  <p class="mt-1 line-clamp-2 text-[0.95rem] lg:hidden">
-                    {n.data.dek}
-                  </p>
-                  <p class="meta mt-1">
-                    <time datetime={isoDate(n.data.published)}>
-                      {formatDate(n.data.published)}
-                    </time>
-                    {n.data.draft && " · Draft"}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p class="meta">
-              Recent releases and announcements, with what they mean in
-              practice. The first takes are on the way.
-            </p>
-          )
-        }
-        <p class="mt-4 text-sm"><a href="/news">All news →</a></p>
-      </aside>
     </section>
 
     <section class="py-10" aria-labelledby="latest-h">
