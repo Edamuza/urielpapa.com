@@ -1,0 +1,42 @@
+name: IndexNow
+
+# After Vercel finishes a production deploy, tell Bing and the other IndexNow
+# engines which pages changed since the previous production deploy.
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  submit:
+    name: Submit changed URLs
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "☁️ Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Find the previous production deploy
+        id: prev
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CURRENT: ${{ github.event.deployment.id }}
+        run: |
+          sha=$(gh api "repos/${{ github.repository }}/deployments?environment=Production&per_page=10" \
+            --jq "[.[] | select(.id != ${CURRENT})][0].sha // empty")
+          echo "sha=${sha:-${{ github.event.deployment.sha }}~1}" >> "$GITHUB_OUTPUT"
+
+      - name: "📣 Submit to IndexNow"
+        run: node scripts/indexnow.mjs "${{ steps.prev.outputs.sha }}" "${{ github.event.deployment.sha }}"

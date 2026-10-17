@@ -93,6 +93,8 @@ The "UP" monogram is drawn in `scripts/generate-icons.mjs`. After changing it, r
 - JSON-LD on every page (WebSite + Person), plus BlogPosting, BreadcrumbList, CollectionPage, ProfilePage, ContactPage and FAQPage where the content is visible.
 - `/robots.txt` allows search, AI search and AI training crawlers (plan: `schema-and-technical.md` §4). If the site ever moves behind Cloudflare, turn off its AI bot blocking.
 - `/sitemap-index.xml`, a full-content `/rss.xml`, a generated `/llms.txt`, and a Markdown copy of every post at its URL plus `.md` (noindex, canonical header).
+- Each sitemap entry carries a `lastmod` from the entry's `updated` date (else `published`), so Google recrawls what changed. Keep `updated` accurate when you edit a post.
+- IndexNow (Bing, Yandex, Naver, Seznam, Yep): after each Vercel production deploy, `.github/workflows/indexnow.yml` runs `scripts/indexnow.mjs`, which submits the changed posts plus the list pages, or the whole sitemap when layouts or config changed. The key is the file name of `public/59f21d6790c85a447f402bf2529b4a2f.txt`; to rotate it, replace that file with a new 32-character hex name containing the same value. Preview with `DRY_RUN=1 node scripts/indexnow.mjs <from-sha> <to-sha>`. Google doesn't use IndexNow, and its Indexing API is only for job and livestream pages.
 - A 1200×630 black and white OG image is generated for every post at `/og/<slug>.png`.
 - Fonts are self-hosted from `@fontsource` packages; the only JavaScript is the theme toggle, search, code copy, sharing and form enhancement.
 

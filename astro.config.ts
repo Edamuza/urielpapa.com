@@ -18,6 +18,7 @@ import {
   transformerNotationWordHighlight,
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
+import { contentEntries } from "./scripts/content-urls.mjs";
 
 const SITE_URL = "https://urielpapa.com";
 
@@ -30,6 +31,13 @@ const SITEMAP_EXCLUDE = [
   "/preview",
   "/404",
 ];
+
+/** Last-changed date per content URL, for the sitemap's lastmod. */
+const LASTMOD = new Map(
+  contentEntries()
+    .filter(e => e.lastmod)
+    .map(e => [e.path, e.lastmod as Date])
+);
 
 /** A self-hosted Latin font family from an @fontsource package (woff2 for browsers, woff for OG images). */
 function localFont(
@@ -78,6 +86,12 @@ export default defineConfig({
       filter: page => {
         const path = new URL(page).pathname.replace(/\/$/, "");
         return !SITEMAP_EXCLUDE.some(p => path === p || path.startsWith(p));
+      },
+      // lastmod tells search engines which pages changed; only entries with a real date get one.
+      serialize: item => {
+        const path = new URL(item.url).pathname.replace(/\/$/, "") || "/";
+        const lastmod = LASTMOD.get(path);
+        return lastmod ? { ...item, lastmod: lastmod.toISOString() } : item;
       },
     }),
   ],
