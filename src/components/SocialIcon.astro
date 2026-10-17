@@ -1,0 +1,28 @@
+---
+/** Small monochrome brand icon for a profile link (Tabler icons, MIT). */
+import Facebook from "@/assets/icons/socials/facebook.svg";
+import GitHub from "@/assets/icons/socials/github.svg";
+import LinkedIn from "@/assets/icons/socials/linkedin.svg";
+import TikTok from "@/assets/icons/socials/tiktok.svg";
+import X from "@/assets/icons/socials/x.svg";
+
+type Props = { name: string; class?: string };
+const { name, class: className } = Astro.props;
+const icons = {
+  facebook: Facebook,
+  github: GitHub,
+  linkedin: LinkedIn,
+  tiktok: TikTok,
+  x: X,
+} as const;
+const Icon = icons[name as keyof typeof icons];
+---
+
+{
+  Icon && (
+    <Icon
+      class:list={["inline-block size-4 shrink-0", className]}
+      aria-hidden="true"
+    />
+  )
+}

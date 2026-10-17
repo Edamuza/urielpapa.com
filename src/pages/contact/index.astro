@@ -3,6 +3,7 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import { CONTACT, SITE, SOCIALS } from "@/config";
+import SocialIcon from "@/components/SocialIcon.astro";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
 const crumbs = [
@@ -201,7 +202,12 @@ const field =
             <>
               {" "}
               ·{" "}
-              <a href={s.url} rel="me noopener">
+              <a
+                href={s.url}
+                rel="me noopener"
+                class="inline-flex items-center gap-1"
+              >
+                <SocialIcon name={s.name} />
                 {s.label}
               </a>
             </>

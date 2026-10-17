@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import Avatar from "@/components/Avatar.astro";
+import SocialIcon from "@/components/SocialIcon.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import { SITE, SOCIALS } from "@/config";
 import { HUBS } from "@/data/hubs";
@@ -135,7 +136,12 @@ const schema = [
         {
           SOCIALS.map(s => (
             <li>
-              <a href={s.url} rel="me noopener">
+              <a
+                href={s.url}
+                rel="me noopener"
+                class="inline-flex items-center gap-1.5"
+              >
+                <SocialIcon name={s.name} />
                 {s.label}
               </a>
             </li>

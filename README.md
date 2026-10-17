@@ -84,6 +84,10 @@ After changing `astro.config.ts` or `keystatic.config.ts`, stop and start `pnpm 
 
 If a future version ever drops `previewUrl`, the preview URLs keep working when typed in (for example `/preview/blog/<slug>`), and a "View on site" link can be added to the entries another way.
 
+### Favicons and app icons
+
+The "UP" monogram is drawn in `scripts/generate-icons.mjs`. After changing it, run `node scripts/generate-icons.mjs` to rewrite `public/favicon.svg` (follows light and dark mode), `favicon.ico`, `apple-touch-icon.png`, the 192, 512 and maskable 512 icons and `site.webmanifest`, then commit the files.
+
 ## SEO and AI visibility
 
 - JSON-LD on every page (WebSite + Person), plus BlogPosting, BreadcrumbList, CollectionPage, ProfilePage, ContactPage and FAQPage where the content is visible.

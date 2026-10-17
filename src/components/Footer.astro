@@ -1,5 +1,6 @@
 ---
 import IconRss from "@/assets/icons/IconRss.svg";
+import SocialIcon from "@/components/SocialIcon.astro";
 import Avatar from "./Avatar.astro";
 import { SITE, SOCIALS } from "@/config";
 import { HUBS } from "@/data/hubs";
@@ -80,9 +81,11 @@ const siteLinks = [
               <a
                 href={s.url}
                 rel="me noopener"
+                class="inline-flex items-center gap-1.5"
                 data-event="outbound_profile_click"
                 data-event-network={s.name}
               >
+                <SocialIcon name={s.name} />
                 {s.label}
               </a>
             </li>
