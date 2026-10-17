@@ -179,10 +179,15 @@ const robots =
   <body
     class="bg-background font-app text-foreground selection:bg-accent selection:text-accent-foreground flex min-h-svh flex-col"
   >
+    <p
+      class="bg-accent text-accent-foreground px-4 py-2 text-center text-sm font-semibold"
+    >
+      <q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)
+    </p>
     {
       draft && (
         <div
-          class="bg-accent text-accent-foreground px-4 py-2 text-center text-sm font-semibold"
+          class="bg-accent text-accent-foreground border-accent-foreground/25 border-t px-4 py-2 text-center text-sm font-semibold"
           role="status"
         >
           Draft preview: this page is not published and is hidden in production
