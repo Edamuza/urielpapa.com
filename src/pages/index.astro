@@ -105,7 +105,7 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
 
       <aside
         aria-labelledby="home-news-h"
-        class="lg:border-border lg:border-s lg:ps-8"
+        class="border-border max-w-read rounded-lg border p-5 sm:p-6 lg:max-w-none lg:rounded-none lg:border-y-0 lg:border-e-0 lg:p-0 lg:ps-8"
       >
         <h2 id="home-news-h" class="h3 mb-3">Latest news takes</h2>
         {
@@ -116,6 +116,10 @@ const startWith = posts.filter(p => !p.data.draft).slice(0, 2);
                   <a href={postUrl(n)} class="font-semibold">
                     {n.data.title}
                   </a>
+                  {/* The sidebar on wide screens stays compact; phones get the summary. */}
+                  <p class="mt-1 line-clamp-2 text-[0.95rem] lg:hidden">
+                    {n.data.dek}
+                  </p>
                   <p class="meta mt-1">
                     <time datetime={isoDate(n.data.published)}>
                       {formatDate(n.data.published)}
