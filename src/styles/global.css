@@ -107,7 +107,7 @@
   @apply text-muted-foreground text-sm;
 }
 
-/* The one filled button on the site (ux-ui-spec.md §5.9) and outlined buttons */
+/* Filled buttons (contact form submit, homepage About me) and outlined buttons */
 @utility btn {
   @apply border-foreground inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-4 py-2 font-semibold no-underline;
 }
