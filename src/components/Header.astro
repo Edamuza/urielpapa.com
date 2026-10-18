@@ -148,7 +148,8 @@ const isActive = (href: string) =>
   });
 
   // Hide the header while scrolling down, show it again when scrolling up.
-  // It always shows near the top, while the menu is open, or while it has focus.
+  // It always shows near the top, while the menu is open, or while it has keyboard focus.
+  // (A mouse click also focuses a button, such as the theme toggle; that must not pin it.)
   const header = document.querySelector<HTMLElement>("#site-header");
   const panel = menu?.querySelector<HTMLElement>("nav");
   if (header) {
@@ -161,7 +162,7 @@ const isActive = (href: string) =>
       const delta = y - lastY;
       if (Math.abs(delta) < 8) return;
       const keep =
-        y < 80 || menu?.open || header.contains(document.activeElement);
+        y < 80 || menu?.open || header.querySelector(":focus-visible") !== null;
       if (delta > 0 && !keep) header.setAttribute("data-hidden", "");
       else show();
       lastY = y;
@@ -176,7 +177,9 @@ const isActive = (href: string) =>
       },
       { passive: true }
     );
-    header.addEventListener("focusin", show);
+    header.addEventListener("focusin", e => {
+      if ((e.target as HTMLElement).matches(":focus-visible")) show();
+    });
     menu?.addEventListener("toggle", () => {
       if (!menu.open || !panel) return;
       show();
