@@ -65,10 +65,10 @@ export const NEWSLETTER = {
 };
 
 export const CONTACT = {
-  /** Plan question 8: Uriel to confirm in his own words. */
+  /** Draft wording; Uriel may rewrite it. */
   kindOfWork:
     "I take on a small number of projects: web apps and business systems, AI automation and chatbots, and SEO or GEO setup for websites.",
-  /** Plan question 8: Uriel to confirm. */
+  /** Draft wording; Uriel may rewrite it. */
   replyTime: "I usually reply within a few days.",
 };
 

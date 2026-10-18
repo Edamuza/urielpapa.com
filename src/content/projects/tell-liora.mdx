@@ -23,7 +23,7 @@ draft: false
 
 Deciding when a symptom during pregnancy needs care is stressful, and help is not always a call or a connection away. An app for this has to work offline and has to ground its answers in trusted guidance.
 
-[Uriel to add: what led the team to this problem]
+We wanted a problem where offline AI makes a real difference. In many parts of the Philippines, a pregnant woman with a worrying symptom may have a weak signal and a long trip to the nearest clinic, so an app that works without internet and follows WHO guidance felt worth building.
 
 ## What we built
 
@@ -43,11 +43,11 @@ My own part, beyond co-developing the app:
 - **Model:** Gemma, on device.
 - **Video:** Remotion.
 
-[Uriel to add: why this stack]
+Expo let us build for iOS and Android from one React Native codebase in the time a hackathon allows. Gemma is small enough to run on a phone, which is what makes offline answers possible. Remotion let me make the product video in code, so script changes were quick.
 
 ## Results
 
 - A working offline app that pairs an on-device model with 8 WHO decision tables.
 - An iOS build, a research brief, pitch materials and a 73-second product video.
 
-[Uriel to add: how the hackathon went]
+It was a long, fast build. The hardest part was getting the model to run smoothly on a phone while keeping its answers tied to the WHO tables. Showing a working offline demo, not just slides, is the part I'm proudest of.

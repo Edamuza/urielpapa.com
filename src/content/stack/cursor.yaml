@@ -1,5 +1,5 @@
 name: "Cursor"
 group: ai
-use: "[Uriel to add: how I use Cursor]"
+use: "My AI code editor for quick edits when I'm not working in Claude Code."
 url: https://cursor.com
 order: 8

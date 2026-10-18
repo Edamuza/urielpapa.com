@@ -1,5 +1,5 @@
 name: "Cloudflare"
 group: infrastructure
-use: "[Uriel to add: what I use Cloudflare for]"
+use: "Turnstile spam checks on website forms, including this site's contact form."
 url: https://www.cloudflare.com
 order: 3

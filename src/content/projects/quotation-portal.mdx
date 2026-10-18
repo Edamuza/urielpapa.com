@@ -25,7 +25,7 @@ draft: false
 
 Quotations need to reach the right person, stay private, and leave a clear record of what was accepted or rejected. Email attachments do none of that well.
 
-[Uriel to add: what the quotation process looked like before the portal]
+Before the portal, quotations went out as PDF attachments by email. Clients sometimes replied to an older version, approvals got buried in long threads, and we had to dig through inboxes to confirm what was agreed.
 
 ## What we built
 
@@ -42,7 +42,7 @@ Quotations need to reach the right person, stay private, and leave a clear recor
 - **Rate limiting:** Redis.
 - **PDF rendering:** Playwright.
 
-[Uriel to add: why this stack]
+Next.js let one codebase serve both the client and admin sides. Prisma on PostgreSQL gave typed queries and clean records for the audit log. Clerk handled admin sign-in so I didn't build it from scratch, Redis kept the one-time code endpoint safe from guessing, and Playwright rendered PDFs from the same page the client sees, so the PDF always matches.
 
 ## Results
 

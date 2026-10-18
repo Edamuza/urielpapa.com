@@ -23,7 +23,7 @@ draft: false
 
 When a site needs rebuilding, the old pages, their images and their fonts are the starting point. Sometimes the only copy left is on the Wayback Machine, and saving it page by page by hand is slow.
 
-[Uriel to add: the rebuild that started this tool]
+It started with a client rebuild where the old site was already offline and the only copy left was on the Wayback Machine. Saving every page and image by hand took far too long, so we wrote a tool to do it.
 
 ## What we built
 
@@ -37,10 +37,10 @@ When a site needs rebuilding, the old pages, their images and their fonts are th
 - **Tool:** Python.
 - **Target:** WordPress, through a block child theme base.
 
-[Uriel to add: why this stack]
+Python is quick to write for scraping and file handling, and threads made it practical to save many pages at once. The output targets WordPress because that's where most of our client rebuilds landed, so a ready block child theme saved setup time on every project.
 
 ## Results
 
 - Pages and snapshots saved with their images and fonts, in a layout ready for a WordPress rebuild.
 
-[Uriel to add: how many sites or pages it has handled, if known]
+- Used on the agency's own site rebuilds. I haven't kept an exact count of the pages it has saved.

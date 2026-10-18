@@ -1,4 +1,4 @@
 name: "Gemini"
 group: ai
-use: "[Uriel to add: what I use Gemini for]"
+use: "Research, reading long documents, and checking prompts against a second model."
 order: 3

@@ -31,7 +31,7 @@ draft: false
 
 VITE SEO Digital Advertising grew to a team of up to 22 across sales, development, project management, marketing and SEO. HR, sales, project work and accounting each needed their own records, and some of them had to connect, such as payroll posting into the accounting books.
 
-[Uriel to add: what the team used before the ERP, and what was hardest about it]
+Before the ERP, the team ran on spreadsheets, a separate project tool, shared inboxes and manual payroll computations. Payroll was the hardest part: every cutoff meant copying attendance into sheets, computing contributions by hand and typing the totals into the books again.
 
 ## What we built
 
@@ -51,7 +51,7 @@ The system also connected to Gmail, Twilio Voice, Meta messaging webhooks, OpenA
 - **Database:** MySQL.
 - **Integrations:** Laravel Reverb, n8n, OpenAI, OpenRouter, Gmail, Twilio Voice, Meta messaging webhooks, and a Python scraper.
 
-[Uriel to add: why this stack]
+Laravel handled the business rules, queues and real-time events, and it's strong for data-heavy systems with many models. Next.js gave all 115 pages one consistent interface. MySQL fit transactional records like payroll and journals, and keeping the API separate let back-end and front-end work move in parallel.
 
 ## Results
 
@@ -60,4 +60,4 @@ The system also connected to Gmail, Twilio Voice, Meta messaging webhooks, OpenA
 - 5,241 automated tests.
 - Built in under 3 months, from July to October 2026.
 
-[Uriel to add: how the team used it day to day]
+Staff clocked in through the HRIS, sales worked leads and messages in the CRM, and projects ran in the PMS. At each payroll cutoff, payroll posted straight into the accounting books instead of being typed in again.

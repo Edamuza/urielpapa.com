@@ -7,4 +7,4 @@ updated: 2026-10-17
 * In October 2026 I co-developed [Tell Liora](/projects/tell-liora) at the AppBuildersPH Hackathon 2026, an offline mobile app that pairs an on-device Gemma model with 8 WHO decision tables.
 * VITE SEO Digital Advertising, the agency I founded at 21, has closed.
 * I'm building this site and writing the first posts on AI, automation, tech stacks, SEO, GEO and AEO, marketing, and the founder's journey.
-* \[Uriel to add: what's next for you]
+* Next, I'm taking on a small number of client projects in web apps, AI automation and SEO or GEO, and publishing a new post every two weeks.

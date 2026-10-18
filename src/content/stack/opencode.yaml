@@ -1,5 +1,5 @@
 name: "OpenCode"
 group: ai
-use: "[Uriel to add: how I use OpenCode]"
+use: "A terminal coding agent for trying open and local models on real code."
 url: https://opencode.ai
 order: 9

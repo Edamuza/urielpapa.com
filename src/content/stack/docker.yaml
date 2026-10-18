@@ -1,5 +1,5 @@
 name: "Docker"
 group: infrastructure
-use: "[Uriel to add: what I use Docker for]"
+use: "Running PostgreSQL, Redis and n8n locally so each project matches production."
 url: https://www.docker.com
 order: 4

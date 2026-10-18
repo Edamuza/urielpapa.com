@@ -23,7 +23,7 @@ draft: false
 
 SEO work on WordPress repeats the same checks and the same publishing steps on every site: headings, indexability, images, broken links, internal links, titles, descriptions and schema. Doing it by hand takes time, and a missed step goes live.
 
-[Uriel to add: the moment it became clear these tools were needed]
+It became clear when we were publishing across several client sites at once and the same mistakes kept coming back: a missing meta description on one site, a page left on noindex on another. Checklists didn't stop it, so we built the checks into WordPress itself.
 
 ## What we built
 
@@ -39,11 +39,11 @@ Five plugins, about 11,700 lines of code in total:
 - **Platform:** WordPress.
 - **Language:** PHP.
 
-[Uriel to add: why this stack]
+Our client sites ran on WordPress, so the tools had to live where the team already worked. Plain PHP plugins meant no extra service to host, and they worked alongside Yoast SEO and Rank Math instead of replacing them.
 
 ## Results
 
 - 5 plugins and about 11,700 lines of code.
 - Audits, internal linking, publishing rules and imports handled inside WordPress.
 
-[Uriel to add: how the team used the plugins in practice]
+Writers dropped DOCX drafts into the importer, the scanner ran before each client report, and the publish guard stopped posts that were missing an SEO title or schema. The content graph helped us find pages with no internal links pointing to them.

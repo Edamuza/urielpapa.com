@@ -102,4 +102,4 @@ The "UP" monogram is drawn in `scripts/generate-icons.mjs`. After changing it, r
 
 - Replace the "UP" monogram with a real photo: put it in `public/images/` and set `SITE.photo` in `src/config.ts`.
 - Confirm the values marked in `src/config.ts` (job title, newsletter frequency, the "kind of work" line and reply time on Contact) and add the X, Threads, Instagram, Facebook and Reddit profiles.
-- Finish the draft posts: search for `[Uriel to add` and `[verify` in `src/content/`, then untick Draft.
+- Replace the stand-in passages with your own story. They are listed in the project notes file `blog/drafted-answers.md`.
