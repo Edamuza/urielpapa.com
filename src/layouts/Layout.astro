@@ -9,7 +9,13 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Analytics from "@/components/Analytics.astro";
 import { SITE } from "@/config";
-import { graph, personNode, websiteNode } from "@/utils/schema";
+import {
+  WEBSITE_ID,
+  graph,
+  personNode,
+  webPageNode,
+  websiteNode,
+} from "@/utils/schema";
 import "@/styles/global.css";
 
 type Props = {
@@ -22,6 +28,8 @@ type Props = {
   noindex?: boolean;
   /** Extra JSON-LD nodes for this page; WebSite and Person are always added. */
   schema?: object[];
+  /** Type and fields for the page's own WebPage node, when `schema` has none. */
+  webPage?: Record<string, unknown>;
   publishedTime?: Date;
   modifiedTime?: Date;
   /** Optional canonical override (e.g. for paginated or alternate URLs). */
@@ -37,6 +45,7 @@ const {
   ogType = "website",
   noindex = false,
   schema = [],
+  webPage,
   publishedTime,
   modifiedTime,
   canonical,
@@ -50,7 +59,38 @@ const path =
   Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
 const socialImageURL = new URL(ogImage, SITE.url).href;
-const jsonLd = graph(websiteNode(), personNode(), ...schema);
+// Every page gets a page node (a WebPage, unless the page passed a more specific
+// one such as ProfilePage or CollectionPage), tied to the site and its breadcrumbs.
+type Node = Record<string, unknown>;
+const nodes = schema as Node[];
+const pageId = `${canonicalURL}#page`;
+const crumbs = nodes.find(n => n["@type"] === "BreadcrumbList");
+if (crumbs) crumbs["@id"] ??= `${canonicalURL}#breadcrumb`;
+const ownPage = nodes.find(n => n["@id"] === pageId);
+// A post or project on the page is the page's main entity.
+const mainNode = nodes.find(n => /#(article|project)$/.test(String(n["@id"])));
+const pageNode: Node =
+  ownPage ??
+  webPageNode({
+    url: canonicalURL,
+    name: fullTitle,
+    description,
+    extra: {
+      ...(publishedTime && { datePublished: publishedTime.toISOString() }),
+      ...(modifiedTime && { dateModified: modifiedTime.toISOString() }),
+      ...webPage,
+    },
+  });
+pageNode.isPartOf ??= { "@id": WEBSITE_ID };
+pageNode.inLanguage ??= SITE.lang;
+if (mainNode) pageNode.mainEntity ??= { "@id": mainNode["@id"] };
+if (crumbs) pageNode.breadcrumb ??= { "@id": crumbs["@id"] };
+const jsonLd = graph(
+  websiteNode(),
+  personNode(),
+  ...(ownPage ? [] : [pageNode]),
+  ...nodes
+);
 const robots =
   noindex || draft
     ? "noindex, follow"

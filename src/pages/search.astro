@@ -2,6 +2,7 @@
 import "@pagefind/default-ui/css/ui.css";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import { breadcrumbNode } from "@/utils/schema";
 
 const crumbs = [
   { name: "Home", href: "/" },
@@ -13,6 +14,8 @@ const crumbs = [
   title="Search"
   description="Search every post, note and project on urielpapa.com."
   noindex
+  schema={[breadcrumbNode(crumbs)]}
+  webPage={{ "@type": "SearchResultsPage" }}
 >
   <div class="app-layout max-w-read pt-8">
     <Breadcrumbs crumbs={crumbs} />

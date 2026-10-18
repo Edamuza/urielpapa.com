@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import { WEBSITE_ID, breadcrumbNode } from "@/utils/schema";
 
 const crumbs = [
   { name: "Home", href: "/" },
@@ -10,6 +11,8 @@ const crumbs = [
 
 <Layout
   title="Colophon: How This Site Is Built"
+  schema={[breadcrumbNode(crumbs)]}
+  webPage={{ "@type": "AboutPage", about: { "@id": WEBSITE_ID } }}
   description="How urielpapa.com is built: Astro static pages, Tailwind CSS, the Keystatic git-based CMS, Vercel hosting, JSON-LD, Markdown copies and llms.txt for AI tools."
 >
   <div class="app-layout max-w-read pt-8">

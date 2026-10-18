@@ -90,7 +90,7 @@ The "UP" monogram is drawn in `scripts/generate-icons.mjs`. After changing it, r
 
 ## SEO and AI visibility
 
-- JSON-LD on every page (WebSite + Person), plus BlogPosting, BreadcrumbList, CollectionPage, ProfilePage, ContactPage and FAQPage where the content is visible.
+- Schema.org JSON-LD on every page: WebSite, Person and a page node (WebPage, or ProfilePage, ContactPage, CollectionPage, AboutPage or SearchResultsPage), plus BlogPosting, BreadcrumbList, FAQPage, Event and project nodes where the content is visible. `scripts/check-html.mjs` fails the build if a page has no valid JSON-LD with its page node.
 - `/robots.txt` allows search, AI search and AI training crawlers (plan: `schema-and-technical.md` §4). If the site ever moves behind Cloudflare, turn off its AI bot blocking.
 - `/sitemap-index.xml`, a full-content `/rss.xml`, a generated `/llms.txt`, and a Markdown copy of every post at its URL plus `.md` (noindex, canonical header).
 - Each sitemap entry carries a `lastmod` from the entry's `updated` date (else `published`), so Google recrawls what changed. Keep `updated` accurate when you edit a post.

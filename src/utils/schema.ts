@@ -93,6 +93,21 @@ export const collectionNode = (opts: {
   },
 });
 
+/** The page node every page gets, unless it passes its own (ProfilePage, CollectionPage…). */
+export const webPageNode = (opts: {
+  url: string;
+  name: string;
+  description: string;
+  extra?: Record<string, unknown>;
+}) => ({
+  "@type": "WebPage",
+  "@id": `${opts.url}#page`,
+  url: opts.url,
+  name: opts.name,
+  description: opts.description,
+  ...opts.extra,
+});
+
 export const graph = (...nodes: object[]) => ({
   "@context": "https://schema.org",
   "@graph": nodes,

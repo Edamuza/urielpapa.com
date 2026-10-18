@@ -39,7 +39,7 @@ const schema = [
   {
     "@type": "BlogPosting",
     "@id": `${url}#article`,
-    mainEntityOfPage: url,
+    mainEntityOfPage: { "@id": `${url}#page` },
     headline: data.title,
     description: data.description,
     image: abs("/og.png"),

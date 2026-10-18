@@ -10,6 +10,7 @@ import {
   postUrl,
   projectUrl,
 } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
 
 const items = (await getCollection("stack")).sort(
   (a, b) =>
@@ -29,12 +30,21 @@ const crumbs = [
   { name: "Home", href: "/" },
   { name: "Stack", href: "/stack" },
 ];
+const title = "Stack: The Tools and Technologies I Use";
+const description =
+  "The languages, frameworks, databases, AI models and harnesses, automation, SEO and infrastructure tools Uriel Papa uses, each linked to the posts and projects that use it.";
+const schema = [
+  collectionNode({
+    path: "/stack",
+    name: title,
+    description,
+    items: items.map(i => ({ name: i.data.name, href: `/stack#${i.id}` })),
+  }),
+  breadcrumbNode(crumbs),
+];
 ---
 
-<Layout
-  title="Stack: The Tools and Technologies I Use"
-  description="The languages, frameworks, databases, AI models and harnesses, automation, SEO and infrastructure tools Uriel Papa uses, each linked to the posts and projects that use it."
->
+<Layout title={title} description={description} schema={schema}>
   <div class="app-layout max-w-read pt-8">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro

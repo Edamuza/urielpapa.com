@@ -87,7 +87,7 @@ const ogImage = data.hero ? data.hero.src : `/og/${post.id}.png`;
 const article = {
   "@type": "BlogPosting",
   "@id": `${url}#article`,
-  mainEntityOfPage: url,
+  mainEntityOfPage: { "@id": `${url}#page` },
   url,
   headline: data.title,
   description: data.description,

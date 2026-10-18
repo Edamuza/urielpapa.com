@@ -3,6 +3,7 @@ import { getEntry, render } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import { formatDate, isoDate } from "@/utils/content";
+import { PERSON_ID, breadcrumbNode } from "@/utils/schema";
 
 const page = await getEntry("pages", "now");
 if (!page) throw new Error("Missing src/content/pages/now.md");
@@ -13,7 +14,13 @@ const crumbs = [
 ];
 ---
 
-<Layout title={page.data.title} description={page.data.description}>
+<Layout
+  title={page.data.title}
+  description={page.data.description}
+  modifiedTime={page.data.updated}
+  schema={[breadcrumbNode(crumbs)]}
+  webPage={{ about: { "@id": PERSON_ID } }}
+>
   <div class="app-layout max-w-read pt-8">
     <Breadcrumbs crumbs={crumbs} />
     <h1 class="h1">{page.data.title}</h1>

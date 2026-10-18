@@ -1,5 +1,6 @@
 // Fails the build when any image on any page is missing alt text or a title,
-// or any link is missing a title. Runs after `astro build` on the built pages.
+// any link is missing a title, or a page has no valid Schema.org JSON-LD with
+// its own page node. Runs after `astro build` on the built pages.
 /* eslint-disable no-console -- a build check; its output is the build log. */
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -23,8 +24,24 @@ const withoutCode = html => html.replace(/<(script|style|template|textarea)\b[\s
 const problems = [];
 let count = 0;
 let links = 0;
+let pages = 0;
 for (const file of htmlFiles(ROOT)) {
-  const html = withoutCode(readFileSync(file, "utf8"));
+  const raw = readFileSync(file, "utf8");
+  const name = file.slice(ROOT.length);
+  // Pagefind's own files and redirect stubs are not pages.
+  if (!name.startsWith("/pagefind/") && /<html\b/i.test(raw) && !/http-equiv="refresh"/i.test(raw)) {
+    pages++;
+    const blocks = [...raw.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
+    try {
+      const nodes = blocks.flatMap(([, json]) => JSON.parse(json)["@graph"] ?? []);
+      if (!nodes.some(n => String(n["@id"] ?? "").endsWith("#page"))) {
+        problems.push(`${name}: Schema.org JSON-LD has no page node`);
+      }
+    } catch {
+      problems.push(`${name}: Schema.org JSON-LD is not valid JSON`);
+    }
+  }
+  const html = withoutCode(raw);
   for (const [tag] of html.matchAll(/<a\b[^>]*>/g)) {
     links++;
     if (!attr(tag, "title")?.trim()) {
@@ -41,8 +58,10 @@ for (const file of htmlFiles(ROOT)) {
 }
 
 if (problems.length) {
-  console.error(`Images or links missing alt text or a title (${problems.length}):`);
+  console.error(`Pages that fail the HTML check (${problems.length}):`);
   for (const p of problems) console.error(`  ${p}`);
   process.exit(1);
 }
-console.log(`HTML check: all ${count} images have alt text and a title, and all ${links} links have a title.`);
+console.log(
+  `HTML check: all ${count} images have alt text and a title, all ${links} links have a title, and all ${pages} pages have Schema.org data.`,
+);
