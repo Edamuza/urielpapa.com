@@ -56,6 +56,18 @@ export const SOCIALS: { name: string; label: string; url: string }[] = [
   },
 ];
 
+/** Third-party badges shown in the footer. Add one object per badge. */
+export const TRUST_BADGES = [
+  {
+    name: "Website Launches",
+    href: "https://websitelaunches.com/site/urielpapa.com",
+    src: "https://websitelaunches.com/badge/urielpapa.com.svg",
+    alt: "Established online - Public launch record",
+    width: 255,
+    height: 55,
+  },
+];
+
 export const NEWSLETTER = {
   /** Provider default from the plan; confirm. */
   provider: "Buttondown",

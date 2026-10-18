@@ -2,7 +2,7 @@
 import IconRss from "@/assets/icons/IconRss.svg";
 import SocialIcon from "@/components/SocialIcon.astro";
 import Avatar from "./Avatar.astro";
-import { SITE, SOCIALS } from "@/config";
+import { SITE, SOCIALS, TRUST_BADGES } from "@/config";
 import { HUBS } from "@/data/hubs";
 
 const year = new Date().getFullYear();
@@ -95,5 +95,29 @@ const siteLinks = [
       </ul>
     </div>
   </div>
-  <p class="meta border-border border-t py-6">© {year} {SITE.name}</p>
+  <div
+    class="border-border flex flex-wrap items-center justify-between gap-4 border-t py-6"
+  >
+    <p class="meta">© {year} {SITE.name}</p>
+    {
+      TRUST_BADGES.length > 0 && (
+        <ul class="flex flex-wrap items-center gap-3" aria-label="Badges">
+          {TRUST_BADGES.map(b => (
+            <li>
+              <a href={b.href} target="_blank" rel="noopener">
+                <img
+                  src={b.src}
+                  alt={b.alt}
+                  width={b.width}
+                  height={b.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
 </footer>
