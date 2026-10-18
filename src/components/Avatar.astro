@@ -5,10 +5,15 @@ import photo from "@/assets/images/uriel-papa.jpg";
 
 /**
  * Set eager where the avatar is above the fold (home intro, About). The photo is
- * decorative (empty alt) unless `alt` is given, as on About and the author box.
+ * labelled with the name everywhere, so image checks and search see who it is.
  */
 type Props = { size?: number; class?: string; eager?: boolean; alt?: string };
-const { size = 56, class: className, eager = false, alt = "" } = Astro.props;
+const {
+  size = 56,
+  class: className,
+  eager = false,
+  alt = SITE.name,
+} = Astro.props;
 ---
 
 {
@@ -16,6 +21,7 @@ const { size = 56, class: className, eager = false, alt = "" } = Astro.props;
     <Image
       src={photo}
       alt={alt}
+      title={alt}
       width={size}
       height={size}
       densities={[1, 2]}
