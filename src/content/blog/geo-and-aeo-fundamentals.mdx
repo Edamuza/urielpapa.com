@@ -37,6 +37,7 @@ businessImpact:
     This site is newly launched, so I will share what changes in traffic and AI
     citations after a few months of data.
 published: 2026-10-07
+updated: 2026-10-18
 related: []
 projects:
   - wordpress-seo-plugins
@@ -125,7 +126,7 @@ The habit from my SEO work since 2023 that matters even more now is answering th
 
 ## How is this site set up for AI search?
 
-These are facts about how urielpapa.com is built:
+urielpapa.com is built so AI search systems can read every page without running JavaScript: Astro renders static HTML at build time, robots.txt allows the search and answer bots, and each page carries Person and BlogPosting schema that matches what you see. The details:
 
 * **robots.txt allows AI crawlers.** It welcomes search and AI answer crawlers, including OAI-SearchBot, ChatGPT-User, PerplexityBot and Claude-SearchBot, and also allows training crawlers such as GPTBot, ClaudeBot and Google-Extended. Only the CMS and a few utility routes are disallowed.
 * **JSON-LD structured data** on every page type, describing the site, the author and each post.

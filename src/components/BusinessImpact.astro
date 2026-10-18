@@ -3,7 +3,7 @@ type Props = { lines: string[] };
 const { lines } = Astro.props;
 ---
 
-<aside
+<section
   class="border-foreground my-10 rounded-lg border p-5"
   aria-labelledby="business-impact"
 >
@@ -13,4 +13,4 @@ const { lines } = Astro.props;
   <ul class="space-y-2">
     {lines.map(line => <li>{line}</li>)}
   </ul>
-</aside>
+</section>

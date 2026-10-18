@@ -184,8 +184,10 @@ const robots =
   <body
     class="bg-background font-app text-foreground selection:bg-accent selection:text-accent-foreground flex min-h-svh flex-col"
   >
-    <!-- Always visible: sticks to the top; the header below hides on scroll down. -->
+    <!-- Always visible: sticks to the top; the header below hides on scroll down.
+         data-nosnippet keeps it out of search snippets and AI page summaries. -->
     <p
+      data-nosnippet
       class="bg-accent text-accent-foreground sticky top-0 z-50 flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
     >
       <!-- One inline box, so flex layout keeps the spaces between the parts. -->
