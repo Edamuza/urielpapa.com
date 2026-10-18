@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && node scripts/vercel-routes.mjs && node scripts/check-images.mjs && pagefind --site .vercel/output/static",
+    "build": "astro check && astro build && node scripts/vercel-routes.mjs && node scripts/check-html.mjs && pagefind --site .vercel/output/static",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",
