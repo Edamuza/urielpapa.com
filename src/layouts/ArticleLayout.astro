@@ -266,6 +266,7 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
             <Image
               src={data.hero}
               alt={data.heroAlt ?? ""}
+              title={data.heroAlt ?? ""}
               widths={[720, 1080, 1440]}
               sizes="(min-width: 768px) 68ch, 100vw"
               loading="eager"
