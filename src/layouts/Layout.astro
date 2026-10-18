@@ -45,7 +45,7 @@ const {
 
 const fullTitle = title
   ? `${title} | ${SITE.name}`
-  : `${SITE.name}: ${SITE.jobTitle}`;
+  : `${SITE.name}: ${SITE.jobTitle} on AI, Automation and SEO`;
 const path =
   Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
@@ -82,6 +82,7 @@ const robots =
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.name} />
+    <meta name="publisher" content={SITE.name} />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={SITE.name} />

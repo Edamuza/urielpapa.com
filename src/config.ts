@@ -11,7 +11,7 @@ export const SITE = {
   title: "Uriel Papa",
   /** Default meta description (home page and fallbacks). */
   description:
-    "Knowledge shared by Uriel Papa, a technical founder from Metro Manila: AI and LLMs, automation, technology and business, SEO, GEO and AEO, tech stacks, marketing and the founder's journey.",
+    "Uriel Papa is a technical founder in Metro Manila writing about AI, automation, SEO, GEO and AEO, tech stacks, marketing and the founder's journey.",
   lang: "en",
   locale: "en_PH",
   timezone: "Asia/Manila",
