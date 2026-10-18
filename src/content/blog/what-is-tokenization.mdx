@@ -37,6 +37,7 @@ businessImpact:
     Output tokens usually cost more than input tokens, so short, structured
     replies save money.
 published: 2026-10-02
+updated: 2026-10-19
 related:
   - n8n-messenger-instagram-chatbot
 projects: []
@@ -70,7 +71,7 @@ draft: false
 ---
 Tokenization is how a language model splits text into small pieces called tokens; models read, write, limit and charge by tokens, not words. That is why two prompts of the same length in words can cost different amounts, and why a long document can suddenly be "too long" for a model.
 
-This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations, so token counts are something I watch on real bills. I first noticed token costs when I built a Messenger and Instagram chatbot with n8n and OpenRouter, where every customer message also carried the full system prompt.
+This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations and in the [ERP we built with Laravel and Next.js](/blog/laravel-vs-nextjs), so token counts are something I watch on real bills. I first noticed token costs when I built a Messenger and Instagram chatbot with n8n and OpenRouter, where every customer message also carried the full system prompt.
 
 ## What is a token?
 
@@ -127,7 +128,7 @@ Output length is limited in tokens too. A model may stop mid-answer when it reac
 
 ## What does this mean in practice?
 
-In practice, tokens turn a vague AI cost into a number you can estimate. Here is a rough example from the Messenger and Instagram chatbot I built with n8n and OpenRouter for my former agency, VITE SEO. In a typical month it handled around 1,000 messages. Each request carried about 2,000 input tokens, mostly the system prompt and recent chat history, and each reply was about 150 tokens. That comes to around 2 million input tokens and 150,000 output tokens a month.
+In practice, tokens turn a vague AI cost into a number you can estimate. Here is a rough example from the [Messenger and Instagram chatbot I built with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot) for my former agency, VITE SEO. In a typical month it handled around 1,000 messages. Each request carried about 2,000 input tokens, mostly the system prompt and recent chat history, and each reply was about 150 tokens. That comes to around 2 million input tokens and 150,000 output tokens a month.
 
 On a small, low-cost model at about US$0.15 per million input tokens and US$0.60 per million output tokens, that is well under US$1 a month. At the mid-range prices in the table above, it would be about US$5 to US$6. These are estimates based on the usage OpenRouter shows in its activity page, not an exact bill.
 

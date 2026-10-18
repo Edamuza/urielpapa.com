@@ -39,6 +39,7 @@ businessImpact:
     Splitting the API from the interface let our back-end and front-end work
     move at the same time, which helped us ship in under 3 months.
 published: 2026-10-01
+updated: 2026-10-19
 related:
   - astro-7-content-sites
 projects:
@@ -121,7 +122,7 @@ The cost of this split is coordination. Every feature touches two codebases, and
 
 ## Why did we use both in our ERP?
 
-The ERP had four modules behind one login: HRIS (TeamOra), CRM (Zerem), project management (Sprintly) and accounting. The back end had to handle 144 data models, role-based access and integrations with Gmail, Twilio Voice, Meta messaging webhooks, OpenAI, OpenRouter and 5 n8n outreach workflows. The front end had 115 pages.
+The ERP, which we built for [my former agency, VITE SEO Digital Advertising](/blog/closing-my-agency), had four modules behind one login: HRIS (TeamOra), CRM (Zerem), project management (Sprintly) and accounting. The back end had to handle 144 data models, role-based access and integrations with Gmail, Twilio Voice, Meta messaging webhooks, OpenAI, OpenRouter and 5 n8n outreach workflows. The front end had 115 pages.
 
 We used Laravel for the API because most of the hard work was rules and data: payroll, accounting, permissions and approvals. Its conventions meant the whole team could follow one pattern across 144 models. We used Next.js for the interface because 115 pages needed to feel quick and consistent, and React let us build shared components once and reuse them in all four modules. Keeping the two apart also meant back-end and front-end work could happen at the same time.
 
@@ -135,4 +136,4 @@ We used Laravel for the API because most of the hard work was rules and data: pa
 * **Pick Next.js if** the hard part is the interface or the content: a marketing site, a portal with a few clear screens, or an app where speed and search visibility matter most.
 * **Pick both if** you have a data-heavy system and also need a modern, interactive interface, and your team can maintain two codebases.
 
-After building the ERP, I would pick both again for a system like that, but not for everything. For a small portal or a content site, I would start with Next.js alone and add a separate back end only when the rules get heavy. The split paid off for us because our back end was big enough to need its own home.
+After building the ERP, I would pick both again for a system like that, but not for everything. For a small portal or a content site, I would start with Next.js alone and add a separate back end only when the rules get heavy. For a site that is mostly content, [Astro 7, which runs this site](/news/astro-7-content-sites), is also worth a look. The split paid off for us because our back end was big enough to need its own home.

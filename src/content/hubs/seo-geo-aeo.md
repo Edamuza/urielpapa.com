@@ -6,7 +6,7 @@ summary: How search is evolving, with GEO and AEO fundamentals, semantic SEO and
 order: 4
 startHere:
   - post: geo-and-aeo-fundamentals
-    reason: The basics of being found and cited by AI search, with this site as a working example.
+    reason: How AI search systems such as ChatGPT search, Google AI Overviews and Perplexity pick which pages to cite, what still matters from classic SEO, and how urielpapa.com itself is set up for AI answers.
 ---
 
 Search is no longer only a page of ten blue links. People now get answers from Google AI Overviews, ChatGPT search, Perplexity and other assistants, and those answers quote and cite websites. Here I write about how search is evolving and what everyone with a website should know about it.

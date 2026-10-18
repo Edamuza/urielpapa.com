@@ -27,6 +27,7 @@ takeaways:
 businessImpact: []
 sourceUrl: https://astro.build/blog/astro-7/
 published: 2026-10-14
+updated: 2026-10-19
 related:
   - laravel-vs-nextjs
 projects: []
@@ -59,7 +60,7 @@ Astro 7 is mostly a speed and tooling release. These are the main changes from t
 
 ## Why does it matter for content sites?
 
-Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines.
+Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines, including the AI search systems I cover in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
 
 Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
 
@@ -67,7 +68,7 @@ For a business, the practical questions are build time, hosting cost and how muc
 
 ## What did I notice building this site on Astro 7?
 
-This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. Most pages ship no JavaScript, with small islands for the theme toggle, search, code copy buttons and form enhancement.
+This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. [Most pages ship no JavaScript](/notes/this-site-ships-no-javascript-by-default), with small islands for the theme toggle, search, code copy buttons and form enhancement.
 
 One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
 

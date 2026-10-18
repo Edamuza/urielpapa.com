@@ -37,7 +37,7 @@ businessImpact:
     This site is newly launched, so I will share what changes in traffic and AI
     citations after a few months of data.
 published: 2026-10-07
-updated: 2026-10-18
+updated: 2026-10-19
 related: []
 projects:
   - wordpress-seo-plugins
@@ -108,7 +108,7 @@ Nearly everything. Pages still need to be crawlable and indexable, load quickly,
   I led and co-developed 5 in-house WordPress plugins, about 11,700 lines of code, including a publish guard that refuses a post without an SEO title, a meta description and schema.
 </FromTheBuild>
 
-The habit from my SEO work since 2023 that matters even more now is answering the question in the first sentence. Pages that answered plainly near the top tended to win featured snippets, and that same habit makes a passage easy for an AI assistant to quote. I also learned that a plugin can check for a title, a description and schema, but it cannot write a clear answer for you. That part still comes down to the writer.
+The habit from my SEO work since 2023 that matters even more now is answering the question in the first sentence. Pages that answered plainly near the top tended to win featured snippets, and that same habit makes a passage easy for an AI assistant to quote. I also learned that a plugin can check for a title, a description and schema, but it cannot write a clear answer for you. That part still comes down to the writer. For how SEO articles compared with paid ads as a source of leads at my agency, see [organic content vs paid ads](/blog/organic-content-vs-paid-ads).
 
 ## What can you do on your own site today?
 
@@ -126,7 +126,7 @@ The habit from my SEO work since 2023 that matters even more now is answering th
 
 ## How is this site set up for AI search?
 
-urielpapa.com is built so AI search systems can read every page without running JavaScript: Astro renders static HTML at build time, robots.txt allows the search and answer bots, and each page carries Person and BlogPosting schema that matches what you see. The details:
+urielpapa.com is built so AI search systems can read every page without running JavaScript: [Astro 7](/news/astro-7-content-sites) renders static HTML at build time, robots.txt allows the search and answer bots, and each page carries Person and BlogPosting schema that matches what you see. The details:
 
 * **robots.txt allows AI crawlers.** It welcomes search and AI answer crawlers, including OAI-SearchBot, ChatGPT-User, PerplexityBot and Claude-SearchBot, and also allows training crawlers such as GPTBot, ClaudeBot and Google-Extended. Only the CMS and a few utility routes are disallowed.
 * **JSON-LD structured data** on every page type, describing the site, the author and each post.
