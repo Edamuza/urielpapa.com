@@ -1,0 +1,107 @@
+---
+title: How to Check if ChatGPT Cites Your Site
+seoTitle: How to Check if ChatGPT Cites Your Website
+description: >-
+  How to check whether ChatGPT cites your website: allow OAI-SearchBot, test
+  real prompts, find chatgpt.com visits in GA4, and read Google and Bing AI reports.
+dek: >-
+  There is no ChatGPT citation report yet, but four checks together show
+  whether ChatGPT can see your site, cites it and sends you visitors.
+hub: seo-geo-aeo
+frame: guide
+takeaways:
+  - >-
+    ChatGPT can only cite pages it is allowed to fetch, so first make sure
+    robots.txt does not block OAI-SearchBot.
+  - >-
+    Asking ChatGPT the questions your pages answer, with web search on, is the
+    most direct way to see whether it cites you.
+  - >-
+    ChatGPT adds utm_source=chatgpt.com to the links it sends, so its visits
+    show up as their own source in Google Analytics.
+  - >-
+    Google Search Console and Bing Webmaster Tools now report AI citations and
+    impressions, but neither covers ChatGPT.
+published: 2026-10-19
+related: []
+projects: []
+stack:
+  - google-search-console
+  - ga4
+  - gpt
+faq:
+  - q: Does OpenAI have a report that shows when ChatGPT cites my site?
+    a: >-
+      No. OpenAI's publisher FAQ points to referral traffic, tagged with
+      utm_source=chatgpt.com, as the way to measure ChatGPT visits. There is no
+      citation report like Bing's AI Performance report.
+  - q: Do I need to allow GPTBot for ChatGPT to cite my site?
+    a: >-
+      No. GPTBot is OpenAI's training crawler. ChatGPT search uses
+      OAI-SearchBot, and each one has its own robots.txt setting, so you can
+      allow search and block training.
+event: {}
+syndication: []
+draft: true
+---
+To check whether ChatGPT cites your site, ask it the questions your pages answer with web search on and look at the sources it lists, then confirm in your analytics, because ChatGPT tags the links it sends with `utm_source=chatgpt.com`. Before either check means anything, make sure your robots.txt lets OAI-SearchBot fetch your pages.
+
+This guide is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I use these same checks on urielpapa.com, which is set up for AI search as described in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
+
+## Can ChatGPT see your site at all?
+
+ChatGPT search finds pages with its own crawler, OAI-SearchBot. OpenAI's [crawler documentation](https://developers.openai.com/docs/bots) says sites that block OAI-SearchBot "will not be shown in ChatGPT search answers", and that a robots.txt change can take about 24 hours to take effect. OpenAI runs two other bots with separate settings:
+
+| Bot | What it does | Affects ChatGPT search? |
+| --- | --- | --- |
+| OAI-SearchBot | Finds pages to show and cite in ChatGPT search | Yes |
+| ChatGPT-User | Visits a page when a user asks ChatGPT about it | No |
+| GPTBot | Crawls content that may be used to train OpenAI's models | No |
+
+So you can block GPTBot to opt out of training and still allow OAI-SearchBot to be cited. Open `yoursite.com/robots.txt` and check that no rule disallows OAI-SearchBot, or disallows every bot with `User-agent: *`. Also check your CDN or firewall, because some have their own AI bot blocking that overrides robots.txt.
+
+[Uriel: one line on what urielpapa.com's robots.txt allows, and whether you have seen OAI-SearchBot in Vercel's logs.]
+
+## How do you test whether ChatGPT cites you?
+
+Ask ChatGPT the questions your pages already answer and look at the sources under each answer. A simple routine:
+
+1. **List 10 to 20 questions** your pages answer, in the words a reader would use, not your page titles.
+2. **Make sure the answer uses web search.** Answers that searched the web show their sources; an answer from the model's memory has none to check.
+3. **Note every source** for each question: whether your site is cited, which page, and which other sites are cited instead.
+4. **Repeat on the same day each month** with the same questions, so the results are comparable.
+
+Answers change from one run to the next, so one missing citation means little. A question where you are never cited across several months is the signal to act on.
+
+[Uriel: 3 or 4 of the questions you test for urielpapa.com, and what you found the first time you ran them.]
+
+## How do you see ChatGPT visits in Google Analytics?
+
+OpenAI's [publisher FAQ](https://help.openai.com/en/articles/12627856-publishers-and-developers-faq) says ChatGPT "automatically includes the UTM parameter utm_source=chatgpt.com in referral URLs", so its visits appear as their own source. In GA4:
+
+1. Open **Reports**, then **Acquisition**, then **Traffic acquisition**.
+2. Change the table's dimension to **Session source / medium**.
+3. Search the table for `chatgpt.com`.
+
+The landing pages for that source are the pages ChatGPT sent people to. To see every AI assistant in one row, create a custom channel group with a rule that matches sources such as `chatgpt.com`, `perplexity.ai`, `copilot.microsoft.com`, `gemini.google.com` and `claude.ai`.
+
+Referral data only shows citations people clicked. ChatGPT can cite a page many times without a visit, so a low number does not mean you are never cited.
+
+[Uriel: what GA4 shows for chatgpt.com on urielpapa.com so far, even if it's zero.]
+
+## What do Google and Bing report about AI answers?
+
+Neither report covers ChatGPT, but both show whether AI answers in their own products use your pages:
+
+* **Google Search Console** has a [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) that counts impressions of your links in AI Overviews and AI Mode, by page, country, device and date. Google says it rolled the report out to all websites by August 31, 2026.
+* **Bing Webmaster Tools** added [AI Performance](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview) as a public preview on February 10, 2026. It shows how often your pages are cited in Microsoft Copilot and AI summaries in Bing, which pages are cited, and a sample of the grounding queries that led to them.
+
+Bing's report is the closest thing to a citation report today, and a page that Copilot cites is often worth testing in ChatGPT too.
+
+## How often should you check?
+
+Once a month is enough for most sites. A monthly rhythm gives Search Console, Bing and GA4 enough data to compare from one check to the next. Check sooner after a big change, such as a new robots.txt rule or a rewritten page.
+
+Treat citations like rankings: a signal to watch over time, not a number to chase every day. Organic work is slow to show results, as I found comparing [organic content and paid ads](/blog/organic-content-vs-paid-ads), and I expect AI citations to build just as slowly.
+
+[Uriel: one or two sentences on what you'll change on the site if a page is never cited after a few months.]
