@@ -23,7 +23,9 @@ takeaways:
     Google Search Console and Bing Webmaster Tools now report AI citations and
     impressions, but neither covers ChatGPT.
 published: 2026-10-19
-related: []
+related:
+  - geo-and-aeo-fundamentals
+  - organic-content-vs-paid-ads
 projects: []
 stack:
   - google-search-console
@@ -45,6 +47,13 @@ syndication: []
 draft: true
 ---
 To check whether ChatGPT cites your site, ask it the questions your pages answer with web search on and look at the sources it lists, then confirm in your analytics, because ChatGPT tags the links it sends with `utm_source=chatgpt.com`. Before either check means anything, make sure your robots.txt lets OAI-SearchBot fetch your pages.
+
+The four checks, in order:
+
+1. **Check that robots.txt allows OAI-SearchBot**, so [ChatGPT can see your site](#can-chatgpt-see-your-site-at-all).
+2. **Ask ChatGPT the questions your pages answer**, with web search on, and [note the sources it cites](#how-do-you-test-whether-chatgpt-cites-you).
+3. **Find chatgpt.com visits** in [Google Analytics](#how-do-you-see-chatgpt-visits-in-google-analytics).
+4. **Read the AI reports** in [Google Search Console and Bing Webmaster Tools](#what-do-google-and-bing-report-about-ai-answers).
 
 This guide is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I use these same checks on urielpapa.com, which is set up for AI search as described in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
 
@@ -79,7 +88,9 @@ Ask ChatGPT the questions your pages already answer and look at the sources unde
 
 Answers change from one run to the next, so one missing citation means little. A question where you are never cited across several months is the signal to act on.
 
-I ran this for urielpapa.com on 21 October 2026, logged out of ChatGPT with web search on, and asked each question twice:
+## What happened when I tested urielpapa.com?
+
+I tested urielpapa.com on 21 October 2026 with four questions my posts answer, logged out of ChatGPT with web search on, and asked each question twice:
 
 | Question | My page that answers it | urielpapa.com cited? | What ChatGPT cited instead |
 | --- | --- | --- | --- |
@@ -120,7 +131,7 @@ For urielpapa.com the answer so far is zero. From 23 September to 20 October 202
 
 ## What do Google and Bing report about AI answers?
 
-Neither report covers ChatGPT, but both show whether AI answers in their own products use your pages:
+Google Search Console and Bing Webmaster Tools both report how AI answers in their own products use your pages, but neither covers ChatGPT:
 
 * **Google Search Console** has a [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) that counts impressions of your links in AI Overviews and AI Mode, by page, country, device and date. Google says it rolled the report out to all websites by August 31, 2026.
 * **Bing Webmaster Tools** added [AI Performance](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview) as a public preview on February 10, 2026. It shows how often your pages are cited in Microsoft Copilot and AI summaries in Bing, which pages are cited, and a sample of the grounding queries that led to them.
@@ -129,7 +140,7 @@ Bing's report is the closest thing to a citation report today, and a page that C
 
 ## How often should you check?
 
-Once a month is enough for most sites. A monthly rhythm gives Search Console, Bing and GA4 enough data to compare from one check to the next. Check sooner after a big change, such as a new robots.txt rule or a rewritten page.
+Checking ChatGPT citations once a month is enough for most sites. A monthly rhythm gives Search Console, Bing and GA4 enough data to compare from one check to the next. Check sooner after a big change, such as a new robots.txt rule or a rewritten page.
 
 Treat citations like rankings: a signal to watch over time, not a number to chase every day. Organic work is slow to show results, as I found comparing [organic content and paid ads](/blog/organic-content-vs-paid-ads), and I expect AI citations to build just as slowly.
 
