@@ -78,6 +78,9 @@ export default defineConfig({
   trailingSlash: "never",
   // Static pages on Vercel's CDN; only /api/*, /keystatic and /preview/* run on demand.
   output: "static",
+  // The stylesheet is about 10 KB compressed, so inlining it saves a
+  // render-blocking request on every first visit.
+  build: { inlineStylesheets: "always" },
   adapter: vercel(),
   integrations: [
     mdx(),

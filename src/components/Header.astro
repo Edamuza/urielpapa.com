@@ -154,11 +154,17 @@ const isActive = (href: string) =>
   const panel = menu?.querySelector<HTMLElement>("nav");
   if (header) {
     const show = () => header.removeAttribute("data-hidden");
-    let lastY = window.scrollY;
+    // Read the scroll position on the first scroll, not while the page is still
+    // loading, where reading it would force an extra layout.
+    let lastY: number | undefined;
     let ticking = false;
     const update = () => {
       ticking = false;
       const y = window.scrollY;
+      if (lastY === undefined) {
+        lastY = y;
+        return;
+      }
       const delta = y - lastY;
       if (Math.abs(delta) < 8) return;
       const keep =
