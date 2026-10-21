@@ -60,9 +60,7 @@ ChatGPT search finds pages with its own crawler, OAI-SearchBot. OpenAI's [crawle
 
 So you can block GPTBot to opt out of training and still allow OAI-SearchBot to be cited. Open `yoursite.com/robots.txt` and check that no rule disallows OAI-SearchBot, or disallows every bot with `User-agent: *`. Also check your CDN or firewall, because some have their own AI bot blocking that overrides robots.txt.
 
-On urielpapa.com, robots.txt allows OAI-SearchBot and ChatGPT-User on every public page. I allow GPTBot too, because I want models to learn who I am.
-
-When I checked on 21 October 2026, Vercel's request logs showed no OAI-SearchBot visits in the past two weeks. That result proved little, because the same logs showed no requests of any kind for the last day, even though Google Analytics recorded real visitors in that time. If your host's logs look empty, make sure logging works before you trust a zero.
+On urielpapa.com, robots.txt allows OAI-SearchBot and ChatGPT-User on every public page. I allow GPTBot too, because I want models to learn who I am. [Uriel: have you seen OAI-SearchBot in Vercel's logs? Add a line if so.]
 
 ## How do you test whether ChatGPT cites you?
 
@@ -75,16 +73,7 @@ Ask ChatGPT the questions your pages already answer and look at the sources unde
 
 Answers change from one run to the next, so one missing citation means little. A question where you are never cited across several months is the signal to act on.
 
-I first ran this on 21 October 2026, four days after urielpapa.com started getting visitors. ChatGPT cited the site for none of my four questions:
-
-| Question | My post that answers it | What ChatGPT cited instead |
-| --- | --- | --- |
-| Who is Uriel Papa? | Home and About pages | TechBehemoths in one run, viteseo.ph in the other |
-| Laravel vs Next.js for a business system | [Laravel vs Next.js](/blog/laravel-vs-nextjs) | The official Laravel and Next.js docs |
-| How do I build an AI chatbot for Messenger and Instagram with n8n and OpenRouter? | [My n8n chatbot build](/blog/n8n-messenger-instagram-chatbot) | n8n, OpenRouter and Meta for Developers |
-| What are GEO and AEO, and how do I get my pages cited by AI search? | [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) | Google Search Central, OpenAI, Perplexity and arXiv |
-
-I asked each question twice while logged out, and the sources changed between runs. The most useful result came from "Who is Uriel Papa?": ChatGPT described me correctly, but cited viteseo.ph, my former agency's site, not urielpapa.com. It knows who I am, and it reaches me through an older site.
+[Uriel: 3 or 4 of the questions you test for urielpapa.com, and what you found the first time you ran them.]
 
 ## How do you see ChatGPT visits in Google Analytics?
 
@@ -98,7 +87,7 @@ The landing pages for that source are the pages ChatGPT sent people to. To see e
 
 Referral data only shows citations people clicked. ChatGPT can cite a page many times without a visit, so a low number does not mean you are never cited.
 
-On urielpapa.com, GA4 has no chatgpt.com row yet. From 23 September to 20 October 2026 the site had 54 sessions: 44 direct, 5 from Facebook and the rest from a few referral sites. Zero is the expected start for a site this new, and it gives me a baseline for next month.
+[Uriel: what GA4 shows for chatgpt.com on urielpapa.com so far, even if it's zero.]
 
 ## What do Google and Bing report about AI answers?
 
@@ -115,4 +104,4 @@ Once a month is enough for most sites. A monthly rhythm gives Search Console, Bi
 
 Treat citations like rankings: a signal to watch over time, not a number to chase every day. Organic work is slow to show results, as I found comparing [organic content and paid ads](/blog/organic-content-vs-paid-ads), and I expect AI citations to build just as slowly.
 
-If a page of mine is still not cited after a few months, I'll first rule out access: no firewall challenge for bots, the page in the sitemap, and the page indexed in Bing. Then I'll rewrite its opening to answer the question directly and add what only I have, such as the ERP's real numbers in the Laravel vs Next.js post, since ChatGPT answered that question from the official docs alone.
+[Uriel: one or two sentences on what you'll change on the site if a page is never cited after a few months.]
