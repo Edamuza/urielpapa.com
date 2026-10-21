@@ -60,7 +60,13 @@ ChatGPT search finds pages with its own crawler, OAI-SearchBot. OpenAI's [crawle
 
 So you can block GPTBot to opt out of training and still allow OAI-SearchBot to be cited. Open `yoursite.com/robots.txt` and check that no rule disallows OAI-SearchBot, or disallows every bot with `User-agent: *`. Also check your CDN or firewall, because some have their own AI bot blocking that overrides robots.txt.
 
-On urielpapa.com, robots.txt allows OAI-SearchBot and ChatGPT-User on every public page. I allow GPTBot too, because I want models to learn who I am. [Uriel: have you seen OAI-SearchBot in Vercel's logs? Add a line if so.]
+On urielpapa.com, robots.txt allows OAI-SearchBot and ChatGPT-User on every public page. I allow GPTBot too, because I want models to learn who I am.
+
+![urielpapa.com robots.txt allowing OAI-SearchBot, ChatGPT-User and the other AI search bots](../../assets/images/content/chatgpt-citations-robots-txt.png)
+
+*urielpapa.com/robots.txt on 21 October 2026.*
+
+I also searched my Vercel request logs for OAI-SearchBot over the last two weeks and found nothing. That told me nothing about the bot, because the same logs showed no requests of any kind for the previous day while GA4 recorded real visitors. Before you trust an empty search, check that your logs show normal traffic.
 
 ## How do you test whether ChatGPT cites you?
 
@@ -73,7 +79,26 @@ Ask ChatGPT the questions your pages already answer and look at the sources unde
 
 Answers change from one run to the next, so one missing citation means little. A question where you are never cited across several months is the signal to act on.
 
-[Uriel: 3 or 4 of the questions you test for urielpapa.com, and what you found the first time you ran them.]
+I ran this for urielpapa.com on 21 October 2026, logged out of ChatGPT with web search on, and asked each question twice:
+
+| Question | My page that answers it | urielpapa.com cited? | What ChatGPT cited instead |
+| --- | --- | --- | --- |
+| Who is Uriel Papa? | [About](/about) | No | My old agency's website, and a TechBehemoths listing |
+| Laravel vs Next.js for a business system | [Laravel vs Next.js](/blog/laravel-vs-nextjs) | No | The official Laravel and Next.js docs |
+| How do I build an AI chatbot for Messenger and Instagram with n8n and OpenRouter? | [My n8n chatbot build](/blog/n8n-messenger-instagram-chatbot) | No | n8n, OpenRouter and Meta for Developers docs |
+| What are GEO and AEO, and how do I get my pages cited by AI search? | [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) | No | Google Search Central, OpenAI and Perplexity docs, and arXiv |
+
+Zero of four, which I expected: the site had only had visitors for four days. The sources also changed between the two runs of the same question, which is why one run is only a sample.
+
+The useful finding was the first question. ChatGPT knew who I was, but it described me through [the agency I ran](/blog/closing-my-agency) and cited that agency's website, not this one. So the name is already known; my job is to connect it to urielpapa.com.
+
+![ChatGPT answering "Who is Uriel Papa?" with a citation to the Vite SEO agency website](../../assets/images/content/chatgpt-citations-who-is-uriel-papa.png)
+
+*"Who is Uriel Papa?": the answer cites my old agency's site, not urielpapa.com.*
+
+![ChatGPT's source list for Laravel vs Next.js, showing only Laravel and Next.js documentation](../../assets/images/content/chatgpt-citations-laravel-vs-nextjs.png)
+
+*"Laravel vs Next.js for a business system": every source is official documentation.*
 
 ## How do you see ChatGPT visits in Google Analytics?
 
@@ -87,7 +112,11 @@ The landing pages for that source are the pages ChatGPT sent people to. To see e
 
 Referral data only shows citations people clicked. ChatGPT can cite a page many times without a visit, so a low number does not mean you are never cited.
 
-[Uriel: what GA4 shows for chatgpt.com on urielpapa.com so far, even if it's zero.]
+For urielpapa.com the answer so far is zero. From 23 September to 20 October 2026 the site had 54 sessions from six sources: 44 direct, 5 from Facebook, 2 from websitelaunches.com, and one each from Messenger, Vercel and an unknown source. Filtering the table for "chatgpt" returns nothing. Zero is my baseline, and the first chatgpt.com row will be easy to spot.
+
+![GA4 Traffic acquisition by session source and medium for urielpapa.com, with no chatgpt.com row](../../assets/images/content/chatgpt-citations-ga4-source-medium.png)
+
+*GA4 Traffic acquisition by session source / medium, 23 September to 20 October 2026.*
 
 ## What do Google and Bing report about AI answers?
 
@@ -104,4 +133,6 @@ Once a month is enough for most sites. A monthly rhythm gives Search Console, Bi
 
 Treat citations like rankings: a signal to watch over time, not a number to chase every day. Organic work is slow to show results, as I found comparing [organic content and paid ads](/blog/organic-content-vs-paid-ads), and I expect AI citations to build just as slowly.
 
-[Uriel: one or two sentences on what you'll change on the site if a page is never cited after a few months.]
+If a page on urielpapa.com is still never cited after three months, I'll first rule out access: no firewall rule challenging bots, the page in the sitemap, and indexed in Bing. Then I'll rewrite its opening to answer the exact question in two or three sentences and lead with what only I have, because my Laravel vs Next.js test showed that a generic comparison loses to the official docs.
+
+*Screenshots are from my own ChatGPT and Google Analytics sessions, taken on 21 October 2026. ChatGPT is a trademark of OpenAI. Google Analytics is a trademark of Google LLC. This post is not endorsed by or affiliated with OpenAI or Google.*
