@@ -7,6 +7,8 @@ order: 4
 startHere:
   - post: geo-and-aeo-fundamentals
     reason: How AI search systems such as ChatGPT search, Google AI Overviews and Perplexity pick which pages to cite, what still matters from classic SEO, and how urielpapa.com itself is set up for AI answers.
+  - post: how-to-check-if-chatgpt-cites-your-site
+    reason: How to check whether ChatGPT can see, cite and send visitors to your site, with the results of my first test on urielpapa.com.
 ---
 
 Search is no longer only a page of ten blue links. People now get answers from Google AI Overviews, ChatGPT search, Perplexity and other assistants, and those answers quote and cite websites. Here I write about how search is evolving and what everyone with a website should know about it.
