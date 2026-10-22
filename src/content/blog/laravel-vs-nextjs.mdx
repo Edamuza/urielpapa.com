@@ -107,7 +107,7 @@ The Laravel team's own 10-minute video walks through starting a new Laravel app 
 
 For systems with many related records and strict rules, Laravel gives a lot for free: models, relationships, migrations, validation and queues all follow one set of conventions. In the ERP, the payroll rules (SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay) and the double-entry accounting all lived in the Laravel API.
 
-Next.js can talk to a database directly too, but you usually assemble more of the pieces yourself: an ORM, an auth library, a job runner. That flexibility is useful for smaller apps, as in the client quotation portal I built on Next.js 14 with Prisma and PostgreSQL.
+Next.js can talk to a database directly too, but you usually assemble more of the pieces yourself: an ORM, an auth library, a job runner. That flexibility is useful for smaller apps, as in the client quotation portal I led and co-developed on Next.js 14 with Prisma and PostgreSQL.
 
 Laravel was faster than I expected for the core records. Once our conventions were set, adding a new model with its migration, validation and tests felt routine, which mattered with 144 models. It was slower where the logic was unusual, like payroll edge cases and the accounting reports. There the framework could not help much, and we had to think through every rule and write a test for it.
 

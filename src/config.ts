@@ -36,7 +36,7 @@ export const MACRO =
 
 /**
  * Profiles listed in the footer, About, Contact and Person `sameAs`.
- * Add Threads, Instagram and Reddit once confirmed.
+ * Add Threads and Reddit once confirmed.
  */
 export const SOCIALS: { name: string; label: string; url: string }[] = [
   {
@@ -50,6 +50,11 @@ export const SOCIALS: { name: string; label: string; url: string }[] = [
     name: "tiktok",
     label: "TikTok",
     url: "https://www.tiktok.com/@its_uriel26",
+  },
+  {
+    name: "instagram",
+    label: "Instagram",
+    url: "https://www.instagram.com/its_uriel26/",
   },
   {
     name: "facebook",
