@@ -4,7 +4,7 @@ Owner: Uriel Papa. Method: /semantic-seo-sro (Macro > Seed > Node). Updated 22 O
 
 ## Macro
 
-urielpapa.com helps founders, small-business owners and developers use AI, automation and modern web stacks well, through first-hand build notes from a technical founder in Metro Manila.
+urielpapa.com helps founders, small-business owners and developers use AI, automation and modern web stacks well, through first-hand build notes from a technical founder in the Philippines.
 
 Core entities: Uriel Papa, urielpapa.com, ChatGPT, Google AI Overviews, Perplexity, Claude, Google Search Console, Bing Webmaster Tools, GA4, schema.org, IndexNow, llms.txt, n8n, Zapier, Make, OpenRouter, AI agents, context window, tokens, Astro, Laravel, Next.js, Vercel.
 

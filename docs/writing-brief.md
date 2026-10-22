@@ -4,7 +4,7 @@ Every post on urielpapa.com follows these rules. They come from the /semantic-se
 
 ## Voice and facts
 
-- First person, as Uriel Papa: a technical founder in Metro Manila who shares what works and what didn't. Plain words, short sentences (under 25 words), paragraphs of 2-4 sentences. American spelling. No hype, no emoji.
+- First person, as Uriel Papa: a technical founder in the Philippines who shares what works and what didn't. Plain words, short sentences (under 25 words), paragraphs of 2-4 sentences. American spelling. No hype, no emoji.
 - Never refer to Uriel as "he", "him" or "his". Use "I" in posts, or the name.
 - Facts about Uriel come ONLY from the site itself: src/pages/about.astro, src/content/projects/*.mdx, src/content/pages/now.md and published posts in src/content/blog/. Never invent experiences, numbers, clients, quotes or results. If a point needs first-hand experience the site does not record, write the general guidance without claiming it as Uriel's.
 - No [Uriel: ...] placeholders. Posts must be publishable as written.

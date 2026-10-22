@@ -24,7 +24,6 @@ export const personNode = () => ({
   },
   address: {
     "@type": "PostalAddress",
-    addressRegion: "Metro Manila",
     addressCountry: "PH",
   },
   knowsAbout: [
