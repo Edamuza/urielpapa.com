@@ -1,0 +1,176 @@
+---
+title: The Best Free Tools to Track Your Visibility in AI Search
+seoTitle: Best Free Tools to Track AI Search Visibility
+description: >-
+  The best free tools to track AI search visibility, compared: Search Console,
+  Bing AI Performance, GA4, a monthly prompt check and AI crawler logs.
+dek: >-
+  No single free tool covers every AI answer engine. Seven free tools, what
+  each one shows and misses, and the three I would set up first.
+hub: seo-geo-aeo
+frame: best-of
+takeaways:
+  - >-
+    Bing Webmaster Tools' free AI Performance report counts citations in
+    Microsoft Copilot and Bing's AI summaries, the closest thing to a free
+    citation report as of October 2026.
+  - >-
+    Google Search Console's Generative AI performance report counts
+    impressions in AI Overviews and AI Mode, but it reports no AI-only clicks
+    and does not cover the Gemini app.
+  - >-
+    No free official report covers ChatGPT or Perplexity citations, so a fixed
+    set of test prompts, run monthly and logged in a spreadsheet, is still the
+    most direct free check.
+  - >-
+    GA4 only sees AI visits that arrive with a tag or a referrer, and in
+    October 2026 a ChatGPT bug briefly dropped its utm_source tag, so those
+    visits showed up as Direct.
+  - >-
+    Crawler logs show whether AI bots can read your pages, but Vercel's free
+    Hobby plan keeps runtime logs for only one hour.
+published: 2026-11-10
+related:
+  - how-to-check-if-chatgpt-cites-your-site
+  - geo-and-aeo-fundamentals
+projects: []
+stack:
+  - google-search-console
+  - ga4
+  - ahrefs
+  - semrush
+  - vercel
+  - cloudflare
+faq:
+  - q: Is there a free tool that tracks ChatGPT citations over time?
+    a: >-
+      Not an official one as of October 2026. OpenAI points publishers to
+      referral traffic tagged with utm_source=chatgpt.com, and free checkers
+      such as Ahrefs' give a one-time snapshot. Ongoing tracking means
+      re-running your own prompts each month or paying for a monitoring tool.
+  - q: Does an AI crawler visit mean my page will be cited?
+    a: >-
+      No. A crawler visit only shows that the bot could fetch the page. Whether
+      an answer cites it depends on the question and on which passage the
+      system trusts most, so check citations with Bing's report and your own
+      prompt tests.
+event: {}
+syndication: []
+draft: true
+---
+
+The best free tools to track your visibility in AI search are Google Search Console's Generative AI performance report, Bing Webmaster Tools' AI Performance report, GA4 with a channel group for AI referrals, and a monthly set of test prompts in a spreadsheet. Server or CDN logs add a check that AI crawlers can reach you, and Ahrefs' free AI Visibility Checker gives a one-time snapshot. No single free tool covers ChatGPT, Gemini, Perplexity, Copilot and AI Overviews at once, so you combine three or four of them.
+
+This comparison is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I run four of these tools on urielpapa.com every month, and the step-by-step routine for ChatGPT is in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+## What should a free AI visibility tool tell you?
+
+A free AI visibility tool is only useful if you know which question it answers. I judged each tool on four criteria:
+
+- **Cost:** free, or a free tier that does not expire, as of October 2026.
+- **AI surfaces:** which answer engines it covers, such as AI Overviews, AI Mode, Copilot, ChatGPT, Gemini or Perplexity.
+- **Data type:** citations or impressions inside AI answers, visits from them, or crawler activity on your site.
+- **Effort:** a one-time setup, or manual work every month.
+
+The data type matters most. Bing's own [AI Performance FAQ](https://www.bing.com/webmasters/help/ai-performance-9f8e7d6c) says a citation "does not represent traffic, clicks, or user engagement." So a tool that counts citations and a tool that counts visits measure two different things, and you need both to see the whole picture.
+
+## What do Google and Bing report about AI answers?
+
+Google and Bing are the two search engines that give site owners a free, official report on AI answers. Each one covers only its own products.
+
+### Google Search Console: Generative AI performance report
+
+- **What it shows:** how many times links to your site were shown in AI Overviews and AI Mode, by page, country, device and date. Google's [report documentation](https://support.google.com/webmasters/answer/16984139) says it reached all websites worldwide as of August 31, 2026.
+- **What it misses:** clicks, because it counts impressions only. It does not cover the Gemini app, and it may not appear at all for a site with too few AI impressions.
+- **Cost:** free. Google calls Search Console [a free service](https://support.google.com/webmasters/answer/9128668).
+- **How to start:** verify your site in Search Console, then open the Generative AI performance report. It may not appear until your site has enough AI impressions.
+
+### Bing Webmaster Tools: AI Performance report
+
+- **What it shows:** total citations, cited pages and the grounding queries behind them, across Microsoft Copilot, AI summaries in Bing and "select partner AI integrations." You can view 7 days, 30 days, 3 months or a custom range, and export to CSV or Excel.
+- **What it misses:** clicks and traffic. Bing says the data "represents a sample of overall citation activity," and grounding queries are grouped phrases, not the prompts people typed.
+- **Cost:** free. Bing Webmaster Tools says you can [get started for free](https://www.bing.com/webmasters/about).
+- **How to start:** add and verify your site in Bing Webmaster Tools, then open AI Performance.
+
+Bing's report is the only free official report that counts actual citations, which makes it the best single free tool on this list.
+
+## How do you see visits from AI assistants?
+
+Visits from AI assistants show up in your analytics when the link carries a tag or a referrer. GA4 is the free tool most sites already have.
+
+### GA4 with a custom channel group for AI referrals
+
+- **What it shows:** sessions and landing pages from AI assistants. OpenAI's [publisher FAQ](https://help.openai.com/en/articles/12627856-publishers-and-developers-faq) says ChatGPT adds `utm_source=chatgpt.com` to its referral links. A custom channel group can put `chatgpt.com`, `perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com` and `claude.ai` in one "AI assistants" row.
+- **What it misses:** every citation nobody clicked, and any visit that arrives without a tag or referrer. On October 14, 2026, [Search Engine Roundtable reported](https://www.seroundtable.com/utm-parameters-missing-chatgpt-42299.html) that ChatGPT links had stopped carrying the tag, so those visits were filed as Direct. The tag came back on October 15, and the change was called a bug.
+- **Cost:** free. Google's [channel group guide](https://support.google.com/analytics/answer/13051316) says a standard property can have 2 custom channel groups, and they apply to past data too.
+- **How to start:** copy the default channel group in Admin, add an AI channel with a source rule, and move it above Referral. Google says traffic goes to "the first channel whose definition it matches."
+
+The GA4 steps for finding ChatGPT visits are in [my ChatGPT routine](/blog/how-to-check-if-chatgpt-cites-your-site#how-do-you-see-chatgpt-visits-in-google-analytics).
+
+## How do you check ChatGPT, Gemini and Perplexity directly?
+
+ChatGPT, Gemini and Perplexity give site owners no citation report, so the free way to check them is to ask them yourself.
+
+### A monthly prompt set in a spreadsheet
+
+- **What it shows:** whether each assistant cites you for the questions your pages answer, which page it picks, and who it cites instead.
+- **What it misses:** scale and certainty. Answers change between runs, so one result is only a sample.
+- **Cost:** free, apart from your time.
+- **How to start:** write 10 to 20 questions in your readers' words, and run them on the same day each month with web search on. Log one row per question and assistant.
+
+When I ran four questions on 21 October 2026, ChatGPT cited urielpapa.com for none of them, and GA4 showed no chatgpt.com sessions. That zero is my baseline.
+
+### Ahrefs' free AI Visibility Checker
+
+- **What it shows:** brand mentions across ChatGPT, Gemini, Perplexity, Copilot, AI Overviews and AI Mode, plus top topics and the top cited domains and pages. Ahrefs' [checker page](https://ahrefs.com/free-ai-visibility) says it needs no signup.
+- **What it misses:** history and depth. The page calls it "a one-time snapshot" limited to the top 5 results per section, and it does not split citations from mentions. Trends, share of voice and custom prompts are in the paid Brand Radar.
+- **Cost:** free. Semrush's [AI Search Visibility Checker](https://www.semrush.com/free-tools/ai-search-visibility-checker/) is similar, with three free checks a day.
+- **How to start:** enter your brand name, and save the results with the date.
+
+A free checker is a good first look, and a poor way to track change over time.
+
+## What can server and CDN logs tell you?
+
+Server and CDN logs show which AI crawlers request your pages, which is a precondition for being cited, not proof of it.
+
+### Vercel runtime logs
+
+- **What it shows:** each request with its path, status code and user agent. Vercel's [runtime logs documentation](https://vercel.com/docs/logs/runtime) says the Logs tab is available on all plans.
+- **What it misses:** history. The Hobby plan keeps 1 hour of logs and Pro keeps 1 day. Static requests appear only when served from cache, and free-text search covers only the message and path, not the user agent.
+- **Cost:** free on Hobby. Longer retention needs a paid plan.
+- **How to start:** open Logs in your project, filter by path, and read the user agent of each request.
+
+### Cloudflare AI Crawl Control
+
+- **What it shows:** which AI crawlers visit, grouped by operator, with request counts, status codes and the most requested paths. Cloudflare's [AI Crawl Control docs](https://developers.cloudflare.com/ai-crawl-control/) say it is available on all plans.
+- **What it misses:** referrals. The [traffic analysis page](https://developers.cloudflare.com/ai-crawl-control/features/analyze-ai-traffic/) marks referral metrics as paid plans only. It also sees only traffic that passes through Cloudflare.
+- **Cost:** free for crawler activity.
+- **How to start:** route your domain through Cloudflare, then open AI Crawl Control in the dashboard.
+
+Both log tools answer one question, whether AI crawlers can reach your pages, so they are most useful when a page is never cited.
+
+## How do the free tools compare?
+
+The free tools split into three groups: citation reports from Google and Bing, visit data from analytics, and crawler data from logs.
+
+| Tool | AI surfaces | Data type | Free limit | Effort |
+| --- | --- | --- | --- | --- |
+| Search Console Generative AI report | AI Overviews, AI Mode | Impressions | Free | Setup once |
+| Bing AI Performance | Copilot, Bing AI summaries, some partners | Citations (sampled) | Free | Setup once |
+| GA4 AI channel group | Any assistant that tags or refers | Visits | 2 custom groups | Setup once |
+| Monthly prompt set | Any assistant you test | Citations (manual) | Free | Monthly |
+| Ahrefs AI Visibility Checker | ChatGPT, Gemini, Perplexity, Copilot, AI Overviews, AI Mode | Mentions | One-time snapshot | Per check |
+| Vercel runtime logs | Crawlers only | Requests | 1 hour on Hobby | Per check |
+| Cloudflare AI Crawl Control | Crawlers only | Requests | Referrals paid | Setup once |
+
+Only Bing's report and your own prompt tests count citations, which is why those two carry the most weight.
+
+## Which free tool should you start with?
+
+Start with Bing Webmaster Tools, Google Search Console and a GA4 channel group, because each needs only a one-time setup and then collects data on its own. Bing shows where Copilot cites you, Google shows your AI Overviews reach, and GA4 shows which AI answers send real visitors.
+
+Add a monthly prompt set next, because it is the only free way to check ChatGPT, Gemini and Perplexity citations. Keep it small enough to finish in one sitting, or you will stop doing it.
+
+Leave logs and free checkers for specific questions. Check crawler logs when a page is never cited and you suspect a block, and run a free checker when you want a quick look at competitors.
+
+That is the stack I use on urielpapa.com: Search Console, Bing Webmaster Tools, GA4 and a monthly four-question check. If you are new to the topic, [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) explains which crawlers and indexes each AI system relies on.

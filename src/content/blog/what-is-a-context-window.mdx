@@ -1,0 +1,145 @@
+---
+title: What Is a Context Window in an LLM, and Why Does It Matter?
+seoTitle: "What Is a Context Window in an LLM? Sizes, Limits, Tips"
+description: >-
+  A context window is the most tokens an LLM can consider at once. How big
+  they are in 2026, what happens when you go over, and how to use one well.
+dek: >-
+  Everything a model reads and writes in one request has to fit in its
+  context window. Knowing its size and limits explains forgetful chats, big
+  bills and missed details.
+hub: ai
+frame: explainer
+takeaways:
+  - >-
+    A context window is the maximum number of tokens a model can consider in
+    one request, including the system prompt, documents, chat history and the
+    model's own reply.
+  - >-
+    As of October 2026, Claude Opus 5.5, OpenAI's GPT-6.1 Sol and Google's
+    Gemini 4 Argon each have a context window of about 1 million tokens.
+  - >-
+    When the input alone is larger than the context window, Anthropic's API
+    rejects the request with a "prompt is too long" error, while chat apps
+    usually drop or summarize older messages.
+  - >-
+    In the 2023 "Lost in the Middle" study, GPT-3.5-Turbo answered 75.8% of
+    questions correctly with the key document first, but 53.8% with it in the
+    middle of 20 documents.
+  - >-
+    Training data is fixed at a cutoff date, the context window lasts one
+    request, and memory features store notes outside the model and load them
+    back into the context.
+published: 2026-11-13
+related:
+  - what-is-tokenization
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack:
+  - claude
+  - gpt
+  - gemini
+  - n8n
+faq:
+  - q: Does the model's reply count toward the context window?
+    a: >-
+      Yes. Anthropic and OpenAI both count the output, including any reasoning
+      or thinking tokens, toward the context window. A long document can leave
+      too little room for a full answer, so the reply stops early.
+  - q: Does prompt caching free up space in the context window?
+    a: >-
+      No. Anthropic's documentation says cached prompt prefixes still occupy
+      the context window. Caching changes what you pay for those tokens, not
+      whether they count toward the limit.
+  - q: Why does a long chat seem to forget what I said at the start?
+    a: >-
+      Chat apps drop or summarize older messages as a conversation nears the
+      context window limit, so early details can fall out. Models also use
+      information in the middle of a long context less reliably than
+      information at the start or end.
+event: {}
+syndication: []
+draft: true
+---
+
+A context window is the maximum number of tokens a large language model can consider at once: your prompt, any documents, the conversation history and the model's own reply. Anything outside the window is invisible to the model. The window sets how much a model can work with. Filling it also costs money, slows replies and can make answers less accurate.
+
+This explainer is part of my [AI, in Depth](/topics/ai) writing. I build with Claude, Claude Code, GPT and Gemini. My [n8n chatbot for Messenger and Instagram](/blog/n8n-messenger-instagram-chatbot) sends only the last few messages from each sender with every reply. That is context window management at its simplest.
+
+## What is a context window?
+
+A context window is the working space a language model reads from while it writes a reply. Anthropic's [context window documentation](https://platform.claude.com/docs/en/build-with-claude/context-windows) describes it as all the text a model can reference when it generates a response, including the response itself. OpenAI's [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state) defines it as the maximum number of tokens that can be used in a single request.
+
+Everything you send lands in that space. That includes the system prompt, your question, attached files, tool definitions, tool results and every earlier turn of the chat. The reply takes space too, and so does any reasoning the model does before it answers. OpenAI says the limit covers input, output and reasoning tokens together.
+
+Anthropic also calls the context window the model's "working memory", separate from the data it was trained on. So a context window is the full set of tokens a model can see and write in one request, and nothing more.
+
+## How does a context window relate to tokens?
+
+Context windows are measured in tokens, not words or pages. A token is a small piece of text, and each model family splits text its own way. I explain how in [what tokenization is and why it sets AI costs](/blog/what-is-tokenization). The same document can therefore fill a different share of the window in Claude, GPT or Gemini.
+
+Rough conversions help with planning. Anthropic's [models overview](https://platform.claude.com/docs/en/about-claude/models/overview) says 1 million tokens is roughly 555,000 words on its current tokenizer. Google's [long context guide](https://ai.google.dev/gemini-api/docs/long-context) says 1 million tokens holds about 50,000 lines of code, or 8 average-length English novels.
+
+For an exact number, count with the provider's own token counter before you send the request. A context window is a token budget, so the tokenizer decides how much of your text fits.
+
+## How big are context windows today?
+
+Context windows from the three big providers are now about 1 million tokens. These are the figures from each provider's official model pages, as of October 2026:
+
+| Model | Provider | Context window | Max output per request |
+| --- | --- | --- | --- |
+| Claude Opus 5.5 | Anthropic | 1M tokens | 128K tokens |
+| Claude Sonnet 5.5 | Anthropic | 1M tokens | 128K tokens |
+| [GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) | OpenAI | 1,050,000 tokens | 128,000 tokens |
+| [Gemini 4 Argon](https://ai.google.dev/gemini-api/docs/models/gemini-4-argon) | Google | 1,048,576 tokens | 65,536 tokens by default |
+
+The output cap is a separate limit inside the window. A model can stop at its output limit even when the window still has room. Google says Gemini 4 shares one window across input, thinking and output. Earlier Gemini 3 and 2.5 models used separate budgets of 1M input and 64K output tokens.
+
+The jump has been fast. The 2023 study I cover below treated 16K and 100K windows as long-context models. Today a single request can hold tens of thousands of lines of code or a stack of contracts. That is exactly why it is tempting to send everything.
+
+## What happens when you go over the context window?
+
+Going over the context window means something has to give, and what gives depends on the tool you use:
+
+* **The request fails.** Anthropic's API returns a 400 "prompt is too long" error when the input alone exceeds the window. If the reply runs out of room, it stops with the stop reason `model_context_window_exceeded`.
+* **The output is cut off.** OpenAI warns that tokens generated past the context window limit may be truncated in API responses.
+* **Older messages drop out.** Anthropic notes that chat apps such as claude.ai can manage the window on a "first in, first out" basis.
+* **Older messages get summarized.** Anthropic's server-side compaction, in beta, summarizes earlier turns so a conversation can continue past the limit. OpenAI offers compaction in its Responses API.
+
+The last two explain why a long chat seems to forget what you said at the start. The model did not lose a memory. The early messages were removed or shortened before the model saw the request.
+
+## Is a bigger context window always better?
+
+A bigger context window is a ceiling, not a target, because filling it has three costs. The first is money. Every token you send is billed as input on every request, and some models charge more for long prompts. OpenAI prices GPT-6.1 Sol prompts above 272K input tokens at twice the input rate and 1.5 times the output rate for the whole request. Anthropic bills its 1M-token models at standard rates, except Claude Haiku 5.5, where prompts over 100,000 tokens cost more. Both rules apply as of October 2026. Prompt caching lowers the price of repeated tokens, but Anthropic notes that cached tokens still take up space in the window.
+
+The second is speed. Google's long context guide says longer inputs generally increase the time to the first token of the reply.
+
+The third is accuracy. In [Lost in the Middle](https://arxiv.org/abs/2307.03172), Nelson F. Liu and colleagues tested how well models used long inputs in 2023. With 20 documents, GPT-3.5-Turbo answered 75.8% of questions correctly when the answer was in the first document. It scored 53.8% when the answer sat in the middle, below its 56.1% with no documents at all. Models did best with information at the start or end, a U-shaped curve.
+
+Those models are old, but the problem has not gone away. Anthropic's current documentation calls it context rot: as the token count grows, accuracy and recall degrade. More context helps only when the extra tokens are relevant.
+
+## How should businesses and developers use the context window?
+
+The best way to use a context window is to send the smallest set of tokens that answers the question well. These habits apply whether you run a chatbot, an internal assistant or a coding agent:
+
+1. **Keep the system prompt focused.** It is sent with every request, so every extra paragraph costs tokens and adds noise.
+2. **Retrieve only the relevant chunks.** Retrieval-augmented generation (RAG) splits your documents into chunks, searches them for each question and sends only the best matches.
+3. **Summarize or trim the history.** Send the last few messages, plus a short summary of anything older that still matters.
+4. **Put key facts at the start or end.** The Lost in the Middle results suggest models miss the middle of a long prompt most often.
+5. **Count tokens before you send.** A token counter tells you how close a request is to the limit and to a higher price tier.
+
+My chatbot follows the third habit. Each run reads the sender's last few messages from a Google Sheet and sends them with the system prompt, not the whole chat. When I looked at its token use, I also cut the system prompt to about half its length, as I describe in the tokenization post.
+
+## How is a context window different from memory and training data?
+
+A context window, memory and training data are three different places where a model gets information, and they last for very different lengths of time:
+
+| | Training data | Context window | Memory |
+| --- | --- | --- | --- |
+| What it holds | What the model learned before release | What you send in this request | Notes saved outside the model |
+| How long it lasts | Fixed at a cutoff date | One request | Until you or the tool deletes it |
+| How you change it | Use a newer model | Change the request | Edit the stored notes |
+
+Training data stops at a cutoff. Anthropic lists June 2026 for its current Claude models, and OpenAI lists April 30, 2026 for GPT-6.1 Sol. Anything newer has to come in through the context window, for example from a web search or a document you attach.
+
+Memory features still work through the context window. Anthropic's [memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool) lets Claude save files that persist between sessions, then read the relevant ones back in when a task needs them. My chatbot's Google Sheet log works the same way on a small scale. A model only "remembers" what is loaded into its context window for the current request.

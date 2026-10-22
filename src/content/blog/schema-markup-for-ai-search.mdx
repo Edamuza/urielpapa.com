@@ -1,0 +1,200 @@
+---
+title: Which Schema Markup Actually Helps in AI Search?
+seoTitle: "Schema Markup for AI Search: What Actually Helps"
+description: >-
+  Schema markup is not required for AI search, but it confirms your entities
+  and powers rich results. Which types matter, which do little, how to test.
+dek: >-
+  No schema type gets a page cited by AI. The right markup confirms who wrote
+  the page and what it is, and it has to match what readers see.
+hub: seo-geo-aeo
+frame: explainer
+takeaways:
+  - >-
+    Google's guide to generative AI features says structured data isn't
+    required for AI search, but is still worth using for rich results.
+  - >-
+    Microsoft Bing wrote in October 2025 that schema helps search engines and
+    AI systems understand content, without promising it earns citations.
+  - >-
+    When Ahrefs tracked 1,885 pages that added JSON-LD, AI citations showed no
+    major uplift in AI Overviews, AI Mode or ChatGPT.
+  - >-
+    Google stopped showing FAQ rich results on May 7, 2026, and dropped HowTo
+    rich results from desktop and mobile in 2023.
+  - >-
+    Google's structured data guidelines say markup must describe content
+    readers can see, and fake reviews can cost a page its rich results.
+published: 2026-11-03
+related:
+  - geo-and-aeo-fundamentals
+  - how-to-check-if-chatgpt-cites-your-site
+projects: []
+stack:
+  - astro
+  - wordpress
+faq:
+  - q: Should I remove FAQPage markup now that Google dropped FAQ rich results?
+    a: >-
+      There is no need. Google said in 2023 that structured data it does not
+      use causes no problems for Search. Keep it only on pages where the
+      questions and answers are visible, as they are on this page.
+  - q: Does schema markup help ChatGPT cite my site?
+    a: >-
+      Not measurably, on the evidence so far. In the Ahrefs test, ChatGPT
+      citations rose 2.2% after pages added JSON-LD, a change the authors could
+      not tell apart from zero.
+  - q: Should I use JSON-LD, Microdata or RDFa?
+    a: >-
+      Use JSON-LD if you can. Google's Rich Results Test reads all three, but
+      JSON-LD sits in one script block apart from the HTML, so it is easier to
+      generate from your content and keep in sync with it.
+event: {}
+syndication: []
+draft: true
+---
+
+Schema markup is code, usually JSON-LD written with the schema.org vocabulary, that tells search engines what a page is and who wrote it. No schema type makes AI search cite you, and Google says its AI features need no special markup. What schema does is confirm the people, pages and facts on your site, and Google's rich results still depend on it.
+
+This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. Every page on urielpapa.com carries JSON-LD. At the agency I ran, I co-developed a [WordPress publish guard](/projects/wordpress-seo-plugins) that would not let a post go out without schema.
+
+## What is schema markup?
+
+Schema markup is a set of machine-readable labels added to a page, written with the shared vocabulary at schema.org. Instead of guessing from the text that a page is a blog post by a named person, a search engine reads it directly: this is a `BlogPosting`, its author is this `Person`, it was published on this date. Each search engine uses the parts of the vocabulary it supports.
+
+The markup can be written in three formats: JSON-LD, Microdata and RDFa. JSON-LD is the usual choice. Microsoft Bing, whose guidance I cover below, says schema is "usually added in JSON-LD format as a script in the backend of your site." Your CMS or a developer adds it. It sits in a `<script type="application/ld+json">` block, apart from the visible HTML.
+
+That separation is also the risk. Because readers never see the JSON-LD, it can drift from what the page says, or claim things the page never shows. The useful way to think about schema is as a confirmation layer: it restates, in a form machines can parse, what the page already tells its readers.
+
+## What do Google and Microsoft say about schema and AI search?
+
+Google and Microsoft both say schema helps machines understand a page, and neither says it gets a page into AI answers. Google's guide to [optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), last updated in July 2026, warns against "overfocusing on structured data." It says structured data "isn't required for generative AI search." It still recommends using it as part of your SEO, because it makes pages eligible for rich results.
+
+Microsoft sounds warmer. Krishna Madhavan, a principal product manager at Microsoft Bing, wrote an [October 2025 post on getting content into AI search answers](https://about.ads.microsoft.com/en/blog/post/october-2025/optimizing-your-content-for-inclusion-in-ai-search-answers). It says schema "helps search engines and AI systems understand your content." The post suggests labeling content as a product, review, FAQ or event, alongside clear headings and a modular layout.
+
+Read together, the advice is consistent, as of October 2026. Schema is a precise way to state facts about a page, not a switch for rankings or citations. Both companies put the page's own content first.
+
+## Does adding schema make AI cite you more?
+
+Adding schema did not raise AI citations in the best test so far, at least for pages AI already cites. Ahrefs [tracked 1,885 pages that added JSON-LD](https://ahrefs.com/blog/schema-ai-citations/) between August 2025 and March 2026. It compared them with matched pages that never added it, and published the results on May 11, 2026:
+
+| AI platform         | Change in citations after adding JSON-LD |
+| ------------------- | ---------------------------------------- |
+| Google AI Overviews | −4.6%                                    |
+| Google AI Mode      | +2.4%                                    |
+| ChatGPT             | +2.2%                                    |
+
+The authors concluded that adding schema "produced no major uplift in citations on any platform." They called the AI Mode and ChatGPT changes indistinguishable from zero, and said they could not confidently pin the AI Overviews drop on schema.
+
+The same study found that AI-cited pages were almost three times as likely to have JSON-LD as pages that were not cited. That is a correlation, not a cause: sites that bother with schema tend to be well maintained in other ways. One limit matters too. Every page in the test was already cited heavily, so it says little about pages AI has not found yet. To see whether a change works on your own site, measure citations directly, as I describe in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+## Which schema types matter on a content site?
+
+A content site needs only a handful of types, the ones that say who is behind it and what each page is:
+
+| Type                        | What it says                                         | Where it goes                         |
+| --------------------------- | ---------------------------------------------------- | ------------------------------------- |
+| Person                      | Who the author is, with `sameAs` links to profiles   | Every page, or the author page        |
+| Organization                | The company behind the site, with its logo           | Home or About page of a business site |
+| WebSite                     | The site's name and publisher                        | Every page                            |
+| BlogPosting or Article      | A post's headline, author, dates and image           | Each post                             |
+| BreadcrumbList              | Where the page sits in the site                      | Every page below the home page        |
+| ProfilePage                 | A page about one person or organization              | About or author page                  |
+| CollectionPage and ItemList | A page that lists other pages                        | Topic and archive pages               |
+
+Those seven types cover who wrote a page, who stands behind the site and what each page is, which is what a search engine needs to tie your pages to one entity.
+
+## What does the schema on urielpapa.com look like?
+
+On urielpapa.com, every page outputs one JSON-LD `@graph`. It always holds WebSite, Person and a node for the page itself. Posts add BlogPosting and BreadcrumbList, and [my About page](/about) is a ProfilePage. Topic pages are a CollectionPage with an ItemList, and FAQPage appears only where questions show on the page. There is no Organization node as publisher: this is a personal site, so the Person is the publisher.
+
+Here is a trimmed version of what my post on [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) outputs:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://urielpapa.com/#website",
+      "url": "https://urielpapa.com/",
+      "name": "Uriel Papa",
+      "publisher": { "@id": "https://urielpapa.com/#person" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://urielpapa.com/#person",
+      "name": "Uriel Papa",
+      "url": "https://urielpapa.com/about",
+      "jobTitle": "Technical Founder",
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Technological University of the Philippines"
+      },
+      "knowsAbout": ["Large language models", "n8n", "Laravel", "Search engine optimization"],
+      "sameAs": ["https://www.linkedin.com/in/uriel-papa-vitese01/", "https://github.com/Edamuza"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#page",
+      "url": "https://urielpapa.com/blog/geo-and-aeo-fundamentals",
+      "isPartOf": { "@id": "https://urielpapa.com/#website" },
+      "mainEntity": { "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#article" },
+      "breadcrumb": { "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#breadcrumb" }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#article",
+      "mainEntityOfPage": { "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#page" },
+      "headline": "GEO and AEO Fundamentals: What Everyone Should Know About AI Search",
+      "datePublished": "2026-10-07T00:00:00.000Z",
+      "dateModified": "2026-10-19T00:00:00.000Z",
+      "author": { "@id": "https://urielpapa.com/#person" },
+      "publisher": { "@id": "https://urielpapa.com/#person" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://urielpapa.com/blog/geo-and-aeo-fundamentals#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://urielpapa.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Topics", "item": "https://urielpapa.com/topics" },
+        { "@type": "ListItem", "position": 3, "name": "SEO, GEO and AEO", "item": "https://urielpapa.com/topics/seo-geo-aeo" }
+      ]
+    }
+  ]
+}
+```
+
+The `@id` values do the real work. The Person is described once, and every post points to it as author and publisher, so each page tells the same story about one entity. I keep each value in line with what the site shows: the university in `alumniOf`, for example, is named on my About page.
+
+## Which schema types do little now?
+
+FAQPage and HowTo markup do little in Google today, because the rich results they powered are gone. In August 2023, Google [cut back both features](https://developers.google.com/search/blog/2023/08/howto-faq-changes): FAQ rich results were limited to "well-known, authoritative government and health websites", and HowTo results to desktop. On September 13, 2023, HowTo results stopped showing on desktop too.
+
+FAQ rich results then went entirely. Google's [documentation updates log](https://developers.google.com/search/updates) says the feature "will no longer appear in Google Search starting May 7, 2026." Google removed the FAQ documentation in June 2026.
+
+This post still carries FAQPage markup, and I am not hiding that. The questions at the end of the page are visible, and the markup describes them accurately. Google's 2023 post says structured data it does not use "does not cause problems for Search, but also has no visible effects in Google Search." So I treat FAQPage as a cheap, honest description of the page, not as a tactic.
+
+The same logic covers markup that describes nothing on the page. An Organization node on a personal blog, or a skill list the site never backs up, adds no meaning. Mark up what the page shows, and stop there.
+
+## What schema mistakes should you avoid?
+
+The worst schema mistakes are markup that says something the page does not. Google's [general structured data guidelines](https://developers.google.com/search/docs/appearance/structured-data/sd-policies), updated in July 2026, list the main ones:
+
+- **Marking up hidden content.** "Don't mark up content that is not visible to readers of the page." If the JSON-LD describes a person, the page must describe the same person.
+- **Fake or misleading markup.** The guidelines name fake reviews and content unrelated to the page's focus. They warn that reviews or ratings not written by real users may bring a manual action.
+- **Missing required properties.** The guidelines say items "missing required properties are not eligible for rich results."
+
+Two more come from templates rather than intent. A theme can stamp the same headline, image or date on every page, and a plugin can bump `dateModified` when nothing changed. Both make the markup disagree with the page.
+
+The penalty is narrower than many people fear. Google says a structured data manual action means a page "loses eligibility for appearance as a rich result." It adds that this "doesn't affect how the page ranks." Mismatched markup buys nothing, though, and it puts the rich results you do qualify for at risk.
+
+## How do you test schema markup?
+
+Two free tools answer different questions, and you need both. Google's [Rich Results Test](https://support.google.com/webmasters/answer/7445569), at `search.google.com/test/rich-results`, checks whether Google can fetch a page and whether its structured data qualifies for Google's rich result types. It reads JSON-LD, RDFa and Microdata, and shows errors and warnings.
+
+The Schema Markup Validator, at `validator.schema.org`, checks the markup against schema.org itself. Schema.org [launched it in beta](https://blog.schema.org/2021/05/21/announcing-schema-markup-validator-validator-schema-org-beta/) on May 21, 2021, as the new home of Google's old Structured Data Testing Tool. It checks that markup is written in widely understood ways, not against the needs of any one product. Use it for types with no Google rich result, such as CollectionPage.
+
+Neither tool checks that the markup matches the page. That part you do by reading both side by side.
+
+On urielpapa.com, part of the test runs on every build. A script checks each built page. It fails the build if a page has no JSON-LD, has invalid JSON, or has no node for the page itself. The WordPress publish guard did the same job at publish time. Both prove that markup exists; only reading the page proves it is true.

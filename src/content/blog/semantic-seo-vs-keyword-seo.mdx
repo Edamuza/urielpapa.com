@@ -1,0 +1,145 @@
+---
+title: "Semantic SEO vs Keyword SEO: What Is the Difference?"
+seoTitle: "Semantic SEO vs Keyword SEO: The Real Difference"
+description: >-
+  Keyword SEO targets search phrases; semantic SEO targets topics, entities and
+  meaning. How they differ, why Google shifted, and how to move a site over.
+dek: >-
+  Keyword SEO asks which phrase a page should rank for. Semantic SEO asks which
+  topic a site should own, and keywords become the research behind the answer.
+hub: seo-geo-aeo
+frame: comparison
+takeaways:
+  - >-
+    Keyword SEO optimizes each page for a target phrase, while semantic SEO
+    optimizes a whole site for topics and the entities inside them.
+  - >-
+    Google introduced its Knowledge Graph on May 16, 2012 with more than 500
+    million objects, and described the change as "things, not strings".
+  - >-
+    BERT, launched in October 2019, helped Google understand one in 10 U.S.
+    English searches by reading how words combine, not only which words appear.
+  - >-
+    In a 2017 Ahrefs study of 3 million searches, the average #1 page also
+    ranked in the top 10 for nearly 1,000 other keywords.
+  - >-
+    Keyword research still matters in semantic SEO: it is the input that shows
+    which questions and entities a topic has to cover.
+published: 2026-10-27
+related:
+  - geo-and-aeo-fundamentals
+  - how-to-check-if-chatgpt-cites-your-site
+projects:
+  - wordpress-seo-plugins
+stack:
+  - google-search-console
+  - ga4
+  - ahrefs
+faq:
+  - q: Does keyword density still matter?
+    a: >-
+      Not as a target number. Google's SEO Starter Guide warns that repeating
+      the same words over and over is tiring for users, and its spam policies
+      treat unnatural repetition as keyword stuffing. Use the words your readers
+      use, where they fit naturally.
+  - q: Is semantic SEO the same as GEO?
+    a: >-
+      No. Semantic SEO is how you plan and connect content around topics and
+      entities for search engines. GEO, generative engine optimization, is about
+      being quoted and cited in AI answers, and it builds on the same
+      foundation.
+  - q: Can a small site do semantic SEO?
+    a: >-
+      Yes, and a small site is the easiest place to start. Pick one topic you
+      know well, write a hub page and a handful of posts that each answer one
+      question, and link them to each other before adding a second topic.
+event: {}
+syndication: []
+draft: true
+---
+
+Semantic SEO is search optimization built around topics, entities and meaning, while keyword SEO is built around the exact phrases people type. Keyword SEO asks which phrase a page should rank for. Semantic SEO asks which topic a site should own, which questions and entities that topic includes, and how the pages that answer them connect.
+
+This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I have worked on both sides. I produced a 23-page semantic SEO master plan from Google Search Console, GA4, Bing Webmaster and Google Trends data. I also co-developed five WordPress SEO plugins, including an internal-link content graph.
+
+## How do semantic SEO and keyword SEO compare?
+
+Semantic SEO and keyword SEO differ in what they treat as the unit of work. The table sums up the six differences that change your day-to-day decisions:
+
+| | Keyword SEO | Semantic SEO |
+| --- | --- | --- |
+| Unit of optimization | One page for one target phrase | A topic, and the entities and questions inside it |
+| How relevance is judged | Matching words in the title, headings and body | Matching meaning, intent and related concepts |
+| Content planning | A keyword list, one page per phrase | A topical map: a hub, then a page per subtopic or question |
+| Internal linking | Added at the end, often by anchor text | Planned up front, so related pages point to each other |
+| Measurement | Rank for each tracked keyword | Coverage of the topic: impressions, queries per page and traffic per hub |
+| Fit for AI answers | Weak: one phrase, one page | Strong: AI answers search many related questions |
+
+The last row matters more each year. Google says its [AI Overviews and AI Mode](https://developers.google.com/search/docs/appearance/ai-features) "may use a 'query fan-out' technique", running several related searches across subtopics before answering. A site that covers the whole topic is in more of those searches than a site with one page per phrase.
+
+## What is keyword SEO?
+
+Keyword SEO is the practice of choosing a search phrase, then writing and optimizing one page to rank for it. The workflow is familiar. Find a keyword with enough volume and low competition, put it in the title, URL and headings, then track its rank. SEO plugins are built the same way. Yoast SEO defines its [focus keyphrase](https://yoast.com/focus-keyword/) as the search term you want a page to rank for. [Rank Math](https://rankmath.com/kb/score-100-in-tests/) scores content against a focus keyword. I set up both on client sites from 2023.
+
+The approach still has a place, because people do type phrases and a page should use the words its readers use. Google's [SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide) advises you to "think about the words that a user might search for". The same guide also limits the tactics around it. Google does not use the keywords meta tag, and keywords in a domain or URL path alone have "hardly any effect".
+
+Pushed too far, keyword SEO turns into repetition. Google's [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) define keyword stuffing as filling a page with keywords "in an attempt to manipulate rankings". Repeating phrases until they sound unnatural counts. Keyword SEO works best as a writing habit, not as a strategy for a whole site.
+
+## What is semantic SEO?
+
+Semantic SEO is the practice of organizing a site around topics and the entities inside them. The goal is that search engines understand what the site is about and which page answers which question. An entity is a distinct thing, such as a person, product, place or concept. A search engine can identify it whatever words you use for it.
+
+The idea comes from how Google itself stores knowledge. Google [introduced the Knowledge Graph](https://blog.google/products/search/introducing-knowledge-graph-things-not/) on May 16, 2012, calling it a shift to "things, not strings". At launch it held more than 500 million objects and more than 3.5 billion facts about them and the relationships between them.
+
+In practice, semantic SEO means three things. You plan content as a topical map: a hub page for the main topic and a page for each subtopic or question. You name the entities each page is about and explain how they relate. And you link related pages so the structure is visible to readers and crawlers. A site planned this way tells search engines what it knows, not only which phrases it targets.
+
+## Why did Google move from keywords to meaning?
+
+Google moved from keywords to meaning because matching words could not handle how people actually ask questions. Over twelve years, each update made Search better at reading intent and less dependent on exact phrases:
+
+| Year | Change | What it did |
+| --- | --- | --- |
+| 2012 | Knowledge Graph | Stored "things, not strings": entities and their relationships |
+| 2013 | Hummingbird | "A major improvement to our overall ranking systems made in August 2013" |
+| 2015 | RankBrain | "Helps us understand how words are related to concepts" |
+| 2018 | Neural matching | Understands "representations of concepts in queries and pages" |
+| 2019 | BERT | Understands "how combinations of words express different meanings and intent" |
+| 2021 | MUM | A model that can both understand and generate language |
+| 2024 | AI Overviews | Began rolling out to everyone in the U.S. on May 14, 2024 |
+
+The quotes for Hummingbird, RankBrain, neural matching and BERT come from Google's [guide to ranking systems](https://developers.google.com/search/docs/appearance/ranking-systems-guide). Google's [post on BERT](https://blog.google/products/search/search-language-understanding-bert/), from October 25, 2019, says it helped Search understand one in 10 searches in U.S. English. Google [announced MUM](https://blog.google/products/search/introducing-mum/) on May 18, 2021, calling it 1,000 times more powerful than BERT. Google [later said](https://blog.google/products/search/how-ai-powers-great-search-results/) MUM serves specialized applications, not core ranking. The [AI Overviews announcement](https://blog.google/products/search/generative-ai-google-search-may-2024/) expected them to reach over a billion people by the end of 2024.
+
+Each step rewarded pages that answer the question over pages that repeat the phrase.
+
+## Does keyword research still matter in semantic SEO?
+
+Keyword research still matters, but its job changes. In keyword SEO, each keyword becomes a page. In semantic SEO, keywords are evidence: they show which questions people ask, which words they use and which entities belong to a topic.
+
+The data supports grouping keywords instead of chasing them one by one. Ahrefs [studied 3 million searches](https://ahrefs.com/blog/also-rank-for-study/) in 2017 and found the average #1 page also ranked in the top 10 for nearly 1,000 other relevant keywords. The median was around 400. One good page on a topic ranks for a whole cluster of phrases, not one.
+
+My master plan started from the same kind of data. Search Console, GA4, Bing Webmaster and Google Trends report queries, landing pages and interest over time, which is keyword-level information. A semantic plan reads that data for patterns: which questions repeat, which entities show up together, and which topics already earn impressions. Keyword research is the input to the topical map, not the map itself.
+
+## How do you move a site from keywords to topics?
+
+Moving a site from keywords to topics is mostly reorganizing what you already have. These steps work in order:
+
+1. **Export your queries and pages.** Pull them from the [Search Console Performance report](https://support.google.com/webmasters/answer/7576553), which groups data by query and by page.
+2. **Group queries into topics.** Put queries that share an intent or an entity together, and give each group one name.
+3. **Choose a few hubs.** Pick the topics you know best and that matter to your business. Each becomes a hub page.
+4. **Map one page to each question.** Merge pages that compete for the same question, and list the gaps you have no page for.
+5. **Link every page up and sideways.** Link each page to its hub and to the pages it truly relates to. Use anchors that name the topic.
+6. **Find orphan pages.** Check which pages have no internal links pointing to them, and fix those first.
+7. **Measure by topic.** Track impressions and queries per hub, not only the rank of single keywords.
+
+Steps 5 and 6 are where tooling pays off. The internal-link content graph in our [WordPress SEO Plugin Suite](/projects/wordpress-seo-plugins) showed how pages link to each other. It helped us find pages with no internal links pointing to them. This site follows step 3. As of October 2026, urielpapa.com is organized into seven topic hubs. Every post links up to its hub in the second paragraph.
+
+## Which should you choose?
+
+Semantic SEO is the better default for almost every site, with keyword work done inside it. The right mix depends on where you start:
+
+* **New or small site:** Start semantic. Pick one hub, write five or six posts that each answer one question, and link them before adding a second topic.
+* **Established site built on keyword pages:** Keep what ranks, then group pages into topics, merge pages that compete and add hub pages.
+* **Local or transactional pages:** Keyword precision still matters, because "plumber in Makati" and "plumbing tips" are different intents. Keep these pages focused, then link them into a topic hub.
+* **Site that wants to be cited in AI answers:** Go semantic, because AI answers search many related questions. I cover the rest of that work in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
+
+The choice is not keywords or topics. Keywords tell you what people ask; topics decide how you answer them across a whole site.

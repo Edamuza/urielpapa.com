@@ -1,0 +1,171 @@
+---
+title: What Is llms.txt, and Does My Website Need One?
+seoTitle: What Is llms.txt, and Does Your Website Need One?
+description: >-
+  llms.txt is a proposed Markdown file that summarizes a site for AI tools. What
+  goes in it, who reads it today, and whether your website needs one.
+dek: >-
+  llms.txt is cheap to add and easy to get right, but almost nothing reads it
+  yet. Here is what it is, who uses it, and when it is worth the ten minutes.
+hub: seo-geo-aeo
+frame: explainer
+takeaways:
+  - >-
+    llms.txt is a Markdown file at a site's root that summarizes the site and
+    links to its key pages, proposed by Jeremy Howard of Answer.AI on September
+    3, 2024.
+  - >-
+    Google's guide to generative AI features says Google Search ignores
+    llms.txt files, so adding one will neither help nor harm your rankings.
+  - >-
+    In an Ahrefs study of 137,210 sites, 97% of the llms.txt files published
+    received no requests at all in May 2026.
+  - >-
+    Documentation and developer sites benefit most, because coding agents and
+    AI tools load their docs as context, and Anthropic, OpenAI and Perplexity
+    all publish one for their own docs.
+  - >-
+    urielpapa.com generates its llms.txt at build time from its topics and
+    latest published entries, so the file never goes out of date.
+published: 2026-11-17
+related:
+  - geo-and-aeo-fundamentals
+  - how-to-check-if-chatgpt-cites-your-site
+projects: []
+stack:
+  - astro
+faq:
+  - q: Will adding llms.txt hurt my Google rankings?
+    a: >-
+      No. Google's guide to generative AI features says creating and
+      maintaining llms.txt files will neither harm nor help your visibility or
+      rankings in Google Search, because Google Search ignores them.
+  - q: Do I also need an llms-full.txt file?
+    a: >-
+      No. llms-full.txt is not part of the llms.txt proposal. It is a
+      convention from documentation platforms that puts the full text of every
+      page in one file, and it mainly helps docs sites whose readers paste the
+      docs into an AI tool.
+  - q: Should the links in llms.txt point to HTML pages or Markdown files?
+    a: >-
+      The proposal prefers clean Markdown versions of pages, at the same URL
+      plus .md. Links to HTML pages still work, since AI tools can read HTML,
+      but Markdown copies are shorter and cheaper for a model to load.
+event: {}
+syndication: []
+draft: true
+---
+
+llms.txt is a Markdown file at the root of a website, at /llms.txt, that tells AI tools what the site is about and links to its most useful pages. It is a proposal, not an adopted standard: Google Search ignores it, and no major AI company has said its crawlers read it on other people's sites. Most websites do not need one, but it costs almost nothing, and documentation and developer sites have the clearest reason to add it.
+
+This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. urielpapa.com generates its own llms.txt at build time, as part of the AI search setup I describe in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals), so the examples below come from a file I maintain.
+
+## What is llms.txt?
+
+llms.txt is a proposed file format for giving language models a short, curated guide to a website. Jeremy Howard published the idea on the Answer.AI blog on [September 3, 2024](https://www.answer.ai/posts/2024-09-03-llmstxt.html), and the spec now lives at [llmstxt.org](https://llmstxt.org/). The problem it targets is context: a model answering a question about your site cannot read every page, and HTML is full of menus, scripts and ads that waste its limited space.
+
+So instead of making an AI tool guess from your sitemap or a crawl, you tell it directly which pages matter and what each one covers. The proposal says the file is meant mainly for inference, meaning the moment a tool reads your site to answer a question, rather than for training models.
+
+In short, llms.txt is a table of contents for AI tools, written in Markdown so both people and programs can read it.
+
+## What goes in an llms.txt file?
+
+An llms.txt file follows a fixed order, and only the first part is required. The [llmstxt.org spec](https://llmstxt.org/) lists it as:
+
+1. **An H1** with the name of the site or project. This is the only required section.
+2. **A blockquote** with a short summary of the site.
+3. **Optional paragraphs or lists** with more detail, using any Markdown except headings.
+4. **H2 sections of links**, each item written as `[name](url)` with an optional note after a colon.
+
+An H2 named "Optional" has a special meaning: its links are secondary, and a tool short on space can skip them. A minimal file looks like this:
+
+```markdown
+# Example Company
+
+> Example Company makes invoicing software for small businesses.
+
+## Docs
+
+- [Getting started](https://example.com/docs/start.md): set up an account
+- [API reference](https://example.com/docs/api.md): every endpoint
+
+## Optional
+
+- [Changelog](https://example.com/changelog.md)
+```
+
+The spec also suggests a clean Markdown copy of each page at the same URL plus .md. A separate file, llms-full.txt, is not in the spec. Documentation platforms such as Mintlify generate it to combine a whole docs site into one file, and Anthropic's [llms.txt for its developer docs](https://platform.claude.com/llms.txt) has an llms-full.txt companion that was about 46 MB in October 2026.
+
+## Who actually reads llms.txt today?
+
+Very few systems read llms.txt files today, and Google Search is not one of them. Google's [guide to optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), last updated July 10, 2026, lists llms.txt among the tactics you can ignore. It says creating one "will neither harm nor help" your visibility, "as Google Search ignores them."
+
+Another Google team takes a different view. As of October 2026, Chrome's Lighthouse has an [llms.txt audit](https://developer.chrome.com/docs/lighthouse/agentic-browsing/llms-txt) in its experimental agentic browsing category. It calls llms.txt an emerging convention, flags a server error when fetching the file, and marks a missing file as not applicable, because the file is optional.
+
+The AI companies send the same mixed signal. OpenAI's [crawler documentation](https://developers.openai.com/docs/bots) and Perplexity's [crawler documentation](https://docs.perplexity.ai/guides/bots) both describe robots.txt as the way to control their bots and say nothing about reading llms.txt on your site. Yet both pages point to an llms.txt for their own docs, and Anthropic publishes one too. Publishing a file for your docs is not the same as reading everyone else's.
+
+The server logs agree. Ahrefs [analyzed 137,210 sites](https://ahrefs.com/blog/llmstxt-study/) and found that 28% published an llms.txt, but 97% of those files received no requests in May 2026. AI search bots made only 1.1% of the requests that did arrive, and OAI-SearchBot 0.74%.
+
+## How is llms.txt different from robots.txt and sitemap.xml?
+
+llms.txt, robots.txt and sitemap.xml are all plain files that crawlers fetch from your site, but they do different jobs for different readers:
+
+| Question | llms.txt | robots.txt | sitemap.xml |
+| --- | --- | --- | --- |
+| What it does | Summarizes the site and links its key pages | Says which crawlers may fetch which paths | Lists the URLs you want crawled and indexed |
+| Format | Markdown | Plain text rules | XML |
+| Who reads it | Some AI tools and coding agents | Search engines and AI crawlers | Search engines and other crawlers |
+| Status | A proposal | An IETF standard, RFC 9309 | A widely supported protocol |
+| Effect on Google Search | None | Controls crawling | Helps discovery |
+| What to list | Your best pages, with a note on each | Allow and disallow rules | Every page you want indexed |
+
+The key difference is that robots.txt controls access and llms.txt only describes. Blocking OAI-SearchBot in robots.txt keeps you out of ChatGPT search, while a missing llms.txt costs you nothing measurable. A sitemap is meant to list every page you want indexed, while llms.txt is meant to be short and chosen by hand.
+
+So llms.txt replaces neither file. If you have time for only one, check robots.txt first, because it decides whether AI search can see you at all.
+
+## Does your website need an llms.txt file?
+
+Most websites do not need an llms.txt file, but few will regret adding one. The cost is ten minutes or one small route in your code. The proven benefit is close to zero for search: Google ignores the file, and the Ahrefs data shows AI search bots rarely fetch it.
+
+The sites that benefit are the ones whose readers already use AI tools on their content:
+
+* **Documentation and developer sites.** Developers paste docs into ChatGPT or Claude and point coding agents at them. In the Ahrefs data, the Claude-Code agent fetched llms.txt files more often than any AI search bot, assistant or training crawler except GPTBot.
+* **Software and API products**, where an agent needs the right page fast to call your API correctly.
+* **Large sites with a clear core**, where a hand-picked list of 20 pages beats a sitemap of 20,000.
+
+For a local business, a portfolio or a small blog, llms.txt is optional. Spend the time first on what AI search does use: crawlable pages, allowed AI search bots, and clear answers. The case for adding it anyway is the low cost, not any proven gain.
+
+## What does the llms.txt on urielpapa.com contain?
+
+urielpapa.com does not keep a hand-written llms.txt. An Astro route builds the file from the site's content every time the site is built. It writes my name as the H1, the site summary as the blockquote, and a line noting that every post has a Markdown copy. Then it lists the About, Projects and Contact pages and my profiles, every topic page with its summary, and the 20 newest published entries in the blog collection, which includes news takes and event notes. It ends with up to 10 notes and an "Optional" section linking the RSS feed and the sitemap. Drafts are never listed.
+
+An excerpt from the live file on 22 October 2026, with lines left out where marked:
+
+```markdown
+# Uriel Papa
+
+> urielpapa.com is where Uriel Papa, a technical founder from Metro Manila, shares the lessons from founding a company and building with technology: [...]
+
+## Topics
+
+- [SEO, GEO and AEO](https://urielpapa.com/topics/seo-geo-aeo): How search is evolving, with GEO and AEO fundamentals, semantic SEO and technical SEO.
+[...]
+
+## Optional
+
+- [RSS feed](https://urielpapa.com/rss.xml)
+- [Sitemap](https://urielpapa.com/sitemap-index.xml)
+```
+
+Two gaps remain against the spec. The links point to the HTML pages, not to their .md copies, although each post's head does link its Markdown copy. And no page links to llms.txt itself. Ahrefs recorded no AI bot requests for llms.txt files that did not exist, which suggests tools only fetch the file when they already know it is there.
+
+## How do you add an llms.txt file?
+
+Adding llms.txt takes one of two routes: a static file you write by hand, or a route that generates it from your content. The steps:
+
+1. **Write the summary.** One H1 with your site's name and a one- or two-sentence blockquote saying who it is for and what it covers.
+2. **Pick the pages.** List your 10 to 30 most useful pages under a few H2 headings, each with a short note on what it answers.
+3. **Publish it at the root.** On a static site, put llms.txt in the public folder. In Astro or a similar framework, a small server route can build it from your content, as urielpapa.com does. On WordPress, plugins such as Yoast SEO can generate it.
+4. **Check it.** Open yoursite.com/llms.txt, confirm it loads as plain text and every link works, and run the Lighthouse audit if you use it.
+
+Then leave it alone. A generated file updates itself, while a hand-written one needs a look each time you add an important page. To see whether AI tools actually cite you, test the answers directly, as I describe in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).

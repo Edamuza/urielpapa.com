@@ -1,0 +1,149 @@
+---
+title: "n8n vs Zapier vs Make: Which Should a Small Business Use?"
+seoTitle: "n8n vs Zapier vs Make for Small Business (2026)"
+description: >-
+  n8n vs Zapier vs Make compared on price, how runs are counted, self-hosting,
+  AI and ease of use, with a worked cost example and a pick for each situation.
+dek: >-
+  Zapier is the easiest, Make is the cheapest hosted option, and n8n wins when
+  you have a developer and workflows with many steps. The way each one counts a
+  run decides most of the bill.
+hub: automation
+frame: comparison
+takeaways:
+  - >-
+    Zapier bills a task for each successful action step, Make bills a credit for
+    most modules including the trigger, and n8n bills one execution per workflow
+    run, however many steps it has.
+  - >-
+    As of October 2026, a workflow with a trigger and three actions that runs
+    1,000 times a month costs $89 a month on Zapier, $9 on Make and $20 on n8n
+    Cloud, billed annually.
+  - >-
+    n8n is the only one of the three you can self-host, and its free Community
+    edition includes almost the complete feature set.
+  - >-
+    Zapier hosts customer data on AWS servers in the United States, while Make
+    lets you choose a US or EU data center when you create an organization.
+  - >-
+    My self-hosted n8n chatbot for Messenger and Instagram cost about US$10 a
+    month to run in early 2026, about US$6 of it for a small VPS.
+published: 2026-11-20
+related:
+  - n8n-messenger-instagram-chatbot
+  - what-is-tokenization
+projects: []
+stack:
+  - n8n
+  - openrouter
+faq:
+  - q: Is n8n really free?
+    a: >-
+      The self-hosted Community edition is free, but you pay for the server it
+      runs on and you maintain it. Features such as SSO, projects, sharing and
+      Git version control need a paid Business or Enterprise license. n8n Cloud
+      starts at $20 a month, billed annually.
+  - q: Do AI steps cost extra on these tools?
+    a: >-
+      Usually, yes. On Make, AI Agents use Make's AI Provider and consume credits
+      based on tokens, and with your own AI connection you also pay the provider
+      for tokens. Zapier counts agent activities separately from tasks, and on
+      self-hosted n8n you pay your model provider directly.
+  - q: Can I start on Zapier and move to n8n later?
+    a: >-
+      Yes, but plan to rebuild each workflow, reconnect every account and test
+      again, because the tools do not share a workflow format. Move the
+      workflows that run most often first, since they save the most money.
+event: {}
+syndication: []
+draft: true
+---
+
+For most small businesses, choosing between n8n, Zapier and Make comes down to two things: who builds the workflows, and how many steps they run. Zapier is the easiest to learn and lists the most apps, but it costs the most as runs and steps grow. Make is the cheapest hosted option. n8n is the best value when you have a developer, long workflows or data that must stay on your own server.
+
+I built a [Messenger and Instagram chatbot on self-hosted n8n with OpenRouter](/blog/n8n-messenger-instagram-chatbot), and this post is part of my [Automation](/topics/automation) writing. Everything about Zapier and Make below comes from their own pricing pages and docs.
+
+The short verdict:
+
+- **Non-technical owner, a few simple workflows:** Zapier.
+- **Lowest hosted price, with visual branching:** Make.
+- **A developer on the team, or many steps per run:** n8n.
+
+Here is how the three compare as of October 2026, from the [Zapier pricing page](https://zapier.com/pricing), the [Make pricing page](https://www.make.com/en/pricing), the [n8n pricing page](https://n8n.io/pricing/) and [n8n's integrations directory](https://n8n.io/integrations/). Prices are in US dollars, billed annually.
+
+| | Zapier | Make | n8n |
+| --- | --- | --- | --- |
+| Entry paid price | Pro, $19.99/mo for 750 tasks | Core, $9/mo for 10,000 credits | Starter, $20/mo for 2,500 executions (Cloud) |
+| Free option | 100 tasks/mo, two-step Zaps only | 1,000 credits/mo | Self-hosted Community edition |
+| What counts as one run unit | A task: each successful action step | A credit: most module actions, including the trigger | An execution: one full workflow run |
+| Self-hosting | No | No | Yes |
+| Integrations claimed | 9,000+ apps | 3,500+ apps | 2,000+ integrations |
+| AI features | Agents, Copilot, chatbots, MCP | AI Agents, Maia assistant | AI Agent node, MCP, Assistant |
+| Learning curve | Lowest | Medium | Highest, especially self-hosted |
+| Best for | Non-technical teams | Budget-conscious teams | Teams with a developer |
+
+## How much does each tool cost as your workflows grow?
+
+The cost of each tool depends on how it counts a run. The same workflow can cost ten times more on one than on another. Zapier counts a task for each successful action, but not for the trigger or for Filter, Paths and Formatter steps. Make counts a credit for most modules, including the trigger that reads incoming data, while routers and error handlers are free. n8n counts one execution per workflow run, and its pricing page says steps are not counted.
+
+Take a workflow with a trigger and three actions. For example, a form entry creates a contact, adds a sheet row and sends an email. Here is the cheapest plan that covers it, billed annually:
+
+| Monthly volume | Zapier | Make | n8n Cloud |
+| --- | --- | --- | --- |
+| 1,000 runs, trigger + 3 actions | 3,000 tasks: Pro, $89 | 4,000 credits: Core, $9 | 1,000 executions: Starter, $20 |
+| 1,000 runs, trigger + 9 actions | 9,000 tasks: Pro, $129 | 10,000 credits: Core, $9 | 1,000 executions: Starter, $20 |
+| 10,000 runs, trigger + 3 actions | 30,000 tasks: Pro, $289 | 40,000 credits: Core, $29 | 10,000 executions: Pro, $50 |
+
+Zapier's bill grows with both runs and steps, while n8n's grows only with runs. Make stays cheapest among the hosted plans at these volumes. A self-hosted n8n bill is the server itself. My chatbot workflow has ten nodes and runs as one execution per message. Its VPS cost about US$6 a month in early 2026.
+
+## Can you self-host, and where does your data live?
+
+n8n is the only one of the three you can run on your own server. Its free Community edition includes "almost the complete feature set", according to n8n's guide to [choosing Cloud or self-hosting](https://docs.n8n.io/choose-how-to-use-n8n). It leaves out paid features such as SSO, projects, workflow sharing and Git version control. The same guide says self-hosting needs technical expertise for installation and configuration, and that maintenance becomes your responsibility.
+
+Zapier and Make are hosted services only. Zapier's [data privacy overview](https://zapier.com/legal/data-privacy) says it "hosts data in AWS servers located in the United States", and it does not offer EU-only storage. Make lets you [choose a US or EU data center](https://help.make.com/organizations) when you create an organization, and you cannot change it afterwards.
+
+So if a client contract or privacy rule says where data must be stored, n8n self-hosted gives you the most control. Make's EU region is the next option, and Zapier fits when US hosting is acceptable.
+
+## Which tool is easiest to learn?
+
+Zapier is the easiest of the three for someone who has never built an automation. A Zap is a trigger followed by a list of action steps, read from top to bottom. Every plan also includes Copilot, Zapier's AI assistant. The catch is the Free plan, which only allows two-step Zaps, so most real workflows need a paid plan from the start.
+
+Make uses a visual canvas where modules connect like a flowchart, with routers and filters included even on the Free plan. That makes branching easier to see, but extra building blocks such as iterators and aggregators mean more to learn than Zapier's list of steps.
+
+n8n has a similar visual editor, plus code steps in JavaScript or Python and raw HTTP requests on every plan. My chatbot needed little code, but it still took real setup. I set up a Meta app and webhook, wrote the system prompt, and used a Code node to read the sender and message. Self-hosting adds server setup on top of that.
+
+## How do their AI and agent features compare?
+
+All three tools now let you add AI models and agents to a workflow, but they bill for AI differently. Zapier offers Zapier Agents, chatbots and MCP on every plan, and AI by Zapier steps from the Pro plan. Agent activities have their own monthly allowance, 1,500 on Pro, and do not use tasks.
+
+Make AI Agents are available on all plans and use Make's AI Provider, which turns tokens into credits. Make's [credits documentation](https://help.make.com/credits) gives an example: the Small agent tier, GPT-5 nano, uses 1 credit per 18,080 input tokens. With your own OpenAI, Claude or Gemini connection, you pay the provider for tokens and Make for operations. Tokens drive most AI cost, as I explain in [what tokenization is](/blog/what-is-tokenization).
+
+n8n includes an AI Agent node, an MCP server trigger and client, and human approval for tool calls on every Cloud plan. On self-hosted n8n you bring your own model. My chatbot sends each message to OpenRouter through an HTTP Request node, so I can switch models without rebuilding the workflow.
+
+## How many apps does each tool connect to?
+
+Zapier claims the largest library, with more than 9,000 apps on its pricing page. Make lists more than 3,500 apps, and n8n's integrations page lists more than 2,000. Each vendor counts integrations differently, so treat these numbers as a rough guide rather than a fair ranking.
+
+The real test is whether your specific apps have ready-made steps, and whether the tool can call any other API. All three can. Zapier includes webhooks and premium apps on its paid plans. Make supports custom apps for any service with a public API. n8n includes custom HTTP and GraphQL requests on every plan.
+
+My chatbot shows why that matters. The OpenRouter call and the reply through Meta's Send API both run in plain HTTP Request nodes, not in dedicated integrations. If an app you rely on is missing from a tool's library, check for a public API before you rule the tool out.
+
+## Which should you choose?
+
+The right choice depends on who builds the workflows and how much they run. Here is a verdict for each common situation:
+
+- **A non-technical owner with a few simple workflows:** choose Zapier. It is the fastest to learn and connects the most apps, and at low volume the higher price per task matters less.
+- **A budget-conscious team without a developer:** choose Make. It costs $9 a month for 10,000 credits, billed annually, and its canvas handles branching well.
+- **A budget-conscious team with a developer:** choose n8n. Start on n8n Cloud at $20 a month, or self-host the Community edition and pay only for the server.
+- **High-volume workflows with many steps:** choose n8n. One execution covers every step, so long workflows do not multiply the bill.
+- **Strict data location rules:** choose self-hosted n8n, or Make with an EU data center.
+
+If you are unsure, build the same small workflow on the free tier of two tools and see which one your team can maintain.
+
+## What does it cost to switch tools later?
+
+Switching between n8n, Zapier and Make means rebuilding each workflow, because none of them runs the others' workflow files. n8n saves workflows as JSON that you can [export and import into another n8n instance](https://docs.n8n.io/build/manage-workflows/export-and-import). Make exports scenarios as [blueprints](https://help.make.com/blueprints) for reuse inside Make, and even then you must recreate each app connection after importing.
+
+The rebuild is only part of the work. You reconnect every account, update webhook URLs in the apps that call the workflow, and test each path again. For my chatbot, moving would mean changing the webhook URL in the Meta app settings and testing both Messenger and Instagram again.
+
+So pick the tool you expect to keep for a few years, not only the cheapest one this month. If you do move, start with the workflows that run most often, because they save the most money.

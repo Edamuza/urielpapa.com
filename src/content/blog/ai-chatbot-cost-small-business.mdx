@@ -1,0 +1,172 @@
+---
+title: How Much Does an AI Chatbot Cost a Small Business to Run?
+seoTitle: AI Chatbot Cost for a Small Business, Explained
+description: >-
+  An AI chatbot costs a small business about US$7 to US$70 a month to run on
+  n8n as of October 2026. Here is the token math, hosting options and hidden
+  costs.
+dek: >-
+  The AI model is usually the cheapest part of a chatbot. The platform it runs
+  on, the messaging channel and the time to set it up cost more.
+hub: automation
+frame: explainer
+takeaways:
+  - >-
+    As of October 2026, 1,000 five-message chatbot conversations cost about
+    US$1.20 in tokens on GPT-6 Luna or Claude Haiku 5.5, and about US$9 on
+    Gemini 3.8 Flash.
+  - >-
+    The platform usually costs more than the AI: about US$6 a month for a small
+    VPS running self-hosted n8n, or US$50 to US$60 a month for n8n Cloud Pro.
+  - >-
+    A chatbot resends its system prompt with every message, so in a typical
+    five-message conversation the prompt can be about 73% of the input tokens.
+  - >-
+    From October 1, 2026, Meta gives each WhatsApp business number 1,000 free
+    service messages a month and charges for the rest.
+  - >-
+    My own Messenger and Instagram chatbot cost about US$10 a month to run in
+    early 2026, mostly a small VPS for self-hosted n8n plus AI tokens.
+published: 2026-11-06
+related:
+  - n8n-messenger-instagram-chatbot
+  - what-is-tokenization
+projects: []
+stack:
+  - n8n
+  - openrouter
+  - gpt
+  - claude
+  - gemini
+faq:
+  - q: Is a WhatsApp chatbot more expensive than a Messenger chatbot?
+    a: >-
+      It can be. Meta charges for WhatsApp template messages per delivered
+      message, and from October 1, 2026 it charges for service messages after
+      the first 1,000 a month per business number. Check the WhatsApp pricing
+      page for your country's rates before you budget.
+  - q: Can I run an AI chatbot for free?
+    a: >-
+      For testing, almost. The n8n Community edition is free to self-host,
+      Gemini models have a free tier, and Zapier's free plan includes 100 tasks
+      a month. A live chatbot still needs a server, and on Gemini's free tier
+      Google may use your content to improve its products.
+  - q: Which model should a small business chatbot use?
+    a: >-
+      Start with a small, low-cost model such as GPT-6 Luna or Claude Haiku
+      5.5, test it on your real questions, and only move up if the answers fall
+      short. Hand hard or sensitive conversations to a person instead of paying
+      for a bigger model.
+event: {}
+syndication: []
+draft: true
+---
+
+An AI chatbot costs a small business about US$7 to US$70 a month to run on n8n, for up to 1,000 conversations, as of October 2026. The AI model is usually the smallest part, often US$1 to US$9 for those 1,000 conversations. Most of the bill is the platform the chatbot runs on, plus the time it takes to set up and maintain. Zapier and Make cost more at that volume.
+
+I built a [Messenger and Instagram chatbot with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot) for my former agency. It cost about US$10 a month to run in early 2026, mostly a small VPS for self-hosted n8n plus AI tokens. This post is part of my [Automation](/topics/automation) writing, and it shows the math behind numbers like that one.
+
+## What makes up the cost of an AI chatbot?
+
+The cost of an AI chatbot comes from five parts, and only two of them show up as a clear monthly bill:
+
+- **AI model tokens.** You pay the model provider per token for what you send and what it writes back.
+- **The automation or hosting platform.** n8n, Zapier or Make runs the workflow that receives a message, calls the model and sends the reply.
+- **The messaging channel.** Messenger, Instagram, WhatsApp or a website chat widget, each with its own rules and, for WhatsApp, its own fees.
+- **Setup time.** Creating the Meta app, connecting the webhook, writing the system prompt and testing.
+- **Upkeep.** Updating the prompt when prices or services change, reading handed-over chats and keeping the server patched.
+
+My own cost table had three lines: about US$6 for n8n hosting, about US$3 to US$5 for tokens and nothing extra for the lead log. Setup and upkeep never appear on an invoice, but they are real costs, and they are usually the largest ones.
+
+## How does AI token pricing work?
+
+AI token pricing charges per million tokens, with one price for input tokens and a higher one for output tokens. A token is a piece of text, roughly three quarters of an English word. My post on [what tokenization is](/blog/what-is-tokenization) explains how text becomes tokens.
+
+These are the standard prices for three low-cost models, as of October 2026:
+
+| Model                                  | Input per 1M tokens | Output per 1M tokens | Cached input per 1M tokens | Source                                                                        |
+| -------------------------------------- | ------------------- | -------------------- | -------------------------- | ----------------------------------------------------------------------------- |
+| GPT-6 Luna (up to 272K input tokens)   | US$0.10             | US$0.50              | US$0.01                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
+| Claude Haiku 5.5 (prompts up to 100K)  | US$0.10             | US$0.50              | US$0.01                    | [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
+| Gemini 3.8 Flash (through Dec 31, 2026) | US$0.75             | US$3.75              | US$0.075, plus storage     | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)           |
+
+Google lists Gemini 3.8 Flash at US$1.50 input and US$7.50 output from January 1, 2027, so its price doubles in a few weeks. A request costs its input tokens times the input price, plus its output tokens times the output price.
+
+## What do 1,000 chatbot conversations cost in tokens?
+
+A worked example makes chatbot token costs concrete. Here are the assumptions:
+
+1. Each conversation has 5 customer messages, so the model is called 5 times.
+2. A 1,200-token system prompt goes with every call.
+3. Each customer message is 50 tokens, and each reply is 150 tokens.
+4. Every call also carries the conversation so far, which grows by 200 tokens per turn.
+
+The first call sends 1,250 input tokens (1,200 + 50). The next calls send 1,450, 1,650, 1,850 and 2,050. That adds up to 8,250 input tokens and 750 output tokens (5 × 150), or 9,000 tokens per conversation. That sits inside the 6,000 to 10,000 tokens per conversation I recorded for my own chatbot.
+
+For 1,000 conversations, that is 8.25 million input tokens and 0.75 million output tokens:
+
+| Model            | Input cost              | Output cost             | Total per 1,000 conversations |
+| ---------------- | ----------------------- | ----------------------- | ----------------------------- |
+| GPT-6 Luna       | 8.25 × US$0.10 = US$0.83 | 0.75 × US$0.50 = US$0.38 | About US$1.20                 |
+| Claude Haiku 5.5 | 8.25 × US$0.10 = US$0.83 | 0.75 × US$0.50 = US$0.38 | About US$1.20                 |
+| Gemini 3.8 Flash | 8.25 × US$0.75 = US$6.19 | 0.75 × US$3.75 = US$2.81 | About US$9.00                 |
+
+On Gemini 3.8 Flash's 2027 prices, the same month would cost about US$18. On a small model, tokens are rarely the line that decides a small business's chatbot budget.
+
+## How much does hosting the chatbot cost?
+
+Hosting a chatbot workflow costs anywhere from about US$6 to well over US$100 a month, depending on the platform and how it counts usage. In the example above, 1,000 conversations means 5,000 incoming messages. Prices below are from each official pricing page, as of October 2026:
+
+| Option                   | Entry price                                                                                         | Included                | At 5,000 messages a month                                   |
+| ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
+| Self-hosted n8n on a VPS | Free [Community edition](https://docs.n8n.io/hosting/), on a VPS of about US$6 | No execution limit      | About US$6, my own figure from early 2026                     |
+| n8n Cloud Starter        | [US$20 a month yearly, US$24 monthly](https://n8n.io/pricing/)                                      | 2,500 executions        | Too small                                                   |
+| n8n Cloud Pro            | US$50 a month yearly, US$60 monthly                                                                 | 10,000 executions       | Fits                                                        |
+| Zapier Professional      | [US$19.99 a month yearly, US$29.99 monthly](https://zapier.com/pricing)                             | 750 tasks               | About 15,000 tasks; the 10,000-task tier alone is US$129 a month yearly |
+| Make Core                | [US$9 a month yearly, US$10.59 monthly](https://www.make.com/en/pricing)                            | 10,000 credits          | About 20,000 credits, so a higher tier                       |
+
+The platforms count differently. n8n bills one execution per workflow run, however many steps it has. Zapier counts every action step as a task, so three steps per message (call the AI, send the reply, log the lead) means 15,000 tasks. Make counts most module actions as one credit, so four modules per message means 20,000 credits. n8n shows the same plan prices in euros to some visitors.
+
+Adding the tokens gives the full range for 1,000 conversations. Self-hosted n8n with GPT-6 Luna or Claude Haiku 5.5 comes to about US$6 + US$1.20 = US$7.20 a month. n8n Cloud Pro billed monthly with Gemini 3.8 Flash comes to about US$60 + US$9 = US$69.
+
+## What hidden costs push a chatbot bill up?
+
+Hidden chatbot costs usually come from tokens you did not plan for and rules you did not read. The main ones:
+
+- **Prompt length.** In the example, the system prompt is 6,000 of the 8,250 input tokens in each conversation, about 73%.
+- **Conversation history.** A 10-message conversation in the same example sends 21,500 input tokens. That is 2.6 times the 5-message one, because every call resends all earlier turns.
+- **Thinking tokens.** Models that reason before answering bill that thinking as output, and Google's Gemini output prices include thinking tokens.
+- **Retries.** A failed run that repeats its model call pays for those tokens again.
+- **Human handover.** Someone has to read and answer the chats the bot passes on.
+- **Meta platform rules.** Messenger replies are open for 24 hours after a person's message. Meta's [Messenger policy](https://developers.facebook.com/docs/messenger-platform/policy/policy-overview/) says automated chats must disclose they are automated where the law requires it.
+- **WhatsApp fees.** [WhatsApp charges per delivered template message](https://developers.facebook.com/docs/whatsapp/pricing/). From October 1, 2026, each business number gets 1,000 free service messages a month, then Meta charges.
+
+Price changes are the last hidden cost. Gemini 3.8 Flash doubles on January 1, 2027, and Claude Haiku 5.5 costs five times more for prompts over 100,000 tokens.
+
+## How can you keep chatbot costs low?
+
+Keeping chatbot costs low mostly means sending fewer tokens and choosing a platform that fits your volume. What works:
+
+- **Shorten the system prompt.** It goes with every message, so each sentence you cut saves tokens on every call.
+- **Trim the history.** Send the last few messages or a short summary, not the whole chat.
+- **Cap reply length.** Ask for short replies and set a maximum output length.
+- **Use prompt caching.** [OpenAI caches prompts](https://developers.openai.com/api/docs/guides/prompt-caching) of 1,024 tokens or more automatically when the start of the prompt matches, so put the fixed system prompt first.
+- **Start with a small model.** Hand hard questions to a person instead of paying for a bigger model.
+- **Set a spending limit** with your model provider, where it offers one.
+
+Caching changes the example. If the 6,000 system-prompt tokens per conversation are read from cache on GPT-6 Luna, they cost 6 × US$0.01 = US$0.06 per 1,000 conversations. The other 2.25 million input tokens cost US$0.23, and output stays at US$0.38. That is about US$0.66 instead of US$1.20, before the small cost of writing the cache.
+
+## Should you build the chatbot yourself or hire someone?
+
+Building an AI chatbot yourself costs time instead of money, and hiring someone costs money but saves the learning curve. A DIY build means creating a Meta app, connecting a webhook and writing the prompt. If you self-host, you also run n8n with Docker on a server you keep updated. My [n8n chatbot guide](/blog/n8n-messenger-instagram-chatbot) walks through nine steps, from the Meta app to going live.
+
+DIY suits you if you are comfortable with webhooks and a Linux server, and your volume is modest. Hiring makes sense when nobody on the team will own upkeep, or the chatbot touches payments, bookings or personal data.
+
+If you hire, ask four things:
+
+1. Is the setup a fixed fee, and what does monthly upkeep cost?
+2. Will the model and platform accounts be in your name, with token costs passed through?
+3. How does the bot hand a conversation to a person?
+4. Who updates the system prompt when your prices or services change?
+
+Either way, budget for upkeep. A chatbot stays cheap only while someone keeps its prompt, prices and handover rules current.
