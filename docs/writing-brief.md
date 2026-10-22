@@ -46,7 +46,7 @@ frame: <guide | comparison | best-of | why | explainer | build-story>
 takeaways:
   - >-
     <3 to 5 self-contained sentences, each quotable alone, each with a specific fact>
-published: <YYYY-MM-DD, the planned publish date>
+published: <YYYY-MM-DD, today's date; never a future date. The publishing task sets it to the real publish day.>
 related:
   - <0-2 slugs of PUBLISHED posts>
 projects: []
