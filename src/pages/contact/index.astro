@@ -190,7 +190,8 @@ const field =
         </p>
         <p class="meta mt-3">
           Your name, email and message are sent to my inbox and used only to
-          reply to you. Nothing is added to a mailing list.
+          reply to you. Nothing is added to a mailing list. By sending this you
+          agree to the <a href="/privacy">privacy policy</a>.
         </p>
       </div>
     </form>
@@ -290,6 +291,12 @@ const field =
         status.textContent =
           err instanceof Error ? err.message : "Something went wrong.";
       if (button) button.disabled = false;
+      // Turnstile tokens are single-use, so get a fresh one for the next try.
+      const widget = form.querySelector(".cf-turnstile");
+      const turnstile = (
+        window as unknown as { turnstile?: { reset: (el?: Element) => void } }
+      ).turnstile;
+      if (widget) turnstile?.reset(widget);
     }
   });
 </script>

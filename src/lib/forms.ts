@@ -1,4 +1,5 @@
 /** Shared helpers for the two on-demand form endpoints. */
+import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import { TURNSTILE_SECRET_KEY } from "astro:env/server";
 
 export const wantsJson = (request: Request) =>
@@ -42,30 +43,45 @@ export function reply(
 }
 
 // Best-effort rate limit per IP. Serverless instances don't share memory, so
-// Turnstile and the honeypot do most of the work; this only stops bursts.
+// this is per instance only: Turnstile and the honeypot do most of the work;
+// this only stops bursts. Expired keys are swept so the map can't grow forever.
 const hits = new Map<string, number[]>();
-export function rateLimited(ip: string, max = 5, windowMs = 10 * 60 * 1000) {
+export function rateLimited(key: string, max = 5, windowMs = 10 * 60 * 1000) {
   const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter(t => now - t < windowMs);
+  for (const [k, times] of hits) {
+    if (!times.some(t => now - t < windowMs)) hits.delete(k);
+  }
+  const recent = (hits.get(key) ?? []).filter(t => now - t < windowMs);
   recent.push(now);
-  hits.set(ip, recent);
+  hits.set(key, recent);
   return recent.length > max;
 }
 
+/**
+ * Cloudflare Turnstile check.
+ * - Both keys set: verify the token with Cloudflare (8 s timeout = fail).
+ * - Site key set but secret missing: misconfigured, so fail closed.
+ * - Neither set: allow; the honeypot and rate limit are the only spam filters.
+ */
 export async function verifyTurnstile(token: string | null, ip: string) {
-  if (!TURNSTILE_SECRET_KEY) return true; // not configured
+  if (!TURNSTILE_SECRET_KEY) return !PUBLIC_TURNSTILE_SITE_KEY;
   if (!token) return false;
-  const res = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      body: new URLSearchParams({
-        secret: TURNSTILE_SECRET_KEY,
-        response: token,
-        remoteip: ip,
-      }),
-    }
-  );
-  const data = (await res.json().catch(() => ({}))) as { success?: boolean };
-  return data.success === true;
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        body: new URLSearchParams({
+          secret: TURNSTILE_SECRET_KEY,
+          response: token,
+          remoteip: ip,
+        }),
+        signal: AbortSignal.timeout(8000),
+      }
+    );
+    const data = (await res.json().catch(() => ({}))) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    return false; // timeout or network error
+  }
 }

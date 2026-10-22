@@ -8,6 +8,7 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import { mdxComponents } from "@/components/mdx";
 import { SHOW_DRAFTS, SITE } from "@/config";
 import {
+  isoDateTime,
   formatDate,
   getNotes,
   isoDate,
@@ -43,7 +44,7 @@ const schema = [
     headline: data.title,
     description: data.description,
     image: abs("/og.png"),
-    datePublished: data.published.toISOString(),
+    datePublished: isoDateTime(data.published),
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
     isPartOf: { "@id": WEBSITE_ID },

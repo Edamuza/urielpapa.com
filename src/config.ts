@@ -1,3 +1,5 @@
+import { PUBLIC_SHOW_DRAFTS } from "astro:env/client";
+
 /**
  * Site-wide settings for urielpapa.com.
  *
@@ -56,6 +58,14 @@ export const SOCIALS: { name: string; label: string; url: string }[] = [
   },
 ];
 
+/** X (Twitter) handle for twitter:site and twitter:creator, taken from the X profile above. */
+export const X_HANDLE = `@${
+  SOCIALS.find(s => s.name === "x")
+    ?.url.replace(/\/+$/, "")
+    .split("/")
+    .pop() ?? "its_uriel26"
+}`;
+
 /** Third-party badges shown in the footer. Add one object per badge. */
 export const TRUST_BADGES = [
   {
@@ -94,5 +104,4 @@ export const NAV = [
 ];
 
 /** Show drafts with a "Draft" banner (preview builds only, never production). */
-export const SHOW_DRAFTS =
-  import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === "true";
+export const SHOW_DRAFTS = import.meta.env.DEV || PUBLIC_SHOW_DRAFTS === true;

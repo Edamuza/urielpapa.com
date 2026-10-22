@@ -20,12 +20,13 @@ import WorkWithMe from "@/components/WorkWithMe.astro";
 import TOC from "@/components/TOC.astro";
 import PostCard from "@/components/PostCard.astro";
 import { mdxComponents } from "@/components/mdx";
-import { SITE } from "@/config";
+import { SHOW_DRAFTS, SITE } from "@/config";
 import { hubName } from "@/data/hubs";
 import {
   formatDate,
   getAllBlogEntries,
   isoDate,
+  isoDateTime,
   postUrl,
   readingTime,
   type Post,
@@ -33,6 +34,7 @@ import {
 import {
   abs,
   breadcrumbNode,
+  faqNode,
   PERSON_ID,
   WEBSITE_ID,
   type Crumb,
@@ -75,7 +77,9 @@ const crumbs: Crumb[] =
 
 // Keep reading: chosen related posts, otherwise the newest in the same hub.
 const all = await getAllBlogEntries();
-let related = (await getEntries(data.related)).filter(Boolean) as Post[];
+let related = (
+  (await getEntries(data.related)).filter(Boolean) as Post[]
+).filter(p => SHOW_DRAFTS || !p.data.draft);
 if (related.length === 0) {
   related = all
     .filter(p => p.id !== post.id && p.data.hub === data.hub)
@@ -83,6 +87,8 @@ if (related.length === 0) {
 }
 
 const ogImage = data.hero ? data.hero.src : `/og/${post.id}.png`;
+// Last meaningful change; the publish date until the post is updated.
+const modified = data.updated ?? data.published;
 
 const article = {
   "@type": "BlogPosting",
@@ -92,8 +98,8 @@ const article = {
   headline: data.title,
   description: data.description,
   image: abs(ogImage),
-  datePublished: data.published.toISOString(),
-  ...(data.updated && { dateModified: data.updated.toISOString() }),
+  datePublished: isoDateTime(data.published),
+  dateModified: isoDateTime(modified),
   author: { "@id": PERSON_ID },
   publisher: { "@id": PERSON_ID },
   isPartOf: { "@id": WEBSITE_ID },
@@ -121,27 +127,23 @@ const article = {
   }),
 };
 
-const faqNode = data.faq.length
-  ? {
-      "@type": "FAQPage",
-      mainEntity: data.faq.map(f => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    }
-  : null;
-
-const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
+const schema = [
+  article,
+  breadcrumbNode(crumbs),
+  ...(data.faq.length ? [faqNode(url, data.faq)] : []),
+];
 ---
 
 <Layout
   title={data.seoTitle}
   description={data.description}
   ogImage={ogImage}
+  ogImageAlt={data.hero ? data.heroAlt : undefined}
+  ogImageWidth={data.hero?.width}
+  ogImageHeight={data.hero?.height}
   ogType="article"
   publishedTime={data.published}
-  modifiedTime={data.updated}
+  modifiedTime={modified}
   schema={schema}
   draft={data.draft}
 >
@@ -357,6 +359,7 @@ const schema = [article, breadcrumbNode(crumbs), ...(faqNode ? [faqNode] : [])];
     a.className =
       "heading-anchor ms-2 no-underline opacity-60 hover:opacity-100 focus:opacity-100";
     a.setAttribute("aria-label", `Link to section: ${h.textContent}`);
+    a.title = `Link to section: ${h.textContent}`;
     a.textContent = "#";
     h.appendChild(a);
   }

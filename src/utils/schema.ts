@@ -93,6 +93,25 @@ export const collectionNode = (opts: {
   },
 });
 
+/**
+ * FAQPage for the questions shown at the end of a page. It has its own @id and is
+ * part of the page node (Layout.astro links it with `hasPart`), so the URL carries
+ * one page entity with the FAQ inside it, not two unrelated pages.
+ */
+export const faqNode = (
+  pageUrl: string,
+  items: { q: string; a: string }[]
+) => ({
+  "@type": "FAQPage",
+  "@id": `${pageUrl}#faq`,
+  isPartOf: { "@id": `${pageUrl}#page` },
+  mainEntity: items.map(f => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+});
+
 /** The page node every page gets, unless it passes its own (ProfilePage, CollectionPage…). */
 export const webPageNode = (opts: {
   url: string;

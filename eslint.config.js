@@ -1,20 +1,15 @@
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
 import eslintPluginAstro from "eslint-plugin-astro";
-import tsParser from "@typescript-eslint/parser";
+import globals from "globals";
 
 export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
   {
-    files: ["**/*.astro"],
     languageOptions: {
-      parserOptions: {
-        parser: tsParser,
-      },
-    },
-  },
-  {
-    files: ["**/*.ts", "**/*.tsx"],
-    languageOptions: {
-      parser: tsParser,
+      globals: { ...globals.browser, ...globals.node },
     },
   },
   { rules: { "no-console": "error" } },

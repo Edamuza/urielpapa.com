@@ -1,0 +1,113 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import { SITE } from "@/config";
+import { formatDate, isoDate } from "@/utils/content";
+import { WEBSITE_ID, breadcrumbNode } from "@/utils/schema";
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Privacy", href: "/privacy" },
+];
+/** Change this date whenever the policy text changes. */
+const updated = new Date("2026-10-22");
+---
+
+<Layout
+  title="Privacy Policy"
+  description="What urielpapa.com collects and why: Google Analytics, the contact form, the Buttondown newsletter, Vercel hosting and YouTube embeds. No ads, no data sold."
+  modifiedTime={updated}
+  schema={[breadcrumbNode(crumbs)]}
+  webPage={{ about: { "@id": WEBSITE_ID } }}
+>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro
+      title="Privacy policy"
+      intro="What this site collects, which services handle it, and how to ask me to delete it."
+    >
+      <p class="meta mt-3">
+        Last updated: <time datetime={isoDate(updated)}
+          >{formatDate(updated, "D MMMM YYYY")}</time
+        >
+      </p>
+    </PageIntro>
+    <div class="app-prose">
+      <h2 id="short">The short version</h2>
+      <p>
+        There are no ads on this site. I don't sell your data or share it for
+        marketing. Everything that leaves your browser is listed below.
+      </p>
+
+      <h2 id="analytics">Analytics</h2>
+      <p>
+        I use Google Analytics 4 to see which pages people read. It loads only
+        after you scroll, tap or press a key, or after 4 seconds. It records
+        page views and a few events, such as newsletter signups, contact form
+        submissions and clicks on some links. Ad storage and ad personalisation
+        are always off. In the EEA, the UK and Switzerland, analytics cookies
+        are off by default, so Google receives only cookieless measurements.
+      </p>
+
+      <h2 id="contact">The contact form</h2>
+      <p>
+        When you send the <a href="/contact">contact form</a>, your name, email
+        address, topic and message go to Resend, an email service, which
+        delivers them to my inbox. I use them only to reply to you.
+      </p>
+      <p>
+        To stop spam, the form has a hidden field that only bots fill in, and
+        the server briefly keeps IP addresses in memory to limit how many
+        messages can be sent in a short time. When Cloudflare Turnstile is
+        switched on, it runs a spam check in the form and your IP address is
+        sent to Cloudflare to verify it.
+      </p>
+
+      <h2 id="newsletter">The newsletter</h2>
+      <p>
+        Newsletter signups go to Buttondown. I send it your email address, your
+        IP address, the page you signed up from and a short tag saying which
+        signup box you used. Buttondown then emails you a confirmation link, and
+        you are only subscribed after you click it. You can unsubscribe at any
+        time. The same Turnstile spam check applies when it is switched on.
+      </p>
+
+      <h2 id="hosting">Hosting</h2>
+      <p>
+        The site is hosted on Vercel. Like any web host, Vercel keeps server
+        logs of requests, which include IP addresses and browser details.
+      </p>
+
+      <h2 id="youtube">YouTube videos</h2>
+      <p>
+        Some posts include a YouTube video. Until you press play, only the
+        thumbnail image loads, from YouTube's image server (i.ytimg.com). When
+        you press play, the player loads from youtube-nocookie.com, YouTube's
+        privacy-enhanced mode. Without JavaScript, the link opens the video on
+        YouTube itself.
+      </p>
+
+      <h2 id="badge">The footer badge</h2>
+      <p>
+        The footer shows a badge image loaded from websitelaunches.com, so that
+        site receives a normal image request from your browser.
+      </p>
+
+      <h2 id="browser">What stays in your browser</h2>
+      <p>
+        If you pick a light or dark theme, that choice is saved in your
+        browser's local storage. It is never sent to me.
+      </p>
+
+      <h2 id="delete">Asking me to delete your data</h2>
+      <p>
+        To ask what I hold about you, or to have it deleted, write to me through
+        the <a href="/contact">contact page</a> or email <a
+          href={`mailto:${SITE.email}`}>{SITE.email}</a
+        >. I will delete your messages and remove your address from the
+        newsletter.
+      </p>
+    </div>
+  </div>
+</Layout>

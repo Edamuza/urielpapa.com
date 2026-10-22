@@ -49,7 +49,7 @@ const crumbs = [
       // @ts-expect-error — Missing types for @pagefind/default-ui package.
       const { PagefindUI } = await import("@pagefind/default-ui");
 
-      // Display warning inn dev mode
+      // Display warning in dev mode
       if (import.meta.env.DEV) {
         pageFindSearch.innerHTML = `
             <div class="bg-muted/75 rounded p-4 space-y-4 mb-4">
@@ -71,6 +71,22 @@ const crumbs = [
           return term;
         },
       });
+
+      // Every link needs a title (site rule): Pagefind renders result links
+      // itself, so give each new one a title from its text as it appears.
+      const addTitles = () => {
+        for (const a of pageFindSearch.querySelectorAll<HTMLAnchorElement>(
+          "a:not([title])"
+        )) {
+          const text = a.textContent?.trim();
+          if (text) a.title = text;
+        }
+      };
+      new MutationObserver(addTitles).observe(pageFindSearch, {
+        childList: true,
+        subtree: true,
+      });
+      addTitles();
 
       // If search param exists (eg: search?q=astro), trigger search
       const query = params.get("q");

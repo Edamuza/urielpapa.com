@@ -1,3 +1,11 @@
 allowBuilds:
   esbuild: true
   sharp: true
+
+# Patched versions of transitive build-time packages that older dependents pin
+# (pnpm audit, 22 Oct 2026). Remove once @astrojs/mdx and satori ship them.
+overrides:
+  js-yaml@>=4.0.0 <4.3.2: ^4.3.2
+  smol-toml@<1.9.0: ^1.9.0
+  fflate@>=0.7.0 <0.7.5: ^0.7.5
+

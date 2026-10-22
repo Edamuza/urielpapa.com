@@ -4,7 +4,12 @@ import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import { SITE } from "@/config";
-import { formatDate, getNewsletterIssues, isoDate } from "@/utils/content";
+import {
+  isoDateTime,
+  formatDate,
+  getNewsletterIssues,
+  isoDate,
+} from "@/utils/content";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
 export async function getStaticPaths() {
@@ -30,7 +35,7 @@ const schema = [
     headline: issue.data.title,
     description: issue.data.description,
     url: abs(path),
-    datePublished: issue.data.published.toISOString(),
+    datePublished: isoDateTime(issue.data.published),
     author: { "@id": PERSON_ID },
     articleSection: "Newsletter",
     inLanguage: SITE.lang,

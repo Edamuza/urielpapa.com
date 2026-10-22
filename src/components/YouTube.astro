@@ -29,7 +29,7 @@ const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
       height="360"
       loading="lazy"
       decoding="async"
-      class="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+      class="absolute inset-0 size-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
     />
     <span
       class="absolute inset-0 flex items-center justify-center"
@@ -71,6 +71,8 @@ const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
         iframe.referrerPolicy = "strict-origin-when-cross-origin";
         iframe.className = "aspect-video w-full rounded-lg";
         link.replaceWith(iframe);
+        // Keep keyboard and screen reader users on the video they just started.
+        iframe.focus();
       })
     );
 </script>

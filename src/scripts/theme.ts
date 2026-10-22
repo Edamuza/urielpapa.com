@@ -11,12 +11,10 @@ let theme: Theme =
 
 function reflect(): void {
   document.documentElement.setAttribute("data-theme", theme);
-  const btn = document.querySelector("#theme-btn");
-  btn?.setAttribute(
-    "aria-label",
-    theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-  );
-  btn?.setAttribute("aria-pressed", String(theme === "dark"));
+  // The button's label stays "Toggle dark theme"; aria-pressed carries the state.
+  document
+    .querySelector("#theme-btn")
+    ?.setAttribute("aria-pressed", String(theme === "dark"));
 }
 
 function persist(): void {
@@ -39,7 +37,7 @@ document.querySelector("#theme-btn")?.addEventListener("click", () => {
 window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", ({ matches }) => {
-    let stored: string | null = null;
+    let stored: string | null;
     try {
       stored = localStorage.getItem(THEME_KEY);
     } catch {

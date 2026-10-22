@@ -3,13 +3,22 @@ name: IndexNow
 # After Vercel finishes a production deploy, tell Bing and the other IndexNow
 # engines which pages changed since the previous production deploy.
 # Vercel reports deploys as a "Vercel" commit status; a successful one on main
-# means production is live.
+# means production is live. (Vercel does not create GitHub Deployments for this
+# repo, so `deployment_status` would never fire.)
 on:
   status:
+
+# For `status` events the run's head SHA is the default branch head, not the
+# commit the status is about, so name the run after that commit: the duplicate
+# check below finds earlier runs by this title.
+run-name: >-
+  ${{ github.event.context == 'Vercel' && github.event.state == 'success'
+  && format('IndexNow {0}', github.event.sha) || 'IndexNow (ignored status)' }}
 
 permissions:
   contents: read
   statuses: read
+  actions: read
 
 jobs:
   submit:
@@ -20,20 +29,41 @@ jobs:
       contains(github.event.branches.*.name, 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    # Vercel can report success more than once for the same commit (redeploys).
+    # Run those one at a time, and skip once a run for the commit has succeeded.
+    concurrency:
+      group: indexnow-${{ github.event.sha }}
+      cancel-in-progress: false
 
     steps:
+      - name: Skip if this commit was already submitted
+        id: dup
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.sha }}
+        run: |
+          done=$(gh api "repos/${{ github.repository }}/actions/workflows/indexnow.yml/runs?event=status&status=success&per_page=100" \
+            --jq "[.workflow_runs[] | select(.display_title == \"IndexNow $SHA\")] | length")
+          if [ "${done:-0}" -gt 0 ]; then
+            echo "IndexNow already ran for $SHA; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: "☁️ Checkout repository"
-        uses: actions/checkout@v4
+        if: steps.dup.outputs.skip != 'true'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ github.event.sha }}
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        if: steps.dup.outputs.skip != 'true'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: "24"
+          node-version: "22" # matches Vercel (nodejs22.x)
 
       - name: Find the previous production deploy
+        if: steps.dup.outputs.skip != 'true'
         id: prev
         env:
           GH_TOKEN: ${{ github.token }}
@@ -48,4 +78,5 @@ jobs:
           echo "sha=${prev:-$SHA~1}" >> "$GITHUB_OUTPUT"
 
       - name: "📣 Submit to IndexNow"
+        if: steps.dup.outputs.skip != 'true'
         run: node scripts/indexnow.mjs "${{ steps.prev.outputs.sha }}" "${{ github.event.sha }}"

@@ -25,14 +25,18 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (String(form.get("website") ?? ""))
     return reply(request, 200, { message: "Thanks!" }, "/contact/thanks");
 
+  // Strip control characters (CR/LF etc.) so the name can't break the subject line.
   const name = String(form.get("name") ?? "")
+    // eslint-disable-next-line no-control-regex -- matching control characters is the point
+    .replace(/[\x00-\x1f\x7f]/g, "")
     .trim()
     .slice(0, 120);
   const email = String(form.get("email") ?? "")
     .trim()
     .slice(0, 200);
-  const topicKey = String(form.get("topic") ?? "other");
-  const topic = TOPICS[topicKey] ?? TOPICS.other;
+  const rawTopic = String(form.get("topic") ?? "other");
+  const topicKey = Object.hasOwn(TOPICS, rawTopic) ? rawTopic : "other";
+  const topic = TOPICS[topicKey];
   const message = String(form.get("message") ?? "")
     .trim()
     .slice(0, 5000);
@@ -75,7 +79,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
+  const sent = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -88,8 +92,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       subject: `[urielpapa.com] ${topic}: ${name}`,
       text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}\n\n${message}`,
     }),
-  });
-  if (!res.ok) {
+    signal: AbortSignal.timeout(8000),
+  })
+    .then(res => res.ok)
+    .catch(() => false); // timeout or network error
+  if (!sent) {
     return reply(request, 502, {
       message: `Your message couldn't be sent right now. Please email ${CONTACT_TO_EMAIL} directly.`,
     });

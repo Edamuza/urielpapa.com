@@ -8,6 +8,14 @@ import { hubName } from "@/data/hubs";
 import { mdxComponents } from "@/components/mdx";
 import { getAllBlogEntries, getNotes, noteUrl, postUrl } from "@/utils/content";
 
+/** Escapes text for HTML inside the feed's content. */
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
 /** Full-content feed of posts and notes. Drafts are never included. */
 export const GET: APIRoute = async () => {
   const container = await AstroContainer.create();
@@ -22,7 +30,8 @@ export const GET: APIRoute = async () => {
       link: postUrl(p),
       title: p.data.title,
       description: p.data.description,
-      date: p.data.updated ?? p.data.published,
+      // pubDate is when the post first went out, not when it was last edited.
+      date: p.data.published,
       hub: p.data.hub,
       takeaways: p.data.takeaways,
     })),
@@ -44,7 +53,7 @@ export const GET: APIRoute = async () => {
         props: { components: mdxComponents },
       });
       const takeaways = e.takeaways.length
-        ? `<h2>Key takeaways</h2><ul>${e.takeaways.map(t => `<li>${t}</li>`).join("")}</ul>`
+        ? `<h2>Key takeaways</h2><ul>${e.takeaways.map(t => `<li>${escapeHtml(t)}</li>`).join("")}</ul>`
         : "";
       const url = new URL(e.link, SITE.url).href;
       return {

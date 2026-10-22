@@ -8,7 +8,8 @@ import {
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Analytics from "@/components/Analytics.astro";
-import { SITE } from "@/config";
+import { SITE, X_HANDLE } from "@/config";
+import { isoDateTime } from "@/utils/content";
 import {
   WEBSITE_ID,
   graph,
@@ -22,8 +23,13 @@ type Props = {
   /** Page title without the site suffix. Omit on the home page. */
   title?: string;
   description?: string;
-  /** Absolute or root-relative URL of the 1200×630 social image. */
+  /** Absolute or root-relative URL of the social image (1200×630 for /og.png and /og/*). */
   ogImage?: string;
+  /** Alt text for the social image; defaults to the page title. */
+  ogImageAlt?: string | null;
+  /** Real size of a custom social image (e.g. a hero). Omitted when unknown. */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   ogType?: "website" | "article" | "profile";
   noindex?: boolean;
   /** Extra JSON-LD nodes for this page; WebSite and Person are always added. */
@@ -42,6 +48,9 @@ const {
   title,
   description = SITE.description,
   ogImage = "/og.png",
+  ogImageAlt,
+  ogImageWidth,
+  ogImageHeight,
   ogType = "website",
   noindex = false,
   schema = [],
@@ -63,6 +72,15 @@ const path =
   Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
 const socialImageURL = new URL(ogImage, SITE.url).href;
+const socialImageAlt = ogImageAlt || (title ?? fullTitle);
+// The default and generated OG images are always 1200×630; other images only
+// get size tags when the caller knows their real size.
+const isGeneratedOg = ogImage === "/og.png" || ogImage.startsWith("/og/");
+const socialImageSize = isGeneratedOg
+  ? { width: 1200, height: 630 }
+  : ogImageWidth && ogImageHeight
+    ? { width: ogImageWidth, height: ogImageHeight }
+    : null;
 // Every page gets a page node (a WebPage, unless the page passed a more specific
 // one such as ProfilePage or CollectionPage), tied to the site and its breadcrumbs.
 type Node = Record<string, unknown>;
@@ -80,8 +98,8 @@ const pageNode: Node =
     name: fullTitle,
     description,
     extra: {
-      ...(publishedTime && { datePublished: publishedTime.toISOString() }),
-      ...(modifiedTime && { dateModified: modifiedTime.toISOString() }),
+      ...(publishedTime && { datePublished: isoDateTime(publishedTime) }),
+      ...(modifiedTime && { dateModified: isoDateTime(modifiedTime) }),
       ...webPage,
     },
   });
@@ -89,6 +107,12 @@ pageNode.isPartOf ??= { "@id": WEBSITE_ID };
 pageNode.inLanguage ??= SITE.lang;
 if (mainNode) pageNode.mainEntity ??= { "@id": mainNode["@id"] };
 if (crumbs) pageNode.breadcrumb ??= { "@id": crumbs["@id"] };
+// Questions shown on the page are part of it, not a second page at the same URL.
+const faq = nodes.find(n => n["@type"] === "FAQPage");
+if (faq) {
+  faq["@id"] ??= `${canonicalURL}#faq`;
+  pageNode.hasPart ??= { "@id": faq["@id"] };
+}
 const jsonLd = graph(
   websiteNode(),
   personNode(),
@@ -110,7 +134,7 @@ const robots =
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="canonical" href={canonicalURL} />
+    {!(noindex || draft) && <link rel="canonical" href={canonicalURL} />}
     <meta name="robots" content={robots} />
 
     <Font
@@ -135,13 +159,26 @@ const robots =
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    {
+      socialImageSize && (
+        <>
+          <meta
+            property="og:image:width"
+            content={String(socialImageSize.width)}
+          />
+          <meta
+            property="og:image:height"
+            content={String(socialImageSize.height)}
+          />
+        </>
+      )
+    }
     {
       publishedTime && (
         <meta
           property="article:published_time"
-          content={publishedTime.toISOString()}
+          content={isoDateTime(publishedTime)}
         />
       )
     }
@@ -149,7 +186,7 @@ const robots =
       modifiedTime && (
         <meta
           property="article:modified_time"
-          content={modifiedTime.toISOString()}
+          content={isoDateTime(modifiedTime)}
         />
       )
     }
@@ -163,9 +200,12 @@ const robots =
     }
 
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={X_HANDLE} />
+    <meta name="twitter:creator" content={X_HANDLE} />
     <meta name="twitter:title" content={title ?? fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImageURL} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
 
     <link
       rel="alternate"
@@ -214,7 +254,9 @@ const robots =
         let stored = null;
         try {
           stored = localStorage.getItem("theme");
-        } catch (e) {}
+        } catch {
+          // Storage can be blocked; fall back to the system theme.
+        }
         const prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)"
         ).matches;

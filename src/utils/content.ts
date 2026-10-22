@@ -83,6 +83,14 @@ export const formatDate = (date: Date, format = "D MMM YYYY") =>
 export const isoDate = (date: Date) =>
   dayjs(date).tz(SITE.timezone).format("YYYY-MM-DD");
 
+/**
+ * Full ISO 8601 date-time in Manila time, e.g. 2026-10-22T08:00:00+08:00, for
+ * JSON-LD and article meta tags. Same instant as the stored date (so it agrees
+ * with the sitemap and the date shown on the page), written with the +08:00 offset.
+ */
+export const isoDateTime = (date: Date) =>
+  dayjs(date).tz(SITE.timezone).format("YYYY-MM-DDTHH:mm:ssZ");
+
 /** Most recent meaningful date for sitemaps, feeds and "updated" labels. */
 export const lastModified = (post: Post) =>
   post.data.updated ?? post.data.published;

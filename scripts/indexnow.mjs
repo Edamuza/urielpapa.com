@@ -2,11 +2,13 @@
 // Run after a production deploy: node scripts/indexnow.mjs <from-sha> <to-sha>
 // Set DRY_RUN=1 to print the URLs without submitting them.
 /* eslint-disable no-console -- a CLI script; its output is the GitHub Actions log. */
-// Content-only changes submit the changed entries plus the list pages;
+// Content-only changes submit the changed entries plus the list pages, including
+// URLs that went away (post deleted, turned back into a draft, or moved by a
+// `frame` change) so engines recrawl them and drop them from the index;
 // any other change (layouts, styles, config) submits every URL in the live sitemap.
 import { execFileSync } from "node:child_process";
 import { readdirSync } from "node:fs";
-import { contentEntries } from "./content-urls.mjs";
+import { entryFor } from "./content-urls.mjs";
 
 const SITE = "https://urielpapa.com";
 const HOST = new URL(SITE).host;
@@ -20,11 +22,45 @@ if (!keyFile) throw new Error("No IndexNow key file (public/<32 hex>.txt) found.
 const key = keyFile.replace(/\.txt$/, "");
 
 const [from, to = "HEAD"] = process.argv.slice(2);
+// --no-renames: a moved or renamed post shows up as a delete plus an add,
+// so its old URL is submitted too.
 const changed = from
-  ? execFileSync("git", ["diff", "--name-only", from, to], { encoding: "utf8" })
+  ? execFileSync("git", ["diff", "--name-only", "--no-renames", from, to], {
+      encoding: "utf8",
+    })
       .split("\n")
       .filter(Boolean)
   : [];
+
+/** A file's text at a git revision, or undefined if it did not exist there. */
+function textAt(rev, file) {
+  try {
+    return execFileSync("git", ["show", `${rev}:${file}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    });
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Public paths a changed content file affects: its current URL if it is live,
+ * plus its previous URL if that was live and is now gone (deleted, drafted or moved).
+ */
+function affectedPaths(file) {
+  const entryAt = rev => {
+    const text = textAt(rev, file);
+    return text === undefined ? undefined : entryFor(file, text);
+  };
+  const before = entryAt(from);
+  const after = entryAt(to);
+  const paths = [];
+  if (after && !after.draft) paths.push(after.path);
+  if (before && !before.draft && (!after || after.draft || after.path !== before.path))
+    paths.push(before.path);
+  return paths;
+}
 
 async function sitemapUrls() {
   const index = await (await fetch(`${SITE}/sitemap-index.xml`)).text();
@@ -42,11 +78,7 @@ if (changed.length === 0) {
   console.log("No changed files given; nothing to submit.");
   process.exit(0);
 } else if (changed.every(f => f.startsWith("src/content/"))) {
-  const byFile = new Map(contentEntries().map(e => [e.file, e]));
-  const paths = changed
-    .map(f => byFile.get(f))
-    .filter(e => e && !e.draft)
-    .map(e => e.path);
+  const paths = changed.flatMap(affectedPaths);
   urls = [...new Set([...paths, ...LIST_PAGES])].map(p => (p === "/" ? SITE : SITE + p));
 } else {
   urls = await sitemapUrls();

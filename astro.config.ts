@@ -146,8 +146,20 @@ export default defineConfig({
       ["ui-monospace", "monospace"]
     ),
   ],
+  // Responsive images for <Image> and Markdown/MDX images: srcset and sizes
+  // sized to the container, plus Astro's global styles for them.
+  image: {
+    layout: "constrained",
+    responsiveStyles: true,
+  },
   env: {
     schema: {
+      /** "true" on preview builds to show drafts (src/config.ts SHOW_DRAFTS). */
+      PUBLIC_SHOW_DRAFTS: envField.boolean({
+        access: "public",
+        context: "client",
+        optional: true,
+      }),
       PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
         access: "public",
         context: "client",

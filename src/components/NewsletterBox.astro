@@ -1,4 +1,5 @@
 ---
+import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import { NEWSLETTER } from "@/config";
 
 type Props = { heading?: string; from: string };
@@ -18,21 +19,24 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
   <form
     method="post"
     action="/api/subscribe"
-    class="mt-4 flex flex-col gap-2 sm:flex-row"
+    class="mt-4"
     data-newsletter
     data-from={from}
     novalidate
   >
-    <label for={`${id}-email`} class="sr-only">Email address</label>
-    <input
-      id={`${id}-email`}
-      name="email"
-      type="email"
-      required
-      autocomplete="email"
-      placeholder="you@example.com"
-      class="border-foreground bg-background min-h-11 flex-1 rounded-lg border px-3 py-2"
-    />
+    <div class="flex flex-col gap-2 sm:flex-row">
+      <label for={`${id}-email`} class="sr-only">Email address</label>
+      <input
+        id={`${id}-email`}
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder="you@example.com"
+        class="border-foreground bg-background min-h-11 flex-1 rounded-lg border px-3 py-2"
+      />
+      <button type="submit" class="btn">Subscribe</button>
+    </div>
     <!-- Honeypot: people never see or fill this -->
     <input
       type="text"
@@ -43,7 +47,15 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
       aria-hidden="true"
     />
     <input type="hidden" name="from" value={from} />
-    <button type="submit" class="btn">Subscribe</button>
+    {
+      PUBLIC_TURNSTILE_SITE_KEY && (
+        <div
+          class="cf-turnstile mt-3"
+          data-sitekey={PUBLIC_TURNSTILE_SITE_KEY}
+          data-theme="auto"
+        />
+      )
+    }
   </form>
   <p
     class="mt-2 text-sm"
@@ -57,10 +69,31 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
       >About the newsletter</a
     >.
   </p>
+  <p class="meta mt-1">
+    By subscribing you agree to the <a href="/privacy">privacy policy</a>.
+  </p>
 </section>
 
 <script>
   import { track } from "@/scripts/events";
+
+  type Turnstile = { reset: (el?: Element) => void };
+  const turnstile = () =>
+    (window as unknown as { turnstile?: Turnstile }).turnstile;
+
+  // Load Turnstile once per page, only when a widget was rendered (site key set).
+  if (
+    document.querySelector("form[data-newsletter] .cf-turnstile") &&
+    !document.querySelector(
+      'script[src*="challenges.cloudflare.com/turnstile"]'
+    )
+  ) {
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
 
   for (const form of document.querySelectorAll<HTMLFormElement>(
     "form[data-newsletter]"
@@ -102,6 +135,9 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
             err instanceof Error ? err.message : "Something went wrong.";
       } finally {
         if (button) button.disabled = false;
+        // Turnstile tokens are single-use, so get a fresh one for the next try.
+        const widget = form.querySelector(".cf-turnstile");
+        if (widget) turnstile()?.reset(widget);
       }
     });
   }
