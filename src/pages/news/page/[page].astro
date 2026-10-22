@@ -1,0 +1,13 @@
+---
+import NewsPage from "@/components/listings/NewsPage.astro";
+import { getNewsTakes } from "@/utils/content";
+import { laterPages } from "@/utils/pagination";
+
+export async function getStaticPaths() {
+  return laterPages((await getNewsTakes()).length);
+}
+
+const { page } = Astro.props;
+---
+
+<NewsPage page={page} />

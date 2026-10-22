@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PostCard from "@/components/PostCard.astro";
+import NewsletterBox from "@/components/NewsletterBox.astro";
+import Pagination from "@/components/Pagination.astro";
+import { formatDate, getNewsTakes, postUrl } from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+import { pageCount, pageHref, pageItems } from "@/utils/pagination";
+
+type Props = { page: number };
+const { page } = Astro.props;
+
+const allNews = await getNewsTakes();
+const pages = pageCount(allNews.length);
+const news = pageItems(allNews, page);
+const path = pageHref("/news", page);
+const pageLabel = page > 1 ? `Page ${page} of ${pages}` : "";
+const title = "Tech News, with Context";
+const intro =
+  "Recent releases and announcements in the topics I write about, and what they mean in practice.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "News", href: "/news" },
+  ...(page > 1 ? [{ name: `Page ${page}`, href: path }] : []),
+];
+
+const months = new Map<string, typeof news>();
+for (const n of news) {
+  const key = formatDate(n.data.published, "MMMM YYYY");
+  months.set(key, [...(months.get(key) ?? []), n]);
+}
+
+const schema = [
+  collectionNode({
+    path,
+    name: pageLabel ? `${title}, ${pageLabel.toLowerCase()}` : title,
+    description: intro,
+    items: news.map(n => ({ name: n.data.title, href: postUrl(n) })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={`Tech News, with Context${pageLabel ? ` (${pageLabel})` : ""}`}
+  description={`Uriel Papa's takes on recent AI, framework, search and marketing news: what happened, what changed, why it matters and what to do about it.${pageLabel ? ` ${pageLabel}.` : ""}`}
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={title} intro={intro}>
+      {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
+    </PageIntro>
+    {
+      news.length === 0 ? (
+        <p class="max-w-read">The first news takes are on the way.</p>
+      ) : (
+        [...months].map(([month, items]) => (
+          <section class="max-w-read mb-8">
+            <h2 class="h3 border-border mb-3 border-b pb-2">{month}</h2>
+            <ul>
+              {items.map(n => (
+                <PostCard
+                  href={postUrl(n)}
+                  title={n.data.title}
+                  hub={n.data.hub}
+                  date={n.data.published}
+                  draft={n.data.draft}
+                />
+              ))}
+            </ul>
+          </section>
+        ))
+      )
+    }
+    <Pagination base="/news" page={page} pages={pages} label="News" />
+    <NewsletterBox from="news-index" />
+  </div>
+</Layout>

@@ -1,0 +1,57 @@
+---
+import { pageHref } from "@/utils/pagination";
+
+type Props = { base: string; page: number; pages: number; label: string };
+const { base, page, pages, label } = Astro.props;
+---
+
+{
+  pages > 1 && (
+    <nav aria-label={`${label} pages`} class="max-w-read mt-8 mb-12">
+      <ul class="flex flex-wrap items-center gap-2">
+        {page > 1 && (
+          <li>
+            <a
+              href={pageHref(base, page - 1)}
+              rel="prev"
+              class="border-border block rounded-lg border px-3 py-2 font-medium no-underline hover:underline"
+            >
+              ← Newer
+            </a>
+          </li>
+        )}
+        {Array.from({ length: pages }, (_, i) => i + 1).map(n => (
+          <li>
+            {n === page ? (
+              <span
+                aria-current="page"
+                class="bg-foreground text-background block rounded-lg px-3 py-2 font-semibold"
+              >
+                {n}
+              </span>
+            ) : (
+              <a
+                href={pageHref(base, n)}
+                aria-label={`${label}, page ${n}`}
+                class="border-border block rounded-lg border px-3 py-2 no-underline hover:underline"
+              >
+                {n}
+              </a>
+            )}
+          </li>
+        ))}
+        {page < pages && (
+          <li>
+            <a
+              href={pageHref(base, page + 1)}
+              rel="next"
+              class="border-border block rounded-lg border px-3 py-2 font-medium no-underline hover:underline"
+            >
+              Older →
+            </a>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}
