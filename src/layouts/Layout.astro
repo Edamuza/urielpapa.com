@@ -52,9 +52,13 @@ const {
   draft = false,
 } = Astro.props;
 
-const fullTitle = title
-  ? `${title} | ${SITE.name}`
-  : `${SITE.name}: ${SITE.jobTitle} on AI, Automation and SEO`;
+// The site name is added only while the whole title stays within 60 characters,
+// so search results don't cut off the words that describe the page.
+const fullTitle = !title
+  ? `${SITE.name}: ${SITE.jobTitle} on AI, Automation and SEO`
+  : `${title} | ${SITE.name}`.length <= 60
+    ? `${title} | ${SITE.name}`
+    : title;
 const path =
   Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
