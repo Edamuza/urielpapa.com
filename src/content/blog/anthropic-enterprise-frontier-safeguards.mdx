@@ -46,6 +46,10 @@ On September 1, 2026, Anthropic published [Enterprise Frontier Safeguards](https
 
 Many regulated companies found that retention hard to accept. Anthropic says it built EFS with more than 100 customers to give them both misuse detection and control of their data. EFS is rolling out in phases, starting later this fall. Until it is ready, eligible customers get zero data retention, or ZDR, on Fable 5 and [Fable 5.1](https://www.anthropic.com/claude-fable-and-mythos-5-1).
 
+Anthropic's two-minute announcement video explains how customers such as Salesforce, Visa, Uber and KPMG shaped EFS:
+
+<YouTube id="FoteuzPpx7E" title="Building Enterprise Frontier Safeguards with our customers" channel="Claude" />
+
 ## What changed, in plain words?
 
 * **Your storage, your keys.** Monitoring data can live in the customer's own Amazon S3, Azure Blob Storage or Google Cloud Storage, under the customer's encryption keys, access rules and audit logs.
@@ -69,3 +73,9 @@ Developers building for regulated clients should pay the most attention. If you 
 * **Read retention terms per model.** Check the retention rules for the exact model you use, since Anthropic's 30-day retention started with Fable 5.
 * **Ask about eligibility.** If you serve a regulated industry on an enterprise plan, request access through the form linked in Anthropic's post.
 * **Send less.** Strip names, ID numbers and account details from prompts when the task does not need them.
+
+## Where can you learn more?
+
+- [Anthropic's API and data retention documentation](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention) - Which models and features qualify for zero data retention, and how the 30-day rule for Covered Models works.
+- [Anthropic's commercial data retention policy](https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data) - How long Anthropic keeps API and Claude for Work data by default, and the longer periods for flagged content.
+- [Claude Code's zero data retention guide](https://code.claude.com/docs/en/zero-data-retention) - What zero data retention covers in Claude Code on Claude for Enterprise, and which features it turns off.

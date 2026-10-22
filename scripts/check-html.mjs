@@ -1,8 +1,9 @@
 // Fails the build when any image on any page is missing alt text or a title,
-// any link is missing a title, or a page has no valid Schema.org JSON-LD with
-// its own page node. Runs after `astro build` on the built pages.
+// any link is missing a title or points to a page on this site that does not
+// exist, or a page has no valid Schema.org JSON-LD with its own page node.
+// Runs after `astro build` on the built pages.
 /* eslint-disable no-console -- a build check; its output is the build log. */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = ".vercel/output/static";
@@ -20,6 +21,16 @@ const attr = (tag, name) =>
 
 // Links inside scripts and styles are code, not links on the page.
 const withoutCode = html => html.replace(/<(script|style|template|textarea)\b[\s\S]*?<\/\1\s*>/gi, "");
+
+// Routes that only exist on the server (src/pages with prerender = false, and Keystatic).
+const ON_DEMAND = ["/api/", "/preview/", "/keystatic"];
+
+/** True when an internal href resolves to a built file. */
+const resolves = href => {
+  const path = decodeURI(href.split(/[?#]/)[0]).replace(/\/$/, "") || "/";
+  if (ON_DEMAND.some(p => path.startsWith(p))) return true;
+  return [path, `${path}.html`, join(path, "index.html")].some(p => existsSync(join(ROOT, p)));
+};
 
 const problems = [];
 let count = 0;
@@ -44,8 +55,12 @@ for (const file of htmlFiles(ROOT)) {
   const html = withoutCode(raw);
   for (const [tag] of html.matchAll(/<a\b[^>]*>/g)) {
     links++;
+    const href = attr(tag, "href");
     if (!attr(tag, "title")?.trim()) {
-      problems.push(`${file.slice(ROOT.length)}: link to ${attr(tag, "href")} is missing a title`);
+      problems.push(`${file.slice(ROOT.length)}: link to ${href} is missing a title`);
+    }
+    if (href?.startsWith("/") && !href.startsWith("//") && !resolves(href)) {
+      problems.push(`${file.slice(ROOT.length)}: link to ${href} goes to a page that does not exist`);
     }
   }
   for (const [tag] of html.matchAll(/<img\b[^>]*>/g)) {
@@ -63,5 +78,5 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(
-  `HTML check: all ${count} images have alt text and a title, all ${links} links have a title, and all ${pages} pages have Schema.org data.`,
+  `HTML check: all ${count} images have alt text and a title, all ${links} links have a title and every internal link resolves, and all ${pages} pages have Schema.org data.`,
 );

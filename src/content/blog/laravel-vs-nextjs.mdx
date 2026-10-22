@@ -98,6 +98,10 @@ Next.js is built on React and runs JavaScript or TypeScript on both the server a
 
 Hosting details come from the official docs as of October 2026. Laravel 13 needs [PHP 8.3 or newer](https://laravel.com/framework/docs/deployment) and can run on any server you manage, on a VPS set up through Laravel Forge, or on Laravel Cloud, the fully managed platform from the Laravel team. Next.js [deploys](https://nextjs.org/docs/app/getting-started/deploying) as a Node.js server or a Docker container with every feature, as a static export with fewer features, or on platforms with adapters such as Vercel. For background jobs, real-time events and API authentication, Laravel's own packages are [Horizon](https://laravel.com/framework/docs/horizon), [Reverb](https://laravel.com/framework/docs/reverb) and [Sanctum](https://laravel.com/framework/docs/sanctum).
 
+The Laravel team's own 10-minute video walks through starting a new Laravel app in 2026:
+
+<YouTube id="zartL4W9Qfc" title="Getting Started with Laravel in 2026" channel="Laravel" />
+
 ## Which is quicker for building data-heavy systems?
 
 For systems with many related records and strict rules, Laravel gives a lot for free: models, relationships, migrations, validation and queues all follow one set of conventions. In the ERP, the payroll rules (SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay) and the double-entry accounting all lived in the Laravel API.
@@ -137,3 +141,10 @@ We used Laravel for the API because most of the hard work was rules and data: pa
 * **Pick both if** you have a data-heavy system and also need a modern, interactive interface, and your team can maintain two codebases.
 
 After building the ERP, I would pick both again for a system like that, but not for everything. For a small portal or a content site, I would start with Next.js alone and add a separate back end only when the rules get heavy. For a site that is mostly content, [Astro 7, which runs this site](/news/astro-7-content-sites), is also worth a look. The split paid off for us because our back end was big enough to need its own home.
+
+## Where can you learn more?
+
+- [Laravel's Eloquent ORM documentation](https://laravel.com/framework/docs/eloquent) - The official guide to the models, relationships and queries that carried our 144 data models.
+- [Next.js Learn course](https://nextjs.org/learn) - A free, step-by-step course from the Next.js team that builds a full app with layouts, data fetching and rendering.
+- [How to use Next.js as a backend for your frontend](https://nextjs.org/docs/app/guides/backend-for-frontend) - The official guide to what Next.js can handle on the server before you need a separate API like Laravel.
+- [My take on Vercel's Flat Rate CDN](/news/vercel-flat-rate-cdn) - What fixed CDN pricing changes, and does not change, for a Next.js front end hosted on Vercel.

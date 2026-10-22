@@ -67,6 +67,10 @@ For a small business, a predictable bill is often worth more than the cheapest p
 
 The limit is scope. The post lists what the flat fee covers and does not say it covers Functions or Image Optimization. An app that renders pages on the server, runs API routes or resizes images can still have usage-based costs on top of the flat rate. Static and cached pages benefit most, which is one more reason to keep pages static where you can.
 
+Fireship's four-minute video on a $96K Vercel bill after a viral launch shows the risk, and why server functions still need watching:
+
+<YouTube id="SCIfWhAheVw" title="when your serverless computing bill goes parabolic..." channel="Fireship" />
+
 ## What should you do now?
 
 * **On a Pro team already:** open the Usage page and check your typical monthly CDN requests and transfer. Opt in only if a tier fits your normal traffic, and remember you can opt out later.
@@ -75,3 +79,9 @@ The limit is scope. The post lists what the flat fee covers and does not say it 
 * **Serving mostly static pages:** this plan rewards caching, so make sure marketing pages and blogs are served from the CDN.
 
 If you are deciding where an app should live in the first place, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers the hosting trade-offs between a VPS and Vercel.
+
+## Where can you learn more?
+
+- [Vercel's Flat Rate CDN documentation](https://vercel.com/docs/pricing/flat-rate-cdn) - The tiers, the exact resources the flat fee covers, how to exclude projects and what usage is out of scope.
+- [Vercel Spend Management](https://vercel.com/docs/spend-management) - How to set a budget for usage outside the flat rate, get alerts and pause projects when you reach it.
+- [Vercel CDN Cache documentation](https://vercel.com/docs/caching/cdn-cache) - How to make responses cacheable on Vercel's CDN, the part of your traffic the flat rate rewards.

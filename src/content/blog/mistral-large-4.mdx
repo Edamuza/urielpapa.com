@@ -42,6 +42,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing. The prices below are
 
 On October 6, 2026, Mistral published [Introducing Mistral Large 4](https://mistral.ai/news/mistral-large-4/). The model is available as a public preview through the API on Mistral Studio. Mistral says it will release the weights "by the end of the month," and calls the model the first milestone funded by its [€3 billion Series D](https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/), announced on September 8.
 
+Mistral's own 17-second launch clip gives the headline pitch, and the announcement has the details:
+
+<YouTube id="hD51W2txi1Y" title="Introducing Mistral Large 4, Le Chonk." channel="Mistral" />
+
 ## What changed, in plain words?
 
 * **A very large mixture-of-experts model.** Mistral Large 4 has about 1 trillion parameters, with 52 billion active for each token. Mixture-of-experts means only a slice of the model runs at a time, which keeps it cheaper to serve than its size suggests.
@@ -69,3 +73,9 @@ Two details are still missing. The announcement does not state a context window 
 * **Check the European option.** If your clients care where data is processed, ask Mistral about the European deployment when it is available.
 
 As of October 2026, the Mistral Large 4 weights were not yet listed on [Mistral's Hugging Face page](https://huggingface.co/mistralai).
+
+## Where can you learn more?
+
+- [Mistral's Mistral Large 4 model card](https://docs.mistral.ai/models/mistral-large-4-0) - The preview's documentation, which lists a 1M-token context window and cached input at US$0.14 per million tokens.
+- [Hugging Face's guide to mixture-of-experts models](https://huggingface.co/blog/moe) - How mixture-of-experts models work, and why they still need a lot of memory to serve.
+- [My post on DeepSeek-V4.1-Flash](/news/deepseek-v4-1-flash) - An open-weight model whose weights are already on Hugging Face, at a very low API price.

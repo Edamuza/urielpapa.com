@@ -66,6 +66,10 @@ The markup can be written in three formats: JSON-LD, Microdata and RDFa. JSON-LD
 
 That separation is also the risk. Because readers never see the JSON-LD, it can drift from what the page says, or claim things the page never shows. The useful way to think about schema is as a confirmation layer: it restates, in a form machines can parse, what the page already tells its readers.
 
+Martin Splitt of Google explains what structured data is, how to add it and how to check that it works, in under three minutes:
+
+<YouTube id="tYfCjbvaOYg" title="Structured Data for beginners" channel="Google Search Central" />
+
 ## What do Google and Microsoft say about schema and AI search?
 
 Google and Microsoft both say schema helps machines understand a page, and neither says it gets a page into AI answers. Google's guide to [optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), last updated in July 2026, warns against "overfocusing on structured data." It says structured data "isn't required for generative AI search." It still recommends using it as part of your SEO, because it makes pages eligible for rich results.
@@ -198,3 +202,10 @@ The Schema Markup Validator, at `validator.schema.org`, checks the markup agains
 Neither tool checks that the markup matches the page. That part you do by reading both side by side.
 
 On urielpapa.com, part of the test runs on every build. A script checks each built page. It fails the build if a page has no JSON-LD, has invalid JSON, or has no node for the page itself. The WordPress publish guard did the same job at publish time. Both prove that markup exists; only reading the page proves it is true.
+
+## Where can you learn more?
+
+- [Google's Search Gallery](https://developers.google.com/search/docs/appearance/structured-data/search-gallery) - every structured data type Google Search supports, with a link to the rules for each one.
+- [Google's Article structured data documentation](https://developers.google.com/search/docs/appearance/structured-data/article) - the properties Google reads from Article and BlogPosting markup, such as author, dates and images.
+- [The schema.org Person type](https://schema.org/Person) - the full list of Person properties, including `sameAs`, `alumniOf` and `knowsAbout`.
+- [The JSON-LD 1.1 specification](https://www.w3.org/TR/json-ld11/) - the W3C standard that defines `@context`, `@id` and `@graph`.

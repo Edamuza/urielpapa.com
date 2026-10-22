@@ -47,6 +47,10 @@ I have used Prisma on PostgreSQL for the [client quotation portal](/projects/quo
 
 Prisma's [August 28, 2026 changelog](https://www.prisma.io/changelog/2026-08-28) says that `npm install prisma@latest` installs Prisma 8, and that Prisma 7 stays supported under the `prisma@prev` tag. As of October 2026, the official [release status page](https://www.prisma.io/docs/orm/release-status) describes Prisma ORM 8 as a release candidate, lists the CLI at 8.0.0-rc.25, and says general availability is expected in October 2026. On October 12, the team published [a post on the 330 issues Prisma ORM 8 closes](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues).
 
+Prisma's 48-second launch video gives the company's own pitch for the new Prisma, including the Prisma 8 release candidate:
+
+<YouTube id="DE4WBE7mZqY" title="Meet the New Prisma" channel="Prisma" />
+
 ## What changed, in plain words?
 
 Prisma ORM 8 is less an upgrade than a new tool with a familiar name. These are the main changes from the [October 12 post](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues) and the [release status page](https://www.prisma.io/docs/orm/release-status):
@@ -75,3 +79,9 @@ The support window gives breathing room. Prisma says Prisma 7 keeps getting bug 
 * **Planning the move:** read the official [Prisma 7 to 8 upgrade guide](https://www.prisma.io/docs/guides/upgrade-prisma-orm/postgresql) and budget it as a project, with tests around your main queries first.
 
 If you are weighing a TypeScript ORM against a full framework like Laravel, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers how much of the data layer each one gives you.
+
+## Where can you learn more?
+
+- [TypeScript migrations in Prisma 8](https://www.prisma.io/blog/typescript-migrations-in-prisma-next) - Prisma's own walkthrough of how `migration.ts` files are planned, checked and re-run.
+- [The Prisma ORM data contract](https://www.prisma.io/docs/orm/contract-authoring/the-data-contract) - The docs page on the `contract.prisma` file that replaces `schema.prisma` in Prisma 8.
+- [How migrations work in Prisma ORM](https://www.prisma.io/docs/orm/migrations/how-migrations-work) - The official guide to planning, reviewing and applying migrations in Prisma 8.

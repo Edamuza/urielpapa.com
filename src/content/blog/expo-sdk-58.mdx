@@ -56,6 +56,10 @@ These are the main changes from the [official release notes](https://expo.dev/ch
 * **Breaking changes.** R8 code shrinking is on by default in Android release builds. `File.write()` in `expo-file-system` is now async. Foreground notifications show by default. libSQL support is removed from `expo-sqlite`. React Native 0.87 and later make the strict TypeScript API the default and remove some APIs, including `InteractionManager`. macOS is not supported in SDK 58.
 * **Tooling minimums.** Node.js must be 22.13 or newer, 24.3 or newer, or 26 and later. Odd-numbered releases such as 23 and 25 are not supported.
 
+Expo's own seven-minute video runs through the biggest SDK 58 updates, a quick way to spot what affects your app:
+
+<YouTube id="vqMYeWjBWkI" title="Expo SDK 58 just dropped. Here are the 24 biggest updates" channel="Expo" />
+
 ## What does it mean for small businesses and founders?
 
 For a business with an Expo app, SDK 58 is mostly good news with a bill attached. Faster Android builds and stable routing features cut the time a small team spends waiting and wiring things by hand. The bill is the upgrade work: a two-version React Native jump, a new iOS life cycle and default changes like R8 can each break something that worked yesterday.
@@ -72,3 +76,9 @@ There is also a timing issue for anyone who tests with Expo Go. Expo says the ne
 * **Shipping to iOS:** review any custom `AppDelegate` code against the new scene life cycle before the iOS 27 rollout reaches your users.
 
 If you are still choosing the stack around a mobile app, such as the API and admin panel behind it, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.
+
+## Where can you learn more?
+
+- [Expo's SDK upgrade walkthrough](https://docs.expo.dev/workflow/upgrading-expo-sdk-walkthrough/) - The official step-by-step process for upgrading one SDK version at a time, with links to each release's notes.
+- [Introduction to development builds](https://docs.expo.dev/develop/development-builds/introduction/) - Expo's guide to the development builds you need for SDK 58 until the new Expo Go ships.
+- [React Native 0.88 release post](https://reactnative.dev/blog/2026/10/19/react-native-0.88) - The React Native team's notes on the version SDK 58 is built on, including iOS scene life cycle support.

@@ -58,6 +58,10 @@ Astro 7 is mostly a speed and tooling release. These are the main changes from t
 * **Caching and routing become stable.** Route caching is stable, with experimental cache providers for Netlify, Vercel and Cloudflare. A new `src/fetch.ts` entry point gives control over the request pipeline.
 * **Breaking changes.** The new compiler reports unclosed tags and invalid HTML nesting as errors instead of fixing them silently. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
 
+Chris Pennington of Coding in Public walks through these changes, including build benchmarks and the whitespace gotcha, in under nine minutes:
+
+<YouTube id="KBOgV7kuSm8" title="What Astro’s new compiler means for you" channel="Coding in Public" />
+
 ## Why does it matter for content sites?
 
 Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines, including the AI search systems I cover in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
@@ -83,3 +87,9 @@ Two things confused me, and both were dev server issues, not production ones. On
 * **On another framework:** Astro 7 is worth a look if your site is mostly content, such as a blog, docs or marketing pages, and you want pages that ship little or no JavaScript. For an app with logins, dashboards and lots of data, like the ERP I built with Laravel and Next.js, I would stay with an app framework.
 
 If you are comparing frameworks for something more data-heavy than a content site, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.
+
+## Where can you learn more?
+
+- [Astro's islands architecture guide](https://docs.astro.build/en/concepts/islands/) - The official explanation of how Astro keeps most of a page as static HTML and adds JavaScript only where needed.
+- [Astro's content collections guide](https://docs.astro.build/en/guides/content-collections/) - How to organize, validate and query blog posts and other content with type checking.
+- [Vite 8 release announcement](https://vite.dev/blog/announcing-vite8) - The Vite team's post on Rolldown, the Rust bundler behind Astro 7's faster builds.

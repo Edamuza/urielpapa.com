@@ -50,6 +50,10 @@ Push Security, a browser security company, found the attack in a customer enviro
 
 The fake page copied the look of Anthropic's install instructions. [BleepingComputer reported](https://www.bleepingcomputer.com/news/security/hackers-abuse-google-ads-bing-redirects-to-push-claude-clickfix-attacks/) that the page displayed the real install command, but its Copy button put a different, attacker-controlled command on the clipboard. The final malware was still unknown when BleepingComputer published. On October 17, a Google spokesperson told [CyberGuy, in a story syndicated by Fox News](https://www.foxnews.com/tech/hackers-hide-dangerous-fake-ai-downloads-behind-google-ads.amp): "We've suspended the advertiser accounts running the reported campaign."
 
+Push Security's short explainer shows how ClickFix attacks trick people into pasting a harmful command, the same trick the fake Claude page used:
+
+<YouTube id="79ZlINvdY6U" title="Push Explains: ClickFix (Malicious Copy & Paste)" channel="Push Security" />
+
 ## How does SERP poisoning work, in plain words?
 
 SERP poisoning means getting a harmful page into the places people trust on a search results page. Attackers use three main routes: paid ads that impersonate a brand, organic rankings pushed up with spam, and hacked websites that lend their reputation to a bad redirect. A fourth route is newer: seeding fake pages so that AI answers repeat a scam phone number or login link.
@@ -110,3 +114,9 @@ In my view, small sites are the likeliest hosts. A WordPress site with an outdat
 ## What can we learn from it?
 
 Trust signals on a results page can all be borrowed. A familiar domain in an ad, a real business page and a correct-looking command were each used here as cover. Google's rules already cover this, and its May 2026 change extends them to AI answers, but enforcement often arrives after a researcher reports the problem. Business owners should check their own sites and brand searches instead of waiting for a warning. If you also want to see how AI tools describe your business, my guide on [checking whether ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site) is a good place to start.
+
+## Where can you learn more?
+
+- [Download Claude](https://claude.com/download) - Anthropic's official download page for the Claude desktop and mobile apps, the safe place to start.
+- [Help, I think I've been hacked](https://web.dev/articles/hacked) - Google's guide for site owners on how sites get hacked, how to recover and how to remove the warnings.
+- [Hardening WordPress](https://developer.wordpress.org/advanced-administration/security/hardening/) - The official WordPress handbook on updates, passwords, file permissions, plugins, backups and monitoring.

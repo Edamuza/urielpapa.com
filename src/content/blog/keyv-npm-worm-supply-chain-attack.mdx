@@ -43,7 +43,7 @@ draft: false
 ---
 On August 4, 2026, an attacker took over the GitHub account behind keyv, a widely used Node.js caching library, and published a poisoned keyv 6.0.0 to npm. Within an hour the same credential-stealing payload reached the Cacheable family and ecto, then spread further as the worm republished packages with stolen npm tokens. It matters because simply installing an affected version was enough to hand over a machine's secrets.
 
-I build with Node.js, TypeScript, Astro and Next.js, and this site's own lockfile pulls keyv in through ESLint, so I checked it. This take is part of my [Tech Stacks](/topics/tech-stacks) writing, and the build behind this site is described in my post on [Astro 7 for content sites](/blog/astro-7-content-sites).
+I build with Node.js, TypeScript, Astro and Next.js, and this site's own lockfile pulls keyv in through ESLint, so I checked it. This take is part of my [Tech Stacks](/topics/tech-stacks) writing, and the build behind this site is described in my post on [Astro 7 for content sites](/news/astro-7-content-sites).
 
 ## What happened?
 
@@ -107,6 +107,10 @@ The trust signals failed too. The keyv release had valid provenance and GitHub-v
 7. **If you publish packages, lock down publishing** (standard practice). npm's [trusted publishing docs](https://docs.npmjs.com/trusted-publishers) recommend requiring 2FA and disallowing tokens, and offer staged publishing that needs a 2FA approval per release.
 8. **Update Node.js while you are at it** (separate issue). The [October 21, 2026 security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) ships v22.23.4, v24.22.1 and v26.12.1, fixing four high-severity issues.
 
+Better Stack's general npm and pnpm hardening guide, not specific to keyv, shows how to disable install scripts and hold back brand-new versions:
+
+<YouTube id="Wq6yMdt11LM" title="npm installs can hack your laptop (Here's how to stop it)" channel="Better Stack" />
+
 ## What can we learn from it?
 
 Provenance answers "where was this built?" and not "is this safe?" The attacker controlled the source, so the honest pipeline signed a malicious package. Account 2FA alone is not enough either: Datadog found the worm used stolen npm tokens that could bypass 2FA.
@@ -114,3 +118,10 @@ Provenance answers "where was this built?" and not "is this safe?" The attacker 
 The campaign is also not over. In October, the same worm family reached tensorlake, a TypeScript SDK, through a rogue commit on October 7. [The Hacker News reports](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) that this version adds a monitor that wipes the home directory if the stolen GitHub token is revoked. That is why the order of cleanup now matters: find and remove persistence first, then rotate.
 
 Boring defaults helped this site. The lockfile pins keyv 4.5.4 and flat-cache 4.0.1 through ESLint 10.6.0, far from the poisoned versions. The pnpm config also allows build scripts for only two packages, esbuild and sharp. That combination does not stop every attack, but it turns "install the latest" into a reviewed change.
+
+## Where can you learn more?
+
+- [OWASP NPM Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/NPM_Security_Cheat_Sheet.html) - A checklist covering lockfiles, ignoring run-scripts, 2FA, token use and trusted publishing.
+- [About SLSA](https://slsa.dev/spec/v1.0/about) - The framework behind build provenance, with a plain statement of what it does and does not protect against.
+- [npm security best practices by Liran Tal](https://github.com/lirantal/npm-security-best-practices) - A maintained list of copy-paste settings for npm, pnpm and Bun, including install cooldowns and build-script allow-lists.
+- [The Railway security incident](/news/railway-security-incident-environment-variables) - My checklist for rotating secrets after a leak, which applies just as well after a poisoned install.

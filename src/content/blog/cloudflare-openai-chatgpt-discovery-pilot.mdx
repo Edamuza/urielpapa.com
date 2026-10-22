@@ -71,3 +71,14 @@ The access rules have not changed. OpenAI's [crawler documentation](https://deve
 2. **If you use Cloudflare, review its AI crawler settings.** [AI Crawl Control](https://developers.cloudflare.com/ai-crawl-control/) is available on all Cloudflare plans and sets allow or block rules for each AI crawler. A block there stops a bot even if robots.txt allows it.
 3. **Fix the patterns the pilot filters out.** Stop redirecting every missing URL to the homepage, return a real 404, and use canonical tags for duplicate pages.
 4. **Watch for chatgpt.com referrals** in GA4 over the next few months, so you have your own numbers before the companies publish theirs.
+
+Semrush walks through Cloudflare's AI crawler settings, including the separate choices for search, training and agents, which helps with step 2:
+
+<YouTube id="57owCIzdVzI" title="Whoa! Could This Cloudflare Click Deindex Your Site?" channel="Semrush" />
+
+## Where can you learn more?
+
+- [Cloudflare's managed robots.txt setting](https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/) - How Cloudflare can add AI crawler rules to your robots.txt for you, on all plans.
+- [Content Signals](https://contentsignals.org/) - Cloudflare's robots.txt directives for saying whether your content may be used for search, AI answers or AI training.
+- [Google's guide to canonical URLs](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls) - The ways to mark the preferred version of duplicate pages, from strongest to weakest.
+- [Any site can now opt out of Google AI Overviews and AI Mode](/news/google-search-generative-ai-control) - My take on Google's own setting for keeping a site out of its AI answers.

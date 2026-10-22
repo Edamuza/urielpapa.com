@@ -115,3 +115,14 @@ The Railway incident shows that a hosting platform is part of your security peri
 First, keep a short secrets inventory: what each key is, where it lives and how to rotate it. Second, use keys with the smallest scope and a spending limit where the provider allows it, so a stolen key can do less. Third, make misuse easier to spot. Railway's Google Cloud guide notes that with static outbound IPs, API calls from any other address suggest misuse, while shared IPs leave you guessing.
 
 None of this requires leaving Railway. It requires assuming that any place you store a secret can leak it, and planning for the day it does.
+
+IBM Technology's explainer covers secret sprawl, plaintext storage and rotation, the habits that make a week like this one shorter:
+
+<YouTube id="BqekRTA6VCs" title="Secrets Management: Secure Credentials & Avoid Data Leaks" channel="IBM Technology" />
+
+## Where can you learn more?
+
+- [OWASP Secrets Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html) - A vendor-neutral guide to storing, rotating and auditing secrets across a whole system.
+- [AWS guide to unauthorized activity in your account](https://repost.aws/knowledge-center/potential-account-compromise) - AWS's own steps to find unknown IAM users, access keys and charges, then secure the account.
+- [GitHub's guide to reviewing your security log](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/reviewing-your-security-log) - How to filter and export the last 90 days of activity on your GitHub account.
+- [The keyv npm worm](/news/keyv-npm-worm-supply-chain-attack) - My take on another 2026 incident that targeted developer secrets, and why removing persistence comes before rotating.

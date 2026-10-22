@@ -47,10 +47,10 @@ On October 17, the [DeepSeek change log](https://api-docs.deepseek.com/updates) 
 ## What changed, in plain words?
 
 * **Images, natively.** V4.1-Flash is the smallest model in DeepSeek's new architecture family and understands images without a separate vision model.
-* **A big model that runs small.** It is a 552-billion-parameter mixture-of-experts model that activates 8 billion parameters for input and 16 billion for output.
+* **A big model that runs small.** DeepSeek describes it as a 552-billion-parameter mixture-of-experts model that activates 8 billion parameters for input and 16 billion for output.
 * **Cheaper caching.** DeepSeek says its cache needs a quarter of the memory of the previous generation, which lowers cache-hit costs for agents.
 * **Large limits.** The [Models and Pricing page](https://api-docs.deepseek.com/quick_start/pricing) lists a 1-million-token context and up to 384K tokens of output.
-* **Open weights.** The release notes link the weights and a technical report, but do not state the license.
+* **Open weights.** The release notes link the weights and a technical report, and the Hugging Face model card (linked below) lists the MIT license.
 
 These are the prices per million tokens for `deepseek-flash`, as of October 2026:
 
@@ -59,6 +59,10 @@ These are the prices per million tokens for `deepseek-flash`, as of October 2026
 | Input, cache hit | US$0.006 | US$0.003 |
 | Input, cache miss | US$0.30 | US$0.15 |
 | Output | US$1.20 | US$0.60 |
+
+IBM's explainer on mixture-of-experts models shows how a model this large runs only a small part of itself for each token:
+
+<YouTube id="sYDlVVyJYn4" title="What is Mixture of Experts?" channel="IBM Technology" />
 
 ## What does it mean for small businesses and founders?
 
@@ -75,3 +79,10 @@ Open weights also give you a way out. If you later want the model hosted elsewhe
 * **Test image tasks.** Receipts, product photos and screenshots can now go to the same model as your text prompts.
 * **Read the data terms.** Before sending customer data, check DeepSeek's privacy policy and terms for where and how it is processed.
 * **Watch the new search fees.** DeepSeek's Search and Fetch tools are billed at US$0.75 per 1,000 requests from November 1, 2026, according to the pricing page.
+
+## Where can you learn more?
+
+- [DeepSeek-V4.1-Flash-1017 on Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) - The model card, with the weights, the technical report and the MIT license the card lists.
+- [DeepSeek's context caching guide](https://api-docs.deepseek.com/guides/kv_cache/) - How the automatic cache works, how to spot cache hits in the usage data and why hits are not guaranteed.
+- [DeepSeek's privacy policy](https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html) - Where DeepSeek stores personal data and how long it keeps it, worth reading before you send customer data.
+- [My take on GPT-6 Sol and Luna](/news/gpt-6-sol-luna) - What OpenAI's new models cost, including GPT-6 Luna, which lists below DeepSeek-V4.1-Flash at any hour.

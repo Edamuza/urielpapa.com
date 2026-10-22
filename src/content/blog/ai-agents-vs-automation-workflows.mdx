@@ -78,6 +78,10 @@ AI agents and automation workflows differ mainly in who decides the next step: y
 
 Anthropic's [guide to building effective agents](https://www.anthropic.com/engineering/building-effective-agents), published in December 2024, draws the same line. It calls workflows systems where models and tools run "through predefined code paths", and agents systems where models "dynamically direct their own processes and tool usage." The tools have changed since then, as the post itself notes, but the distinction still holds as of October 2026. In short, a workflow trades flexibility for control, and an agent trades control for flexibility.
 
+Barry Zhang, a co-author of Anthropic's guide, explains in this 15-minute talk when to build an agent and when a workflow is enough:
+
+<YouTube id="D7_ipDqhtwk" title="How We Build Effective Agents: Barry Zhang, Anthropic" channel="AI Engineer" />
+
 ## What is an automation workflow?
 
 An automation workflow is a chain of steps that runs the same way every time a trigger fires. Zapier's [key concepts guide](https://help.zapier.com/hc/en-us/articles/8496181725453-Learn-key-concepts-in-Zaps) puts it in three terms: "A trigger is an event that starts a Zap", an action is what the Zap does next, and a task is one action it completes successfully. n8n's [workflow documentation](https://docs.n8n.io/workflows/) describes the same idea as "a collection of nodes connected together to automate a process." Zapier, Make and n8n are the usual tools for this kind of work.
@@ -128,3 +132,10 @@ A small business should use the simplest option that does the job. Anthropic's g
 | Anything that moves money or deletes data | Workflow, or an agent that waits for a person | The cost of a wrong action is too high |
 
 For most small businesses, the workflow with an AI step covers the common jobs, and it is the one I would build first. Move a task to an agent only after the fixed version keeps hitting cases it cannot handle, and keep a person in the loop for any action you cannot undo.
+
+## Where can you learn more?
+
+- [OWASP Top 10 for Agentic Applications for 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) - A free, peer-reviewed list of the main security risks in AI agents, from the OWASP Gen AI Security Project.
+- [n8n's guide to human review for AI agent tools](https://docs.n8n.io/build/integrate-ai/ai-examples/human-in-the-loop-for-tools) - How to make an n8n AI Agent wait for a person's approval before it runs a risky tool.
+- [My take on the OpenCode MCP flaw](/news/opencode-mcp-oauth-rce) - A real case of an AI coding agent trusting a remote server, and what to check on your own machines.
+- [My take on Zapier Next Gen Zaps](/news/zapier-next-gen-zaps) - How Zapier pairs workflows built from an AI chat with an agent that watches runs and proposes fixes.

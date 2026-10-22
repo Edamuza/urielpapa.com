@@ -109,6 +109,10 @@ Here is my workflow node by node, in the order a message passes through it:
   Keep the system prompt short and specific. It is sent with every message, so every extra sentence adds tokens to every reply. My post on [what tokenization is](/blog/what-is-tokenization) explains why that matters for cost.
 </Callout>
 
+n8n's own beginner course explains APIs and webhooks, the two pieces that carry each message into and out of this workflow:
+
+<YouTube id="y_cpFMF1pzk" title="n8n Beginner Course (2/9) - Introduction to APIs and Webhooks" channel="n8n" />
+
 ## What does it cost to run?
 
 | Item                         | Monthly cost       | Notes                                                                                  |
@@ -144,3 +148,10 @@ Build the handover in from the start. Have the model return a clear flag when it
 * Every conversation is logged with its channel and outcome.
 * You know your expected monthly token use and have set a spending limit where your provider allows it.
 * Your privacy notice covers storing messages and contact details.
+
+## Where can you learn more?
+
+- [Meta's guide to webhooks for the Messenger Platform](https://developers.facebook.com/documentation/business-messaging/messenger-platform/webhooks) - How Meta verifies your webhook, signs each payload and retries when your server does not answer within 5 seconds.
+- [n8n's Webhook node documentation](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook) - The difference between test and production URLs, and the ways a workflow can respond to a webhook.
+- [OpenRouter's quickstart guide](https://openrouter.ai/docs/quickstart) - The endpoint, headers and request format for calling any model in OpenRouter's catalog.
+- [n8n's guide to self-hosting with Docker Compose](https://docs.n8n.io/deploy/host-n8n/install-options/use-a-cloud-provider/use-docker-compose) - How to run n8n on a Linux server with your own domain and HTTPS, which Meta's webhook needs.

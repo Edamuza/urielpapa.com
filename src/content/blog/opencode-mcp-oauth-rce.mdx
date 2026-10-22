@@ -98,6 +98,10 @@ The lessons apply to OpenCode, Claude Code, Cursor and any other agent:
 
 For people who build these tools, Pillar's advice is to pass URLs as program arguments instead of building shell commands from them, to bind OAuth discovery to the configured server's origin, and to test on Windows too.
 
+A Microsoft security engineer's BlueHat 2026 talk covers the wider MCP attack surface, including trusted tools that turn malicious later:
+
+<YouTube id="cVWB58kEt-Y" title="BlueHat 2026: Securing the future of AI: Securing MCP with defense in depth patterns" channel="Microsoft Security Response Center (MSRC)" />
+
 ## What should you do now?
 
 1. **Find every OpenCode install.** Check Windows and WSL machines first. For a global npm install, `npm ls -g opencode-ai` prints the installed version.
@@ -108,3 +112,10 @@ For people who build these tools, Pillar's advice is to pass URLs as program arg
 6. **Run agents on untrusted code in a sandbox**, such as a container, a virtual machine or a separate user account.
 7. **If you got OpenCode's October 17 email about Console keys**, revoke and replace those keys in each provider's dashboard. Deleting a key from Console does not revoke it.
 8. **Track AI tool versions by hand for now.** Without a CVE, your scanner will not do it for you.
+
+## Where can you learn more?
+
+- [The MCP security best practices](https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices) - The protocol's own guidance, including a section on validating OAuth sign-in URLs and never opening them through a shell.
+- [CWE-78 at MITRE](https://cwe.mitre.org/data/definitions/78.html) - The formal description of OS command injection, the weakness class Pillar assigned to this flaw.
+- [OWASP Top 10 for Agentic Applications for 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) - A free, peer-reviewed list of the main security risks in AI agents, from the OWASP Gen AI Security Project.
+- [My take on the keyv npm worm](/news/keyv-npm-worm-supply-chain-attack) - Another 2026 attack where installing one package was enough to hand over a developer machine's secrets.

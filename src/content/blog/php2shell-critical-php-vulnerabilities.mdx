@@ -81,6 +81,10 @@ On exploitation, the sources are careful. [CISA's alert](https://www.cisa.gov/ne
 
 The CVSS vector rates attack complexity as high, so not every site will fall to the same request. Even so, a remote attack that needs no login, on software as widely used as PHP, is the kind of bug worth patching the same day.
 
+Kevin Powell's video covers the same flaws, including where the "70% of the internet" headline comes from and why so many sites are stuck without a fix:
+
+<YouTube id="cBD1AgkM1VQ" title="This PHP vulnerability is a big deal" channel="General Musings with Kevin Powell" />
+
 ## What does it mean for small businesses and founders?
 
 Many small business websites, in the Philippines and elsewhere, run on WordPress with shared or managed hosting. On that kind of hosting, the PHP version belongs to the host, not to you. Your job is to confirm the host has patched, and to move off old PHP versions if your site is still on one.
@@ -103,3 +107,9 @@ For businesses with a custom Laravel app on a VPS or in Docker, the job is yours
 The biggest lesson is that patching is only half the job if nobody knows which PHP version is live. A site can show the right version on the command line and still serve pages from an old worker. A short list of every site, its host and its PHP version saves hours on days like this.
 
 The second lesson is that hosting choice is a security choice. With managed hosting, the host carries the patch, and you only need to confirm it. With your own server, you get more control and more responsibility. Either is fine, as long as someone owns the update when the next critical release lands.
+
+## Where can you learn more?
+
+- [PHP's supported versions page](https://www.php.net/supported-versions.php) - The official dates when each PHP branch stops getting security fixes, so upgrades can be planned before they are urgent.
+- [WordPress's guide to updating PHP](https://wordpress.org/support/update-php/) - Why WordPress recommends PHP 8.3 or newer, as of October 2026, and how to prepare a site before switching.
+- [NIST SP 800-40 Rev. 4, Guide to Enterprise Patch Management Planning](https://csrc.nist.gov/pubs/sp/800/40/r4/final) - NIST's guide to treating patching as routine maintenance rather than an emergency.

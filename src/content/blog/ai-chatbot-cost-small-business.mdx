@@ -156,6 +156,10 @@ Keeping chatbot costs low mostly means sending fewer tokens and choosing a platf
 
 Caching changes the example. If the 6,000 system-prompt tokens per conversation are read from cache on GPT-6 Luna, they cost 6 × US$0.01 = US$0.06 per 1,000 conversations. The other 2.25 million input tokens cost US$0.23, and output stays at US$0.38. That is about US$0.66 instead of US$1.20, before the small cost of writing the cache.
 
+OpenAI's own Build Hour shows how prompt caching works and how to order a prompt so more of it is read from cache:
+
+<YouTube id="tECAkJAI_Vk" title="Build Hour: Prompt Caching" channel="OpenAI" />
+
 ## Should you build the chatbot yourself or hire someone?
 
 Building an AI chatbot yourself costs time instead of money, and hiring someone costs money but saves the learning curve. A DIY build means creating a Meta app, connecting a webhook and writing the prompt. If you self-host, you also run n8n with Docker on a server you keep updated. My [n8n chatbot guide](/blog/n8n-messenger-instagram-chatbot) walks through nine steps, from the Meta app to going live.
@@ -170,3 +174,10 @@ If you hire, ask four things:
 4. Who updates the system prompt when your prices or services change?
 
 Either way, budget for upkeep. A chatbot stays cheap only while someone keeps its prompt, prices and handover rules current.
+
+## Where can you learn more?
+
+- [Anthropic's prompt caching documentation](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) - How caching works on Claude models, including minimum prompt lengths, cache lifetime and what cache writes and reads cost.
+- [My take on WhatsApp's service message charges](/news/whatsapp-service-message-charges) - What changed on October 1, 2026, and what a WhatsApp chatbot should check before its bill does.
+- [My take on Claude Haiku 5.5](/news/claude-haiku-5-5) - What Anthropic's small model costs, and where its price step above 100,000 tokens applies.
+- [My take on GPT-6 Sol and Luna](/news/gpt-6-sol-luna) - What OpenAI's cheaper GPT-6 models cost, and what to change in an app that uses them.

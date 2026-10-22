@@ -70,6 +70,10 @@ According to [Mozilla's incident report, bug 2083449](https://bugzilla.mozilla.o
 
 A researcher named Wayne found the weak keys on October 17, 2026 and reported them to the root programs. In its [October 21 filing to the BSE and NSE](https://www.bseindia.com/xml-data/corpfiling/AttachLive/6be0c423-b335-494b-86f3-54c561c3a5f9.pdf), eMudhra blamed a flaw in its key generation ceremony. A wrap and unwrap step created a second set of weak keys, and those weak keys were the ones published.
 
+IBM Technology's explainer covers how public key infrastructure and HTTPS work, which makes the role of a certificate authority easier to follow:
+
+<YouTube id="0ctat6RBrFo" title="Tech Talk: What is Public Key Infrastructure (PKI)?" channel="IBM Technology" />
+
 ## Who is affected?
 
 Three groups need to pay attention, and one group can relax.
@@ -126,3 +130,9 @@ E-signatures and document signing deserve the same question. eMudhra says its In
 The first lesson is that audits are not proof. eMudhra says this hierarchy passed independent audits two years in a row. The weak keys still went unnoticed for about 17 months. The second lesson is that fast revocation works where it exists. Browsers blocked the certificates within hours, while servers and runtimes needed manual updates across dozens of projects.
 
 The third lesson is to automate certificates. About 97 percent of the affected eMudhra certificates came through ACME, so for most owners switching CA should be a configuration change, not a project. Automated renewal and regular updates make the next CA failure a routine fix.
+
+## Where can you learn more?
+
+- [How Let's Encrypt works](https://letsencrypt.org/how-it-works/) - How ACME proves you control a domain and gets certificates issued without manual steps, which is what makes switching CA a configuration change.
+- [How Certificate Transparency works](https://certificate.transparency.dev/howctworks/) - Why certificates go into public logs, and how domain owners can subscribe to a monitor for their own domains.
+- [Qualys SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - A free tool that analyzes how a public web server is set up for HTTPS, including the certificates it serves.

@@ -73,6 +73,10 @@ The 100,000-token step matters more than the headline price. A support bot with 
 
 I use Claude models for my custom Claude skills and my Claude Code work. For that kind of setup, Anthropic positions Haiku 5.5 as a subagent alongside Sonnet 5.5 and Opus 5.5, handling the high-volume steps.
 
+PostHog tested Haiku 5.5 as a team of subagents under Opus on a real codebase, and it also covers the price step that can cost five times more:
+
+<YouTube id="jtqY9yEzFrc" title="Claude Haiku 5.5: Don't Use It Like a Normal Model" channel="PostHog" />
+
 ## What should you do now?
 
 * **Re-run your own tests.** Try your real prompts on Haiku 5.5 before switching, and compare answers with your current model.
@@ -80,3 +84,10 @@ I use Claude models for my custom Claude skills and my Claude Code work. For tha
 * **Stay under 100K tokens per prompt.** Trim history and documents so most requests stay in the cheaper tier.
 * **Use prompt caching.** Cache reads cost US$0.01 per million tokens, so a repeated system prompt becomes almost free.
 * **Check your subscription.** On Max or Team, look for the new monthly API credit before paying for API usage separately.
+
+## Where can you learn more?
+
+- [Anthropic's guide to prompting Claude Haiku 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-haiku-5-5) - Tips for this model on effort, search, early stopping and keeping chatbots to their system prompt.
+- [Anthropic's effort documentation](https://platform.claude.com/docs/en/build-with-claude/effort) - What each effort level does, and why low suits chat and simple, high-volume requests.
+- [Anthropic's token counting guide](https://platform.claude.com/docs/en/build-with-claude/token-counting) - How to recount your prompts for free on the new model before you estimate costs.
+- [My post on GPT-6 Sol and Luna](/news/gpt-6-sol-luna) - OpenAI's cheap Luna model, at the same headline price per token as Haiku 5.5.

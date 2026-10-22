@@ -72,4 +72,14 @@ The cost of all this is migration work. Code that relied on the old implicit cac
 * **Running a mostly static site:** add `ensureStatic` to the layouts that should never render per request.
 * **Planning ahead:** treat Next.js 17 as a migration, not a routine bump, and put it on the calendar now.
 
-If your site is mostly content rather than an app, my take on [Astro 7 for content sites](/blog/astro-7-content-sites) covers a framework built for that case.
+Vercel's hands-on session shows how to migrate an app to Next.js 16 and the `use cache` directive, step by step:
+
+<YouTube id="Bk0ZAi2aV5w" title={'Hands On: How To Migrate To Next.js 16 and "Use Cache”'} channel="Vercel" />
+
+If your site is mostly content rather than an app, my take on [Astro 7 for content sites](/news/astro-7-content-sites) covers a framework built for that case.
+
+## Where can you learn more?
+
+- [Next.js caching guide](https://nextjs.org/docs/app/getting-started/caching) - The official guide to Cache Components, `use cache`, `cacheLife` and how the static shell is built.
+- [The `use cache` directive reference](https://nextjs.org/docs/app/api-reference/directives/use-cache) - The full reference for what can be cached, how cache keys work and the limits to know.
+- [My take on React 19.3 and View Transitions](/news/react-19-3-view-transitions) - What the React release that ships with Next.js 16.4 adds, and what to test before upgrading.

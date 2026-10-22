@@ -104,6 +104,10 @@ Zapier and Make are hosted services only. Zapier's [data privacy overview](https
 
 So if a client contract or privacy rule says where data must be stored, n8n self-hosted gives you the most control. Make's EU region is the next option, and Zapier fits when US hosting is acceptable.
 
+n8n's own video from August 2026 shows the current way to install the free Community edition on your own machine with one command:
+
+<YouTube id="t5RBVTby9EU" title="New Self-Hosting n8n Locally + AI Assistant Setup" channel="n8n" />
+
 ## Which tool is easiest to learn?
 
 Zapier is the easiest of the three for someone who has never built an automation. A Zap is a trigger followed by a list of action steps, read from top to bottom. Every plan also includes Copilot, Zapier's AI assistant. The catch is the Free plan, which only allows two-step Zaps, so most real workflows need a paid plan from the start.
@@ -147,3 +151,10 @@ Switching between n8n, Zapier and Make means rebuilding each workflow, because n
 The rebuild is only part of the work. You reconnect every account, update webhook URLs in the apps that call the workflow, and test each path again. For my chatbot, moving would mean changing the webhook URL in the Meta app settings and testing both Messenger and Instagram again.
 
 So pick the tool you expect to keep for a few years, not only the cheapest one this month. If you do move, start with the workflows that run most often, because they save the most money.
+
+## Where can you learn more?
+
+- [Zapier's guide to how task usage is measured](https://help.zapier.com/hc/en-us/articles/8496196837261-How-is-task-usage-measured-in-Zapier) - Which steps count as tasks, which are free, and what happens when you reach your plan's limit.
+- [n8n's guide to self-hosting with Docker Compose](https://docs.n8n.io/deploy/host-n8n/install-options/use-a-cloud-provider/use-docker-compose) - A step-by-step setup of n8n on a Linux server with your own domain and HTTPS.
+- [My take on Zapier Next Gen Zaps](/news/zapier-next-gen-zaps) - Zapier's new workflows that you describe in an AI tool and deploy, with an agent that proposes fixes.
+- [My take on Maia by Make](/news/make-maia-ai-automation-builder) - How Make's AI assistant builds automations from plain language, and what it costs in credits.

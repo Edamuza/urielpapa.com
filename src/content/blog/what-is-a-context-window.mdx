@@ -74,6 +74,10 @@ Everything you send lands in that space. That includes the system prompt, your q
 
 Anthropic also calls the context window the model's "working memory", separate from the data it was trained on. So a context window is the full set of tokens a model can see and write in one request, and nothing more.
 
+IBM Technology's 11-minute explainer walks through what a context window holds and how it shapes a conversation:
+
+<YouTube id="-QVoIxEpFkM" title="What is a Context Window? Unlocking LLM Secrets" channel="IBM Technology" />
+
 ## How does a context window relate to tokens?
 
 Context windows are measured in tokens, not words or pages. A token is a small piece of text, and each model family splits text its own way. I explain how in [what tokenization is and why it sets AI costs](/blog/what-is-tokenization). The same document can therefore fill a different share of the window in Claude, GPT or Gemini.
@@ -143,3 +147,10 @@ A context window, memory and training data are three different places where a mo
 Training data stops at a cutoff. Anthropic lists June 2026 for its current Claude models, and OpenAI lists April 30, 2026 for GPT-6.1 Sol. Anything newer has to come in through the context window, for example from a web search or a document you attach.
 
 Memory features still work through the context window. Anthropic's [memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool) lets Claude save files that persist between sessions, then read the relevant ones back in when a task needs them. My chatbot's Google Sheet log works the same way on a small scale. A model only "remembers" what is loaded into its context window for the current request.
+
+## Where can you learn more?
+
+- [Anthropic's guide to effective context engineering for AI agents](https://www.anthropic.com/research/effective-context-engineering-for-ai-agents) - How to choose what goes into the context window, with compaction, note-taking and subagents for long tasks.
+- [Chroma's Context Rot report](https://www.trychroma.com/research/context-rot) - A 2025 test of 18 models showing that answers get less reliable as the input grows, even on simple tasks.
+- [Anthropic's compaction overview](https://platform.claude.com/docs/en/build-with-claude/compaction) - How Claude can summarize older turns on the server, and which compaction option fits your app.
+- [OpenAI's compaction guide](https://developers.openai.com/api/docs/guides/compaction) - How to shrink a long conversation in the Responses API, at a token threshold or on demand.

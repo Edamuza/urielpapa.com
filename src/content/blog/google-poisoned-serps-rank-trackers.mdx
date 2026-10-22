@@ -44,7 +44,7 @@ draft: false
 ---
 Google has been answering rank trackers with swapped search results since September 2026, according to the rank-tracking company Nozzle. Nozzle measured that 8.4% of the Google results pages it judged since September 13 were "poisoned": complete, normal-looking pages with most of the real results replaced. For anyone who reads rankings in Ahrefs, Semrush or a similar tool, some of the drops reported since late September did not happen to real searchers.
 
-I use Ahrefs to track search performance for client WordPress sites, Semrush for keyword research and competitor checks from my agency's SEO work, and Google Search Console on client sites, so this lands right in my reporting. This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. It is a different story from the [fake Claude ads that poisoned Google results for searchers](/blog/google-search-poisoning-fake-claude-ads): this one is about the data SEO tools collect.
+I use Ahrefs to track search performance for client WordPress sites, Semrush for keyword research and competitor checks from my agency's SEO work, and Google Search Console on client sites, so this lands right in my reporting. This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. It is a different story from the [fake Claude ads that poisoned Google results for searchers](/news/google-search-poisoning-fake-claude-ads): this one is about the data SEO tools collect.
 
 ## What happened?
 
@@ -53,6 +53,10 @@ Nozzle published [Poisoned Google SERPs](https://nozzle.io/research/poisoned-goo
 The scale is the striking part. Nozzle judged 27.0 million results pages since September 13, across 52 countries and desktop, iPhone and Android. Of those, 8.4% were poisoned, against 0.17% in the baseline weeks. From September 27 to 29, more than a quarter of each day's pages were poisoned, peaking at 28.6% on September 29. The rate eased to about 3% on October 14, then rose to 7.0% on October 18, so Nozzle says it is too early to call it over. (The first October 10 version reported 8.0%, as [PPC Land noted](https://ppc.land/google-feeds-rank-trackers-swapped-results-on-8-of-pages-nozzle-finds/).)
 
 Other vendors saw it too. On October 22, 2026, Ahrefs published [An update on Google's poisoning of search results](https://ahrefs.com/blog/serp-data-update/), saying that "between 5% and 20%" of search results were affected, depending on the data provider. [Search Engine Roundtable](https://www.seroundtable.com/third-party-google-rank-tracking-broken-42272.html) collected statements from Semrush, SE Ranking, SISTRIX and others.
+
+Barry Schwartz's weekly Search Engine Roundtable recap covers the rank tracker problem in its first segment, from about the one-minute mark:
+
+<YouTube id="OvCdu0Uiil8" title="Google Poisoning Tracking Tools, Google AI Results Updates, Discover To Change, Ads, ChatGPT & SEO" channel="RustyBrick Barry Schwartz Search Engine Roundtable" />
 
 ## What changed, in plain words?
 
@@ -113,3 +117,9 @@ For a small business, the practical cost is bad decisions. Rewriting a page, fir
 3. **Ask your tool vendor how they handle it.** Ask whether they detect and reject poisoned pages, whether past data was cleaned up, and how they flag affected keywords. Ahrefs and Semrush have both said they filter results.
 4. **Add a note to client or team reports.** Mark late September and October 2026 tracker data as unreliable, so nobody reads a temporary dip as a trend.
 5. **Wait before you rewrite.** A real ranking change stays. Give a sudden drop a few days and a Search Console check before changing pages that were working.
+
+## Where can you learn more?
+
+- [Search Console's Performance report help](https://support.google.com/webmasters/answer/7576553) - How to read clicks, impressions and average position for a query or page, the numbers to check before trusting a tracker.
+- [Google Search Status Dashboard](https://status.search.google.com/) - Google's official record of ranking updates and service incidents, worth checking before blaming a page.
+- [Google September 2026 spam update](/news/google-september-2026-spam-update) - My take on the spam update that rolled out in the same weeks, a real cause of some late-September drops.

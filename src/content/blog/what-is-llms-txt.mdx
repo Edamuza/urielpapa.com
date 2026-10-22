@@ -106,6 +106,10 @@ The AI companies send the same mixed signal. OpenAI's [crawler documentation](ht
 
 The server logs agree. Ahrefs [analyzed 137,210 sites](https://ahrefs.com/blog/llmstxt-study/) and found that 28% published an llms.txt, but 97% of those files received no requests in May 2026. AI search bots made only 1.1% of the requests that did arrive, and OAI-SearchBot 0.74%.
 
+In this Search Off the Record episode, Google's Martin Splitt and John Mueller ask whether llms.txt and Markdown copies are worth the effort:
+
+<YouTube id="Vkn3R6DUJ34" title="Should I use markdown for my site?" channel="Google Search Central" />
+
 ## How is llms.txt different from robots.txt and sitemap.xml?
 
 llms.txt, robots.txt and sitemap.xml are all plain files that crawlers fetch from your site, but they do different jobs for different readers:
@@ -169,3 +173,10 @@ Adding llms.txt takes one of two routes: a static file you write by hand, or a r
 4. **Check it.** Open yoursite.com/llms.txt, confirm it loads as plain text and every link works, and run the Lighthouse audit if you use it.
 
 Then leave it alone. A generated file updates itself, while a hand-written one needs a look each time you add an important page. To see whether AI tools actually cite you, test the answers directly, as I describe in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+## Where can you learn more?
+
+- [RFC 9309, the Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) - the IETF standard behind robots.txt, the file that actually controls crawler access.
+- [The sitemaps.org protocol](https://www.sitemaps.org/protocol.html) - the XML sitemap format, with every tag and the limit of 50,000 URLs per file.
+- [The llms.txt repository on GitHub](https://github.com/AnswerDotAI/llms-txt) - the source of the proposal, where changes to the format are tracked and discussed in the open.
+- [Yoast's guide to enabling llms.txt](https://yoast.com/help/enable-llmstxt/) - the steps to switch on the generated file in Yoast SEO and pick its pages by hand.

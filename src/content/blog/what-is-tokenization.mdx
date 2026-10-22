@@ -104,6 +104,10 @@ So a 5-word sentence becomes about 10 tokens in this example. Short sentences wi
   Tokenizers differ between models. The same text can be a different number of tokens in Claude, GPT, Gemini or Gemma, so always count with the tokenizer of the model you plan to use.
 </Callout>
 
+To see a tokenizer built step by step, Andrej Karpathy's two-hour lecture builds the GPT tokenizer from scratch with byte pair encoding:
+
+<YouTube id="zduSFxRajkE" title="Let's build the GPT Tokenizer" channel="Andrej Karpathy" />
+
 ## Why do tokens decide what AI costs?
 
 Providers charge per token, usually quoted per million tokens, with one price for input (what you send) and a higher price for output (what the model writes back). Every request is billed as input tokens times the input price plus output tokens times the output price.
@@ -157,3 +161,11 @@ To estimate the cost of an AI feature before you build it:
   Rates change often, so check each provider's pricing page before you budget around them.
 
 Context windows deserve a post of their own, and they are one of the topics in this hub.
+
+## Where can you learn more?
+
+- [Anthropic's token counting guide](https://platform.claude.com/docs/en/build-with-claude/token-counting) - How to count the tokens in a Claude request before you send it, with a free endpoint.
+- [Google's guide to understanding and counting tokens](https://ai.google.dev/gemini-api/docs/tokens) - How Gemini counts text, images and other input, before or after a request.
+- [OpenAI's tiktoken library](https://github.com/openai/tiktoken) - The open-source tokenizer for OpenAI models, for counting tokens in your own code.
+- [Hugging Face's course chapter on tokenizers](https://huggingface.co/learn/llm-course/chapter6/1) - A hands-on walk through the main subword tokenization methods and how to train a tokenizer.
+- [My post on Claude Haiku 5.5's prices and limits](/news/claude-haiku-5-5) - A real example of a new tokenizer changing token counts, and what that does to the price.
