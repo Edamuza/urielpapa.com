@@ -1,0 +1,77 @@
+---
+title: 'DeepSeek-V4.1-Flash: Open Weights, Vision and Peak-Hour Pricing'
+seoTitle: 'DeepSeek-V4.1-Flash: What Changed and What It Costs'
+description: >-
+  DeepSeek-V4.1-Flash adds image input and open weights at a very low price.
+  What changed, how peak pricing lines up with Manila hours, and what to check.
+dek: >-
+  DeepSeek's new Flash model is cheap, open-weight and now reads images. Its
+  peak hours also fall right in the Philippine working day.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    DeepSeek released DeepSeek-V4.1-Flash on September 10, 2026, with native
+    image understanding and open weights on Hugging Face.
+  - >-
+    DeepSeek-V4.1-Flash costs US$0.30 per million input tokens and US$1.20 per
+    million output tokens at peak, and half that off-peak.
+  - >-
+    DeepSeek's peak hours, 01:00 to 04:00 and 06:00 to 10:00 UTC on weekdays,
+    are 9 a.m. to noon and 2 p.m. to 6 p.m. in Manila.
+  - >-
+    DeepSeek-V4.1-Flash is a 552-billion-parameter mixture-of-experts model with
+    a 1-million-token context and up to 384K tokens of output.
+businessImpact: []
+sourceUrl: https://api-docs.deepseek.com/news/news260910
+published: 2026-10-22
+related:
+  - what-is-tokenization
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+DeepSeek has released DeepSeek-V4.1-Flash, a new low-cost model that reads images as well as text and ships with open weights. It replaces DeepSeek's earlier Flash models in the API, and an October 17 update improved it again at the same price. For businesses in the Philippines, the detail to notice is that DeepSeek's peak-price hours fall in the middle of the local working day.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. My post on [what tokenization is](/blog/what-is-tokenization) explains the per-token prices below.
+
+## What happened?
+
+On September 10, 2026, DeepSeek published the [DeepSeek-V4.1-Flash release notes](https://api-docs.deepseek.com/news/news260910). The model is live in the DeepSeek API under the name `deepseek-flash`, and its weights are on Hugging Face under the deepseek-ai organization. The older V4-Flash and V4-Flash-Vision-Exp models were retired, and their names now route to the new model.
+
+On October 17, the [DeepSeek change log](https://api-docs.deepseek.com/updates) recorded an update to DeepSeek-V4.1-Flash-1017. DeepSeek says the call method and pricing are unchanged, with better benchmark results and shorter outputs.
+
+## What changed, in plain words?
+
+* **Images, natively.** V4.1-Flash is the smallest model in DeepSeek's new architecture family and understands images without a separate vision model.
+* **A big model that runs small.** It is a 552-billion-parameter mixture-of-experts model that activates 8 billion parameters for input and 16 billion for output.
+* **Cheaper caching.** DeepSeek says its cache needs a quarter of the memory of the previous generation, which lowers cache-hit costs for agents.
+* **Large limits.** The [Models and Pricing page](https://api-docs.deepseek.com/quick_start/pricing) lists a 1-million-token context and up to 384K tokens of output.
+* **Open weights.** The release notes link the weights and a technical report, but do not state the license.
+
+These are the prices per million tokens for `deepseek-flash`, as of October 22, 2026:
+
+| Item | Peak | Off-peak |
+| --- | --- | --- |
+| Input, cache hit | US$0.006 | US$0.003 |
+| Input, cache miss | US$0.30 | US$0.15 |
+| Output | US$1.20 | US$0.60 |
+
+## What does it mean for small businesses and founders?
+
+DeepSeek-V4.1-Flash is cheap, but it is not the lowest list price. OpenAI lists [GPT-6 Luna](https://developers.openai.com/api/docs/pricing) at US$0.10 input and US$0.50 output per million tokens, below DeepSeek's rates at any hour. DeepSeek's case rests on very cheap cache hits, image input, long outputs and open weights. Here is a rough estimate with the chatbot volume from my tokenization post: about 2 million input tokens and 150,000 output tokens a month. At peak rates, that is 2 × US$0.30 plus 0.15 × US$1.20, or about US$0.78. Off-peak, it is about US$0.39. These are estimates, not a bill.
+
+The timing matters more here than with other providers. DeepSeek's peak hours are 01:00 to 04:00 and 06:00 to 10:00 UTC, Monday to Friday, excluding Chinese public holidays. In Manila, at UTC+8, that is 9 a.m. to noon and 2 p.m. to 6 p.m. A customer chatbot answering during office hours pays the peak rate. A nightly batch job, such as tagging the day's inquiries or summarizing reports, can run off-peak at half the price.
+
+Open weights also give you a way out. If you later want the model hosted elsewhere, or on your own hardware, the weights are available. A 552-billion-parameter model still needs serious hardware, so most small businesses will use it through an API.
+
+## What should you do now?
+
+* **Update old model names.** If your code still calls `deepseek-v4-flash`, it already reaches the new model. Switch to `deepseek-flash` so the name matches what you get.
+* **Schedule batch work off-peak.** Move jobs that do not need an instant answer to Manila evenings or weekends.
+* **Test image tasks.** Receipts, product photos and screenshots can now go to the same model as your text prompts.
+* **Read the data terms.** Before sending customer data, check DeepSeek's privacy policy and terms for where and how it is processed.
+* **Watch the new search fees.** DeepSeek's Search and Fetch tools are billed at US$0.75 per 1,000 requests from November 1, 2026, according to the pricing page.

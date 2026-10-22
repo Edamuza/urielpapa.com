@@ -1,0 +1,117 @@
+---
+title: 'Railway Security Incident: What Happened and What to Rotate Now'
+seoTitle: 'Railway Security Incident: What to Rotate Now'
+description: >-
+  Railway says an attacker may have read and decrypted customer environment
+  variables in October 2026. What happened, who is affected and what to rotate.
+dek: >-
+  Railway, the app hosting platform, disclosed that customer environment
+  variables may have been accessed and decrypted. Here is the timeline, what
+  is still unknown and a checklist for anyone hosting there.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    On October 21, 2026, Railway disclosed anomalous activity in the systems
+    that store customer environment variables, and said some values may have
+    been decrypted by an unauthorized third party.
+  - >-
+    Railway tells every customer to roll all environment variables, API keys
+    and private registry credentials stored on the platform, and to review logs
+    for unusual activity.
+  - >-
+    Railway paused all builds during the investigation, invalidated every
+    Railway API token and signed users out of OAuth sessions, then restored
+    builds plan by plan starting with Enterprise.
+  - >-
+    Railway links the attack to a series targeting platform companies to reach
+    AI inference providers, so AI provider keys stored on Railway deserve to be
+    rotated first.
+businessImpact: []
+sourceUrl: https://blog.railway.com/p/security-disclosure-wednesday-october-21st
+published: 2026-10-22
+related:
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack:
+  - github
+faq:
+  - q: Are sealed variables on Railway safe from this incident?
+    a: >-
+      Not confirmed. Sealed variables cannot be read back through Railway's UI,
+      API or CLI, but the disclosure does not say whether they were in scope,
+      so GitGuardian recommends rotating them too. I would treat them like
+      every other secret until Railway says otherwise.
+  - q: Do I need to move off Railway because of this?
+    a: >-
+      Not necessarily. The urgent job is rotating secrets and checking logs,
+      which you would need to do wherever you moved. Decide on hosting later,
+      once Railway publishes how the attacker got in and what it changed.
+event: {}
+syndication: []
+draft: false
+---
+Railway, the app hosting platform, disclosed on October 21, 2026 that an unauthorized third party may have accessed the encrypted environment variables of its customers, and decrypted some of them. Environment variables are where most apps keep their secrets: database passwords, cloud keys, GitHub tokens and AI provider API keys. If you host anything on Railway, assume your secrets are exposed until you have rotated them.
+
+This one is close to home. [TravelEase](/projects/travelease), the tourism portal my capstone team built, is hosted on Vercel and Railway. This take is part of my [Tech Stacks](/topics/tech-stacks) writing, and it applies to anyone who keeps API keys on a hosting platform, including the [n8n and OpenRouter chatbot setup](/blog/n8n-messenger-instagram-chatbot) I wrote about.
+
+## What happened?
+
+Railway detected "anomalous activity involving systems that store customer environment variables" on the morning of October 21, according to its [security disclosure](https://blog.railway.com/p/security-disclosure-wednesday-october-21st), written by Jacob Cooper. The company believes the attack is part of a series aimed at platform companies, with the goal of compromising AI inference providers. Railway says it notified upstream providers so they could revoke keys proactively.
+
+The [Railway status page incident](https://status.railway.com/incident/QH8L8B3E) shows how the response unfolded. All times below are UTC; add eight hours for Manila time.
+
+| Time (UTC)       | What happened                                                                                     |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| Oct 21, 07:24    | Railway starts investigating an issue                                                             |
+| Oct 21, 09:28    | Dashboard, API and CLI are down; builds paused in all regions                                     |
+| Oct 21, 20:19    | OAuth sessions invalidated; affected users must log in again                                      |
+| Oct 21, 21:59    | Security notice published; customers told to rotate variables and review logs                    |
+| Oct 21, 22:10    | Railway starts rotating all bucket credentials                                                    |
+| Oct 22, 01:22    | Railway publishes guides on recommended security steps                                            |
+| Oct 22, 03:32    | Builds return for Enterprise; Pro, Hobby, Free and Trial to follow                                |
+| Oct 22, 04:17    | All Railway API tokens invalidated; users need new tokens                                         |
+| Oct 22, 06:29    | Builds available for Pro and Enterprise                                                           |
+| Oct 22, 12:30    | Deployment wait times improving; Hobby next, then Free and Trial                                  |
+
+As of the 12:30 UTC update on October 22, the incident was still marked "Identified," and Hobby, Free and Trial builds had not returned yet.
+
+## Who is affected?
+
+Railway's initial analysis suggests the impact "may be limited to a subset of users," and the company says it will email affected accounts. The review is still ongoing, which is why the disclosure asks every customer, not only the emailed ones, to roll their secrets.
+
+Railway has not said how many accounts are in that subset, how the attacker got in or how the decryption happened. Sealed variables are another open question. [Railway's variables docs](https://docs.railway.com/guides/variables) say a sealed value is never shown in the UI and cannot be retrieved through the API or CLI. GitGuardian's [analysis of the incident](https://blog.gitguardian.com/railway-october-2026-incident-environment-variables/) notes the disclosure does not say whether sealed variables were in scope, and recommends rotating them as well. Until Railway answers these questions, every Railway user should act as if affected.
+
+## How serious is it?
+
+The Railway incident is serious because environment variables are keys to other systems. A leaked AWS key, a GitHub token or a database password lets an attacker act outside Railway, in your cloud account, your code or your customer data. Railway's own follow-up guides for [AWS](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-aws-access), [Google Cloud](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-gcp-access) and [GitHub](https://blog.railway.com/p/security-disclosure-recommendation-check-for-anomalous-github-access) show where the damage can spread: new IAM users, new compute instances, surprise charges and webhooks that survive a password reset.
+
+There are early signs of real losses. Blockchain investigator Taylor Monahan estimated about US$371,000 in crypto theft across at least 19 networks, with a first theft transaction at 19:36 UTC on October 21, as [reported by crypto.news](https://crypto.news/railway-security-breach-linked-to-371000-crypto-theft-across-19-chains/). That figure is an outside estimate. Railway has not confirmed it, or how wallet credentials were obtained. In short, this is a credential exposure with reported abuse, not just an outage.
+
+## What does it mean for small businesses and founders?
+
+Railway is popular with small teams because it removes server work: push code, set a few variables, and the app is live. The same convenience means one platform holds the keys to everything else the business runs on. For a founder in Manila with a booking app or a client portal, that can include the payment gateway key, the email provider key, the database and the AI chatbot's API key.
+
+The cost of this incident is mostly time. Rotating a dozen secrets across several services, redeploying and reading logs can take a full day, and some steps wait for builds to return on your plan. A small business that never listed where its keys live will spend most of that day just finding them. The lesson is to know your secrets before an incident, not during one.
+
+## What should you do now?
+
+Labels show where each step comes from: Railway's disclosure and guides, or standard incident practice.
+
+1. **Check your email and the status page.** Railway is emailing affected accounts, and the [status page](https://status.railway.com/incident/QH8L8B3E) shows when builds return for your plan. (Railway)
+2. **List every secret you store on Railway.** Go through each project, service and environment, including shared variables and sealed ones. Note where each key comes from and what it can do. (Standard practice)
+3. **Rotate AI provider, cloud and code-hosting keys first.** Railway says the attackers were after AI inference providers, so start with AI API keys, then AWS, Google Cloud and GitHub credentials, then database passwords. If a variable holds a crypto wallet key, treat that wallet as compromised. (Railway, standard practice)
+4. **Rotate at the source, then update Railway.** Create the new key with the provider first, deactivate the old one, then update the variable and deploy. Railway's guides suggest deactivating rather than deleting the old key at first, so you can switch it back on briefly if something breaks. (Railway)
+5. **Roll private registry credentials and create new Railway API tokens.** Railway invalidated all API tokens on October 22, so CI pipelines and scripts that use them need new ones. (Railway)
+6. **Update every copy outside Railway.** Local `.env` files, CI secrets and teammates' machines often hold the same keys. (Railway)
+7. **Review logs for the exposure window.** Check AWS CloudTrail, Google Cloud Audit Logs, the GitHub security and audit logs, and your app and database logs. Export logs before you revoke anything, so you keep the evidence. (Railway)
+8. **Look for anything the attacker left behind.** Remove unknown IAM users, access keys, SSH keys, OAuth apps, deploy keys and webhooks, and compare this month's cloud bill with last month's. (Railway)
+9. **Check your duty to tell customers.** If your database held personal data and its password was stored on Railway, review your obligations under your local data privacy law. (Standard practice)
+
+## What can we learn from it?
+
+The Railway incident shows that a hosting platform is part of your security perimeter, whether you planned it or not. Three habits would have made this week easier.
+
+First, keep a short secrets inventory: what each key is, where it lives and how to rotate it. Second, use keys with the smallest scope and a spending limit where the provider allows it, so a stolen key can do less. Third, make misuse easier to spot. Railway's Google Cloud guide notes that with static outbound IPs, API calls from any other address suggest misuse, while shared IPs leave you guessing.
+
+None of this requires leaving Railway. It requires assuming that any place you store a secret can leak it, and planning for the day it does.

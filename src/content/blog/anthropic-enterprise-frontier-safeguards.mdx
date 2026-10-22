@@ -1,0 +1,71 @@
+---
+title: 'Anthropic Enterprise Frontier Safeguards: Data Retention, Explained'
+seoTitle: 'Anthropic EFS: Claude Data Retention, Explained'
+description: >-
+  Anthropic's Enterprise Frontier Safeguards let companies keep Claude misuse
+  monitoring data in their own cloud. What changed and what it means for your data.
+dek: >-
+  Anthropic's newest models keep data for 30 days to catch misuse. Its new
+  Enterprise Frontier Safeguards move that data into the customer's own cloud.
+hub: tech-and-business
+frame: news-take
+takeaways:
+  - >-
+    Anthropic introduced 30-day data retention starting with its Fable 5
+    model, so it could detect misuse that spans many sessions and accounts.
+  - >-
+    Anthropic announced Enterprise Frontier Safeguards on September 1, 2026,
+    letting customers store misuse-monitoring data in their own AWS, Azure or
+    Google Cloud storage.
+  - >-
+    Enterprise Frontier Safeguards needs no human review by Anthropic staff,
+    costs nothing from Anthropic, and does not change model behavior, API
+    pricing or rate limits.
+  - >-
+    Until Enterprise Frontier Safeguards is ready, eligible customers get zero
+    data retention on Fable 5 and Fable 5.1.
+businessImpact: []
+sourceUrl: https://www.anthropic.com/news/enterprise-frontier-safeguards
+published: 2026-10-22
+related: []
+projects: []
+stack:
+  - claude
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Anthropic has announced Enterprise Frontier Safeguards, a way for companies to keep the data Anthropic uses to detect misuse of Claude in their own cloud accounts instead of Anthropic's. It answers a trade-off Anthropic made on purpose: starting with Fable 5, it keeps data for 30 days. For anyone building with Claude for clients in finance, healthcare or law, it changes what you can promise about data.
+
+This take is part of my [Technology and Business](/topics/tech-and-business) writing, and it follows the data side of the Claude models I cover in [AI, in Depth](/topics/ai).
+
+## What happened?
+
+On September 1, 2026, Anthropic published [Enterprise Frontier Safeguards](https://www.anthropic.com/news/enterprise-frontier-safeguards), or EFS. The post explains that Anthropic introduced 30-day data retention starting with Fable 5. The reason is that serious misuse can be spread across many sessions and accounts, and spotting it means keeping data for a while.
+
+Many regulated companies found that retention hard to accept. Anthropic says it built EFS with more than 100 customers to give them both misuse detection and control of their data. EFS is rolling out in phases, starting later this fall. Until it is ready, eligible customers get zero data retention, or ZDR, on Fable 5 and [Fable 5.1](https://www.anthropic.com/claude-fable-and-mythos-5-1).
+
+## What changed, in plain words?
+
+* **Your storage, your keys.** Monitoring data can live in the customer's own Amazon S3, Azure Blob Storage or Google Cloud Storage, under the customer's encryption keys, access rules and audit logs.
+* **Automated checks.** Automated systems scan a rolling window of traffic for serious misuse, such as attempts to build offensive cyber or biological capabilities, and for signs of stolen or leaked credentials.
+* **Flags go to you.** Flags go straight to the customer, whose own staff review them. No human review by Anthropic employees is required.
+* **No extra fee.** Anthropic does not charge for EFS. The cloud provider bills for storage, reads, writes and data egress.
+* **Nothing else changes.** EFS does not change model behavior, API pricing or rate limits.
+* **Where it works.** Claude Code, Claude Enterprise, the Claude Platform, Amazon Bedrock, Claude Platform on AWS, Google's Agent Platform and Microsoft Foundry.
+
+## What does it mean for small businesses and founders?
+
+The main lesson is that data terms now differ by model, not just by provider. Anthropic introduced 30-day retention starting with Fable 5, so the model you pick can change how long your prompts are kept. Other providers draw the line in other places: OpenAI's [Agents API does not support zero data retention](https://developers.openai.com/api/docs/guides/agents-api/overview), for example, even with a self-hosted sandbox.
+
+EFS itself is aimed at larger companies. The post speaks of "eligible customers" without defining them, and it does not mention Team or Pro plans or the consumer apps. A small business using the Claude app is unlikely to be eligible yet.
+
+Developers building for regulated clients should pay the most attention. If you build a tool for a clinic, a lender or a law office, the client will ask where their data goes and who can see it. EFS gives a clearer answer for enterprise deployments, but only once it reaches your account. I use Claude models for my Claude skills and Claude Code work, and the same question applies whenever client data goes into a prompt.
+
+## What should you do now?
+
+* **List where client data goes.** Note each AI model and product you send client data to, including models reached through a cloud platform.
+* **Read retention terms per model.** Check the retention rules for the exact model you use, since Anthropic's 30-day retention started with Fable 5.
+* **Ask about eligibility.** If you serve a regulated industry on an enterprise plan, request access through the form linked in Anthropic's post.
+* **Send less.** Strip names, ID numbers and account details from prompts when the task does not need them.

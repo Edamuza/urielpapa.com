@@ -1,0 +1,75 @@
+---
+title: 'Any Site Can Now Opt Out of Google AI Overviews and AI Mode'
+seoTitle: 'Any Site Can Now Opt Out of Google AI Overviews'
+description: >-
+  Google's Search generative AI control in Search Console now lets every site
+  opt out of AI Overviews and AI Mode. What it does, what it costs, and who
+  should use it.
+dek: >-
+  A new Search Console setting removes your site from Google's AI answers
+  without touching regular rankings. Here is when it makes sense, and when it
+  does not.
+hub: seo-geo-aeo
+frame: news-take
+takeaways:
+  - >-
+    As of August 31, 2026, Google has rolled out the Search generative AI
+    control in Search Console to all websites worldwide.
+  - >-
+    The control can exclude a site from AI Overviews, AI Mode and generative AI
+    features in Google Discover, and an excluded site gets no traffic or
+    impressions from those features.
+  - >-
+    Google says the control is not used as a ranking signal for other parts of
+    Search and does not affect AI training, which Google-Extended controls.
+  - >-
+    The control followed a conduct requirement that the UK Competition and
+    Markets Authority imposed on Google on 3 June 2026.
+businessImpact: []
+sourceUrl: https://support.google.com/webmasters/answer/16908024
+published: 2026-10-22
+related:
+  - geo-and-aeo-fundamentals
+  - how-to-check-if-chatgpt-cites-your-site
+projects: []
+stack:
+  - google-search-console
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Google's Search generative AI control, a setting in Search Console, lets a website exclude its content from AI Overviews, AI Mode and generative AI features in Discover. As of August 31, 2026, it is available to all websites worldwide. Every site owner now has a site-wide opt-out from Google's AI answers that leaves regular rankings alone. For most, the right answer is still to stay in.
+
+This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. How Google's AI features pick sources from its index is covered in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
+
+## What happened?
+
+Google's [Search generative AI control help page](https://support.google.com/webmasters/answer/16908024) now says the control was rolled out to all websites worldwide as of August 31, 2026. The control arrived after the UK Competition and Markets Authority imposed a [publisher conduct requirement](https://www.gov.uk/find-digital-markets-measures/google-search-publisher-conduct-requirement) on Google on 3 June 2026. That requirement includes giving publishers effective controls over how their search content is used in generative AI.
+
+## What changed, in plain words?
+
+In Search Console, open **Settings**, then **Search generative AI**. Each property has three choices:
+
+* **Include** your site's links and content in Search generative AI features. This is the default.
+* **Exclude** your site's links and content. Your pages will not be linked in those features or used to ground their answers, and you will get no traffic or impressions from them.
+* **Inherit** the setting from a parent property, such as a domain property above a URL-prefix property.
+
+The features covered are AI Overviews, AI Mode and generative AI features in Google Discover, and Google says the list may change over time. A change usually takes a few days. Google says content is excluded within one to two days, though caching can make some content take longer.
+
+Google is clear about what the control does not do. It is not used as a ranking or inclusion signal for the rest of Search. It does not stop AI training: for that, Google points to the [Google-Extended](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers#google-extended) token in robots.txt. And to leave Google Search entirely, you still use noindex.
+
+## What does it mean for small businesses and founders?
+
+For most small businesses, opting out is the wrong move. Google's help page warns that content from other sites will still appear in these features and may look similar to yours. If a customer asks AI Mode for a service you offer, opting out does not stop the answer; it only removes your link from it.
+
+The control makes more sense for a site whose value is the content itself. Think of a paid newsletter, a research publisher or a recipe site that earns from page views. If AI answers give away what you sell and send few clicks back, the trade can be worth it. The way to decide is with data, not instinct.
+
+For urielpapa.com, excluding would work against everything I set up for AI search. Its robots.txt welcomes AI crawlers, and its passages are written to be quoted.
+
+## What should you do now?
+
+1. **Check the setting** under Settings, then Search generative AI, in Search Console. Make sure it says what you intend, especially if someone else manages your property.
+2. **Look at the numbers first.** The [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) shows impressions in AI Overviews and AI Mode by page, and Google suggests using it to estimate what a change would cost.
+3. **Exclude only one section if needed.** A URL-prefix property for one folder can override the domain setting, so you can keep the rest of the site included.
+4. **Remember the other AI systems.** The control covers Google only. ChatGPT and Perplexity use their own crawlers, and Copilot relies on Bing's. You manage those in robots.txt, as described in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).

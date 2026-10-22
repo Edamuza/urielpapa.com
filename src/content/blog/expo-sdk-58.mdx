@@ -1,0 +1,74 @@
+---
+title: 'Expo SDK 58 Is Out: React Native 0.88, iOS 27 and What Breaks'
+seoTitle: 'Expo SDK 58: What Changed and What Breaks'
+description: >-
+  Expo SDK 58 moves apps to React Native 0.88 and iOS 27. What changed, which
+  breaking changes matter, and how to upgrade an Expo app safely.
+dek: >-
+  Expo has a new SDK with a big React Native jump and a long list of breaking
+  changes. Here is what changed, in plain words, and how I would plan the
+  upgrade.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    Expo released SDK 58 on October 15, 2026, upgrading apps from React Native
+    0.86 to 0.88 and targeting the iOS 27 SDK.
+  - >-
+    In Expo SDK 58, iOS apps move to the UIKit scene-based life cycle, so
+    custom AppDelegate code and hand-managed ios folders may need migration.
+  - >-
+    Expo reports that prebuilt Android core binaries cut a clean debug build
+    from about 80 seconds to about 39 seconds on an Apple M3 Pro.
+  - >-
+    Expo SDK 58 supports Node.js 22.13 or newer, 24.3 or newer, or 26 and
+    later, and does not support odd-numbered Node.js releases.
+businessImpact: []
+sourceUrl: https://expo.dev/changelog/sdk-58
+published: 2026-10-22
+related: []
+projects: []
+stack:
+  - expo
+  - react
+  - nodejs
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Expo released SDK 58, the latest version of its toolkit for building iOS and Android apps with React Native. It moves apps from React Native 0.86 to 0.88, targets iOS 27, and comes with a long list of breaking changes, so most teams should plan the upgrade rather than run it on a Friday.
+
+I co-developed [Tell Liora](/projects/tell-liora), an offline mobile app, with Expo at a hackathon, and prepared its iOS build in Xcode, so the iOS changes here are the ones I read first. This take is part of my [Tech Stacks](/topics/tech-stacks) writing.
+
+## What happened?
+
+The Expo team published [Expo SDK 58](https://expo.dev/changelog/sdk-58) on October 15, 2026, a month after the [SDK 58 beta](https://expo.dev/changelog/sdk-58-beta) opened on September 15. The release notes describe it as built for iOS 27 and the iOS 27 SDK, with React Native 0.88, which also brings in the changes from 0.87.
+
+## What changed, in plain words?
+
+These are the main changes from the [official release notes](https://expo.dev/changelog/sdk-58):
+
+* **iOS 27 and the scene life cycle.** Apps now use the UIKit scene-based life cycle, and Expo generates a `SceneDelegate.swift` file during prebuild. Custom `AppDelegate.swift` code and hand-managed `ios` folders may need migration.
+* **Faster builds and native calls.** Prebuilt Android core binaries cut a clean debug build for four ABIs from about 80 seconds to about 39 seconds on an Apple M3 Pro. Expo Modules 2.0, now in beta, makes synchronous iOS calls 2.5 to 5.6 times faster in Expo's tests.
+* **Expo Router grows up.** Data loaders, server-side rendering, middleware and native tabs are now stable, and server output is the new default for web.
+* **Android widgets.** The `expo-widgets` package now runs on Android, not only iOS.
+* **Breaking changes.** R8 code shrinking is on by default in Android release builds. `File.write()` in `expo-file-system` is now async. Foreground notifications show by default. libSQL support is removed from `expo-sqlite`. React Native 0.87 and later make the strict TypeScript API the default and remove some APIs, including `InteractionManager`. macOS is not supported in SDK 58.
+* **Tooling minimums.** Node.js must be 22.13 or newer, 24.3 or newer, or 26 and later. Odd-numbered releases such as 23 and 25 are not supported.
+
+## What does it mean for small businesses and founders?
+
+For a business with an Expo app, SDK 58 is mostly good news with a bill attached. Faster Android builds and stable routing features cut the time a small team spends waiting and wiring things by hand. The bill is the upgrade work: a two-version React Native jump, a new iOS life cycle and default changes like R8 can each break something that worked yesterday.
+
+The R8 change deserves attention. Code shrinking makes Android release builds smaller, but it can strip classes that a library loads by name, and that kind of bug often shows up only in a release build. That is why a release build on a real device belongs in the test plan, not just a development build.
+
+There is also a timing issue for anyone who tests with Expo Go. Expo says the new Expo Go will reach the App Store and Google Play "within a few weeks" and will support only SDK 58. Until then, `npx create-expo-app` still creates SDK 57 projects, and SDK 58 work needs a development build.
+
+## What should you do now?
+
+* **Starting a new app:** I would start on SDK 58 with a development build, using `npx create-expo-app --template default@sdk-58` as the release notes describe, rather than start on 57 and upgrade in a month.
+* **Running an existing app:** upgrade on a branch with `npx expo install expo@^58.0.0 --fix`, run `npx expo-doctor@latest`, and make a new development build. Then test an Android release build and an iOS build on real devices.
+* **Check your machines and CI:** confirm Node.js meets the new minimums, especially if a build server still runs an odd-numbered release.
+* **Shipping to iOS:** review any custom `AppDelegate` code against the new scene life cycle before the iOS 27 rollout reaches your users.
+
+If you are still choosing the stack around a mobile app, such as the API and admin panel behind it, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers that side.

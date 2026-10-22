@@ -1,0 +1,128 @@
+---
+title: 'eMudhra CA Keys Compromised: What Businesses Should Check Now'
+seoTitle: 'eMudhra CA Key Compromise: What to Check Now'
+description: >-
+  Eight eMudhra intermediate CA keys were weak enough to recover, so browsers
+  blocked them and are dropping a root. What happened and what to check.
+dek: >-
+  A certificate authority generated keys that anyone could guess. Browsers
+  fixed it in hours, but servers and apps need their owners to act.
+hub: tech-and-business
+frame: news-take
+takeaways:
+  - >-
+    Eight eMudhra intermediate CA certificates, generated on April 30, 2025,
+    used private keys so small that anyone could recover them, and one key was
+    simply the number 4.
+  - >-
+    Chrome and Firefox blocked the eight eMudhra intermediates on October 17,
+    2026, within hours of the report, followed by Apple on October 19 and
+    Microsoft on October 20.
+  - >-
+    Mozilla and Chrome are removing trust in the emSign ECC Root CA - G3 root,
+    and eMudhra estimates about 30,000 customer certificates need migration.
+  - >-
+    Servers, containers and runtimes with their own certificate lists, such as
+    Node.js, Python certifi and Go, needed updates in October 2026 to stop
+    trusting the compromised eMudhra intermediates.
+businessImpact: []
+sourceUrl: https://bugzilla.mozilla.org/show_bug.cgi?id=2083449
+published: 2026-10-22
+related:
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack:
+  - cloudflare
+  - nodejs
+  - python
+  - docker
+faq:
+  - q: Are eMudhra's eSign and Indian digital signature services affected?
+    a: >-
+      eMudhra says no. Its October 21, 2026 filing states that the Indian
+      Digital Signature Certificate and eSign businesses run on separate
+      infrastructure and are working normally.
+  - q: Were the compromised keys used to attack anyone?
+    a: >-
+      No source I read reports exploitation in the wild. Chrome says no TLS
+      certificates from these intermediates were logged in Certificate
+      Transparency before its block, but nobody can rule out misuse against
+      non-browser software during the 17 months the keys existed.
+  - q: Will my website stop working on October 27, 2026?
+    a: >-
+      Only if its certificate chains to emSign ECC Root CA - G3. Mozilla has
+      already moved to remove trust in that root, and Chrome Root Store version
+      43, which removes it, is expected in Chrome Stable on October 27, 2026.
+      Certificates that chain to other roots are not affected by this removal.
+event: {}
+syndication: []
+draft: false
+---
+The private keys of eight intermediate certificates from eMudhra, the Indian digital identity and certificate authority company, were so weak that anyone could recover them. Chrome, Firefox, Apple and Microsoft blocked the certificates between October 17 and 20, 2026. Mozilla and Chrome are also removing trust in the root that signed them, emSign ECC Root CA - G3.
+
+This take is part of my [Tech and Business](/topics/tech-and-business) writing. The [self-hosted n8n chatbot for Messenger and Instagram](/blog/n8n-messenger-instagram-chatbot) I built runs on a small VPS and calls other services over HTTPS. If your business runs servers like that, this incident touches your stack.
+
+## What happened?
+
+A certificate authority (CA) is a company that browsers and operating systems trust to confirm who runs a website or who signed a file. The padlock in your browser means a CA vouched for that site, usually through an intermediate certificate signed by the CA's root. Whoever holds an intermediate's private key can vouch for any website. The key must stay secret and be impossible to guess.
+
+According to [Mozilla's incident report, bug 2083449](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449), eMudhra generated a batch of 24 intermediates on April 30, 2025. Eight used private keys that were tiny numbers. [BleepingComputer reports](https://www.bleepingcomputer.com/news/security/mozilla-google-apple-block-compromised-emudhra-ca-certificates/) that some key values were under 256, and the key for "EM OV TLS CA - G3C" was the number 4. Six of the eight could issue website (TLS) certificates, and two could sign software. Sectigo had also cross-signed the affected intermediates in May 2025, which spread their trust to more devices.
+
+A researcher named Wayne found the weak keys on October 17, 2026 and reported them to the root programs. In its [October 21 filing to the BSE and NSE](https://www.bseindia.com/xml-data/corpfiling/AttachLive/6be0c423-b335-494b-86f3-54c561c3a5f9.pdf), eMudhra blamed a flaw in its key generation ceremony. A wrap and unwrap step created a second set of weak keys, and those weak keys were the ones published.
+
+## Who is affected?
+
+Three groups need to pay attention, and one group can relax.
+
+* **Websites with eMudhra certificates under the G3 ECC root.** eMudhra estimated about 30,000 certificates need migration ([bug comment 19](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449)). About 97 percent came through ACME, the automated issuance protocol. eMudhra's [own statement](https://emudhra.com/en/post/certificate-security-incident) says the affected certificates sit in one customer ecosystem in the United States.
+* **Software that keeps its own trust list.** Linux servers, containers, runtimes and command-line tools may not check revocation. [Red Hat's bulletin RHSB-2026-012](https://access.redhat.com/security/vulnerabilities/RHSB-2026-012) lists RHEL 6 through 10 and containers built on RHEL or UBI images.
+* **Teams that rely on signed software.** Two of the eight intermediates were for code signing, so the risk reaches signed files, not only websites. Chrome said those two did not need a browser block.
+* **Not affected, per eMudhra:** the Indian Digital Signature Certificate (DSC) and eSign businesses, which the filing says run on separate infrastructure. The filing puts the global TLS business at around 1 percent of revenue.
+
+## How serious is it?
+
+The eMudhra key compromise is serious in principle and, so far, quiet in practice. Red Hat explains that a holder of these keys could issue fake certificates for any domain. An attacker who can also intercept traffic could then impersonate websites and read or change encrypted data.
+
+Two facts limit the damage. In the [Chrome Root Program's post on dev-security-policy](https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/0R3XLJL6FuE), Chrome said no TLS certificates chaining to these intermediates were logged in Certificate Transparency before its block. Browsers that enforce Certificate Transparency would reject unlogged certificates. Dennis Jackson's [incident tracker](https://emudhra.we-have-a-problem.com/) adds that non-browser clients that skip this check may have been exposed.
+
+No source I read reports exploitation in the wild. eMudhra says its infrastructure was not compromised and no data was breached. Its claim that the intermediates were barely used has been questioned by other participants in the bug. The honest summary: browsers were well protected, and everything else depends on updates.
+
+## How did the eMudhra incident unfold?
+
+| Date (UTC) | Event |
+| --- | --- |
+| April 30, 2025 | eMudhra generates 24 intermediates; eight get weak keys ([bug 2083449](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449)) |
+| May 2025 | Sectigo cross-signs the affected intermediates |
+| October 17, 2026, 18:05 | Researcher reports to Chrome; Chrome blocks six TLS intermediates by 19:45 ([Chrome post](https://groups.google.com/a/mozilla.org/g/dev-security-policy/c/0R3XLJL6FuE)) |
+| October 17, 2026, 22:59 | Firefox block through OneCRL complete, under 3 hours after Mozilla's report ([Mozilla](https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/)) |
+| October 18, 2026, 09:24-09:38 | eMudhra revokes all eight intermediates |
+| October 19, 2026 | Apple blocks the certificates |
+| October 20, 2026 | Microsoft blocks them on Windows; NSS 3.131.1 removes the root; [Go 1.27.3 and 1.26.10](https://groups.google.com/g/golang-announce/c/66pojueaQek) ship (CVE-2026-111943) |
+| October 21, 2026 | eMudhra files a press release with the BSE and NSE; Red Hat publishes RHSB-2026-012 |
+| October 22, 2026 | eMudhra offers Sectigo-issued certificates as an alternative |
+| October 27, 2026 (PDT) | Chrome Root Store version 43, removing emSign ECC Root CA - G3, expected in Chrome Stable |
+
+## What does it mean for small businesses and founders?
+
+The eMudhra incident shows that trust on the internet is a supply chain you do not control. Your website, your payment pages and your signed documents all lean on a CA that someone else chose. When a CA fails, browsers can act in hours. Your own servers may keep trusting bad certificates for months.
+
+Most business websites will not break, because most certificates chain to other CAs. The quieter risk sits in the trust list inside a VPS, a Docker image or an old runtime. [Cloudflare's write-up](https://blog.cloudflare.com/emudhra-certificate-compromise/) puts it well: updating an SDK alone may not change the trust policy underneath it.
+
+E-signatures and document signing deserve the same question. eMudhra says its Indian eSign services are untouched here. Even so, any signing vendor depends on a CA hierarchy, so it is fair to ask yours which one and what its backup plan is.
+
+## What should you do now?
+
+1. **Update browsers and operating systems.** Jackson's [tracker](https://emudhra.we-have-a-problem.com/) lists this as the first step for everyone.
+2. **Check which CA issued your certificates.** Open the certificate details in your browser or hosting dashboard. If the chain ends at emSign ECC Root CA - G3, replace it now. Mozilla has already moved to drop that root, and Chrome follows on October 27. eMudhra customers can request Sectigo-issued certificates through CertiNext or eMudhra support.
+3. **Update the trust store on your servers.** Install the latest `ca-certificates` package. Ubuntu, Debian, Alpine, Fedora and FreeBSD have fixed versions listed on the tracker. On RHEL, Red Hat suggests `rpm -q ca-certificates` to check what is installed.
+4. **Rebuild container images.** Red Hat and Cloudflare both say to rebuild containers after base images update.
+5. **Update runtimes and tools with their own lists.** The tracker lists fixes such as Node.js 22.23.4, 24.22.1 and 26.12.1. Others include Python certifi 2026.10.19, Go 1.27.3 and Docker Desktop 4.96.2. On macOS, built-in tools like curl use a file that is not updated automatically.
+6. **Test the real connection path.** The tracker provides test sites such as `dv-g3b-emudhra.we-have-a-problem.com`. A certificate error there means your client correctly rejects the bad intermediates. Test from the server, not only your laptop.
+7. **Do not disable certificate verification to silence errors.** Cloudflare warns that this removes the protection you just patched in.
+8. **If you use Cloudflare,** update cloudflared to 2026.10.2 and the WARP client, then review uploaded mTLS CAs and origin certificates.
+
+## What can we learn from it?
+
+The first lesson is that audits are not proof. eMudhra says this hierarchy passed independent audits two years in a row. The weak keys still went unnoticed for about 17 months. The second lesson is that fast revocation works where it exists. Browsers blocked the certificates within hours, while servers and runtimes needed manual updates across dozens of projects.
+
+The third lesson is to automate certificates. About 97 percent of the affected eMudhra certificates came through ACME, so for most owners switching CA should be a configuration change, not a project. Automated renewal and regular updates make the next CA failure a routine fix.

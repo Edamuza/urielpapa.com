@@ -1,0 +1,73 @@
+---
+title: 'Cloudflare and OpenAI Pilot Adds Pages to ChatGPT Search'
+seoTitle: 'Cloudflare and OpenAI Pilot Adds Pages to ChatGPT Search'
+description: >-
+  Cloudflare and OpenAI say a pilot using Cloudflare signals helped ChatGPT
+  search find hundreds of millions of new pages. What changed and what site
+  owners should do.
+dek: >-
+  ChatGPT search is getting help finding pages that few sites link to. Here is
+  what the Cloudflare and OpenAI pilot does, and what it does not do.
+hub: seo-geo-aeo
+frame: news-take
+takeaways:
+  - >-
+    On October 15, 2026, Cloudflare and OpenAI reported that a discovery pilot
+    covering about 1% of Cloudflare's network helped OpenAI find and index
+    hundreds of millions of new web pages.
+  - >-
+    The pilot shares metadata about pages for search and discovery, not page
+    content for model training, and Cloudflare says a signal never grants
+    permission to fetch a page.
+  - >-
+    OpenAI's search crawler, OAI-SearchBot, still decides what to fetch, and
+    OpenAI ranks pages on its own, so the pilot does not guarantee citations.
+businessImpact: []
+sourceUrl: https://blog.cloudflare.com/cloudflare-openai-discovery-agentic-web/
+published: 2026-10-22
+related:
+  - how-to-check-if-chatgpt-cites-your-site
+  - geo-and-aeo-fundamentals
+projects: []
+stack:
+  - cloudflare
+  - gpt
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+On October 15, 2026, Cloudflare and OpenAI reported that a joint pilot helped ChatGPT search find and index hundreds of millions of new pages. The pilot uses signals from Cloudflare's network. It matters because crawlers that follow links tend to miss small sites with few backlinks, and this opens a second route into ChatGPT's index.
+
+This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. If you want to check whether ChatGPT already cites your pages, my guide on [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site) walks through it.
+
+## What happened?
+
+Cloudflare published [Cloudflare and OpenAI: making AI discovery better for everyone](https://blog.cloudflare.com/cloudflare-openai-discovery-agentic-web/) on its blog on October 15, 2026, with authors from both companies. The post shares early results from a research pilot the two companies started in July 2026. The pilot covers about 1% of Cloudflare's total network. The post says it has enabled OpenAI to discover and index hundreds of millions of new web pages.
+
+## What changed, in plain words?
+
+Search crawlers usually find new pages by following links. A page that few other sites link to can stay unknown for a long time, even if it is useful. In this pilot, Cloudflare passes OpenAI signals about pages it sees on its network, and OpenAI's search crawler uses them to find and revisit pages.
+
+The post describes three kinds of signals:
+
+* **Filtering signals** flag URLs that do not lead to real, distinct content. Examples are addresses that exist only because bots request missing files, sites that send almost every address to the homepage, and duplicate pages.
+* **Change signals** tell the crawler when a page is worth fetching again and when it has not changed.
+* **Harmful-page signals** flag single dangerous pages, such as a fake login form planted on a normal site. One bad page can then be kept out without judging the whole domain.
+
+Three limits are stated plainly. The pilot shares metadata about pages for search and discovery, not page content for training. A signal does not grant permission to access a page, so your settings still apply. And OpenAI evaluates and ranks the pages on its own, so being discovered is not the same as being cited.
+
+## What does it mean for small businesses and founders?
+
+For a small site, the hard part of AI search is often being found at all. A new business site with a handful of pages and almost no backlinks is the kind of page this pilot is meant to surface. If your site runs behind Cloudflare and allows AI search crawlers, it may be found faster than it would by links alone.
+
+The post leaves open questions. It does not say whether every Cloudflare site is included or which plans are involved. Nor does it say whether site owners can opt in or out of the pilot itself. It also gives no numbers yet on referral traffic, which the companies say they will measure next.
+
+The access rules have not changed. OpenAI's [crawler documentation](https://developers.openai.com/api/docs/bots) says sites that block OAI-SearchBot will not be shown in ChatGPT search answers. Blocking GPTBot is a separate choice about training. A discovery signal does not override either setting.
+
+## What should you do now?
+
+1. **Check robots.txt for OAI-SearchBot.** If you want to be cited in ChatGPT search, make sure it is allowed. OpenAI says a change can take about 24 hours to apply.
+2. **If you use Cloudflare, review its AI crawler settings.** [AI Crawl Control](https://developers.cloudflare.com/ai-crawl-control/) is available on all Cloudflare plans and sets allow or block rules for each AI crawler. A block there stops a bot even if robots.txt allows it.
+3. **Fix the patterns the pilot filters out.** Stop redirecting every missing URL to the homepage, return a real 404, and use canonical tags for duplicate pages.
+4. **Watch for chatgpt.com referrals** in GA4 over the next few months, so you have your own numbers before the companies publish theirs.

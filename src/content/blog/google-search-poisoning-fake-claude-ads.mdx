@@ -1,0 +1,112 @@
+---
+title: 'Poisoned Google Results: Fake Claude Ads Routed Through a Hacked Site'
+seoTitle: 'Poisoned Google Results: The Fake Claude Ad Explained'
+description: >-
+  A Google ad for "claude mac" sent Mac users through Bing and a hacked
+  retailer site to a fake Claude page. How SERP poisoning works and what to do.
+dek: >-
+  Push Security found a Google search ad that hid behind bing.com and a hacked
+  WordPress site to push a fake Claude installer. Here is how poisoned results
+  work, and a checklist for site owners and searchers.
+hub: seo-geo-aeo
+frame: news-take
+takeaways:
+  - >-
+    On October 9, 2026, Push Security reported a Google search ad for "claude
+    mac" that showed bing.com as its address and led Mac users to a fake Claude
+    download page.
+  - >-
+    The fake Claude ad passed through the real "about us" page of a hacked
+    South American retailer's website, so an ordinary small-business site
+    became part of the attack.
+  - >-
+    A Google spokesperson said the company suspended the advertiser accounts
+    behind the fake Claude campaign, according to CyberGuy on October 17, 2026.
+  - >-
+    Since May 15, 2026, Google's spam policies state that they also cover
+    attempts to manipulate generative AI responses in Google Search.
+businessImpact: []
+sourceUrl: https://pushsecurity.com/blog/adception-malvertising-another-search-engines-search-results
+published: 2026-10-22
+related:
+  - geo-and-aeo-fundamentals
+  - how-to-check-if-chatgpt-cites-your-site
+projects: []
+stack:
+  - google-search-console
+  - wordpress
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Push Security reported on October 9, 2026 that a sponsored Google search result for "claude mac" sent Mac users to a fake Claude download page. The ad showed bing.com as its address and passed through a hacked retailer's website on the way. For businesses, the lesson is uncomfortable: poisoned search results borrow trusted brands and trusted websites, and a small company's site can end up as part of the attack without the owner knowing.
+
+I have built WordPress sites for clients since 2023 and five WordPress SEO plugins, so hacked sites showing up in search is close to my work. This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing, and my post on [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) explains how search and AI answers choose which pages to show.
+
+## What happened?
+
+Push Security, a browser security company, found the attack in a customer environment and published [Adception: malvertising another search engine's search results](https://pushsecurity.com/blog/adception-malvertising-another-search-engines-search-results) on October 9, 2026. According to Push, the chain worked in four hops. A Google search ad sent the click to a Bing click-tracking link, which forwarded it to the real "about us" page of a South American homeopathy retailer. That hacked page then redirected visitors to a fake Claude download page.
+
+The fake page copied the look of Anthropic's install instructions. [BleepingComputer reported](https://www.bleepingcomputer.com/news/security/hackers-abuse-google-ads-bing-redirects-to-push-claude-clickfix-attacks/) that the page displayed the real install command, but its Copy button put a different, attacker-controlled command on the clipboard. The final malware was still unknown when BleepingComputer published. On October 17, a Google spokesperson told [CyberGuy, in a story syndicated by Fox News](https://www.foxnews.com/tech/hackers-hide-dangerous-fake-ai-downloads-behind-google-ads.amp): "We've suspended the advertiser accounts running the reported campaign."
+
+## How does SERP poisoning work, in plain words?
+
+SERP poisoning means getting a harmful page into the places people trust on a search results page. Attackers use three main routes: paid ads that impersonate a brand, organic rankings pushed up with spam, and hacked websites that lend their reputation to a bad redirect. A fourth route is newer: seeding fake pages so that AI answers repeat a scam phone number or login link.
+
+The Claude case used two routes at once, a paid ad and a hacked site. The ad looked safe because the address shown was bing.com. The hacked page looked safe because it was a real, indexed business page. Push also found cloaking: the pages checked where a visitor came from, and a direct visit got only a 404 error. Google's [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) call this cloaking, and define hacked content as "any content placed on a site without permission."
+
+One note on terms. In October 2026, SEO tools also used "poisoned SERPs" for a different problem: [Nozzle measured](https://nozzle.io/research/poisoned-google-serps/) Google serving swapped results to rank trackers on 8.4% of pages since September 13. That story is about ranking data, not attacks on searchers.
+
+## When did this happen?
+
+The Claude ad sits inside a busy few months for search abuse. Here is the timeline from the sources I opened.
+
+| Date (2026) | What happened |
+| --- | --- |
+| May 15 | Google's [Search Central changelog](https://developers.google.com/search/updates) clarifies that spam policies "also apply to generative AI responses in Google Search." |
+| Aug 31 to Sep 14 | Netskope sees a Google Ads tech support scam reach at least 619 organizations, [as Hackread reported](https://hackread.com/tech-support-scam-kit-google-ads-fake-security-alerts/). |
+| Sep 24 | [The Hacker News](https://thehackernews.com/2026/09/threatsday-ai-search-poisoning-ai.html) covers research on fake support numbers seeded into ChatGPT, Gemini and Google AI Overviews. |
+| Sep 24 | Google's September 2026 spam update starts and runs 13 days and 16 hours, per the [Search Status Dashboard](https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history). |
+| Oct 5 | The Bing link used in the Claude ad was likely generated, based on Push's decoding of its timestamp. |
+| Oct 9 | Push Security publishes its report, and BleepingComputer covers it. |
+| Oct 17 | Google says it suspended the advertiser accounts behind the campaign. |
+
+## Who is affected?
+
+The direct targets were Mac users searching Google for Claude, Anthropic's AI assistant. Push says Google Search users were the primary target, even though the ad pointed to Bing. Anyone who copied and ran the fake command should treat that Mac as compromised.
+
+The second group is easy to miss: the owners of hacked websites. The South American retailer's page did the redirecting, which means its site carried someone else's attack. The same pattern shows up in the AI answer research. The Hacker News summary says scammers seeded fake support pages on free hosts such as Google Sites, GitHub Pages, WordPress and Blogger, and impersonated brands including Delta, Lufthansa, Chase and Airbnb.
+
+## How serious is it?
+
+The Claude campaign is serious because it beat several checks people rely on. The ad showed a real domain, the hop in the middle was a real business site, and the fake page showed the real install command. Cloaking also hid the pages from anyone who visited them directly, which slows down researchers and review systems.
+
+The scale of search ad abuse is large. In the separate Netskope case, more than 250 Google Ads campaign IDs ran on at least 284 legitimate publisher sites in two weeks, and the goal was to push people into calling a fake support number. Google acted on the Claude ads after the report, but the record shows these campaigns get through review first.
+
+## What does it mean for small businesses and founders?
+
+For a business, poisoned results create three risks. Your brand can be impersonated in an ad or an AI answer, so customers call a scammer's number thinking it is yours. Your customers can be sent to a fake site that looks like your login or checkout page. And your own website can be hacked and used as a host or redirect, which can bring a security warning in Google and hurt the trust you built.
+
+In my view, small sites are the likeliest hosts. A WordPress site with an outdated plugin and nobody watching it is exactly what this chain needs. Spotting it early is mostly a matter of checking a few reports regularly, since the redirect may only trigger for visitors arriving from search.
+
+## What should you do now?
+
+**For site owners:**
+
+1. Open the [Security issues report in Search Console](https://support.google.com/webmasters/answer/9044101) and check for hacked content, malware or social engineering warnings. Fix every issue, then use Request Review.
+2. Check for injected pages. Look at the Pages report in Search Console for URLs you never published, and search Google for site:yourdomain.com with words you would never use, such as casino or pharmacy terms.
+3. Test redirects as a searcher would. Click through to your own pages from a Google result, not only by typing the address, because cloaked redirects only fire for search visitors.
+4. Update WordPress core, themes and plugins, remove unused plugins, and change admin passwords. Google's guide on [preventing malware infections](https://developers.google.com/search/docs/monitor-debug/security/prevent-malware) covers the basics.
+5. Monitor your brand. Search your business name with "phone number", "login" and "support" each month, and check which phone number and links Google's AI Overviews and ChatGPT give for your business.
+6. Report what you find. Google's [report spam, phishing or malware page](https://developers.google.com/search/help/report-quality-issues) links the right form for each, and fake ads go through [Report an ad in My Ad Center](https://support.google.com/My-Ad-Center-Help/answer/13861201?hl=en).
+
+**For searchers:**
+
+1. Type the address of software you already know, such as claude.ai, instead of clicking a sponsored result.
+2. Never paste a command into Terminal from a page you reached through an ad. If you already did, disconnect the device and get it checked.
+3. Get support numbers from the company's own website or app, not from an ad or an AI summary.
+
+## What can we learn from it?
+
+Trust signals on a results page can all be borrowed. A familiar domain in an ad, a real business page and a correct-looking command were each used here as cover. Google's rules already cover this, and its May 2026 change extends them to AI answers, but enforcement often arrives after a researcher reports the problem. Business owners should check their own sites and brand searches instead of waiting for a warning. If you also want to see how AI tools describe your business, my guide on [checking whether ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site) is a good place to start.

@@ -1,0 +1,116 @@
+---
+title: 'The keyv npm Worm: What Happened and What to Check Now'
+seoTitle: 'keyv npm Worm Attack: What Happened and What to Check'
+description: >-
+  A hijacked keyv release on npm spread a credential-stealing worm to hundreds
+  of packages in August 2026. Who is affected, how serious it is, what to do.
+dek: >-
+  An attacker took over the GitHub account behind keyv, a popular Node.js
+  caching library, and shipped a worm through npm with valid provenance. Here
+  is the timeline, who is exposed and a checklist for Node.js teams.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    On August 4, 2026, malicious keyv 6.0.0 was published to npm at 09:35 UTC
+    with a preinstall script that steals developer and cloud credentials.
+  - >-
+    GitHub's malware advisory GHSA-3p9h-f68w-m6fx says any computer that
+    installed keyv 6.0.0 should be considered fully compromised, and all its
+    secrets rotated from a different computer.
+  - >-
+    The worm reused stolen npm tokens to republish other packages, and Aikido
+    counted at least 444 compromised packages across 1,381 versions by August
+    5, 2026.
+  - >-
+    The poisoned keyv release carried genuine SLSA provenance, which proves a
+    package came from a given build pipeline but not that the source code was
+    safe.
+businessImpact: []
+sourceUrl: https://github.com/advisories/GHSA-3p9h-f68w-m6fx
+published: 2026-10-22
+related:
+  - astro-7-content-sites
+projects: []
+stack:
+  - nodejs
+  - github
+  - claude-code
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+On August 4, 2026, an attacker took over the GitHub account behind keyv, a widely used Node.js caching library, and published a poisoned keyv 6.0.0 to npm. Within an hour the same credential-stealing payload reached the Cacheable family and ecto, then spread further as the worm republished packages with stolen npm tokens. It matters because simply installing an affected version was enough to hand over a machine's secrets.
+
+I build with Node.js, TypeScript, Astro and Next.js, and this site's own lockfile pulls keyv in through ESLint, so I checked it. This take is part of my [Tech Stacks](/topics/tech-stacks) writing, and the build behind this site is described in my post on [Astro 7 for content sites](/blog/astro-7-content-sites).
+
+## What happened?
+
+The attacker pushed malicious files to the keyv repository and let the project's own GitHub Actions workflow publish them. According to [Datadog Security Labs](https://securitylabs.datadoghq.com/articles/npm-worm-compromises-popular-npm-packages/), the resulting keyv 6.0.0 had genuine SLSA provenance bound to the malicious commit. GitHub published the malware advisory [GHSA-3p9h-f68w-m6fx](https://github.com/advisories/GHSA-3p9h-f68w-m6fx) the same day, listing keyv 6.0.0 as affected with no patched version. Security vendors tie the payload to the Shai-Hulud worm family, and Datadog calls this wave ChainDrop.
+
+| Time (UTC) | Event | Source |
+|---|---|---|
+| Aug 4, 09:02 | Earliest recovered malicious commit adds a loader, a payload and a preinstall script to keyv | [Datadog](https://securitylabs.datadoghq.com/articles/npm-worm-compromises-popular-npm-packages/) |
+| Aug 4, 09:04 | A commit adds Claude Code and VS Code execution hooks | [Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+| Aug 4, 09:35 | Malicious keyv 6.0.0 is published to npm | [Datadog](https://securitylabs.datadoghq.com/articles/npm-worm-compromises-popular-npm-packages/) |
+| Aug 4, 09:49 to 09:51 | GitHub issues report the incident | [Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+| Aug 4, 10:09 to 10:14 | Nine Cacheable-family releases publish with the payload | [Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+| Aug 4, 10:28 | ecto 5.0.1 publishes with the same files | [Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+| Aug 4, 10:39 to 11:11 | npm removes cacheable-request, flat-cache and cache-manager releases | [Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+| Aug 5 | Aikido counts at least 444 packages across 1,381 versions | [Aikido](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack) |
+| Aug 6 | Singapore's CSA issues advisory AD-2026-009 | [CSA](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/) |
+| Oct 7 to 8 | The same worm family hits tensorlake 0.5.144 | [The Hacker News](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) |
+
+## Who is affected?
+
+Anyone whose install resolved one of the bad versions is affected. Importing the package is not required, because npm runs `preinstall` scripts automatically during installation. [Snyk lists 11 original releases](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) and the last clean version of each:
+
+| Package | Malicious version | Last known good (per Snyk) |
+|---|---|---|
+| keyv | 6.0.0 | 5.6.0 |
+| flat-cache | 6.1.24 | 6.1.23 |
+| file-entry-cache | 11.1.6 | 11.1.5 |
+| cacheable | 2.5.1 | 2.5.0 |
+| cacheable-request | 13.0.20 | 13.0.19 |
+| cache-manager | 7.2.10 | 7.2.9 |
+| @cacheable/memory | 2.2.1 | 2.2.0 |
+| @cacheable/utils | 2.5.1 | 2.5.0 |
+| @cacheable/net | 2.1.1 | 2.1.0 |
+| @cacheable/node-cache | 3.1.2 | 3.1.1 |
+| ecto | 5.0.1 | 5.0.0 |
+
+Snyk notes that flat-cache and file-entry-cache often arrive through development tools such as ESLint. The worm-spread packages are a much longer list, which [CSA says Socket.dev maintains](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/). As of October 22, 2026, keyv 6.0.0 is gone from the [npm version list for keyv](https://www.npmjs.com/package/keyv?activeTab=versions), and registry data shows the same for the other ten, but internal mirrors and caches can still hold copies.
+
+## How serious is it?
+
+The keyv compromise is as serious as a supply-chain incident gets. The [GitHub advisory](https://github.com/advisories/GHSA-3p9h-f68w-m6fx) says an affected computer "should be considered fully compromised." Datadog reports the payload checks hundreds of file patterns for secrets and targets GitHub, npm, AWS, Kubernetes and HashiCorp Vault credentials. With a GitHub token that has workflow scope, it can also dump a repository's Actions secrets.
+
+The attacker also kept remote control. Datadog found that commands from the control server run without signing or sandboxing, so the operator could do more than steal. This was exploited in the wild, not a lab finding: [CSA says the campaign](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/) reached the software supply chains of several organizations. No CVE applies, because this is planted malware rather than a coding flaw.
+
+## What does it mean for small businesses and founders?
+
+The real target is the developer's machine and the CI runner, not your app. Those hold your cloud keys, GitHub tokens and npm publishing rights, so one install by a freelancer or a build job can expose everything they touch. A small team rarely has a security person watching for this.
+
+The exposure window was short, but short is not the same as safe. npm removed some of the bad releases within about an hour, yet Snyk's 11:16 UTC snapshot still showed eight malicious releases tagged `latest`. A fresh project, a CI job with no lockfile or a developer running an upgrade that morning could have pulled one. If you hired a contractor for a Node.js project in August, it is fair to ask whether they checked.
+
+The trust signals failed too. The keyv release had valid provenance and GitHub-verified commits from a bot account, as [Snyk documents](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/). The worm also wrote `.claude/settings.json` and `.vscode/tasks.json` files so it would run again when someone opened the project. Claude Code is part of my own stack, so I now review those folders in every diff like any other code.
+
+## What should you do now?
+
+1. **Search your lockfiles** (`package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`) for the 11 versions above and the Socket.dev list. Check CI caches and private registries too ([Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/)).
+2. **If you find one, treat the machine as compromised.** Isolate it, and rebuild if the package was installed ([CSA](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/)). Snyk advises checking for a `gh-token-monitor` persistence file before revoking GitHub tokens.
+3. **Rotate secrets from a clean computer:** GitHub, npm, cloud, SSH, Kubernetes and Vault credentials ([GitHub advisory](https://github.com/advisories/GHSA-3p9h-f68w-m6fx)).
+4. **Look for persistence in your repositories:** unexpected `.claude/` or `.vscode/` files, commits titled "chore: update config," and new public repositories described as "Shai-Hulud: Here We Go Again" ([Aikido](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack)).
+5. **Pin known-good versions** with `overrides`, rebuild the lockfile and reinstall with install scripts disabled ([Snyk](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/)).
+6. **Block install scripts by default** (standard practice). In pnpm, packages not listed in [`allowBuilds`](https://pnpm.io/settings/build) cannot run scripts; with npm, use `--ignore-scripts` where your build allows it.
+7. **If you publish packages, lock down publishing** (standard practice). npm's [trusted publishing docs](https://docs.npmjs.com/trusted-publishers) recommend requiring 2FA and disallowing tokens, and offer staged publishing that needs a 2FA approval per release.
+8. **Update Node.js while you are at it** (separate issue). The [October 21, 2026 security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) ships v22.23.4, v24.22.1 and v26.12.1, fixing four high-severity issues.
+
+## What can we learn from it?
+
+Provenance answers "where was this built?" and not "is this safe?" The attacker controlled the source, so the honest pipeline signed a malicious package. Account 2FA alone is not enough either: Datadog found the worm used stolen npm tokens that could bypass 2FA.
+
+The campaign is also not over. In October, the same worm family reached tensorlake, a TypeScript SDK, through a rogue commit on October 7. [The Hacker News reports](https://thehackernews.com/2026/10/tensorlake-npm-package-compromised-to.html) that this version adds a monitor that wipes the home directory if the stolen GitHub token is revoked. That is why the order of cleanup now matters: find and remove persistence first, then rotate.
+
+Boring defaults helped this site. The lockfile pins keyv 4.5.4 and flat-cache 4.0.1 through ESLint 10.6.0, far from the poisoned versions. The pnpm config also allows build scripts for only two packages, esbuild and sharp. That combination does not stop every attack, but it turns "install the latest" into a reviewed change.

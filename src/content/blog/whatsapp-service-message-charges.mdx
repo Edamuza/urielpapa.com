@@ -1,0 +1,77 @@
+---
+title: 'WhatsApp Now Charges for Service Messages: What Chatbots Should Check'
+seoTitle: 'WhatsApp Now Charges for Service Messages Past 1,000'
+description: >-
+  Since October 1, 2026, Meta charges for WhatsApp Business Platform service
+  messages after 1,000 a month per number. What changed and what to check.
+dek: >-
+  Free-form replies inside the 24-hour window on the WhatsApp Business Platform
+  are no longer free past a monthly allowance. Here is what changed and what a
+  chatbot owner should check.
+hub: automation
+frame: news-take
+takeaways:
+  - >-
+    From October 1, 2026, Meta charges per message for service messages on the
+    WhatsApp Business Platform, which had been free since November 1, 2024.
+  - >-
+    Each business phone number gets 1,000 free delivered service messages a
+    month, the allowance does not roll over, and charges start with the
+    1,001st message.
+  - >-
+    Utility templates sent inside an open 24-hour customer service window,
+    free since July 1, 2025, are charged again from October 1, 2026.
+  - >-
+    Meta asked businesses to add a payment method by September 30, 2026, and
+    without one it stops delivering service messages once the free tier is used
+    up.
+businessImpact: []
+sourceUrl: https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing
+published: 2026-10-22
+related:
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack:
+  - n8n
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Meta now charges businesses for service messages on the WhatsApp Business Platform. Since October 1, 2026, free-form replies inside the 24-hour customer service window cost money after the first 1,000 a month per business phone number, and utility templates in that window are charged again. If a chatbot or support tool answers your customers on WhatsApp through the API, your bill can change even if nothing else did.
+
+I build chatbots on Meta's messaging platforms with n8n, so pricing rules like this decide whether an automation stays cheap. This take is part of my [Automation](/topics/automation) writing, and my guide to [building an AI chatbot for Messenger and Instagram with n8n](/blog/n8n-messenger-instagram-chatbot) covers the Meta webhook side of such a bot.
+
+## What happened?
+
+Meta's official page on [pricing for the WhatsApp Business Platform](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing) says Meta "resumed charging, on a per-message basis, for messages that were previously free" on October 1, 2026. Two kinds of messages are affected. Service messages, which Meta defines as any non-template message not powered by its Business Agent, had been free since November 1, 2024. Utility templates sent inside an open customer service window had been free since July 1, 2025.
+
+The change applies to the WhatsApp Business Platform, the API that chatbots, CRMs and support tools connect to. The pricing page does not cover the WhatsApp Business App that many small shops run on a single phone.
+
+## What changed, in plain words?
+
+When a customer messages or calls your business, a 24-hour customer service window opens. Inside it, you can reply with normal text instead of a pre-approved template. These are the rules now:
+
+* **Service messages.** Each business phone number gets 1,000 delivered service messages free per month. The count resets monthly, unused messages do not roll over, and every message from the 1,001st is charged.
+* **Utility templates in the window.** Order updates and similar templates sent inside an open window are charged again. The page lists no free tier for them.
+* **Still free.** Messages your customers send you are never charged. A reply to someone who came from a Click to WhatsApp ad opens a free entry point window of up to 7 days, in which Meta does not charge for marketing, utility, authentication or service messages.
+* **Rates by market.** The price depends on the message category and the recipient's country calling code, and Meta says it changes prices only on January 1, April 1, July 1 or October 1.
+* **No payment method, no messages.** Meta asked businesses to add a payment method by September 30, 2026. Without one, it delivers service messages within the free tier and stops after that.
+
+For developers, status webhooks now report the pricing type as `regular` instead of `free_customer_service` for messages beyond the free tier.
+
+## What does it mean for small businesses and founders?
+
+Until now, the running cost of a WhatsApp chatbot was mostly hosting plus AI tokens. My Messenger and Instagram bot cost about US$10 a month in early 2026, mostly a small server and tokens. On WhatsApp, per-message fees now become a third line on that bill, and they grow with every reply.
+
+The free tier sounds generous, but it fills quickly. A bot that sends three messages per conversation uses the 1,000 free messages in about 333 conversations a month, per phone number. Bots that split one answer into several short bubbles reach the limit even sooner. Because rates follow the customer's country code, a Philippine business that answers customers abroad pays those markets' rates.
+
+This is a WhatsApp pricing change, so a Messenger and Instagram bot like the one in my guide is not affected by it.
+
+## What should you do now?
+
+1. **Check the payment method** on your WhatsApp Messaging account in Meta Business Suite. If it is missing, replies stop once the free tier runs out.
+2. **Count last month's service messages** per business phone number, using your provider's dashboard or the pricing type in your webhooks.
+3. **Make replies fuller and fewer.** One complete answer costs less than three short ones. Review your chatbot prompt and any flow that sends follow-up messages.
+4. **Update cost reports** that read the old `free_customer_service` pricing type, so charged messages are counted correctly.
+5. **Ask your WhatsApp solution provider** how it passes these fees on, and look up the rate for the countries your customers are in before you set a monthly budget.

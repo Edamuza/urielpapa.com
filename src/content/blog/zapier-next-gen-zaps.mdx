@@ -1,0 +1,77 @@
+---
+title: 'Zapier Next Gen Zaps: Workflows You Can Build From an AI Chat'
+seoTitle: 'Zapier Next Gen Zaps: What Changes for Small Teams'
+description: >-
+  Zapier announced Next Gen Zaps at ZapConnect 2026: workflows built from AI
+  tools over MCP, with full lists, nested loops and a self-healing agent.
+dek: >-
+  Zapier's new kind of Zap can be described in Claude, ChatGPT or Cursor and
+  deployed to Zapier. Here is what is new, what is still early access, and who
+  should try it.
+hub: automation
+frame: news-take
+takeaways:
+  - >-
+    Zapier announced Next Gen Zaps at ZapConnect 2026 on September 23, 2026,
+    and they are in early access on paid Zapier plans.
+  - >-
+    A Next Gen Zap can be described inside an MCP-enabled AI tool such as
+    Claude, ChatGPT or Cursor and then deployed to Zapier.
+  - >-
+    Next Gen Zaps remove the 500-item loop limit of classic Zaps and add
+    branches that rejoin, nested loops and pauses that wait for a human reply.
+  - >-
+    During early access, Zapier says building and running Next Gen Zaps does
+    not count toward tasks, and it will announce pricing before billing starts.
+businessImpact: []
+sourceUrl: https://community.zapier.com/product-updates/the-next-generation-of-zaps-is-here-53832
+published: 2026-10-22
+related:
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Zapier has announced Next Gen Zaps, a new kind of automation that you can describe in an AI tool such as Claude, ChatGPT or Cursor and deploy to Zapier. They lift some long-standing limits of classic Zaps, such as the 500-item loop cap, and add an agent that watches runs and proposes fixes. For small teams, the main question is whether an automation built through a chat stays reliable once real data flows through it.
+
+I build most of my automations in n8n, so I follow how Zapier and others change the way workflows get built. This take is part of my [Automation](/topics/automation) writing, and my guide to [an AI chatbot for Messenger and Instagram built with n8n](/blog/n8n-messenger-instagram-chatbot) shows what a production workflow looks like step by step.
+
+## What happened?
+
+Zapier announced Next Gen Zaps at ZapConnect 2026 on September 23, 2026, and shared the details in [an announcement on its community site](https://community.zapier.com/product-updates/the-next-generation-of-zaps-is-here-53832). Zapier calls them "a new way to build and run more powerful automations on Zapier, from almost anywhere." The feature is in early access on paid plans, and Team plan requests must come from an account owner or admin.
+
+## What changed, in plain words?
+
+There are two changes: where you build, and what a Zap can do.
+
+On the building side, you can describe a workflow in an AI tool that supports the Model Context Protocol (MCP), the open standard that lets AI apps use outside tools, and deploy it to Zapier. You can also build inside Zapier with plain language, code or a visual canvas.
+
+On the capability side, Zapier lists these differences from classic Zaps:
+
+* **Whole lists.** No more 500-item loop limit.
+* **Branches that rejoin.** Data can split into different paths and merge again.
+* **Nested loops.** Loops can run inside loops, with a summary at the end.
+* **Error handling that keeps going.** One failed step no longer stops the whole run.
+* **Mid-run pauses.** A workflow can wait for a human reply or a scheduled follow-up, then resume.
+* **Self-healing.** A monitoring agent watches runs, diagnoses failures, and can apply or suggest a fix.
+
+On cost, Zapier's [features page](https://zapier.com/features) says that "building and running them is free on any paid Zapier plan" during early access. It also says Next Gen Zaps will use "the same task-based pricing" at general availability, with details shared before billing begins.
+
+## What does it mean for small businesses and founders?
+
+Building from a chat lowers the skill needed to start. An owner who can explain a process in plain words can now get a first draft of a workflow without learning Zapier's editor first. That matters for small teams, where the person who knows the process is rarely the person who builds automations.
+
+The new logic matters more than the chat, though. Long lists, rejoining branches and steps that wait for a human are what real business processes need, such as an approval before an invoice goes out. Those used to push people toward workarounds or toward tools like n8n and Make.
+
+My caution is about trust. A workflow you did not build step by step is harder to check, and a self-healing agent that applies fixes can change behavior without you noticing. Early access also means pricing is not final, so a workflow that runs free today may cost tasks later.
+
+## What should you do now?
+
+1. **Request early access** only if you are on a paid plan and have a real workflow in mind, ideally one blocked by the 500-item limit or by the lack of human approval steps.
+2. **Start with a low-risk process,** such as an internal report or a lead summary, before anything that sends messages to customers or moves money.
+3. **Read what the AI built.** Open each step in Zapier, test it with real sample data, and only then turn it on.
+4. **Decide how much the agent may fix.** Prefer suggested fixes you approve over fixes applied automatically, at least at first.
+5. **Track task use now,** so you can estimate the cost once Zapier announces general availability pricing.

@@ -1,0 +1,71 @@
+---
+title: 'Mistral Large 4: A Trillion-Parameter Open-Weight Model, in Preview'
+seoTitle: 'Mistral Large 4: What the Preview Means for You'
+description: >-
+  Mistral Large 4 is in public preview with open weights promised. What it is,
+  what the API costs, what is still missing, and when small businesses should try it.
+dek: >-
+  Mistral's new flagship is a 1-trillion-parameter model with open weights on
+  the way. Here is what is confirmed, what is not, and what it costs today.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    Mistral AI launched a public preview of Mistral Large 4 on October 6, 2026,
+    through the API on Mistral Studio.
+  - >-
+    Mistral Large 4 is a 1-trillion-parameter, natively multimodal model with
+    52 billion active parameters, trained on 3,800 NVIDIA Grace Blackwell GPUs.
+  - >-
+    The Mistral Large 4 preview costs US$1.36 per million input tokens and
+    US$4.18 per million output tokens.
+  - >-
+    Mistral promised the Mistral Large 4 weights by the end of October 2026 but
+    has not named a license, so self-hosting terms are still unknown.
+businessImpact: []
+sourceUrl: https://mistral.ai/news/mistral-large-4/
+published: 2026-10-22
+related:
+  - what-is-tokenization
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Mistral AI has launched a public preview of Mistral Large 4, its new flagship model, with open weights promised for later in October 2026. It matters because Mistral plans to release the weights of a 1-trillion-parameter model, and its API price sits below GPT-6 Sol and Gemini 4 Argon. For now, it is a preview, and key details such as the license are still missing.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. The prices below are per million tokens, which my post on [what tokenization is](/blog/what-is-tokenization) explains.
+
+## What happened?
+
+On October 6, 2026, Mistral published [Introducing Mistral Large 4](https://mistral.ai/news/mistral-large-4/). The model is available as a public preview through the API on Mistral Studio. Mistral says it will release the weights "by the end of the month," and calls the model the first milestone funded by its [€3 billion Series D](https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/), announced on September 8.
+
+## What changed, in plain words?
+
+* **A very large mixture-of-experts model.** Mistral Large 4 has about 1 trillion parameters, with 52 billion active for each token. Mixture-of-experts means only a slice of the model runs at a time, which keeps it cheaper to serve than its size suggests.
+* **Text and images in one model.** Mistral describes it as natively multimodal, with instruct and reasoning modes in a single model.
+* **Many languages.** The training data spans more than 160 languages, including all official EU languages.
+* **European training and hosting.** The model was trained from scratch on 3,800 NVIDIA Grace Blackwell GPUs in Mistral's European datacenters. Mistral also plans a European deployment it operates end-to-end, alongside other regions.
+* **Preview pricing.** The announcement lists US$1.36 per million input tokens and US$4.18 per million output tokens.
+* **Vendor-reported scores.** Mistral reports 61.7 percent on DeepSWE v1.1 for coding. In a blind human evaluation run by Surge AI, it ranked second of five, behind Claude Opus 5.
+
+## What does it mean for small businesses and founders?
+
+Mistral Large 4 adds a cheaper option at the top end. As of October 22, 2026, OpenAI lists GPT-6 Sol at [US$2 input and US$10 output](https://developers.openai.com/api/docs/pricing) per million tokens, and Google lists Gemini 4 Argon at the same introductory price. Mistral's output price is less than half of both.
+
+Here is a rough estimate with the chatbot volume from my tokenization post: about 2 million input tokens and 150,000 output tokens a month. On Mistral Large 4, that is 2 × US$1.36 plus 0.15 × US$4.18, or about US$3.35 a month. That is an estimate, not a bill, and a smaller model would still be cheaper for simple replies.
+
+The open weights are the bigger story, but they are not here yet. Open weights let a company run the model on its own servers, keep data in-house and avoid depending on one provider. A 1-trillion-parameter model needs serious hardware, though, so for most small businesses self-hosting is not realistic. The practical benefit is that other hosts may offer it once the weights are out, which can push prices down.
+
+Two details are still missing. The announcement does not state a context window or name a license. The license decides whether a business can use the weights commercially, and on what terms.
+
+## What should you do now?
+
+* **Treat it as a preview.** Test it on your own prompts, but do not move production work onto a model that can still change.
+* **Wait for the license.** If self-hosting or a local deployment is the reason you are interested, read the license when the weights ship before planning around it.
+* **Compare on your tasks.** Vendor benchmarks are a starting point. Run the same prompts through Mistral Large 4 and your current model, and compare quality and cost.
+* **Check the European option.** If your clients care where data is processed, ask Mistral about the European deployment when it is available.
+
+As of October 22, 2026, the Mistral Large 4 weights were not yet listed on [Mistral's Hugging Face page](https://huggingface.co/mistralai).

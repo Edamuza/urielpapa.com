@@ -1,0 +1,110 @@
+---
+title: 'OpenCode Quietly Fixed a Critical MCP Flaw: What to Check Now'
+seoTitle: 'OpenCode MCP OAuth Flaw: What Windows Users Should Do'
+description: >-
+  A critical OpenCode flaw let a remote MCP server run code on Windows and WSL
+  during OAuth sign-in. Versions 1.0.137 to 1.18.32 are affected; 1.18.33
+  fixes it.
+dek: >-
+  Pillar Security found a remote code execution bug in OpenCode's MCP sign-in
+  flow. The fix shipped without a CVE or advisory, so your scanners will not
+  warn you. Here is what happened and what to check.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    Pillar Security found that OpenCode versions 1.0.137 to 1.18.32 on Windows
+    and WSL could run code chosen by a remote MCP server during the MCP OAuth
+    sign-in flow.
+  - >-
+    Anomaly, the company behind OpenCode, fixed the flaw in version 1.18.33 on
+    September 28, 2026, but published no CVE or security advisory, so
+    vulnerability scanners will not flag old installs.
+  - >-
+    Pillar proposed a CVSS score of 9.8 out of 10 for the OpenCode flaw,
+    because once a user signs in to a hostile MCP server, no further click or
+    consent is needed.
+  - >-
+    Every remote MCP server connected to an AI coding agent is untrusted input
+    that runs next to your code, your shell and your API keys.
+businessImpact: []
+sourceUrl: https://www.pillar.security/blog/open-and-shut-remote-code-execution-in-opencode-via-mcp-oauth
+published: 2026-10-22
+related: []
+projects: []
+stack:
+  - opencode
+  - claude-code
+  - cursor
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+OpenCode is an open-source AI coding agent for the terminal, made by a company called Anomaly. Anomaly fixed a critical flaw that let a remote MCP server run code on a developer's Windows or WSL machine during OAuth sign-in. Pillar Security found and reported it, and the fix shipped in OpenCode 1.18.33 without a CVE or security advisory. That means dependency scanners will not tell you that an older install is exposed, so you have to check yourself.
+
+I use OpenCode as a terminal coding agent for trying open and local models on real code, next to Claude Code and Cursor, so this one is about tools I run on my own machine. It is part of my [AI](/topics/ai) writing.
+
+## What happened?
+
+Eilon Cohen, head of security research at Pillar Security, published [the full write-up](https://www.pillar.security/blog/open-and-shut-remote-code-execution-in-opencode-via-mcp-oauth) on the bug. MCP (Model Context Protocol) servers give an AI agent extra tools, and remote ones often ask you to sign in with OAuth. During that sign-in, the remote server tells OpenCode the address of its sign-in page.
+
+OpenCode passed that address straight to a helper that opens your browser, the `open` npm package, pinned at version 10.1.2. It did not check the address scheme or confirm that it matched the server you configured. On Windows, that version of `open` built a PowerShell command without escaping the address, so part of a crafted address could run as a command. Pillar classifies it as OS command injection (CWE-78).
+
+| Date (2026) | Event |
+| --- | --- |
+| August 29 | Pillar reports the flaw privately through a GitHub Security Advisory |
+| September 25 | Anomaly confirms receipt and says malicious MCP servers are outside its threat model; pull request #51414, which closes the bug, is merged |
+| September 28 | OpenCode 1.18.33 ships to npm with the fix |
+| October | Pillar publishes its write-up, with no CVE assigned |
+| October 20 | [Infosecurity Magazine reports](https://www.infosecurity-magazine.com/news/opencode-quietly-patched-critical/) that OpenCode quietly patched the flaw |
+
+The [OpenCode 1.18.33 release notes](https://github.com/anomalyco/opencode/releases/tag/v1.18.33) list a bug fix about reporting MCP browser launch failures. They do not mention security. Pillar quotes Anomaly's position as "trying to deal with a malicious MCP server is outside our threat model."
+
+## Who is affected?
+
+You are affected if you run OpenCode version 1.0.137 through 1.18.32 on Windows or in Windows Subsystem for Linux (WSL), and you have a remote MCP server configured that uses OAuth sign-in. Pillar says macOS and Linux are not affected.
+
+The MCP server does not have to be malicious on the day you add it. Pillar notes that a server compromised later, a hijacked registry entry, a typosquatted name or an expired domain could all lead to the same code path. A server you trusted in June can turn hostile in October without any change on your side.
+
+This flaw is separate from the [OpenCode Console breach](https://thehackernews.com/2026/10/opencode-console-breach-may-have.html) disclosed on October 17, 2026, which may have exposed provider API keys saved in OpenCode's hosted Console. Cohen told Infosecurity Magazine the two incidents are unrelated, but both come down to what you let an AI coding tool hold and accept.
+
+## How serious is it?
+
+Pillar proposed a CVSS v3.1 score of 9.8, which is critical. That score is Pillar's own, because no CVE exists and no official score was published. The rating reflects that the attack works over the network and needs no extra interaction once you start the sign-in flow.
+
+Code that runs this way runs as your user account. On a developer laptop, that usually means access to source code, SSH keys, cloud logins and the API keys your agent uses. Pillar's write-up does not say whether the flaw was exploited in the wild.
+
+The missing advisory is a big part of the risk. Earlier OpenCode flaws got public advisories. [CVE-2026-22812](https://github.com/advisories/GHSA-vxw4-wv6m-9hhh) covered an unauthenticated local HTTP server, disclosed in January and fixed in 1.0.216. [GHSA-632h-h47v-g4x4](https://github.com/anomalyco/opencode/security/advisories/GHSA-632h-h47v-g4x4) covered a cross-site upgrade request, disclosed in September and fixed in 1.18.22. This time there is nothing for a scanner to match. Pillar also argues that the address checks added in 1.18.33 are not the real fix. The essential change is the bump of `open` to 11.0.4, a version that escapes the address before it reaches PowerShell.
+
+## What does it mean for small businesses and founders?
+
+Small teams lean on AI coding agents to ship faster, and one laptop often holds client repositories, production keys and deploy access. Every remote MCP server you connect adds another party that can send data to that laptop. That trade is often worth it, but it should be a choice, not a default.
+
+The vendor's threat model may not match yours. Anomaly said malicious MCP servers are outside its threat model, which leaves the decision about which servers to trust with you. For a founder, that means keeping a short list of approved servers, the same way you would approve a browser extension or a payment plugin.
+
+No CVE also means no reminder. If your team relies on automated alerts, OpenCode 1.18.32 on a Windows machine will look fine. A simple inventory of which AI tools run where, and at which version, closes that gap.
+
+## What can we learn from it?
+
+AI coding agents run with access to your machine and your secrets, so every input they accept matters. Prompt injection is the attack most people know: text hidden in a file, web page or tool description that steers the model. Pillar points out that this flaw is different. No model was fooled; the client trusted an address from a remote server and handed it to a shell.
+
+The lessons apply to OpenCode, Claude Code, Cursor and any other agent:
+
+* **Treat everything from an MCP server as untrusted.** Discovery documents, tool descriptions and error messages all come from someone else's server.
+* **Limit permissions.** An agent should not run as an administrator, and production secrets should not sit in the environment of every coding session.
+* **Contain the damage.** A separate user account, container or virtual machine for untrusted repositories and servers keeps a bad tool away from everything else.
+* **Split your keys.** One provider key per tool, with a spend limit, turns a stolen key into a capped bill.
+
+For people who build these tools, Pillar's advice is to pass URLs as program arguments instead of building shell commands from them, to bind OAuth discovery to the configured server's origin, and to test on Windows too.
+
+## What should you do now?
+
+1. **Find every OpenCode install.** Check Windows and WSL machines first. For a global npm install, `npm ls -g opencode-ai` prints the installed version.
+2. **Upgrade to OpenCode 1.18.33 or later**, using the same method you used to install it.
+3. **If you cannot upgrade yet, remove unvetted remote MCP servers** from your OpenCode configuration on Windows and WSL, as Pillar recommends.
+4. **Review the MCP servers you keep.** Confirm who runs each one, that the domain is still theirs and that you added it from an official source.
+5. **Give each AI tool its own provider key** with a spend limit or billing alert, as [The Hacker News suggests](https://thehackernews.com/2026/10/opencode-console-breach-may-have.html) after the Console breach.
+6. **Run agents on untrusted code in a sandbox**, such as a container, a virtual machine or a separate user account.
+7. **If you got OpenCode's October 17 email about Console keys**, revoke and replace those keys in each provider's dashboard. Deleting a key from Console does not revoke it.
+8. **Track AI tool versions by hand for now.** Without a CVE, your scanner will not do it for you.

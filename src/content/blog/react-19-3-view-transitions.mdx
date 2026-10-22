@@ -1,0 +1,75 @@
+---
+title: 'React 19.3: View Transitions and Fragment Refs Are Now Stable'
+seoTitle: 'React 19.3: View Transitions Are Now Stable'
+description: >-
+  React 19.3 makes View Transitions and Fragment Refs stable and adds a
+  browser() API for client-only code. What changed and whether to upgrade now.
+dek: >-
+  React has a new minor release that turns two long-running experiments into
+  stable features. Here is what changed, in plain words, and what it means for
+  apps built on React 19.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    React 19.3, announced on September 9, 2026, makes View Transitions and
+    Fragment Refs stable after they first appeared as experiments in April
+    2025.
+  - >-
+    The React 19.3 ViewTransition component animates elements as they enter,
+    exit or change, using the browser's View Transition API, and works only on
+    the web for now.
+  - >-
+    React 19.3 adds a browser() API in react-dom that keeps a component out of
+    server rendering and shows the nearest Suspense fallback in the HTML
+    instead.
+  - >-
+    Next.js 16.4, released on October 6, 2026, ships with React 19.3.
+businessImpact: []
+sourceUrl: https://react.dev/blog/2026/09/09/react-19-3
+published: 2026-10-22
+related:
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - react
+  - nextjs
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+The React team released React 19.3, a minor version that makes View Transitions and Fragment Refs stable. View Transitions let an app animate between screens with the browser's own animation engine, which used to take extra libraries and custom code. The release lists no breaking changes, so for most React 19 apps it is a low-risk upgrade with useful new tools.
+
+I have built on React 19 for both [TravelEase](/projects/travelease) and the ERP at my former agency, so this is the line of React I work in. This take is part of my [Tech Stacks](/topics/tech-stacks) writing.
+
+## What happened?
+
+The React team published [React 19.3](https://react.dev/blog/2026/09/09/react-19-3) on the official React blog on September 9, 2026, and said the release is available on npm. View Transitions and Fragment Refs were first shown as experimental APIs in the [April 2025 React Labs post](https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-and-more), so this release marks them ready for production use.
+
+## What changed, in plain words?
+
+These are the main changes from the [release post](https://react.dev/blog/2026/09/09/react-19-3):
+
+* **View Transitions are stable.** The `ViewTransition` component animates elements as they appear, disappear, move or resize. By default it cross-fades, and you can style it with CSS. It only animates updates marked as Transitions, and for now it works only in the browser DOM, with React Native support still in progress.
+* **Transition types.** A new `addTransitionType` function records why a change happened, such as "next" or "previous", so the same screen change can slide left or right depending on direction.
+* **Fragment Refs are stable.** A ref on a Fragment lets you focus, observe or scroll a group of elements without adding a wrapper element to the page.
+* **Client-only components.** A new `browser()` API in `react-dom` keeps a component out of server rendering. On the server, the nearest Suspense fallback goes into the HTML instead.
+* **Smaller changes.** Server Components can now render a Context directly, React works with the Trusted Types security policy, and a slow Transition no longer blocks unrelated ones.
+
+## What does it mean for small businesses and founders?
+
+For a business app, the visible gain is polish with less code. Smooth movement between a list and a detail page makes a booking flow or a dashboard feel faster and easier to follow. Without a built-in option, the usual choice is an animation library, which means more JavaScript to download, or no effect at all.
+
+The `browser()` API solves a common, quiet problem. Some widgets, such as maps or charts that need the window, cannot render on the server, and each team writes its own workaround. A standard way to mark those parts as client-only means less custom code to maintain.
+
+The limit is mobile. If your product is a React Native or Expo app, `ViewTransition` does not help yet, because the React team says support beyond the DOM is still in progress.
+
+## What should you do now?
+
+* **On React 19 already:** upgrade `react` and `react-dom` together on a branch and run your tests. The post lists no breaking changes, but its changelog includes behavior changes, such as effects running twice in Strict Mode during hydration.
+* **On Next.js:** you get React 19.3 by upgrading to [Next.js 16.4](https://nextjs.org/blog/next-16-4), which ships with it.
+* **Adding animation:** try `ViewTransition` on one route change before removing an animation library. Check that users who prefer reduced motion still get a calm experience.
+* **Have client-only widgets:** replace custom "is mounted" checks with `browser()` where it fits.
+
+If you are choosing a framework around React for a data-heavy app, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) compares the two approaches I have used.

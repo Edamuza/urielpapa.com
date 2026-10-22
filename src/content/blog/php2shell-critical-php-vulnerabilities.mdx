@@ -1,0 +1,105 @@
+---
+title: 'php2shell: Two Critical PHP Flaws and What Site Owners Should Do'
+seoTitle: 'php2shell PHP Flaws: What to Check and Patch Now'
+description: >-
+  PHP fixed two critical remote code execution flaws, CVE-2026-109618 and
+  CVE-2026-109619, on October 21, 2026. Who is affected and how to patch.
+dek: >-
+  The PHP project shipped an emergency security release for two flaws that can
+  let an attacker run code on a web server without logging in. Here is what
+  happened and a checklist for WordPress and Laravel sites.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35, released on October 21, 2026, fix
+    two critical flaws, CVE-2026-109618 and CVE-2026-109619, that can allow
+    unauthenticated remote code execution.
+  - >-
+    Both php2shell flaws are rated CVSS v4.0 9.2 by the PHP security team, and
+    the 10.0 score that leaked a day early was wrong.
+  - >-
+    The PHP project calls an update the only complete fix, and PHP 8.1 and
+    older get no official release, only minimal source backports for 7.4, 8.0
+    and 8.1.
+  - >-
+    CISA said on October 21, 2026 that it had not observed exploitation yet,
+    but a proof-of-concept video leaked a day before the patch.
+businessImpact: []
+sourceUrl: https://www.php.net/archive/2026.php#2026-10-21-5
+published: 2026-10-22
+related:
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - php
+  - laravel
+  - wordpress
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+The PHP project released PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 on October 21, 2026 to fix two critical flaws, nicknamed php2shell, that can let an attacker run code on a web server without logging in. Any business whose website runs on PHP, which includes every WordPress and Laravel site, should confirm that its server is on a fixed version today.
+
+I have built on PHP, from the Laravel 13 API behind the ERP at my former agency to [five in-house WordPress SEO plugins](/projects/wordpress-seo-plugins), so this one is close to home. It is part of my [Tech Stacks](/topics/tech-stacks) writing, and my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers where PHP sits in a modern business system.
+
+## What happened?
+
+The PHP security team published a [security advisory on php.net](https://www.php.net/archive/2026.php#2026-10-21-5) on October 21, 2026, titled "Critical remote code execution vulnerabilities, update now." It fixes two bugs in PHP itself, not in any one framework or plugin:
+
+* **CVE-2026-109618, "RCE via OOM corruption"** ([GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w)). When a request runs out of memory at the wrong moment, PHP can stop while internal request data is only half set up. The cleanup step may then treat that broken data as valid.
+* **CVE-2026-109619, "RCE via stale global state"** ([GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp)). Internal state from one request can survive after its memory is freed, and a later request on the same worker may use it.
+
+The release came a day earlier than planned. The [PHP Foundation's write-up](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) explains that the CVE IDs, a video of a working proof of concept and some mitigation advice all leaked on October 20. The flaws were found by researchers at Calif, Wiz and OpenAI, among others.
+
+| Date (2026, UTC) | Event |
+| --- | --- |
+| July 30 | Calif starts a PHP audit under the Patch the Planet program. |
+| August 11 | Calif and OpenAI each report a remote code execution bug with the out-of-memory root cause. |
+| August 24 | Wiz reports further attack paths. |
+| September 18 | OpenAI reports further attack paths. |
+| October 20, about 15:00 | Both CVE IDs circulate online with a wrong CVSS score of 10.0. |
+| October 20, 19:30 | PHP publishes its pre-announcement early, setting the release for October 21. |
+| October 20, about 20:00 | Calif mistakenly publishes a video showing its proof of concept. |
+| October 21, 07:41 | Chainguard publishes patched images about six hours before the release, breaking the embargo. |
+| October 21, 14:00 | PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 are released with the advisory. |
+
+## Who is affected?
+
+The php.net advisory says the risk covers "all PHP installations serving web requests." That includes PHP-FPM, Apache with mod_php, php-cgi, FrankenPHP and LiteSpeed. The PHP team rates the risk highest for Apache with mod_php, where an attack can start before any application code runs.
+
+The official [CVE record for CVE-2026-109618](https://www.cve.org/CVERecord?id=CVE-2026-109618) lists PHP 8.2, 8.3, 8.4 and 8.5 below the fixed versions as affected. Older branches are a problem too. PHP 8.1 and older no longer get releases from the PHP project, but the team published minimal source backports for PHP 7.4, 8.0 and 8.1 because of the severity. [Google Cloud's response post](https://cloud.google.com/blog/products/identity-security/responding-to-core-php-vulnerabilities-cve-2026-109618-cve-2026-109619) goes further and says all versions from 5.4 through 8.5.11 are affected.
+
+WordPress, Laravel and custom PHP apps are all exposed through the server they run on, not through their own code. Updating WordPress core or a Laravel package does not fix this. The PHP binary on the server has to change.
+
+## How serious is it?
+
+Both flaws carry a CVSS v4.0 score of 9.2, which is critical. The PHP Foundation notes that the 10.0 score that leaked early was incorrect. The reporters demonstrated full remote code execution, and for the out-of-memory bug on mod_php it worked with default settings.
+
+On exploitation, the sources are careful. [CISA's alert](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching) of October 21 says it "has not observed exploitation of these vulnerabilities as of the time of publication." The PHP security team said it found no functional exploits at release. But the leaked video sped up work on proofs of concept, and [Qualys's post](https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities), updated October 22, says Cloudflare has reported attack traffic aimed at these flaws. Attack traffic is not proof of a break-in, but it means people are trying.
+
+The CVSS vector rates attack complexity as high, so not every site will fall to the same request. Even so, a remote attack that needs no login, on software as widely used as PHP, is the kind of bug worth patching the same day.
+
+## What does it mean for small businesses and founders?
+
+Many small business websites, in the Philippines and elsewhere, run on WordPress with shared or managed hosting. On that kind of hosting, the PHP version belongs to the host, not to you. Your job is to confirm the host has patched, and to move off old PHP versions if your site is still on one.
+
+For businesses with a custom Laravel app on a VPS or in Docker, the job is yours. Someone has to update the PHP packages or rebuild the image, then restart PHP so the new build is the one serving requests. The PHP team also flags timing: [PHP 8.2 reaches end of life on December 31, 2026](https://www.php.net/archive/2026.php), so a site on 8.2 needs both this patch and an upgrade plan.
+
+## What should you do now?
+
+1. **Find every place PHP runs.** CISA asks teams to inventory all systems running PHP, including PHP bundled inside other software. Think websites, staging copies, admin tools and old microsites.
+2. **Check the version that serves web requests.** In WordPress, go to Tools, then Site Health, then Info, and open the [Server section](https://wordpress.org/documentation/article/site-health-screen/#server). On your own server, check the PHP version that PHP-FPM or mod_php is actually running, or the PHP selector in your hosting panel, because Qualys warns that `php -v` may report a different install from the one serving pages.
+3. **Compare against the fixed versions.** Safe versions are PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 or later. Linux distributions can backport fixes under an older version number, so check your vendor's advisory too.
+4. **Update.** On shared or managed hosting, ask the host in writing whether it has applied the October 21 PHP security release. On your own server, update the distribution's PHP packages. For Docker, rebuild on a patched base image and redeploy.
+5. **Restart every PHP worker.** Restart PHP-FPM and Apache, plus any long-running workers, so no process keeps the old build in memory. Qualys advises checking for workers still running the previous build.
+6. **Get off PHP 8.1 and older.** These versions get no official release. Move to PHP 8.3 or newer, test the site on a staging copy first, and plan the 8.2 upgrade before December 31, 2026.
+7. **Use stopgaps only if you truly cannot update today.** The php.net advisory lists settings such as `session.upload_progress.enabled=0` and lower `post_max_size`, but warns they "do not make an installation safe." CISA adds that systems you cannot patch should be taken offline.
+8. **Watch for signs of trouble.** CISA suggests watching for PHP worker processes that launch shells or download tools. If you see that, treat it as an incident, not a patching task.
+
+## What can we learn from it?
+
+The biggest lesson is that patching is only half the job if nobody knows which PHP version is live. A site can show the right version on the command line and still serve pages from an old worker. A short list of every site, its host and its PHP version saves hours on days like this.
+
+The second lesson is that hosting choice is a security choice. With managed hosting, the host carries the patch, and you only need to confirm it. With your own server, you get more control and more responsibility. Either is fine, as long as someone owns the update when the next critical release lands.

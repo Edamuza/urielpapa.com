@@ -1,0 +1,75 @@
+---
+title: 'Next.js 16.4: Cache Components Become the Recommended Default'
+seoTitle: 'Next.js 16.4: Cache Components Are Now the Default'
+description: >-
+  Next.js 16.4 makes Cache Components the recommended model for every app and
+  adds ensureStatic to keep pages static. What changed and what to do now.
+dek: >-
+  The Next.js team now recommends Cache Components for every app and says they
+  become the default in Next.js 17. Here is what that means before you plan
+  your next upgrade.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    Next.js 16.4, released October 6, 2026, recommends Cache Components for
+    every Next.js app, and the team says they will become the default in
+    Next.js 17.
+  - >-
+    New apps created with create-next-app have Cache Components turned on by
+    default from Next.js 16.4.
+  - >-
+    The new ensureStatic route setting in Next.js 16.4 fails the build if a
+    dynamic component sneaks into a page that should stay static.
+  - >-
+    In Next.js 16.4, the Turbopack disk cache uses 20 to 25 percent less space
+    with no configuration changes.
+businessImpact: []
+sourceUrl: https://nextjs.org/blog/next-16-4
+published: 2026-10-22
+related:
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - nextjs
+  - react
+  - vercel
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Vercel's Next.js team released Next.js 16.4, and its biggest change is a recommendation, not a feature: Cache Components are now the suggested way to build every Next.js app. The team says Cache Components will become the default in Next.js 17, so any App Router project has a migration ahead, and 16.4 is the release to start planning it.
+
+The ERP I built at my former agency used a Next.js 16 and React 19 front end, so this is the upgrade path I would be on. It is part of my [Tech Stacks](/topics/tech-stacks) writing, and my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers where Next.js fits in a business system.
+
+## What happened?
+
+The Next.js team published [Next.js 16.4](https://nextjs.org/blog/next-16-4) on October 6, 2026. The post says that "starting with Next.js 16.4," Cache Components are recommended "as the best choice for every Next.js app," and that all new apps from `create-next-app` have them on by default.
+
+## What changed, in plain words?
+
+Cache Components are a way to mark which parts of a page can be cached, using a `'use cache'` line inside a component or function. The team describes it as a component-level version of the Cache-Control header. It replaces the implicit caching of earlier App Router versions and makes caching opt-in. These are the main changes in the [release post](https://nextjs.org/blog/next-16-4):
+
+* **A static guard.** A new `ensureStatic` route setting fails the build if any dynamic content gets into a page that should be static. You can set it on a page or on a whole layout.
+* **Control over prefetching.** New `navigation()` and `prefetch()` functions let you hold back parts of a page until a user actually clicks, instead of loading everything for every visible link.
+* **Lighter tooling.** The Turbopack disk cache uses 20 to 25 percent less space, server code in development recompiles only when a request needs it, and production builds get shorter CSS class names and smaller JavaScript.
+* **React 19.3.** Next.js 16.4 ships with [React 19.3](https://react.dev/blog/2026/09/09/react-19-3), including stable View Transitions.
+* **Upgrade help.** A new `next upgrade --agent` command prepares migration guides and codemods for a coding agent to apply.
+
+## What does it mean for small businesses and founders?
+
+The practical point is cost and predictability. Static pages are served cheaply from a cache or CDN, while pages rendered on every request use server compute, which on most hosts is billed by use. `ensureStatic` turns "this page should be static" from a hope into a build check, which helps marketing pages, blogs and stores that should never run server code per visitor.
+
+The prefetching controls matter for the same reason. Prefetching makes an app feel instant, but the release post's own example shows how prefetching every visible link can load far more data than users ever open. Being able to defer the heavy part keeps the speed without the extra database load.
+
+The cost of all this is migration work. Code that relied on the old implicit caching will behave differently under Cache Components, and Next.js 17 will make the new model the default.
+
+## What should you do now?
+
+* **Starting a new app:** start on 16.4 with the `create-next-app` defaults, so Cache Components are on from day one and Next.js 17 is a smaller step.
+* **Running an existing app:** upgrade with `npm install next@latest`, then turn on Cache Components on a branch and test the pages that depend on fresh data, such as dashboards and carts.
+* **Running a mostly static site:** add `ensureStatic` to the layouts that should never render per request.
+* **Planning ahead:** treat Next.js 17 as a migration, not a routine bump, and put it on the calendar now.
+
+If your site is mostly content rather than an app, my take on [Astro 7 for content sites](/blog/astro-7-content-sites) covers a framework built for that case.

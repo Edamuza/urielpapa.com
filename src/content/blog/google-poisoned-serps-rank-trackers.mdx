@@ -1,0 +1,115 @@
+---
+title: 'Google Is Feeding Rank Trackers Poisoned Results: What to Trust'
+seoTitle: 'Google Poisoned SERPs: Why Rank Trackers Are Wrong'
+description: >-
+  Since September 2026, Google has served swapped results to rank trackers on
+  about 8% of pages, Nozzle found. What happened and how to check your real rankings.
+dek: >-
+  Nozzle and Ahrefs report that Google answers suspected scrapers with complete,
+  normal-looking pages whose results are wrong. Here is what was measured, what
+  the tools are doing, and why Search Console is the number to trust.
+hub: seo-geo-aeo
+frame: news-take
+takeaways:
+  - >-
+    Nozzle found that 8.4% of the 27.0 million Google results pages it judged
+    since September 13, 2026 were poisoned, against 0.17% before, with a peak
+    of 28.6% on September 29.
+  - >-
+    A poisoned results page shows no error and no captcha, but most of a
+    keyword's usual sites are gone, and a tracked site misses the top 10 on
+    60.2% of poisoned pages, Nozzle reported.
+  - >-
+    On October 22, 2026, Ahrefs said that between 5% and 20% of search results
+    were affected, depending on the data provider, and that it filters
+    abnormal results and cleans up past ones.
+  - >-
+    Google has made no public statement about the poisoned pages, but its spam
+    policies already list scraping results for rank-checking without express
+    permission as a violation.
+businessImpact: []
+sourceUrl: https://nozzle.io/research/poisoned-google-serps/
+published: 2026-10-22
+related:
+  - google-search-poisoning-fake-claude-ads
+projects: []
+stack:
+  - ahrefs
+  - semrush
+  - google-search-console
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Google has been answering rank trackers with swapped search results since September 2026, according to the rank-tracking company Nozzle. Nozzle measured that 8.4% of the Google results pages it judged since September 13 were "poisoned": complete, normal-looking pages with most of the real results replaced. For anyone who reads rankings in Ahrefs, Semrush or a similar tool, some of the drops reported since late September did not happen to real searchers.
+
+I use Ahrefs to track search performance for client WordPress sites, Semrush for keyword research and competitor checks from my agency's SEO work, and Google Search Console on client sites, so this lands right in my reporting. This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. It is a different story from the [fake Claude ads that poisoned Google results for searchers](/blog/google-search-poisoning-fake-claude-ads): this one is about the data SEO tools collect.
+
+## What happened?
+
+Nozzle published [Poisoned Google SERPs](https://nozzle.io/research/poisoned-google-serps/) on October 10, 2026, and updated it on October 19 with data through October 18. According to Nozzle, requests to Google started failing in large numbers on September 13. From September 20, many of the requests that did get through came back with swapped results.
+
+The scale is the striking part. Nozzle judged 27.0 million results pages since September 13, across 52 countries and desktop, iPhone and Android. Of those, 8.4% were poisoned, against 0.17% in the baseline weeks. From September 27 to 29, more than a quarter of each day's pages were poisoned, peaking at 28.6% on September 29. The rate eased to about 3% on October 14, then rose to 7.0% on October 18, so Nozzle says it is too early to call it over. (The first October 10 version reported 8.0%, as [PPC Land noted](https://ppc.land/google-feeds-rank-trackers-swapped-results-on-8-of-pages-nozzle-finds/).)
+
+Other vendors saw it too. On October 22, 2026, Ahrefs published [An update on Google's poisoning of search results](https://ahrefs.com/blog/serp-data-update/), saying that "between 5% and 20%" of search results were affected, depending on the data provider. [Search Engine Roundtable](https://www.seroundtable.com/third-party-google-rank-tracking-broken-42272.html) collected statements from Semrush, SE Ranking, SISTRIX and others.
+
+## What changed, in plain words?
+
+A poisoned results page is a normal Google page with the wrong results on it. Nozzle found no error, no captcha and the same page template. The difference is in who ranks: the organic results kept only 22.0% of the previous page's sites, against 88.1% normally. Social sites and forums such as Facebook, Reddit, YouTube and Quora filled the gap.
+
+One example from Nozzle's study makes it concrete. The search "white label local seo" listed SEO vendors on October 4. Three days later, the same search showed a steakhouse, a directory of health departments and USA.gov, and pagination stopped at page 3. For a tracked business, the damage is direct: its own site missed the top 10 on 60.2% of poisoned pages, against 2.7% before. A rank tracker stores that page as real and reports a crash.
+
+The good news is that poisoning passes. Nozzle found that 68.9% of poisoned pages had their usual sites back within three days, and 92.7% within two weeks.
+
+## How did tool vendors detect it and respond?
+
+Tool vendors detected poisoning by comparing each page with the keyword's own history, not with the page itself. Nozzle defines a keyword's "usual sites" as those in its top 10 on at least 60% of pages from August 20 to September 9. A page is poisoned when fewer than half of those sites appear anywhere on it.
+
+Responses so far, as each vendor described them:
+
+- **Ahrefs** says it has "multiple filters in place to detect and reject the abnormal results and request accurate replacements," and is cleaning up past results that may have been affected. It will post updates through dashboard notifications.
+- **Semrush** told Search Engine Roundtable it had seen the issue "since late summer," that the impact on tracked rankings "has been limited," and, per PPC Land, that it added checks.
+- **SE Ranking** said on October 16 that the issue still affected roughly 2% of tracked results.
+- **SISTRIX** says it publishes only results that pass quality checks, according to PPC Land.
+
+None of these vendors has published its filter rules in detail.
+
+## Why would Google do this?
+
+Google has not said. Neither [PPC Land's report on the Ahrefs post](https://ppc.land/ahrefs-says-google-poisons-5-to-20-of-results-served-to-seo-data-tools/) nor Search Engine Roundtable cites any Google statement on the poisoned pages. What follows is context, not a confirmed motive.
+
+Google's position on scraping is on record. Its [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) say that automated queries include "scraping results for rank-checking purposes" without express permission, and that this violates its policies and Terms of Service. In December 2025, Google's general counsel announced a [lawsuit against SerpApi](https://blog.google/technology/safety-security/serpapi-lawsuit/), a company that sells Google results data, saying "This unlawful activity has increased dramatically over the past year."
+
+Nozzle's own reading is that poisoning is "Google's response to AI scraping and grounding," meaning the bulk collection of results to feed AI answers, and rank trackers are caught in it. Barry Schwartz of Search Engine Roundtable says, as his own assumption, that the real targets are AI bots and SerpApi. The logic is simple: a blocked request tells a scraper to try again, while a poisoned one gets stored as real.
+
+## How did we get here? A timeline
+
+| Date | What happened | Source |
+| --- | --- | --- |
+| September 2025 | Google's `num=100` parameter stops working, cutting how many results tools see per request | [Ahrefs](https://ahrefs.com/blog/google-serp-changes-update) |
+| December 19, 2025 | Google sues SerpApi over scraping | [Google](https://blog.google/technology/safety-security/serpapi-lawsuit/) |
+| September 13, 2026 | Requests to Google start failing in large numbers | [Nozzle](https://nozzle.io/research/poisoned-google-serps/) |
+| September 20, 2026 | First poisoned pages appear | Nozzle |
+| September 29, 2026 | Peak: 28.6% of pages poisoned | Nozzle |
+| October 7, 2026 | DemandSphere reports spurious results on about 11% of daily pages | [PPC Land](https://ppc.land/google-returns-wrong-results-on-11-of-demandspheres-daily-rank-checks/) |
+| October 10, 2026 | Nozzle publishes its study | Nozzle |
+| October 12, 2026 | Search Engine Roundtable reports; Semrush confirms the issue | [Search Engine Roundtable](https://www.seroundtable.com/third-party-google-rank-tracking-broken-42272.html) |
+| October 14-18, 2026 | Poisoning eases to about 3%, then rises to 7.0% | Nozzle |
+| October 22, 2026 | Ahrefs reports 5% to 20% of results affected | [Ahrefs](https://ahrefs.com/blog/serp-data-update/) |
+
+## What does it mean for small businesses and founders?
+
+Rank tracker numbers from late September and October 2026 may be wrong. A keyword that "fell out" of the top 10 for a day or two, then came back, most likely never fell for real customers. The reverse risk matters too: a tool that filters too hard can hide a real drop, so no single tracker is the full truth right now.
+
+Google Search Console is the safer number because it is Google's own record of how your site appeared to real searchers, not a scraped copy of a results page. Nozzle says it plainly in its study: if a site "disappears" and Search Console still shows impressions and clicks, nothing happened to the site.
+
+For a small business, the practical cost is bad decisions. Rewriting a page, firing an agency or panicking over a client report because of a poisoned page wastes time and money. In my view, third-party trackers are still useful for competitor checks and keyword research, but for now they should be the second opinion, not the first.
+
+## What should you do now?
+
+1. **Cross-check rankings in Google Search Console.** Before acting on a drop, open the Performance report for the same query and page. If impressions and clicks held steady, treat the tracker's drop as suspect.
+2. **Watch for sudden rank swings.** A one-day crash that recovers within three days, especially since September 20, 2026, matches the poisoning pattern Nozzle describes. Check whether the keyword's usual competitors vanished alongside you.
+3. **Ask your tool vendor how they handle it.** Ask whether they detect and reject poisoned pages, whether past data was cleaned up, and how they flag affected keywords. Ahrefs and Semrush have both said they filter results.
+4. **Add a note to client or team reports.** Mark late September and October 2026 tracker data as unreliable, so nobody reads a temporary dip as a trend.
+5. **Wait before you rewrite.** A real ranking change stays. Give a sudden drop a few days and a Search Console check before changing pages that were working.

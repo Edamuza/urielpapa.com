@@ -1,0 +1,73 @@
+---
+title: 'Gemini 4 Argon Is Out: What Google''s New Top Model Costs'
+seoTitle: 'Gemini 4 Argon: What Google''s New Top Model Costs'
+description: >-
+  Google's Gemini 4 Argon is now open to paying developers. What changed, what
+  it costs before and after December 1, 2026, and when a small business needs it.
+dek: >-
+  Google has a new frontier model. Here is what it does, why its price doubles
+  on December 1, and why most small-business tasks can stay on Flash.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    Google announced Gemini 4 Argon on September 30, 2026 and opened it to
+    paying Gemini API developers on October 13, 2026.
+  - >-
+    Gemini 4 Argon costs US$2 per million input tokens and US$10 per million
+    output tokens through November 30, 2026, then US$4 and US$20 from December
+    1.
+  - >-
+    Gemini 4 Argon has no free tier in the Gemini API, while Gemini 3.8 Flash
+    keeps one and costs US$0.75 input and US$3.75 output per million tokens.
+  - >-
+    Google raised the output limit to 1 million tokens with Gemini 4 Argon, up
+    from 64K, for long, multi-step work.
+businessImpact: []
+sourceUrl: https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/
+published: 2026-10-22
+related:
+  - what-is-tokenization
+projects: []
+stack:
+  - gemini
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Google has released Gemini 4 Argon, its new frontier model for coding, long multi-step tasks and business documents. It was announced on September 30, 2026 and opened to paying developers on October 13. For a small business, the key facts are the price, which doubles on December 1, and the lack of a free tier.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. If per-token pricing is new to you, my explainer on [what tokenization is and why it decides what AI costs](/blog/what-is-tokenization) covers how these bills add up.
+
+## What happened?
+
+Google DeepMind announced the model in [Gemini 4 Argon: our next era of frontier intelligence](https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/), a post by Koray Kavukcuoglu dated September 30, 2026. Access started with trusted cyber defenders in Google's [Fairwind Program](https://deepmind.google/fairwind-program/), with a phased rollout after that.
+
+On October 13, Google said [Gemini 4 Argon is now available for developers](https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-4-argon/) on the paid tier of the Gemini API, in Google AI Studio and in Android Studio. A day later, the [Google Cloud announcement](https://cloud.google.com/blog/products/ai-machine-learning/gemini-4-argon-available-on-google-cloud) added Gemini for business on the web, desktop and mobile.
+
+## What changed, in plain words?
+
+* **A new top model.** Gemini 4 Argon sits above the Flash models as Google's most capable model so far. The model ID is `gemini-4-argon`.
+* **Much longer answers.** The output limit rises to 1 million tokens, up from 64K, according to the launch post. The [Gemini models page](https://ai.google.dev/gemini-api/docs/models) lists a 1M context window.
+* **Strong scores, self-reported.** Google reports 77.9 percent on the DeepSWE v1.1 coding benchmark and first place on Zapier's AutomationBench at 51.3 percent. These are Google's own figures.
+* **A two-step price.** The [Gemini API pricing page](https://ai.google.dev/gemini-api/docs/pricing) lists US$2 input and US$10 output per million tokens through November 30, 2026, then US$4 and US$20 from December 1. Cached input is US$0.10, then US$0.20. Batch requests cost half.
+* **No free tier.** Argon is paid-only in the Gemini API.
+* **Cyber limits.** Offensive security tasks are blocked by default. An unrestricted version goes only to vetted defenders through Fairwind.
+
+## What does it mean for small businesses and founders?
+
+Gemini 4 Argon is a premium model, and most small-business tasks do not need it. Gemini 3.8 Flash costs US$0.75 input and US$3.75 output per million tokens through December 31, 2026, and it keeps a free tier. Argon already costs about 2.7 times as much at its introductory rate, and more than five times as much after December 1.
+
+Here is a rough estimate using the chatbot volume from my tokenization post: about 2 million input tokens and 150,000 output tokens a month. On Argon's introductory rate, that is 2 × US$2 plus 0.15 × US$10, or about US$5.50 a month. From December 1 it becomes 2 × US$4 plus 0.15 × US$20, or about US$11. On Gemini 3.8 Flash it is about US$2.06. These are estimates, not a bill, and costs grow with volume.
+
+Argon earns its price on long, multi-step work. Google Cloud's post describes reading mixed documents with tables and charts, ledger reconciliations, and multi-file code changes. It also says the model is trained to pause for confirmation before irreversible steps. I use Gemini for research and reading long documents, so the long output limit is the change I would test first.
+
+## What should you do now?
+
+* **Test on your own tasks.** Run a handful of real prompts on Argon and on 3.8 Flash, and compare the answers before you switch anything.
+* **Budget at the December price.** A feature that is cheap on the introductory rate will cost twice as much from December 1, 2026.
+* **Keep Flash for volume.** Customer replies, tagging and short summaries rarely need a frontier model.
+* **Plan for paid access.** Argon is not on the free tier, so prototypes need a billed Gemini API project.
+
+Prices here were checked on October 22, 2026, and Google changes them often. Check the pricing page before you commit.

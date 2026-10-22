@@ -1,0 +1,79 @@
+---
+title: 'Maia by Make: An AI Co-Worker That Builds Automations in Chat'
+seoTitle: 'Maia by Make: AI That Builds Make Automations in Chat'
+description: >-
+  Make launched Maia, an AI assistant that builds and debugs Make automations
+  and AI agents from plain language. What it does and what it costs in credits.
+dek: >-
+  Make now has a chat assistant that builds scenarios on the visual canvas while
+  you watch. Here is what Maia does, how its credit pricing works, and where to
+  be careful.
+hub: automation
+frame: news-take
+takeaways:
+  - >-
+    Make announced Maia on August 12, 2026, a conversational assistant that
+    turns plain-language requests into Make automations and AI agents on the
+    visual canvas.
+  - >-
+    Maia can customize templates, explain how an automation works, modify
+    existing scenarios and debug failing modules.
+  - >-
+    On paid Make plans, Maia messages use credits from the same pool as
+    scenario runs, and Make's own examples show single messages costing about
+    140 and 160 credits.
+  - >-
+    Make's Free plan includes a 30-day Maia trial with 45 free messages, and
+    Make says Maia's pricing may change while it is in public beta.
+businessImpact: []
+sourceUrl: https://www.make.com/blog/maia-conversational-ai-coworker-for-ai-agents-and-automation
+published: 2026-10-22
+related:
+  - what-is-tokenization
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Make, the visual automation platform, has launched Maia, an AI assistant that builds automations and AI agents from a plain-language request. Maia works inside Make's visual editor, so you can watch it pick apps, add modules and configure them. For small teams, it lowers the learning curve, but every message is paid for in Make credits.
+
+I build automations mostly with n8n, so I watch how each platform makes building easier and what that costs to run. This take is part of my [Automation](/topics/automation) writing.
+
+## What happened?
+
+Make announced Maia in a [blog post on August 12, 2026](https://www.make.com/blog/maia-conversational-ai-coworker-for-ai-agents-and-automation), describing it as a "conversational AI co-worker." The post says Maia is "live today for all Make users," with advanced features for expert users "coming soon." Make's [what's new page](https://www.make.com/en/whats-new) lists it as a new release.
+
+## What changed, in plain words?
+
+Until now, building in Make meant dragging modules onto a canvas and filling in each field yourself. With Maia, you type what you want, for example sending a summary to Slack when a new lead arrives in Salesforce, and Maia builds it on the canvas. According to Make, Maia can:
+
+* **Build from a request.** It maps the flow, chooses the app modules and configures them, asking questions when your intent is unclear.
+* **Start from a template.** It customizes workflows from Make's template library.
+* **Explain.** It walks you through how an automation works, including ones someone else built.
+* **Fix and change.** It modifies existing automations and debugs failing modules.
+
+Make's key claim is that Maia builds "visually" and "reasons out loud," so you see each step instead of receiving a finished result you cannot inspect.
+
+Pricing is set out on Make's [Maia pricing page](https://help.make.com/maia-by-make-pricing), which notes the details "may change while Maia is in public beta":
+
+* **Paid plans** get unlimited access, but messages consume credits from the same pool as scenario runs. As a temporary promotion, the first 70 messages are free for 30 days after your first use.
+* **The Free plan** gets a 30-day trial with 45 free messages, after which a paid plan is needed.
+* **Cost per message** varies with task complexity and is the same on every plan. Make's examples show messages costing 140.04 and 160.18 credits.
+
+## What does it mean for small businesses and founders?
+
+Maia makes Make easier to start with. The hardest part of a visual automation tool is not the idea, it is knowing which module and setting to use. An owner who can describe a process can now get a working draft, then learn the editor by reading what Maia built.
+
+The credit cost deserves attention. Make's [pricing page](https://www.make.com/en/pricing) says the Free plan includes 1,000 credits a month, and most actions cost one credit. On a paid plan, at about 140 to 160 credits a message, ten messages with Maia can use around 1,500 credits, more than the Free plan's entire monthly allowance. The likely reason is that Maia runs on AI models, which are billed by the amount of text they process, which I explain in my post on [tokenization and AI costs](/blog/what-is-tokenization).
+
+Visible building is the right design, in my view. A workflow you can inspect step by step is easier to trust and fix than one generated behind the scenes. But you still need to check it, because an automation that looks right can still send the wrong data to a customer.
+
+## What should you do now?
+
+1. **Use the free messages on a real task,** such as a workflow you already run by hand, so you can judge the result on familiar data.
+2. **Watch your credit usage** in Make's credit usage table while you work with Maia, and note how many credits a typical build takes.
+3. **Write one clear request** with the trigger, the apps and the expected output, instead of many small messages.
+4. **Test every Maia build** with sample data before you switch it on, especially if it sends messages or updates records.
+5. **Use Maia to debug and explain** inherited scenarios, where it can save the most time for the fewest messages.

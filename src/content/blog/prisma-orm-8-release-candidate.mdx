@@ -1,0 +1,77 @@
+---
+title: 'Prisma ORM 8 Is Now the Default Install, but Still a Release Candidate'
+seoTitle: 'Prisma ORM 8: Default Install, Still a Release Candidate'
+description: >-
+  Installing prisma@latest now gives you Prisma ORM 8, a rewrite with no Rust
+  engine and no generated client. What changed and how to stay on Prisma 7.
+dek: >-
+  Prisma ORM 8 is a near-total rewrite, and it is already what npm installs by
+  default. Here is what changed, in plain words, and how to keep a Prisma 7 app
+  from upgrading by accident.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    Since Prisma's August 28, 2026 changelog, running npm install
+    prisma@latest installs Prisma ORM 8 instead of Prisma 7.
+  - >-
+    As of October 22, 2026, Prisma's release status page calls Prisma ORM 8 a
+    release candidate and expects general availability in October 2026.
+  - >-
+    Prisma ORM 8 replaces the Rust engine and the generated client with a pure
+    TypeScript runtime, and MySQL and SQL Server are not yet supported.
+  - >-
+    Prisma says Prisma ORM 7 will get bug fixes and security updates for 18
+    months after Prisma ORM 8 reaches general availability.
+businessImpact: []
+sourceUrl: https://www.prisma.io/changelog/2026-08-28
+published: 2026-10-22
+related:
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - prisma
+  - postgresql
+  - typescript
+  - nodejs
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Prisma ORM 8, a near-total rewrite of the popular TypeScript database toolkit, is now what `npm install prisma@latest` installs, even though Prisma still calls it a release candidate. It drops the Rust engine and the generated client, changes how migrations work and does not yet support MySQL. Any Prisma 7 project that installs "latest" without a version pin can end up with the wrong CLI.
+
+I have used Prisma on PostgreSQL for the [client quotation portal](/projects/quotation-portal) and for [TravelEase](/projects/travelease), so this change touches both. It is part of my [Tech Stacks](/topics/tech-stacks) writing.
+
+## What happened?
+
+Prisma's [August 28, 2026 changelog](https://www.prisma.io/changelog/2026-08-28) says that `npm install prisma@latest` installs Prisma 8, and that Prisma 7 stays supported under the `prisma@prev` tag. As of October 22, 2026, the official [release status page](https://www.prisma.io/docs/orm/release-status) describes Prisma ORM 8 as a release candidate, lists the CLI at 8.0.0-rc.25, and says general availability is expected in October 2026. On October 12, the team published [a post on the 330 issues Prisma ORM 8 closes](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues).
+
+## What changed, in plain words?
+
+Prisma ORM 8 is less an upgrade than a new tool with a familiar name. These are the main changes from the [October 12 post](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues) and the [release status page](https://www.prisma.io/docs/orm/release-status):
+
+* **No Rust engine.** Prisma 8 runs as pure TypeScript and sends queries through the standard `pg` driver for PostgreSQL.
+* **No generated client.** A "data contract" replaces the old schema-plus-generated-client setup, and there is no `prisma generate` step.
+* **Migrations in TypeScript.** Each migration is a `migration.ts` file, and `prisma db push` is replaced by `db update`.
+* **New features through extensions.** Typed JSON fields, PostGIS for maps and pgvector for vector search come as extensions.
+* **Removed features.** Client extensions, implicit many-to-many relations and automatic `.env` loading are gone, among others.
+* **Narrower database support.** MySQL and SQL Server are not yet Prisma 8 targets.
+* **New minimums.** Node.js 22.18 or newer, 24.11 or newer, or 26 and later, plus TypeScript 5.9 or newer.
+
+## What does it mean for small businesses and founders?
+
+For a team that runs a working app on Prisma 7, the main risk this month is an accidental upgrade. A teammate, a CI script or an AI coding tool that runs "install the latest Prisma" now pulls in a release candidate with a different design. The changelog notes this only matters if you use a `latest` tag, but that is an easy habit to fall into in setup scripts.
+
+The longer-term question is when to move. Prisma 8 fixes long-requested issues and removes the Rust engine, which should simplify deployment. But the rewrite touches queries, migrations and configuration, so the move is a real project with testing time, not a version bump. Apps on MySQL cannot move yet at all.
+
+The support window gives breathing room. Prisma says Prisma 7 keeps getting bug fixes and security updates for 18 months after Prisma 8 reaches general availability.
+
+## What should you do now?
+
+* **On Prisma 7:** pin both `prisma` and `@prisma/client` to `^7` in `package.json`, as the release status page advises, and check CI scripts for any `prisma@latest`.
+* **On MySQL or SQL Server:** stay on Prisma 7 for now.
+* **Starting a new PostgreSQL project:** Prisma 8 is an option, but I would wait for general availability for anything clients depend on, since the API may still change before the final release.
+* **Planning the move:** read the official [Prisma 7 to 8 upgrade guide](https://www.prisma.io/docs/guides/upgrade-prisma-orm/postgresql) and budget it as a project, with tests around your main queries first.
+
+If you are weighing a TypeScript ORM against a full framework like Laravel, my post on [Laravel vs Next.js](/blog/laravel-vs-nextjs) covers how much of the data layer each one gives you.

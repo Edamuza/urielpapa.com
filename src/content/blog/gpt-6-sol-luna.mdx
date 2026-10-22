@@ -1,0 +1,80 @@
+---
+title: 'GPT-6 Sol and Luna: OpenAI''s Cheaper GPT-6 Models in the API'
+seoTitle: 'GPT-6 Sol and Luna: OpenAI''s New API Prices'
+description: >-
+  OpenAI released GPT-6 Sol and GPT-6 Luna in the API on September 22, 2026.
+  What they cost, how they compare with GPT-5.6, and what to change in your app.
+dek: >-
+  OpenAI's two everyday GPT-6 models cost less than the GPT-5.6 models they
+  replace. Here is what changed and what to check before you switch.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    OpenAI released gpt-6-sol and gpt-6-luna in the API on September 22, 2026,
+    both accepting text and image input.
+  - >-
+    GPT-6 Luna costs US$0.10 per million input tokens and US$0.50 per million
+    output tokens, against US$0.20 and US$1.20 for GPT-5.6 Luna.
+  - >-
+    GPT-6 Sol costs US$2 per million input tokens and US$10 per million output
+    tokens, half of GPT-5.6 Sol's price of US$4 and US$20.
+  - >-
+    Both GPT-6 Sol and GPT-6 Luna charge more for the whole request once a
+    prompt passes 272,000 input tokens: double for input and 1.5 times for
+    output.
+businessImpact: []
+sourceUrl: https://developers.openai.com/api/docs/changelog
+published: 2026-10-22
+related:
+  - what-is-tokenization
+  - laravel-vs-nextjs
+projects: []
+stack:
+  - gpt
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+OpenAI has released GPT-6 Sol and GPT-6 Luna in its API, the two everyday models of the GPT-6 family. Both cost less than the GPT-5.6 models they follow, and Luna now matches the headline price of Anthropic's new [Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5). For a small business with an AI feature on OpenAI, this is a cheap upgrade worth testing.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. My post on [what tokenization is](/blog/what-is-tokenization) explains the per-token prices below.
+
+## What happened?
+
+On September 22, 2026, OpenAI's [API changelog](https://developers.openai.com/api/docs/changelog) announced `gpt-6-sol` and `gpt-6-luna`, both taking text and image input. They sit below GPT-6 Astra, the flagship the changelog lists as released on September 3. A week later, on September 29, OpenAI added `gpt-6.1-sol` for complex coding and professional work at the same input and output price as GPT-6 Sol.
+
+## What changed, in plain words?
+
+These are the standard prices per million tokens from [OpenAI's pricing page](https://developers.openai.com/api/docs/pricing), for prompts up to 272,000 input tokens, as of October 22, 2026:
+
+| Model | Input | Cached input | Output |
+| --- | --- | --- | --- |
+| GPT-6 Luna | US$0.10 | US$0.01 | US$0.50 |
+| GPT-5.6 Luna | US$0.20 | US$0.02 | US$1.20 |
+| GPT-6 Sol | US$2.00 | US$0.20 | US$10.00 |
+| GPT-5.6 Sol | US$4.00 | US$0.40 | US$20.00 |
+| GPT-6 Astra | US$10.00 | US$1.00 | US$50.00 |
+
+* **Half price or less.** GPT-6 Sol is half of GPT-5.6 Sol. GPT-6 Luna halves input and cuts output by more than half.
+* **A long-context surcharge.** Past 272,000 input tokens, the [GPT-6 Luna model page](https://developers.openai.com/api/docs/models/gpt-6-luna) says input and cache rates double and output costs 1.5 times as much, for the whole request.
+* **Big limits.** Both models have a context window of 1,050,000 tokens and up to 128,000 output tokens.
+* **Tool calling needs the right setup.** The [GPT-6 Sol model page](https://developers.openai.com/api/docs/models/gpt-6-sol) says Chat Completions supports function calling only with reasoning effort set to none. Otherwise, use the Responses API.
+* **An image fix.** On September 25, OpenAI fixed an image encoding bug that hurt image understanding in both models and advised rerunning image-based evaluations.
+
+## What does it mean for small businesses and founders?
+
+GPT-6 Luna makes simple AI features very cheap. Here is a rough estimate with the chatbot volume from my tokenization post: about 2 million input tokens and 150,000 output tokens a month. On GPT-6 Luna, that is 2 × US$0.10 plus 0.15 × US$0.50, or about US$0.28 a month. On GPT-5.6 Luna, it was about US$0.58. These are estimates, not a bill.
+
+The bigger change is for tasks that needed a mid-range model. GPT-6 Sol now costs about what GPT-5.6 Terra, the mid-range model, costs, so work that once ran on GPT-5.6 Sol costs half as much on the newer model.
+
+Switching is not always a one-line change. The [ERP we built with Laravel and Next.js](/blog/laravel-vs-nextjs) connected to OpenAI, and in a setup like that the model name, the API used for tool calls and the expected answer format all have to be checked together. A newer model can also answer in a different style, which matters if your code parses its replies.
+
+## What should you do now?
+
+* **Test GPT-6 Luna first.** For replies, tagging and summaries, try the cheapest model before paying for Sol.
+* **Keep prompts under 272,000 tokens.** Above that, the whole request is billed at the higher rate.
+* **Move tool calls to the Responses API.** Do this if you want reasoning effort above none.
+* **Rerun image tests from before September 25.** Results from before the fix may understate both models.
+* **Check the GPT-5.6 Sol promotion.** Its US$4 and US$20 rate is a [promotion that runs until at least November 21, 2026](https://developers.openai.com/api/docs/changelog), so budget for change if you stay on it.

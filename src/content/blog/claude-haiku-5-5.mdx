@@ -1,0 +1,82 @@
+---
+title: 'Claude Haiku 5.5: Anthropic''s Small Model Gets Much Cheaper'
+seoTitle: 'Claude Haiku 5.5: Prices, Limits and Who It Suits'
+description: >-
+  Anthropic released Claude Haiku 5.5 on October 7, 2026. What it costs, how it
+  compares with Haiku 4.5, and what it means for small-business AI features.
+dek: >-
+  Anthropic's smallest model is now its cheapest by far. Here is what changed,
+  where the 100K-token price step sits, and what to test before you switch.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    Anthropic released Claude Haiku 5.5 on October 7, 2026, priced at US$0.10
+    per million input tokens and US$0.50 per million output tokens for prompts
+    up to 100,000 tokens.
+  - >-
+    Claude Haiku 5.5 costs five times more per token above 100,000 tokens, at
+    US$0.50 input and US$2.50 output per million.
+  - >-
+    Anthropic says Claude Haiku 5.5 costs around 75 percent less to run than
+    Haiku 4.5 on average, after accounting for a new tokenizer that uses
+    slightly more tokens.
+  - >-
+    In the same announcement, Anthropic halved Claude Sonnet 5.5 cache reads
+    from US$0.20 to US$0.10 per million tokens.
+businessImpact: []
+sourceUrl: https://www.anthropic.com/claude-haiku-5-5
+published: 2026-10-22
+related:
+  - what-is-tokenization
+  - n8n-messenger-instagram-chatbot
+projects: []
+stack:
+  - claude
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Anthropic has released Claude Haiku 5.5, a new version of its smallest and fastest Claude model, at a fraction of Haiku 4.5's price. For small businesses running chatbots, tagging or summaries on Claude, it is a large price cut. The catch is a price step above 100,000 tokens per prompt.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. My post on [what tokenization is](/blog/what-is-tokenization) explains why per-token prices like these decide what an AI feature costs.
+
+## What happened?
+
+On October 7, 2026, Anthropic published the [Claude Haiku 5.5 announcement](https://www.anthropic.com/claude-haiku-5-5). The model ID is `claude-haiku-5-5`. It is available on the Claude Platform API and, according to Anthropic, on all platforms, including Amazon Web Services, Google Cloud and Microsoft Azure.
+
+## What changed, in plain words?
+
+These are the prices per million tokens from the announcement, as of October 22, 2026:
+
+| Model | Input | Output | Cache reads |
+| --- | --- | --- | --- |
+| Haiku 5.5, prompts up to 100K tokens | US$0.10 | US$0.50 | US$0.01 |
+| Haiku 5.5, prompts over 100K tokens | US$0.50 | US$2.50 | US$0.05 |
+| Haiku 4.5 | US$1.00 | US$5.00 | US$0.10 |
+| Sonnet 5.5 | US$2.00 | US$10.00 | US$0.10 |
+
+* **Lower cost, new tokenizer.** Anthropic says Haiku 5.5 costs around 75 percent less to run on average. A footnote explains that its updated tokenizer uses slightly more tokens per task, and the 75 percent figure accounts for that.
+* **An effort setting.** Haiku 5.5 is the first Haiku-class model with adjustable effort, from Low to Max.
+* **Better scores, still a small model.** On Anthropic's OSWorld 2.1 offline subset, Haiku 5.5 scores 72.4 percent against 15.7 percent for Haiku 4.5. Anthropic still recommends Sonnet 5.5 and Opus 5.5 for complex agentic coding.
+* **Cheaper Sonnet caching.** Sonnet 5.5 cache reads drop from US$0.20 to US$0.10 per million tokens, which Anthropic says cuts its cost on most agentic work by about 20 percent.
+* **API credits for subscribers.** Max 5x gets US$100 a month in API credit, Max 20x gets US$200, and Team plans get up to US$500 pooled.
+
+## What does it mean for small businesses and founders?
+
+Haiku 5.5 makes high-volume tasks close to free at small-business scale. Anthropic names summaries, classification, database queries and live customer support as target uses.
+
+Here is a rough estimate with the volume from my [Messenger and Instagram chatbot built with n8n](/blog/n8n-messenger-instagram-chatbot): about 2 million input tokens and 150,000 output tokens a month. On Haiku 4.5, that is 2 × US$1 plus 0.15 × US$5, or about US$2.75. On Haiku 5.5, it is 2 × US$0.10 plus 0.15 × US$0.50, or about US$0.28, before the new tokenizer adds a few tokens. These are estimates, not a bill.
+
+The 100,000-token step matters more than the headline price. A support bot with a short system prompt stays far below it. A tool that pastes a whole contract or a long chat history into every request can cross it, and then every token in that request costs five times as much.
+
+I use Claude models for my custom Claude skills and my Claude Code work. For that kind of setup, Anthropic positions Haiku 5.5 as a subagent alongside Sonnet 5.5 and Opus 5.5, handling the high-volume steps.
+
+## What should you do now?
+
+* **Re-run your own tests.** Try your real prompts on Haiku 5.5 before switching, and compare answers with your current model.
+* **Count tokens again.** The new tokenizer changes token counts, so re-estimate costs with Anthropic's token counting rather than old numbers.
+* **Stay under 100K tokens per prompt.** Trim history and documents so most requests stay in the cheaper tier.
+* **Use prompt caching.** Cache reads cost US$0.01 per million tokens, so a repeated system prompt becomes almost free.
+* **Check your subscription.** On Max or Team, look for the new monthly API credit before paying for API usage separately.
