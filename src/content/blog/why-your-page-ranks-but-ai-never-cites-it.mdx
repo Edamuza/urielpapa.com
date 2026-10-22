@@ -1,0 +1,128 @@
+---
+title: Why Your Page Ranks but AI Never Cites It
+seoTitle: Why Your Page Ranks on Google but AI Never Cites It
+description: >-
+  Ranking and being cited by AI are different tests. Why AI answers skip pages
+  that rank, from query fan-out to trust, and what to change on the page.
+dek: >-
+  AI answers do not reuse your ranking. They search many versions of the
+  question and quote the few passages they trust most.
+hub: seo-geo-aeo
+frame: why
+takeaways:
+  - >-
+    In an Ahrefs study of 15,000 prompts, only 12% of the links ChatGPT, Gemini
+    and Copilot cited ranked in Google's top 10 for the same prompt.
+  - >-
+    AI answers search many related questions, not only yours, so a page that
+    ranks for one phrase can lose to pages that answer the narrower questions.
+  - >-
+    A page gets cited for a clear passage that answers one question, not for
+    its position, so the answer has to sit near the top of its section.
+  - >-
+    When a generic page competes with official docs or a known source, AI
+    picks the source it trusts more, so add what only you know.
+  - >-
+    Google says AI Overviews need no special schema or optimization: the page
+    must be indexed and allowed to show a snippet.
+published: 2026-10-22
+related:
+  - how-to-check-if-chatgpt-cites-your-site
+  - geo-and-aeo-fundamentals
+projects: []
+stack:
+  - google-search-console
+  - gpt
+  - ahrefs
+faq:
+  - q: Do I need special schema to be cited in Google AI Overviews?
+    a: >-
+      No. Google's guide to AI features says there are no additional
+      requirements and no special schema.org markup needed. The page must be
+      indexed and eligible to show with a snippet in Google Search.
+  - q: Is ranking still worth it for AI search?
+    a: >-
+      Yes. In Conductor's study of 167 million AI Overview citations, the first
+      organic result was cited 24.9% of the time and the tenth 10.2% of the
+      time. Ranking raises your odds, but it does not guarantee a citation.
+event: {}
+syndication: []
+draft: true
+---
+
+Your page can rank on Google and still never be cited by AI, because AI answers do not reuse your ranking. They search many versions of the question, read the pages they find in short passages, and quote the few passages they trust most. A page that ranks for one phrase but does not answer the narrower questions clearly, or says nothing other sources do not, gets passed over.
+
+This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I check whether AI cites urielpapa.com every month, and the examples below come from my first test, described in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+## How often does AI cite pages that rank?
+
+Less often than most site owners expect. Ahrefs [compared the citations](https://ahrefs.com/blog/ai-search-overlap/) of ChatGPT, Gemini, Copilot and Perplexity for 15,000 long-tail prompts in 2025. Only 12% of the links cited by ChatGPT, Gemini and Copilot ranked in Google's top 10 for the same prompt. For ChatGPT alone it was 8%. Perplexity had the most overlap, at 28.6%.
+
+Google's own AI Overviews stay closer to the rankings, but not by much. Conductor [looked at 167,867,680 AI Overview citations](https://www.conductor.com/academy/aio-vs-organic-rankings/) from U.S. searches between June and August 2026:
+
+| Organic position | How often it was cited in the AI Overview |
+| --- | --- |
+| 1 | 24.9% |
+| 2 | 21.1% |
+| 3 | 17.9% |
+| 10 | 10.2% |
+
+So 57% of AI Overview citations went to pages outside the top 10, and the page ranked first was not cited three times out of four. Ranking helps, but it is a different test from being cited.
+
+## Does AI search for your exact question?
+
+Usually not. Google's guide to [AI features and your website](https://developers.google.com/search/docs/appearance/ai-features) says AI Overviews and AI Mode "may use a 'query fan-out' technique": they run several related searches across subtopics and then build one answer from the results. Ahrefs found the same pattern in ChatGPT and the other assistants, which may never search the exact words a person typed.
+
+That changes which page wins. Say your page ranks first for "Laravel vs Next.js". An AI answer to that question might also search for "Laravel queue performance", "Next.js data fetching" and "which framework for an ERP". A page that appears across several of those searches, or answers one of them precisely, can beat a page that ranks first for only the original phrase.
+
+The fix is coverage, not more keywords: answer the related questions your readers ask, each under its own heading, and link the pages that answer them to each other.
+
+## Why does one passage matter more than the whole page?
+
+AI answers quote passages, not pages. After the searches, these systems typically read the top of each candidate page, breaks it into short sections and keeps the ones closest in meaning to each part of the question. A long page with a strong ranking but a buried answer gives it nothing clean to quote.
+
+A passage is easy to quote when it does four things:
+
+1. **Its heading reads like the question**, for example "How much does an n8n chatbot cost to run?".
+2. **The first sentence answers it** and names what it is about, instead of starting with "It" or "This".
+3. **The next few sentences explain it**, with one fact, number or source to back it up.
+4. **It stands on its own**, so it still makes sense when quoted without the rest of the page.
+
+Every post on this site is written to that pattern: the answer first, a question for each heading and a source for each fact. It is the cheapest change on this list, because it only means rewriting the opening of each section.
+
+## Why does AI cite official docs instead of your page?
+
+When two passages answer the same question equally well, AI picks the one it trusts more, and official documentation, well-known brands and sources that agree with each other usually win. My own first test showed it. On 21 October 2026 I asked ChatGPT four questions that my posts answer. For "Laravel vs Next.js for a business system", every source it cited was the official Laravel or Next.js documentation, and for my n8n chatbot question it cited n8n, OpenRouter and Meta for Developers.
+
+A generic comparison cannot beat the docs on facts the docs already state. What it can offer is what the docs do not have: first-hand results, real numbers, mistakes and the trade-offs you only learn by building something. My [Laravel vs Next.js post](/blog/laravel-vs-nextjs) is built on an ERP I co-developed, and those specifics are the part worth leading with, because the documentation cannot offer them.
+
+## Can AI read your page at all?
+
+A page can rank in Google and still be invisible to some AI answers. Google says a page needs to be indexed and "eligible to be shown in Google Search with a snippet" to appear in AI Overviews or AI Mode, so `nosnippet`, `data-nosnippet` and a low `max-snippet` limit what it can use. Google also says there is no special schema or other optimization required.
+
+Other assistants use other indexes. ChatGPT search relies on its own crawler, OAI-SearchBot, and Microsoft Copilot is built on Bing, so a page that only ranks in Google may never reach them. Check that:
+
+* robots.txt and your firewall do not block OAI-SearchBot or the other AI search crawlers;
+* the page is indexed in Bing, not only in Google;
+* the main content is in the HTML, not loaded later by JavaScript.
+
+I cover the crawlers each AI system uses in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
+
+## Does AI know who wrote the page?
+
+AI answers lean on sources they can identify, and an author or brand they cannot connect to your site adds little trust. In my test, ChatGPT answered "Who is Uriel Papa?" correctly, but cited the website of the agency I used to run, not urielpapa.com. It knew the name, and it had not yet linked that name to this site.
+
+Making that connection is ordinary work: one consistent name and bio everywhere, an About page that says what you have done, and profiles that link back to your site. This site marks up its author as a Person in Schema.org with links to the same profiles, so the page and the markup say the same thing.
+
+## What should you change if your page ranks but is never cited?
+
+Work through these in order, because the first ones block everything after them:
+
+1. **Make sure AI can read it.** Allow the AI search crawlers, get indexed in Bing, and do not limit snippets.
+2. **Answer first.** Rewrite each section so its first sentence answers the question in its heading.
+3. **Cover the related questions.** Add a section or a linked post for each narrower question readers ask.
+4. **Add what only you have.** Put your own results, numbers and examples next to the claims they support.
+5. **Connect your name to your site.** Use one name and bio everywhere, and link your profiles back to the site.
+6. **Check again in a month.** Test the same questions and compare, as I describe in [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+Ranking still matters, because the pages near the top are cited more often. But a citation goes to the clearest, most trusted answer to each part of the question, and that is something you can write for.
