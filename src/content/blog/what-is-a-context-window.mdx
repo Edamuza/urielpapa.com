@@ -132,7 +132,7 @@ The best way to use a context window is to send the smallest set of tokens that 
 4. **Put key facts at the start or end.** The Lost in the Middle results suggest models miss the middle of a long prompt most often.
 5. **Count tokens before you send.** A token counter tells you how close a request is to the limit and to a higher price tier.
 
-My chatbot follows the third habit. Each run reads the sender's last few messages from a Google Sheet and sends them with the system prompt, not the whole chat. When I looked at its token use, I also cut the system prompt to about half its length, as I describe in the tokenization post.
+My chatbot follows the third habit. Each run reads the sender's last few messages from a Google Sheet and sends them with the system prompt, not the whole chat.
 
 ## How is a context window different from memory and training data?
 

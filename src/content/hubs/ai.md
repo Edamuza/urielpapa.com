@@ -15,4 +15,4 @@ A model like Claude, GPT, Gemini or Gemma is only part of the picture. Harnesses
 
 My own work in this area includes custom Claude skills, a multi-agent Claude Code pipeline that audits a full production codebase in under 6 minutes, and an AI chatbot for Messenger and Instagram that runs on OpenRouter. I also co-developed [Tell Liora](/projects/tell-liora), an offline mobile app that pairs an on-device Gemma model with 8 WHO decision tables.
 
-Posts here aim to leave you understanding something better than before: plain explanations first, with the technical details and sources for anyone who wants to go deeper.
+Each post starts with a plain explanation, then gives the technical details and sources.

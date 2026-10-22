@@ -23,9 +23,9 @@ takeaways:
     A model's context window is measured in tokens, so tokenization also decides
     how much text a model can work with at once.
   - >-
-    What surprised me on real bills was how much of the cost came from the
-    system prompt and chat history sent with every message, not from the
-    question itself.
+    In a chatbot, the system prompt and chat history are sent with every
+    message, so they often make up most of the input tokens, not the question
+    itself.
 businessImpact:
   - >-
     AI bills vary because token counts vary with language, formatting and how
@@ -72,7 +72,7 @@ draft: false
 ---
 Tokenization is how a language model splits text into small pieces called tokens; models read, write, limit and charge by tokens, not words. That is why two prompts of the same length in words can cost different amounts, and why a long document can suddenly be "too long" for a model.
 
-This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations and in the [ERP we built with Laravel and Next.js](/blog/laravel-vs-nextjs), so token counts are something I watch on real bills. I first noticed token costs when I led and co-developed a Messenger and Instagram chatbot with n8n and OpenRouter, where every customer message also carried the full system prompt.
+This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models through OpenRouter in my own automations and in the [ERP we built with Laravel and Next.js](/blog/laravel-vs-nextjs), so token counts matter in my own work. In the Messenger and Instagram chatbot I led and co-developed with n8n and OpenRouter, every customer message also carried the full system prompt.
 
 ## What is a token?
 
@@ -133,11 +133,11 @@ Output length is limited in tokens too. A model may stop mid-answer when it reac
 
 ## What does this mean in practice?
 
-In practice, tokens turn a vague AI cost into a number you can estimate. Here is a rough example from the [Messenger and Instagram chatbot I led and co-developed with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot) for my former agency, VITE SEO. In a typical month it handled around 1,000 messages. Each request carried about 2,000 input tokens, mostly the system prompt and recent chat history, and each reply was about 150 tokens. That comes to around 2 million input tokens and 150,000 output tokens a month.
+In practice, tokens turn a vague AI cost into a number you can estimate. Take a small chatbot, like the [Messenger and Instagram chatbot I led and co-developed with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot), and assume it handles 1,000 messages a month. If each request carries about 2,000 input tokens, mostly the system prompt and recent chat history, and each reply is about 150 tokens, that comes to 2 million input tokens and 150,000 output tokens a month.
 
-On a small, low-cost model at about US$0.15 per million input tokens and US$0.60 per million output tokens, that is well under US$1 a month. At the mid-range prices in the table above, it would be about US$5 to US$6. These are estimates based on the usage OpenRouter shows in its activity page, not an exact bill.
+On a small, low-cost model at about US$0.15 per million input tokens and US$0.60 per million output tokens, that is well under US$1 a month. At the mid-range prices in the table above, it would be about US$5 to US$6. These are worked examples, not figures from a real bill.
 
-After looking at the numbers, I cut the system prompt to about half its length, sent only the last few messages instead of the whole chat, and asked the model for short replies. The biggest saving came from the system prompt, because it was sent with every single message.
+In a setup like this, the system prompt is the first thing to trim, because it is sent with every single message.
 
 To estimate the cost of an AI feature before you build it:
 
@@ -161,7 +161,8 @@ To estimate the cost of an AI feature before you build it:
 
   Rates change often, so check each provider's pricing page before you budget around them.
 
-Context windows deserve a post of their own, and they are one of the topics in this hub.
+
+
 
 ## Where can you learn more?
 

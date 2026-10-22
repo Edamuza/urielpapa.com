@@ -24,9 +24,6 @@ takeaways:
   - >-
     From October 1, 2026, Meta gives each WhatsApp business number 1,000 free
     service messages a month and charges for the rest.
-  - >-
-    My own Messenger and Instagram chatbot cost about US$10 a month to run in
-    early 2026, mostly a small VPS for self-hosted n8n plus AI tokens.
 published: 2026-10-22
 related:
   - n8n-messenger-instagram-chatbot
@@ -64,7 +61,7 @@ draft: true
 
 An AI chatbot costs a small business about US$7 to US$70 a month to run on n8n, for up to 1,000 conversations, as of October 2026. The AI model is usually the smallest part, often US$1 to US$9 for those 1,000 conversations. Most of the bill is the platform the chatbot runs on, plus the time it takes to set up and maintain. Zapier and Make cost more at that volume.
 
-I led and co-developed a [Messenger and Instagram chatbot with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot) for my former agency. It cost about US$10 a month to run in early 2026, mostly a small VPS for self-hosted n8n plus AI tokens. This post is part of my [Automation](/topics/automation) writing, and it shows the math behind numbers like that one.
+I led and co-developed a [Messenger and Instagram chatbot with n8n and OpenRouter](/blog/n8n-messenger-instagram-chatbot) for my former agency. This post is part of my [Automation](/topics/automation) writing, and it works through the costs a build like that one runs into.
 
 ## What makes up the cost of an AI chatbot?
 
@@ -76,7 +73,7 @@ The cost of an AI chatbot comes from five parts, and only two of them show up as
 - **Setup time.** Creating the Meta app, connecting the webhook, writing the system prompt and testing.
 - **Upkeep.** Updating the prompt when prices or services change, reading handed-over chats and keeping the server patched.
 
-My own cost table had three lines: about US$6 for n8n hosting, about US$3 to US$5 for tokens and nothing extra for the lead log. Setup and upkeep never appear on an invoice, but they are real costs, and they are usually the largest ones.
+Setup and upkeep never appear on an invoice, but they are real costs, and they are usually the largest ones.
 
 ## How does AI token pricing work?
 
@@ -101,7 +98,7 @@ A worked example makes chatbot token costs concrete. Here are the assumptions:
 3. Each customer message is 50 tokens, and each reply is 150 tokens.
 4. Every call also carries the conversation so far, which grows by 200 tokens per turn.
 
-The first call sends 1,250 input tokens (1,200 + 50). The next calls send 1,450, 1,650, 1,850 and 2,050. That adds up to 8,250 input tokens and 750 output tokens (5 × 150), or 9,000 tokens per conversation. That sits inside the 6,000 to 10,000 tokens per conversation I recorded for my own chatbot.
+The first call sends 1,250 input tokens (1,200 + 50). The next calls send 1,450, 1,650, 1,850 and 2,050. That adds up to 8,250 input tokens and 750 output tokens (5 × 150), or 9,000 tokens per conversation.
 
 For 1,000 conversations, that is 8.25 million input tokens and 0.75 million output tokens:
 
@@ -119,7 +116,7 @@ Hosting a chatbot workflow costs anywhere from about US$6 to well over US$100 a 
 
 | Option                   | Entry price                                                                                         | Included                | At 5,000 messages a month                                   |
 | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
-| Self-hosted n8n on a VPS | Free [Community edition](https://docs.n8n.io/hosting/), on a VPS of about US$6 | No execution limit      | About US$6, my own figure from early 2026                     |
+| Self-hosted n8n on a VPS | Free [Community edition](https://docs.n8n.io/hosting/), on a VPS of about US$6 | No execution limit      | About US$6 for the VPS                     |
 | n8n Cloud Starter        | [US$20 a month yearly, US$24 monthly](https://n8n.io/pricing/)                                      | 2,500 executions        | Too small                                                   |
 | n8n Cloud Pro            | US$50 a month yearly, US$60 monthly                                                                 | 10,000 executions       | Fits                                                        |
 | Zapier Professional      | [US$19.99 a month yearly, US$29.99 monthly](https://zapier.com/pricing)                             | 750 tasks               | About 15,000 tasks; the 10,000-task tier alone is US$129 a month yearly |

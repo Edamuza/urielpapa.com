@@ -11,7 +11,7 @@ startHere:
     reason: How to check whether ChatGPT can see, cite and send visitors to your site, with the results of my first test on urielpapa.com.
 ---
 
-Search is no longer only a page of ten blue links. People now get answers from Google AI Overviews, ChatGPT search, Perplexity and other assistants, and those answers quote and cite websites. Here I write about how search is evolving and what everyone with a website should know about it.
+People now get answers from Google AI Overviews, ChatGPT search, Perplexity and other assistants, and those answers quote and cite websites. Here I write about how search is changing and what it means for anyone with a website.
 
 SEO (search engine optimization) is still the foundation: semantic SEO, technical SEO, local SEO and link building. GEO (generative engine optimization) and AEO (answer engine optimization) build on it, with a focus on being understood, quoted and cited by AI systems. I also write about the tools behind this work, such as Google Search Console, GA4, Bing Webmaster Tools, Ahrefs, Semrush, Yoast SEO and Rank Math.
 

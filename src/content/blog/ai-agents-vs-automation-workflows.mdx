@@ -23,7 +23,7 @@ takeaways:
     the steps, such as simple chatbots, are not agents.
   - >-
     My n8n chatbot for Messenger and Instagram was a fixed workflow with one AI
-    step, and it cost about US$10 a month to run in early 2026.
+    step, so each run followed the same path and cost about the same.
   - >-
     Prompt injection is ranked first in the OWASP Top 10 for LLM Applications
     2025, and it matters most for agents that can read untrusted content and
@@ -76,7 +76,7 @@ AI agents and automation workflows differ mainly in who decides the next step: y
 | Debugging | Open the failed run and look at the step | Trace every decision the model made |
 | Best fit | Repeated tasks with clear rules | Open-ended tasks with unknown steps |
 
-Anthropic's [guide to building effective agents](https://www.anthropic.com/engineering/building-effective-agents), published in December 2024, draws the same line. It calls workflows systems where models and tools run "through predefined code paths", and agents systems where models "dynamically direct their own processes and tool usage." The tools have changed since then, as the post itself notes, but the distinction still holds as of October 2026. In short, a workflow trades flexibility for control, and an agent trades control for flexibility.
+Anthropic's [guide to building effective agents](https://www.anthropic.com/engineering/building-effective-agents), published in December 2024, draws the same line. It calls workflows systems where models and tools run "through predefined code paths", and agents systems where models "dynamically direct their own processes and tool usage." The tools have changed since then, as the post itself notes, but the distinction still holds as of October 2026.
 
 Barry Zhang, a co-author of Anthropic's guide, explains in this 15-minute talk when to build an agent and when a workflow is enough:
 
@@ -102,9 +102,9 @@ Here is the difference in practice. A workflow that answers a refund email alway
 
 Between the two sits the most useful option for small businesses: a fixed workflow with one or more AI steps inside it. The workflow decides the order, and the model only does the part that needs language, such as reading a message, classifying it or writing a reply. OpenAI's guide is clear on where this falls. Apps that use a model without letting it control the workflow, "think simple chatbots, single-turn LLMs, or sentiment classifiers", are not agents.
 
-My [n8n chatbot for Messenger and Instagram](/blog/n8n-messenger-instagram-chatbot) is built this way. The workflow has 10 nodes in a fixed order: receive the message, load recent history, call a model through OpenRouter, then route on a flag the model returns. A Switch node sends a normal answer, adds the booking link, or emails a person for a handover. The model writes the reply, but it never chooses which step runs next.
+My [n8n chatbot for Messenger and Instagram](/blog/n8n-messenger-instagram-chatbot) is built this way. The workflow runs in a fixed order: receive the message, load recent history, call a model through OpenRouter, then route on a flag the model returns. A Switch node sends a normal answer, adds the booking link, or notifies a person for a handover. The model writes the reply, but it never chooses which step runs next.
 
-That design kept the cost low and predictable. It ran for about US$10 a month in early 2026: about US$6 for a small VPS running n8n, plus about US$3 to US$5 in tokens for a low-cost model such as GPT-4o mini, at around 6,000 to 10,000 tokens per conversation. If tokens are new to you, my post on [what tokenization is](/blog/what-is-tokenization) explains why they set the bill.
+That design kept the cost low and predictable. The workflow calls the model once per message, so the token bill grows with the number of messages, not with how long an agent decides to loop. If tokens are new to you, my post on [what tokenization is](/blog/what-is-tokenization) explains why they set the bill.
 
 Anthropic names several patterns like this, including prompt chaining and routing. n8n also has an [AI Agent node](https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/) that needs at least one tool, so you can put a small agent inside an otherwise fixed workflow. A fixed workflow with AI steps gives you most of the benefit of AI with little of the risk.
 

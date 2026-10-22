@@ -117,7 +117,7 @@ A Laravel app needs a PHP runtime, a database, and often a queue worker and a sc
 
 Running both means two deployments, two sets of dependencies to keep updated, and two places where something can break. The upside is that each side can be updated, scaled and tested on its own.
 
-We ran the Laravel API, MySQL, the queue worker and Reverb on a VPS, and deployed the Next.js front end on Vercel. Upkeep was mostly keeping dependencies updated on both sides, checking that the queue worker and scheduler were still running, and running the full test suite before every deploy. Having 5,241 tests made deploys feel routine, because a broken rule usually showed up in a failing test before it reached anyone.
+For the ERP, upkeep was mostly keeping dependencies updated on both sides, checking that the queue worker and scheduler were still running, and running the full test suite before every deploy. Having 5,241 tests made deploys feel routine, because a broken rule usually showed up in a failing test before it reached anyone.
 
 ## Can you use Laravel and Next.js together?
 

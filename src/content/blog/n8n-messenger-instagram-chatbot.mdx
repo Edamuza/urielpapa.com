@@ -24,8 +24,8 @@ takeaways:
     A chatbot like this should hand sensitive or unclear conversations to a
     person instead of guessing.
   - >-
-    My setup cost about US$10 a month to run in early 2026, mostly a small VPS
-    for self-hosted n8n plus AI tokens.
+    The system prompt is sent with every message, so its length drives most of
+    the token bill.
 businessImpact:
   - >-
     Inquiries get a reply outside office hours instead of waiting until the next
@@ -34,8 +34,8 @@ businessImpact:
     Repetitive questions about services, prices and booking stop taking up a
     person's time.
   - >-
-    Running cost is mostly AI tokens plus n8n hosting: about US$10 a month for
-    my setup in early 2026.
+    Running cost is mostly n8n hosting plus AI tokens, which a small self-hosted
+    setup can keep to roughly US$10 a month.
 published: 2026-10-05
 updated: 2026-10-19
 related:
@@ -93,7 +93,7 @@ I led and co-developed a chatbot like this at VITE SEO Digital Advertising, the 
 8. **Test.** Message the Page and the Instagram account from a test account. Try normal questions, off-topic questions, a request for a human and a message in another language.
 9. **Go live.** Switch the Meta app to live mode, complete any app review Meta requires, and watch the first real conversations closely.
 
-Here is my workflow node by node, in the order a message passes through it:
+Here is a typical layout, node by node, in the order a message passes through it:
 
 1. **Webhook:** receives every request Meta sends.
 2. **IF (verification):** if it is Meta's verification request, a Respond to Webhook node returns the challenge and the run stops.
@@ -116,12 +116,15 @@ n8n's own beginner course explains APIs and webhooks, the two pieces that carry 
 
 ## What does it cost to run?
 
+The table below is a rough example budget for a small self-hosted setup, not a record of a real bill.
+
+
 | Item                         | Monthly cost       | Notes                                                                                  |
 | ---------------------------- | ------------------ | -------------------------------------------------------------------------------------- |
 | n8n hosting                  | About US$6         | Self-hosted on a small VPS (1 to 2 GB of memory)                                       |
 | AI tokens through OpenRouter | About US$3 to US$5 | A low-cost model such as GPT-4o mini, around 6,000 to 10,000 tokens per conversation   |
-| Lead log and booking tool    | About US$0 extra   | Google Sheets and a Google Calendar booking page, already part of our Google Workspace |
-| Total                        | About US$10        | Approximate figures for a typical month in early 2026                                  |
+| Lead log and booking tool    | About US$0 extra   | Google Sheets and a Google Calendar booking page, often already in a Google Workspace plan |
+| Total                        | About US$10        | Rough estimate for a small setup, early 2026 prices                                  |
 
 The biggest variable is usually tokens: how long the system prompt is, how much history you send with each message and how long the replies are.
 

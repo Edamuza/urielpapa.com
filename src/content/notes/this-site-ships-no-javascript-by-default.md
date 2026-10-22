@@ -25,4 +25,3 @@ Posts, notes, projects and topic pages are Markdown and MDX files in the site's 
 
 The build also checks each post before it goes live. A title over 70 characters, a missing meta description or a post without a topic hub fails the build instead of shipping.
 
-The result is a site that is light to load, easy to cache and simple to keep running.

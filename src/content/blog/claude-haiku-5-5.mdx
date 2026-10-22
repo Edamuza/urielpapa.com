@@ -67,7 +67,7 @@ These are the prices per million tokens from the announcement, as of October 202
 
 Haiku 5.5 makes high-volume tasks close to free at small-business scale. Anthropic names summaries, classification, database queries and live customer support as target uses.
 
-Here is a rough estimate with the volume from my [Messenger and Instagram chatbot built with n8n](/blog/n8n-messenger-instagram-chatbot): about 2 million input tokens and 150,000 output tokens a month. On Haiku 4.5, that is 2 × US$1 plus 0.15 × US$5, or about US$2.75. On Haiku 5.5, it is 2 × US$0.10 plus 0.15 × US$0.50, or about US$0.28, before the new tokenizer adds a few tokens. These are estimates, not a bill.
+Take the example chatbot from my tokenization post, which sends about 2 million input tokens and gets 150,000 output tokens back each month. On Haiku 4.5, that is 2 × US$1 plus 0.15 × US$5, or about US$2.75. On Haiku 5.5, it is 2 × US$0.10 plus 0.15 × US$0.50, or about US$0.28, before the new tokenizer adds a few tokens. These are rough estimates.
 
 The 100,000-token step matters more than the headline price. A support bot with a short system prompt stays far below it. A tool that pastes a whole contract or a long chat history into every request can cross it, and then every token in that request costs five times as much.
 
