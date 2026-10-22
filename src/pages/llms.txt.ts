@@ -22,7 +22,7 @@ export const GET: APIRoute = async () => {
     "",
     `> ${MACRO}`,
     "",
-    `${SITE.name} is a ${SITE.jobTitle.toLowerCase()} in ${SITE.location}. Every post also has a plain Markdown copy at its own URL plus .md.`,
+    `${SITE.name} is a ${SITE.jobTitle.toLowerCase()} in the ${SITE.location}. Every post also has a plain Markdown copy at its own URL plus .md.`,
     "",
     "## About",
     "",
