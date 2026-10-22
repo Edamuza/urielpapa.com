@@ -4,7 +4,7 @@
  * src/content.config.ts so the editor warns before the build would fail.
  */
 import { collection, config, fields, singleton } from "@keystatic/core";
-import { wrapper } from "@keystatic/core/content-components";
+import { block, wrapper } from "@keystatic/core/content-components";
 import { FRAMES, HUBS, STACK_GROUPS, SYNDICATION_NETWORKS } from "./src/data/hubs";
 
 const hubOptions = HUBS.map(h => ({ label: h.name, value: h.id }));
@@ -30,6 +30,15 @@ const mdxComponents = {
         ],
         defaultValue: "note",
       }),
+    },
+  }),
+  YouTube: block({
+    label: "YouTube video",
+    description: "A video from a credible channel that adds to the section above it. Loads only when played.",
+    schema: {
+      id: fields.text({ label: "Video ID (the part after watch?v=)", validation: { length: { min: 11, max: 11 } } }),
+      title: fields.text({ label: "Video title, as on YouTube" }),
+      channel: fields.text({ label: "Channel name" }),
     },
   }),
 };

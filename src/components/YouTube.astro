@@ -1,0 +1,76 @@
+---
+/**
+ * MDX: <YouTube id="VIDEO_ID" title="Video title" channel="Channel name" />
+ * Shows the thumbnail only; YouTube (privacy-enhanced mode) loads when the
+ * reader presses play, so a video costs one small image until it is used.
+ * Without JavaScript the link opens the video on YouTube.
+ */
+type Props = { id: string; title: string; channel: string };
+const { id, title, channel } = Astro.props;
+const watch = `https://www.youtube.com/watch?v=${id}`;
+const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+
+<figure class="not-prose my-8" data-youtube={id}>
+  <a
+    href={watch}
+    class="group relative block aspect-video overflow-hidden rounded-lg bg-black"
+    data-youtube-play
+    aria-label={`Play video: ${title}`}
+    title={`Play video: ${title}`}
+    target="_blank"
+    rel="noopener"
+  >
+    <img
+      src={thumb}
+      alt={`${title}, a video by ${channel}`}
+      title={title}
+      width="480"
+      height="360"
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+    />
+    <span
+      class="absolute inset-0 flex items-center justify-center"
+      aria-hidden="true"
+    >
+      <span
+        class="flex size-16 items-center justify-center rounded-full bg-black/75"
+      >
+        <svg viewBox="0 0 24 24" class="ms-1 size-8 fill-white"
+          ><path d="M8 5v14l11-7z"></path></svg
+        >
+      </span>
+    </span>
+  </a>
+  <figcaption class="meta mt-2">
+    Video: <a href={watch} title={`${title} on YouTube`}>{title}</a> by {
+      channel
+    }, on YouTube.
+  </figcaption>
+</figure>
+
+<script>
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-youtube-play]")
+    .forEach(link =>
+      link.addEventListener("click", event => {
+        const figure = link.closest<HTMLElement>("[data-youtube]");
+        const id = figure?.dataset.youtube;
+        if (!id) return;
+        event.preventDefault();
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+        iframe.title =
+          link.getAttribute("aria-label")?.replace("Play video: ", "") ??
+          "YouTube video";
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        iframe.className = "aspect-video w-full rounded-lg";
+        link.replaceWith(iframe);
+      })
+    );
+</script>
