@@ -225,17 +225,6 @@ const robots =
   <body
     class="bg-background font-app text-foreground selection:bg-accent selection:text-accent-foreground flex min-h-svh flex-col"
   >
-    <!-- Always visible: sticks to the top; the header below hides on scroll down.
-         data-nosnippet keeps it out of search snippets and AI page summaries. -->
-    <p
-      data-nosnippet
-      class="bg-accent text-accent-foreground sticky top-0 z-50 flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
-    >
-      <!-- One inline box, so flex layout keeps the spaces between the parts. -->
-      <span
-        ><q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)</span
-      >
-    </p>
     {
       draft && (
         <div
@@ -252,6 +241,18 @@ const robots =
       <slot />
     </main>
     <Footer />
+    <!-- Always visible: sticks to the top; the header below hides on scroll down.
+         It sits last in the HTML and order-first puts it on top, so crawlers and AI
+         fetchers read each page's own text first. data-nosnippet keeps it out of snippets. -->
+    <p
+      data-nosnippet
+      class="bg-accent text-accent-foreground sticky top-0 z-50 order-first flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
+    >
+      <!-- One inline box, so flex layout keeps the spaces between the parts. -->
+      <span
+        ><q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)</span
+      >
+    </p>
     <script>
       import "@/scripts/theme";
     </script>

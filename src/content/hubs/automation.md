@@ -1,7 +1,7 @@
 ---
 title: Automation
 seoTitle: "Automation: n8n Workflows, AI Chatbots and Agents"
-description: The automations I build with n8n, AI chatbots, multi-agent pipelines and custom Claude skills, with how they work, their pros and cons, and what they cost to run.
+description: The automations I build with n8n, AI chatbots, multi-agent pipelines and Claude skills, with how they work, their pros and cons, and what they cost.
 summary: n8n workflows, AI chatbots and agent pipelines, with honest pros, cons and running costs.
 order: 2
 startHere:

@@ -62,6 +62,9 @@ const all = [
     draft: n.data.draft,
   })),
 ].sort((a, b) => b.date.getTime() - a.date.getTime());
+// Long posts and notes first, so news takes never push the guides down the page.
+const guides = all.filter(a => a.frame !== "news-take");
+const news = all.filter(a => a.frame === "news-take");
 
 const crumbs = [
   { name: "Home", href: "/" },
@@ -111,12 +114,13 @@ const schema = [
 
     <section class="max-w-read mt-10" aria-labelledby="all-h">
       <h2 id="all-h" class="h2 mb-4">
-        All posts on {hub.data.title.replace(/^The /, "the ")}
+        Guides and notes on{" "}
+        {hub.data.title.replace(/^The /, "the ")}
       </h2>
       {
-        all.length > 0 ? (
+        guides.length > 0 ? (
           <ul>
-            {all.map(a => (
+            {guides.map(a => (
               <PostCard
                 href={a.href}
                 title={a.title}
@@ -129,14 +133,43 @@ const schema = [
               />
             ))}
           </ul>
-        ) : (
+        ) : news.length === 0 ? (
           <p>
             The first posts on this topic are being written. Subscribe below to
             get them by email.
           </p>
+        ) : (
+          <p>
+            The first long posts on this topic are being written. Meanwhile,
+            here are the latest news takes.
+          </p>
         )
       }
     </section>
+
+    {
+      news.length > 0 && (
+        <section class="max-w-read mt-10" aria-labelledby="news-h">
+          <h2 id="news-h" class="h2 mb-4">
+            News takes on {hub.data.title.replace(/^The /, "the ")}
+          </h2>
+          <ul>
+            {news.map(a => (
+              <PostCard
+                href={a.href}
+                title={a.title}
+                summary={a.summary}
+                date={a.date}
+                minutes={a.minutes}
+                frame={a.frame}
+                draft={a.draft}
+                showHub={false}
+              />
+            ))}
+          </ul>
+        </section>
+      )
+    }
 
     {
       projects.length > 0 && (
