@@ -15,13 +15,13 @@ The full report with tables is the Claude Doc linked above (`full_report`). This
 | # | Action | Owner | Status |
 |---|---|---|---|
 | 1 | Submit `sitemap-index.xml` in Search Console and Bing Webmaster Tools; request indexing for the homepage, About and the live posts | Uriel | Open |
-| 2 | Push feat/mvp to main (31 news takes, pagination, videos, resources, these fixes) | Uriel says "push it to main" | Open |
+| 2 | Push feat/mvp to main (31 news takes, pagination, videos, resources, these fixes) | Uriel says "push it to main" | Done 22 Oct: pushed to main |
 | 3 | GA4 Admin: mark `newsletter_signup`, `contact_submit`, `work_with_me_click` as key events; create the "AI assistants" channel group (regex in `schema-and-technical.md` §5); link Search Console | Uriel | Open |
 | 4 | Move the sticky quote bar out of the text flow | Claude | Done on feat/mvp: the bar is last in the HTML and `order-first` shows it on top |
 | 5 | Align profiles (same name, photo, bio, link); mark agency profiles closed; add Threads, Instagram, Reddit or dev.to to `sameAs` only when the accounts exist | Uriel | Open |
-| 6 | Titles over 60 characters; descriptions outside 140 to 160 | Claude | Descriptions: done on feat/mvp (7 rewritten). Titles: done on feat/mvp (the " \| Uriel Papa" suffix is dropped past 60 characters) |
+| 6 | Titles over 60 characters; descriptions outside 140 to 160 | Claude | Descriptions: done on feat/mvp (7 rewritten). Titles: done on feat/mvp (the " \| Done: 7 descriptions rewritten, and no title passes 60 characters |
 | 7 | Run the 20-prompt AI visibility set on 1 Nov; export Search Console and GA4 about 20 Nov | Uriel, then Claude | Open, dated |
-| 8 | Two `related` posts on every post, long posts first | Claude | Done on feat/mvp: every post lists 2 related live posts (long posts first, same hub first), and the 12 news takes nothing linked to now have in-body links |
+| 8 | Two `related` posts on every post, long posts first | Claude | Done: every post lists 2 related posts, long posts first |
 | 9 | Group long posts above news takes on hub pages | Claude | Done on feat/mvp: "Guides and notes on…" then "News takes on…" |
 | 10 | Add real builds as projects (the n8n chatbot first) and give the long posts without one a "From the build" box | Uriel for the facts, Claude for the pages | Open: needs project facts from Uriel |
 | 11 | Rebalance the draft queue (see `seo-master-plan.md` §6) | Uriel decides, Claude drafts | Open |
