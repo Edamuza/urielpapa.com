@@ -19,9 +19,9 @@ The full report with tables is the Claude Doc linked above (`full_report`). This
 | 3 | GA4 Admin: mark `newsletter_signup`, `contact_submit`, `work_with_me_click` as key events; create the "AI assistants" channel group (regex in `schema-and-technical.md` §5); link Search Console | Uriel | Open |
 | 4 | Move the sticky quote bar out of the text flow | Claude | Done on feat/mvp: the bar is last in the HTML and `order-first` shows it on top |
 | 5 | Align profiles (same name, photo, bio, link); mark agency profiles closed; add Threads, Instagram, Reddit or dev.to to `sameAs` only when the accounts exist | Uriel | Open |
-| 6 | Titles over 60 characters; descriptions outside 140 to 160 | Claude | Descriptions: done on feat/mvp (7 rewritten). Titles: done on the Mac working copy (the " \| Uriel Papa" suffix is dropped past 60 characters), lands with its next push |
+| 6 | Titles over 60 characters; descriptions outside 140 to 160 | Claude | Descriptions: done on feat/mvp (7 rewritten). Titles: done on feat/mvp (the " \| Uriel Papa" suffix is dropped past 60 characters) |
 | 7 | Run the 20-prompt AI visibility set on 1 Nov; export Search Console and GA4 about 20 Nov | Uriel, then Claude | Open, dated |
-| 8 | Two `related` posts on every post, long posts first | Claude | Partly: the Mac working copy links the 12 news takes nothing else links to. Still open: a second `related` post on the 25 posts that have one, and a first on the 7 that have none (live long posts only, so no live post links to a draft) |
+| 8 | Two `related` posts on every post, long posts first | Claude | Done on feat/mvp: every post lists 2 related live posts (long posts first, same hub first), and the 12 news takes nothing linked to now have in-body links |
 | 9 | Group long posts above news takes on hub pages | Claude | Done on feat/mvp: "Guides and notes on…" then "News takes on…" |
 | 10 | Add real builds as projects (the n8n chatbot first) and give the long posts without one a "From the build" box | Uriel for the facts, Claude for the pages | Open: needs project facts from Uriel |
 | 11 | Rebalance the draft queue (see `seo-master-plan.md` §6) | Uriel decides, Claude drafts | Open |
@@ -40,6 +40,10 @@ The plan itself is `seo-master-plan.md` in the project Library; it holds interna
 - **Targets (relative; replace after 8 weeks of data).** At 3 months: 12 to 15 indexed posts, own pages and profiles in the top 5 for "Uriel Papa", cited on 1 to 2 of 20 AI prompts, first 50 newsletter subscribers. At 12 months: 50+ indexed posts, cited on 8 to 10 of 20 prompts, about 500 subscribers.
 - **Workstreams.** Technical and eligibility, writing and passages, content, identity and trust, sharing, AEO and GEO, newsletter and contact, measurement.
 - **Rules that matter for edits.** Write the agency in the past tense; never fabricate experience; sensitive topics (payroll, tax, labour law) cite the government source and say it is not advice; no paid links, link networks or hidden text.
+
+## Technical and security audit
+
+The codebase and security audit from the same day, with 27 findings and their status (Astro upgrade, security headers, forms, privacy, schema, CI), is in `docs/audit-2026-10-22.md`.
 
 ## Re-check
 
