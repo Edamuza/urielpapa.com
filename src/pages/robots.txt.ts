@@ -1,16 +1,15 @@
 import type { APIRoute } from "astro";
 import { SITE } from "@/config";
 
-/** schema-and-technical.md §4: search, AI search and AI training crawlers are all welcome. */
+/**
+ * schema-and-technical.md §4: search, AI search and AI training crawlers are all welcome.
+ * Search engines may crawl everything: pages that must stay out of results (search,
+ * thank-you pages, admin, API, previews) say noindex, which Google only sees if it can
+ * crawl them. Blocking them here made Google index a blocked URL anyway.
+ */
 const body = `# urielpapa.com: search and AI answer engines are welcome
 User-agent: *
 Allow: /
-Disallow: /keystatic
-Disallow: /preview/
-Disallow: /search
-Disallow: /contact/thanks
-Disallow: /newsletter/thanks
-Disallow: /api/
 
 # AI search and answer retrieval (needed to be cited)
 User-agent: OAI-SearchBot
