@@ -1,0 +1,75 @@
+---
+title: "Anthropic Gives Agent Skills to the Agentic AI Foundation"
+seoTitle: "Agent Skills Gets a Neutral Home at AAIF"
+description: >-
+  Anthropic has donated Agent Skills, the SKILL.md standard used by 70+ agent
+  platforms, to the Agentic AI Foundation. What changed and what it means.
+dek: >-
+  The SKILL.md format behind Claude's skills now belongs to a neutral foundation
+  under the Linux Foundation, next to MCP. Skills you write keep working.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    On October 22, 2026, Anthropic donated the Agent Skills standard, its name,
+    GitHub organization and the agentskills.io domain to the Agentic AI
+    Foundation (AAIF).
+  - >-
+    The AAIF runs under the Linux Foundation and already holds the Model Context
+    Protocol (MCP), which Anthropic donated earlier.
+  - >-
+    Anthropic says more than 70 agent platforms support Agent Skills, including
+    ChatGPT, Cursor, GitHub Copilot and VS Code, with 1 million skills
+    published.
+businessImpact:
+  - >-
+    A skill written once can be reused across many AI tools, so the work of
+    writing one is less tied to a single vendor.
+  - >-
+    Planned security guidance matters, because a skill can include scripts that
+    an agent runs on your machine.
+sourceUrl: https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation
+published: 2026-10-24
+related:
+  - opencode-mcp-oauth-rce
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+Agent Skills, the open format for teaching AI agents a task with a folder and a SKILL.md file, now belongs to a neutral foundation instead of Anthropic. Anthropic [announced on October 22, 2026](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation) that it is donating the standard to the Agentic AI Foundation, the same home as the Model Context Protocol (MCP). For anyone writing skills, nothing breaks, and the format is now less tied to one company.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. I write custom Claude skills myself, so this is a standard I use.
+
+## What happened?
+
+In its post [Donating Agent Skills to the Agentic AI Foundation](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation), Anthropic said it is handing over the Agent Skills standard, its name and logo, its GitHub organization and the [agentskills.io](https://agentskills.io) domain. The Agentic AI Foundation (AAIF) runs under the Linux Foundation, and Anthropic co-founded it with Block and OpenAI. Anthropic had already [donated MCP to the AAIF](https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation) when the foundation started.
+
+## What changed, in plain words?
+
+These are the main points from [Anthropic's announcement](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation):
+
+* **What a skill is.** A skill is a folder with a SKILL.md file that teaches an agent a task or domain, plus any scripts or reference files it needs. Anthropic launched skills in October 2025 and published the standard in December 2025.
+* **Who runs it now.** The AAIF is the neutral home. Engineers from Anthropic, Google, OpenAI and other companies maintain it as individuals, and you can use or contribute to the standard without joining the AAIF.
+* **How widely it is used.** Anthropic counts more than 70 agent platforms, including ChatGPT, Cursor, GitHub Copilot and VS Code, 1 million published skills and nearly 280 million installs.
+* **What comes next.** Anthropic has proposed a roadmap with versioned releases, a formal proposal process and security guidance for people who write and install skills. The spec lives at [agentskills.io](https://agentskills.io), with discussion on [GitHub](https://github.com/agentskills/agentskills).
+
+## What does it mean for businesses and site owners?
+
+The practical change is trust. A business that writes skills for its own processes, such as a reporting routine or a brand checklist, can expect them to keep working across tools, because no single vendor controls the format anymore. That is the same reason MCP spread quickly once it had a neutral home.
+
+The security part is the one I would watch most. A skill can carry scripts that an agent runs, so installing a stranger's skill is closer to installing software than copying a prompt. My take on the [OpenCode MCP flaw](/news/opencode-mcp-oauth-rce) shows how agent add-ons can become a way in.
+
+## What should you do now?
+
+* **Keep your skills as they are.** The format has not changed, only who maintains it.
+* **Read a skill's scripts before you install it.** Treat third-party skills like any other code.
+* **Follow the roadmap** on [GitHub](https://github.com/agentskills/agentskills) if you build skills, so versioned releases don't surprise you.
+
+## Where can you learn more?
+
+- [Anthropic's announcement](https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation) - The full post, with the adoption numbers and maintainers.
+- [The Agent Skills specification](https://agentskills.io) - The format itself, now under the AAIF.
+- [Agent Skills on GitHub](https://github.com/agentskills/agentskills) - Where the spec is discussed and where the proposed roadmap will land.
