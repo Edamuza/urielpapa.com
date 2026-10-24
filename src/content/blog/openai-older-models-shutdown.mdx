@@ -1,0 +1,89 @@
+---
+title: "OpenAI Shut Down GPT-4, o1 and Other Older API Models"
+seoTitle: "OpenAI Shut Down GPT-4, o1 and o3-mini in the API"
+description: >-
+  On October 23, 2026, OpenAI shut down GPT-3.5 Turbo, GPT-4, o1, o3-mini and
+  other older API models. What breaks and what to switch to.
+dek: >-
+  Apps that still call these older model names now get errors. OpenAI lists a
+  GPT-5.6 replacement for each one.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    OpenAI shut down a long list of older API models on October 23, 2026,
+    including gpt-3.5-turbo, gpt-4, gpt-4-turbo, gpt-4o-2024-05-13, o1, o1-pro,
+    o3-mini, o4-mini, gpt-4.1-nano and gpt-image-1.
+  - >-
+    The deprecation was announced on April 22, 2026, so this is the end of a
+    six-month notice period, not a surprise.
+  - >-
+    OpenAI's deprecations page names a replacement for each model, mostly
+    gpt-5.6-sol, gpt-5.6-terra or gpt-5.6-luna.
+  - >-
+    Fine-tuned models built on GPT-3.5 Turbo, GPT-4, GPT-4.1 nano, o4-mini,
+    babbage-002 and davinci-002 were shut down on the same date.
+businessImpact:
+  - >-
+    A chatbot, plugin or automation that still names one of these models stops
+    answering until the model name is changed.
+  - >-
+    Businesses with fine-tuned models on these bases need to fine-tune again on
+    a newer base model.
+sourceUrl: https://developers.openai.com/api/docs/deprecations
+published: 2026-10-25
+related:
+  - gpt-6-sol-luna
+  - openai-models-google-cloud
+projects: []
+stack:
+  - gpt
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+OpenAI shut down GPT-4, GPT-3.5 Turbo, o1, o3-mini and several other older models in its API on October 23, 2026. Any app, plugin or automation that still calls one of those model names now gets an error instead of an answer. The fix is usually one line: change the model name to the replacement OpenAI lists, then test.
+
+This take is part of my [AI, in Depth](/topics/ai) writing.
+
+## What happened?
+
+On April 22, 2026, OpenAI announced the deprecation of a group of older models, with access ending on October 23, 2026. That date has now passed. The full list is on [OpenAI's deprecations page](https://developers.openai.com/api/docs/deprecations), which also names a recommended replacement for each model.
+
+## Which models were shut down?
+
+These are the main models from [OpenAI's deprecations page](https://developers.openai.com/api/docs/deprecations), with the replacement it recommends:
+
+| Shut down on October 23, 2026 | OpenAI's recommended replacement |
+| --- | --- |
+| gpt-3.5-turbo (and its snapshots) | gpt-5.6-terra |
+| gpt-4, gpt-4-0613, gpt-4-1106-preview | gpt-5.6-sol |
+| gpt-4-turbo, gpt-4-turbo-2024-04-09 | gpt-5.6-sol |
+| gpt-4o-2024-05-13 | gpt-5.6-sol |
+| gpt-4.1-nano | gpt-5.6-luna |
+| o1, o3-mini | gpt-5.6-sol |
+| o1-pro | gpt-5.6-sol with pro reasoning mode |
+| o4-mini | gpt-5.6-terra |
+| gpt-image-1 | gpt-image-2.5-sunburst or gpt-image-2.5-flare |
+
+Fine-tuned models built on GPT-3.5 Turbo, GPT-4, GPT-4.1 nano, o4-mini, babbage-002 and davinci-002 were shut down on the same date. Note that only the dated gpt-4o-2024-05-13 snapshot is on the list.
+
+## What does it mean for businesses and site owners?
+
+Most of the damage is quiet. A website chatbot, a WordPress plugin, a Zapier or n8n step, or an old script written in 2023 or 2024 may still name gpt-3.5-turbo or gpt-4. Those calls now fail, and the person who notices first is often a customer who gets no reply.
+
+The upside is that the replacements are newer models. My post on [GPT-6 Sol and Luna](/news/gpt-6-sol-luna) covers OpenAI's current prices, which are worth comparing with the GPT-5.6 models before you pick one.
+
+## What should you do now?
+
+* **Search your code and tools for the old names.** Look for gpt-3.5, gpt-4, o1, o3-mini, o4-mini and gpt-image-1 in your code, plugin settings and automation steps.
+* **Swap in the listed replacement and test.** Check the answer length, format and tool calls, since a newer model can behave differently.
+* **Check your error logs from October 23.** Failed calls since that date show where something was missed.
+* **Fine-tune again if you need to.** A fine-tuned model on a retired base has to be rebuilt on a newer base model.
+
+## Where can you learn more?
+
+- [OpenAI's deprecations page](https://developers.openai.com/api/docs/deprecations) - The full list of shut-down models, dates and replacements.
+- [GPT-6 Sol and Luna: OpenAI's Cheaper GPT-6 Models in the API](/news/gpt-6-sol-luna) - My take on OpenAI's current API models and prices.
+- [OpenAI's Frontier Models Are Coming to Google Cloud](/news/openai-models-google-cloud) - My take on another way to buy OpenAI's models.
