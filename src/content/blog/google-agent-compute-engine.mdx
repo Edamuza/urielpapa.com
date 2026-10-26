@@ -1,0 +1,77 @@
+---
+title: "Google Cloud Gives Every AI Agent Its Own Computer"
+seoTitle: "Google Cloud Agent Compute Engine Explained"
+description: >-
+  Google Cloud announced Agent Compute Engine, a computer for each AI agent,
+  plus new controls for agent cost, identity and security. What it means.
+dek: >-
+  The service already runs Gemini's work agents. Customers can sign up for a
+  preview in the coming months, and some new governance tools are live now.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    On October 22, 2026, Google Cloud announced Agent Compute Engine, which
+    gives each Gemini agent its own secure, fast-booting computer.
+  - >-
+    Agent Compute Engine reaches customers as a preview in the coming months;
+    the open-source Agent Substrate for GKE is available now.
+  - >-
+    Google also announced agent governance tools, including token and cost
+    controls, model routing and governance for local agents like Claude Code.
+businessImpact:
+  - >-
+    Companies running AI agents get a safer place to run them, with each agent
+    isolated and using its own short-lived credentials.
+  - >-
+    Token and cost controls help stop an agent from running up an unexpected
+    AI bill.
+sourceUrl: https://cloud.google.com/blog/topics/ai-infrastructure/introducing-agent-compute-engine-and-expanded-agent-governance
+published: 2026-10-26
+related:
+  - opencode-mcp-oauth-rce
+projects: []
+stack:
+  - gemini
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+Google Cloud is giving each AI agent its own secure computer to work on. On October 22, 2026, Google announced Agent Compute Engine, the service that already runs Gemini's work agents, and said customers will be able to use it for their own agents through a preview in the coming months. It also announced new controls for agent cost, identity and security.
+
+This take is part of my [AI, in Depth](/topics/ai) writing.
+
+## What happened?
+
+Google Cloud published [Introducing Agent Compute Engine and expanded agent governance](https://cloud.google.com/blog/topics/ai-infrastructure/introducing-agent-compute-engine-and-expanded-agent-governance) at the AGNTCon + MCPCon conference. Google calls it "a purpose-built compute service that already powers Gemini as an agent for work tasks."
+
+## What changed?
+
+These points come from [Google Cloud's announcement](https://cloud.google.com/blog/topics/ai-infrastructure/introducing-agent-compute-engine-and-expanded-agent-governance):
+
+* **A computer per agent.** Each agent gets a small virtual machine (a microVM) that boots quickly and pauses when idle.
+* **Isolation and short-lived credentials.** Each microVM runs under its agent's own identity with short-lived credentials, and service credentials are added outside the microVM.
+* **Its own disk.** Each microVM keeps its workspace and context on its own Hyperdisk.
+* **Preview later, open source now.** Agent Compute Engine will be in preview "in the coming months." The open-source Agent Substrate runs on GKE today.
+* **Governance tools.** New Agent Gateway features in preview include token and cost governance and model routing policies. Governance for local agents such as Claude Code and Antigravity CLI is "in preview soon."
+
+The post does not give prices.
+
+## What does it mean for businesses and site owners?
+
+An AI agent that can run code, open files and call tools is useful and risky. If it runs on the same machine as everything else, a bad instruction or a bad tool can reach things it should not. I wrote about one such case in [the OpenCode MCP flaw](/news/opencode-mcp-oauth-rce). Giving each agent its own isolated computer, with its own short-lived login, limits how far a mistake can spread.
+
+For most small businesses this is still a future option, since the main service is not in preview yet. The cost controls matter sooner. Agents can call models many times per task, and a cap on tokens is a simple way to keep an agent's bill predictable.
+
+## What should you do now?
+
+* **If you run agents on Google Cloud,** register interest in the preview and look at the Agent Gateway features that are live now.
+* **Give agents their own accounts.** Wherever they run, give agents separate, limited credentials, not your admin login.
+* **Set a spending limit** on any API key an agent uses.
+
+## Where can you learn more?
+
+- [Google Cloud's Agent Compute Engine announcement](https://cloud.google.com/blog/topics/ai-infrastructure/introducing-agent-compute-engine-and-expanded-agent-governance) - The full post with every governance feature.
+- [OpenCode Quietly Fixed a Critical MCP Flaw](/news/opencode-mcp-oauth-rce) - My take on why AI coding agents need tighter boundaries.

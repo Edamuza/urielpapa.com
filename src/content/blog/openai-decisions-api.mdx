@@ -1,0 +1,80 @@
+---
+title: "OpenAI's Decisions API Is Out: Fast, Cheap Yes-or-No Answers"
+seoTitle: "OpenAI Decisions API: What It Does and Costs"
+description: >-
+  OpenAI's Decisions API is generally available. It returns a probability,
+  choice or score in place of text, and charges only for input tokens.
+dek: >-
+  For classifying, routing and scoring, OpenAI now has a dedicated endpoint
+  that it says is about 10 times faster than asking GPT-6 Luna in the
+  Responses API.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    OpenAI published the Decisions API as generally available on October 22,
+    2026, built on GPT-6 Luna.
+  - >-
+    You define a question and its allowed answers; the API returns a
+    probability, one of your choices, or a score instead of written text.
+  - >-
+    Uncached input costs US$0.10 per million tokens and output tokens are not
+    charged, with up to 400 questions per request.
+businessImpact:
+  - >-
+    Tasks like routing support tickets, tagging leads or flagging risky
+    content can run faster and cheaper than with a general chat model.
+  - >-
+    Typed answers are easier to plug into automations than free text that has
+    to be parsed.
+sourceUrl: https://openai.com/index/decisions-api/
+published: 2026-10-26
+related:
+  - gpt-6-sol-luna
+  - openai-older-models-shutdown
+projects: []
+stack:
+  - gpt
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+OpenAI's Decisions API is now generally available, giving apps a fast, low-cost way to get a yes-or-no probability, a choice or a score from a model instead of a paragraph of text. OpenAI published it on October 22, 2026, built on GPT-6 Luna. For anyone who uses AI to sort, route or score things, this is a cheaper tool for that job.
+
+This take is part of my [AI, in Depth](/topics/ai) writing.
+
+## What happened?
+
+OpenAI announced the [Decisions API](https://openai.com/index/decisions-api/) with the tagline "Fast, focused, low-cost decisions for any application." The [developer guide](https://developers.openai.com/api/docs/guides/decisions) says it is generally available and returns answers "about 10x faster than the Responses API."
+
+## What changed?
+
+These points come from [OpenAI's announcement](https://openai.com/index/decisions-api/) and [the Decisions guide](https://developers.openai.com/api/docs/guides/decisions):
+
+* **Three answer types.** A predicate returns the probability that a condition is true. A choice returns one option from a list you supply. A score returns a weighted score across 2 to 10 ordered levels.
+* **One model.** gpt-6-luna is the only supported model, called through a POST request to /v1/decisions.
+* **Input-only pricing.** Uncached input costs US$0.10 per million tokens, cached input is cheaper, and output tokens are not charged.
+* **Bigger batches.** One request can carry up to 400 questions, up from 200 during the public beta.
+* **Text, images and JSON.** Context can be text, images or native JSON.
+
+OpenAI also lists early users. Sierra reported under 280 ms p95 latency, and Ramp reported being 4 times faster and 30% cheaper than GPT-6 Luna for attributing AI costs. Those are the companies' own numbers, published by OpenAI.
+
+## What does it mean for businesses and site owners?
+
+A lot of everyday AI work is a decision, not writing. Is this email a sales lead? Which team should get this ticket? Is this review spam? Until now, the usual way was to ask a chat model and parse its answer. The Decisions API gives back a typed answer and a probability, which is easier to use in an n8n or Zapier step and easier to set a threshold on.
+
+The input-only pricing also changes the maths. You pay for what you send, not for what the model writes back, so short, repeated checks get cheap. My post on [GPT-6 Sol and Luna](/news/gpt-6-sol-luna) covers the model it runs on.
+
+## What should you do now?
+
+* **List your AI steps that are really decisions,** such as tagging, routing, filtering and scoring.
+* **Test one against your current prompt.** Compare accuracy, speed and cost on a sample of real cases before you switch.
+* **Set a confidence threshold.** Send low-probability answers to a person instead of acting on them.
+
+## Where can you learn more?
+
+- [OpenAI's Decisions API announcement](https://openai.com/index/decisions-api/) - Features, prices and customer examples.
+- [Decisions API guide](https://developers.openai.com/api/docs/guides/decisions) - How to call the endpoint, limits and question types.
+- [GPT-6 Sol and Luna: OpenAI's Cheaper GPT-6 Models in the API](/news/gpt-6-sol-luna) - My take on the model behind it.

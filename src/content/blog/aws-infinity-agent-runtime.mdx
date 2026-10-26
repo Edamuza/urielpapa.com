@@ -1,0 +1,76 @@
+---
+title: "AWS Open-Sources Infinity, a Runtime for Thousands of AI Agents"
+seoTitle: "AWS Infinity: Open-Source AI Agent Runtime"
+description: >-
+  AWS released Infinity, an open-source research runtime that pauses AI agents
+  while they wait on tools. What it is, what AWS measured and who it is for.
+dek: >-
+  AWS says Infinity fit 75,000 concurrent agents in the 8 GB of memory on a
+  Raspberry Pi 5. It is an early research release, not a product.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    AWS published Infinity on October 23, 2026, as part of the Hydro project
+    with UC Berkeley, under the Apache 2.0 licence.
+  - >-
+    Infinity suspends an agent during a tool call and resumes it when the
+    result arrives, so a waiting agent does not hold a running process.
+  - >-
+    AWS reports fitting 75,000 concurrent agents in 8 GB on a Raspberry Pi 5,
+    about 100 KB per idle agent, in its own benchmark.
+businessImpact:
+  - >-
+    Agents that spend most of their time waiting could run far more cheaply,
+    including on serverless platforms like AWS Lambda.
+  - >-
+    It is a research release, so it is for developers to try, not for a
+    business to build on yet.
+sourceUrl: https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/
+published: 2026-10-26
+related:
+  - google-agent-compute-engine
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+AWS has open-sourced Infinity, a research runtime that lets one machine run tens of thousands of AI agents by pausing each agent while it waits for a tool. AWS published it on October 23, 2026, and says it fit 75,000 concurrent agents in the 8 GB of a Raspberry Pi 5. It is an early research project, so it is a sign of where agent hosting is going rather than something to deploy today.
+
+This take is part of my [AI, in Depth](/topics/ai) writing.
+
+## What happened?
+
+The AWS Open Source Blog published [Introducing Infinity: a runtime for extreme agent concurrency](https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/). Infinity is part of Hydro, which AWS describes as "a collaborative effort between AWS and UC Berkeley." The code is on [GitHub](https://github.com/hydro-project/infinity) under the Apache 2.0 licence.
+
+## What changed?
+
+These points come from [AWS's post](https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/):
+
+* **Agents pause while they wait.** An agent runs in short slices and never blocks on a tool. During a tool call it is suspended, then resumed when the result comes back.
+* **Serverless friendly.** A step mode lets it run on platforms like AWS Lambda, where the function can end while a tool call runs.
+* **Events as tool calls.** Outside events reach the model as injected tool calls.
+* **Agents that start agents.** A built-in spawn_thread tool creates child agents that report back to the parent.
+
+AWS's benchmark ran 80,000 agents and 3.2 million completions on one CPU thread, with in-memory stores and a simulated model. It measured about 100 KB per idle agent.
+
+## What does it mean for businesses and site owners?
+
+Most of an AI agent's time is spent waiting: for a model reply, a web page, a database or a person. Today that waiting often keeps a process or server running, and you pay for it. A runtime that parks waiting agents cheaply would make it practical to run one agent per customer, per order or per lead.
+
+The numbers come from a benchmark with a simulated model, so real costs will be higher, since the model calls still cost money. Google is working on the same problem from a different angle, which I covered in [Google Cloud's Agent Compute Engine](/news/google-agent-compute-engine).
+
+## What should you do now?
+
+* **If you build agents,** read the [Infinity docs](https://infinity.hydro.run) and try it on a test project.
+* **If you buy agent tools,** ask vendors how they charge for idle time while an agent waits.
+* **Don't build production systems on it yet.** AWS calls it an early research release.
+
+## Where can you learn more?
+
+- [AWS's Infinity announcement](https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/) - How it works and the benchmark details.
+- [Infinity on GitHub](https://github.com/hydro-project/infinity) - The source code.
+- [Google Cloud Gives Every AI Agent Its Own Computer](/news/google-agent-compute-engine) - My take on Google's agent hosting service.
