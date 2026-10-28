@@ -57,7 +57,35 @@ const mdxComponents = {
       author: fields.text({ label: "Account name" }),
       handle: fields.text({ label: "Handle, without @" }),
       date: fields.text({ label: "Date posted (YYYY-MM-DD)" }),
-      text: fields.text({ label: "Post text, exactly as posted", multiline: true }),
+      text: fields.text({ label: "Post text, exactly as posted (full URLs for links)", multiline: true }),
+      media: fields.array(
+        fields.object({
+          type: fields.select({
+            label: "Type",
+            options: [
+              { label: "Photo", value: "photo" },
+              { label: "Video (poster image)", value: "video" },
+            ],
+            defaultValue: "photo",
+          }),
+          src: fields.url({ label: "Image URL (pbs.twimg.com)" }),
+          alt: fields.text({ label: "Alt text" }),
+          width: fields.integer({ label: "Width (px)" }),
+          height: fields.integer({ label: "Height (px)" }),
+        }),
+        { label: "Photos or video poster (up to 4)", itemLabel: props => props.fields.alt.value || "Media" }
+      ),
+      card: fields.object(
+        {
+          url: fields.text({ label: "Link URL (leave empty for none)" }),
+          title: fields.text({ label: "Title" }),
+          description: fields.text({ label: "Description", multiline: true }),
+          domain: fields.text({ label: "Domain, e.g. anthropic.com" }),
+          image: fields.text({ label: "Preview image URL" }),
+          imageAlt: fields.text({ label: "Preview image alt text" }),
+        },
+        { label: "Link preview" }
+      ),
     },
   }),
 };

@@ -94,7 +94,11 @@ function convertProse(text: string): string {
       const handle = jsxAttr(attrs, "handle") ?? "";
       const text = (jsxAttr(attrs, "text") ?? "").replace(/\n+/g, " ");
       const site = jsxAttr(attrs, "platform") === "threads" ? "Threads" : "X";
-      return `> ${text}\n>\n> [${linkText(`${author} (@${handle}) on ${site}`)}](${url})`;
+      const card = attrs.match(
+        /card=\{\{[\s\S]*?url:\s*"([^"]+)"[\s\S]*?title:\s*"([^"]+)"/
+      );
+      const linked = card ? `\n>\n> [${linkText(card[2])}](${card[1]})` : "";
+      return `> ${text}${linked}\n>\n> [${linkText(`${author} (@${handle}) on ${site}`)}](${url})`;
     })
     .replace(/\n{3,}/g, "\n\n");
 }

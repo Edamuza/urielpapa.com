@@ -1,18 +1,35 @@
 ---
 /**
  * MDX: <SocialPost platform="x" url="https://x.com/user/status/123" author="Name"
- *   handle="user" date="2026-10-25" text="The post's text, copied exactly." />
- * Shows a static card first: the verified text, who posted it and when, and a
- * link to the original. "Show the post on X/Threads" swaps in the platform's
- * own embed (photos, video, replies, the thread). X's or Threads' script loads
- * only for readers who click, the same way the YouTube player works, so the
- * page stays fast and private until then. Without JavaScript the link opens
- * the post on the platform.
+ *   handle="user" date="2026-10-25" text="The post's text, copied exactly."
+ *   media={[{ src: "https://pbs.twimg.com/media/ID.jpg", alt: "…", width: 1200, height: 800 }]}
+ *   card={{ url: "https://…", title: "…", domain: "example.com", image: "https://…", imageAlt: "…" }} />
+ * Shows a static card first: the verified text (links and @mentions clickable),
+ * the post's photos or video poster, its link preview, who posted it and when.
+ * Photos come from X's image server, like YouTube thumbnails do. "Show the post
+ * on X/Threads" swaps in the platform's own embed (video, replies, the thread);
+ * X's or Threads' script loads only for readers who click. Without JavaScript
+ * the links open the post on the platform.
  */
 import X from "@/assets/icons/socials/x.svg";
 import Threads from "@/assets/icons/socials/threads.svg";
 import { formatDate } from "@/utils/content";
 
+type Media = {
+  type?: "photo" | "video";
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+type Card = {
+  url: string;
+  title: string;
+  description?: string;
+  domain: string;
+  image?: string;
+  imageAlt?: string;
+};
 type Props = {
   platform: "x" | "threads";
   url: string;
@@ -20,12 +37,51 @@ type Props = {
   handle: string;
   date: string;
   text: string;
+  media?: Media[];
+  card?: Card;
 };
-const { platform, url, author, handle, date, text } = Astro.props;
+const { platform, url, author, handle, date, text, card } = Astro.props;
+const media = (Astro.props.media ?? []).filter(m => m.src).slice(0, 4);
 const site = platform === "threads" ? "Threads" : "X";
 const Icon = platform === "threads" ? Threads : X;
 const paragraphs = text.split(/\n{2,}|\n/).filter(Boolean);
 const when = formatDate(new Date(date), "D MMM YYYY");
+const profile = (h: string) =>
+  platform === "threads"
+    ? `https://www.threads.net/@${h}`
+    : `https://x.com/${h}`;
+
+// Split a paragraph into text, links and @mentions, the way the platform shows them.
+type Part = { text: string; href?: string; title?: string };
+const parts = (p: string): Part[] =>
+  p
+    .split(/(https?:\/\/[^\s]+[^\s.,;:!?)]|(?<![\w@])@\w{1,30})/)
+    .filter(Boolean)
+    .map(t =>
+      t.startsWith("http")
+        ? {
+            text: t.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""),
+            href: t,
+            title: `Link in ${author}'s post: ${t}`,
+          }
+        : /^@\w+$/.test(t)
+          ? { text: t, href: profile(t.slice(1)), title: `${t} on ${site}` }
+          : { text: t }
+    );
+
+// X serves each photo in several sizes; other hosts get the URL as given.
+const sized = (src: string, name: string) =>
+  src.includes("pbs.twimg.com/media/")
+    ? `${src.split("?")[0]}?format=jpg&name=${name}`
+    : src;
+const photoUrl = (i: number) =>
+  platform === "x" ? `${url}/photo/${i + 1}` : url;
+const grid =
+  media.length === 1
+    ? ""
+    : media.length === 3
+      ? "grid grid-cols-2 grid-rows-2 gap-0.5 aspect-[16/9]"
+      : "grid grid-cols-2 gap-0.5 aspect-[16/9]";
 ---
 
 <figure class="not-prose my-8" data-social-post={platform} data-url={url}>
@@ -40,7 +96,115 @@ const when = formatDate(new Date(date), "D MMM YYYY");
       <span class="font-semibold">{author}</span>
       <span class="text-muted-foreground">@{handle}</span>
     </p>
-    {paragraphs.map(p => <p class="mt-2 first:mt-0">{p}</p>)}
+    {
+      paragraphs.map(p => (
+        <p class="mt-2 break-words first:mt-0">
+          {parts(p).map(part =>
+            part.href ? (
+              <a href={part.href} title={part.title} rel="noopener">
+                {part.text}
+              </a>
+            ) : (
+              part.text
+            )
+          )}
+        </p>
+      ))
+    }
+    {
+      media.length > 0 && (
+        <div
+          class:list={[
+            "border-border mt-4 overflow-hidden rounded-lg border",
+            grid,
+          ]}
+        >
+          {media.map((m, i) => (
+            <a
+              href={photoUrl(i)}
+              title={
+                m.type === "video"
+                  ? `Play the video from ${author}'s post on ${site}`
+                  : `Photo ${i + 1} of ${media.length} in ${author}'s post, on ${site}`
+              }
+              rel="noopener"
+              data-social-play={m.type === "video" ? "" : undefined}
+              class:list={[
+                "relative block bg-black/5",
+                media.length === 3 && i === 0 && "row-span-2",
+              ]}
+            >
+              <img
+                src={sized(m.src, media.length === 1 ? "medium" : "small")}
+                srcset={
+                  m.src.includes("pbs.twimg.com/media/")
+                    ? `${sized(m.src, "small")} 680w, ${sized(m.src, "medium")} 1200w`
+                    : undefined
+                }
+                sizes="(min-width: 768px) 680px, 100vw"
+                alt={m.alt}
+                title={m.alt}
+                width={m.width}
+                height={m.height}
+                loading="lazy"
+                decoding="async"
+                class:list={[
+                  media.length === 1
+                    ? "max-h-[44rem] w-full object-cover object-top"
+                    : "size-full object-cover",
+                ]}
+              />
+              {m.type === "video" && (
+                <span
+                  class="absolute inset-0 flex items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <span class="flex size-14 items-center justify-center rounded-full bg-black/75">
+                    <svg viewBox="0 0 24 24" class="ms-1 size-7 fill-white">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                </span>
+              )}
+            </a>
+          ))}
+        </div>
+      )
+    }
+    {
+      card?.url && (
+        <a
+          href={card.url}
+          title={`${card.title}, on ${card.domain}`}
+          rel="noopener"
+          class="border-border mt-4 block overflow-hidden rounded-lg border no-underline hover:bg-black/5"
+        >
+          {card.image && (
+            <img
+              src={card.image}
+              alt={card.imageAlt || `Preview image for ${card.title}`}
+              title={card.imageAlt || card.title}
+              width="600"
+              height="314"
+              loading="lazy"
+              decoding="async"
+              class="aspect-[1.91/1] w-full object-cover"
+            />
+          )}
+          <span class="block px-4 py-3">
+            <span class="text-muted-foreground block text-sm">
+              {card.domain}
+            </span>
+            <span class="block font-medium">{card.title}</span>
+            {card.description && (
+              <span class="text-muted-foreground mt-1 block text-sm">
+                {card.description}
+              </span>
+            )}
+          </span>
+        </a>
+      )
+    }
   </blockquote>
   <figcaption class="meta mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
     <a href={url} title={`${author} on ${site}, ${when}`}
@@ -134,6 +298,15 @@ const when = formatDate(new Date(date), "D MMM YYYY");
     const status = figure.querySelector<HTMLElement>("[data-social-status]");
     const platform = figure.dataset.socialPost;
     const url = figure.dataset.url ?? "";
+    // A video poster starts the platform's own player instead of leaving the page.
+    for (const poster of figure.querySelectorAll<HTMLElement>(
+      "[data-social-play]"
+    ))
+      poster.addEventListener("click", event => {
+        if (!button || button.disabled) return;
+        event.preventDefault();
+        button.click();
+      });
     button?.addEventListener("click", async () => {
       if (!target || !card) return;
       button.disabled = true;
