@@ -1,0 +1,165 @@
+---
+title: "The Best AI Agent Tools Shared on Threads in October 2026"
+seoTitle: "Best AI Agent Tools Shared on Threads, October 2026"
+description: >-
+  Six AI agent tools that builders shared on Threads in October 2026, checked at
+  the source: Claude Duet, Gemini 4 Argon, Executor, agent-browser and more.
+dek: >-
+  Two new always-on assistants, two open-source tools for building agents, and
+  two free repos to learn from, with what each one costs and who can use it.
+hub: ai
+frame: best-of
+takeaways:
+  - >-
+    Claude Duet, opened as a research preview on October 21, 2026, is a
+    proactive Claude agent with a waitlist for Pro and Max subscribers in the
+    US only.
+  - >-
+    Gemini 4 Argon reached Google AI Pro and Ultra subscribers on October 13,
+    2026, with a chat-to-tasks toggle and connections to more than 40 apps.
+  - >-
+    Executor is an MIT-licensed, self-hosted hub where you set up each API or
+    MCP tool once, with allow, approve or block rules, for any MCP agent.
+  - >-
+    Vercel Labs' agent-browser is an Apache-2.0 command-line tool, with about
+    41,100 GitHub stars, that lets AI agents drive a real browser.
+  - >-
+    Awesome LLM Apps, an Apache-2.0 collection of more than 100 agents and RAG
+    apps, had about 140,000 GitHub stars in October 2026.
+published: 2026-10-28
+related:
+  - gemini-4-argon
+  - anthropic-claude-agent-unsanctioned-actions
+projects: []
+stack:
+  - claude
+  - gemini
+  - github
+faq:
+  - q: Can I use Claude Duet in the Philippines?
+    a: >-
+      Not yet, as of October 28, 2026. Anthropic opened the Claude Duet waitlist
+      to Pro and Max subscribers in the US first and has not given a date for
+      other countries.
+  - q: Do I need to code to use these tools?
+    a: >-
+      Claude Duet and Gemini 4 Argon need no code, only a paid plan. Executor,
+      agent-browser and the two GitHub repos need a terminal, Node.js or
+      Python, and some comfort with the command line.
+event: {}
+syndication: []
+draft: true
+---
+
+The best AI agent tools that builders shared on Threads in October 2026 are Claude Duet and Gemini 4 Argon for people who want an assistant that keeps working, Executor and agent-browser for people who build agents, and the Awesome LLM Apps and mg-styles-15 repos for people who learn by copying working code. All six are real and checked at the source. Only four of them can be used in the Philippines today.
+
+This roundup is part of my [AI, in Depth](/topics/ai) writing. I build automations and agents for my own work, and Threads is where many builders now share what they find first.
+
+## How did I pick these six?
+
+These six tools came from a search of Threads posts from October 14 to 28, 2026, looking for tutorials, news and GitHub repositories about AI agents. I kept a find only if it passed four checks:
+
+- **Primary source:** the official announcement or the GitHub repository opened and read, not only the Threads post.
+- **Active:** a release or announcement in October 2026, or a repo still being maintained.
+- **Useful to small teams:** it saves time for a solo builder or a small business, not only for big companies.
+- **Honest access:** I note who can use it, what it costs and whether it works in the Philippines.
+
+I dropped posts from AI bot accounts, "comment for the guide" posts, a repo built to get past anti-bot checks, and repos I could not open. Threads blocks automated reading of posts, so I checked every claim against the linked source instead.
+
+## Which new AI assistants keep working when you are away?
+
+Two of the biggest AI companies launched assistants this month that keep working on a task after you close the chat.
+
+### Claude Duet
+
+- **What it is:** a research preview, opened on October 21, 2026, of "a new app where Claude works as a proactive agent," according to [Anthropic's Claude Duet announcement](https://claude.com/resources/articles/claude-duet). It checks what needs your attention and finishes tasks you assign.
+- **Who it is for:** Anthropic says it was built for "professionals and small business owners," and early testers used it for invoices, customer support and marketing.
+- **Safety:** it can use more than 6,000 connectors and plugins, but before it sends a message, pays, signs or deletes anything it "waits for your approval."
+- **Access and cost:** included in Pro and Max plans, by waitlist, for US subscribers first, on iOS, Android and claude.ai. It shares your plan's usage limits.
+
+I found it through [TestingCatalog's post on Threads](https://www.threads.com/@testingcatalog/post/DexJcPEjSw-). The approval step matters, as I wrote in [my take on Claude agents taking unsanctioned actions](/news/anthropic-claude-agent-unsanctioned-actions).
+
+### Gemini 4 Argon
+
+- **What it is:** Google's latest Gemini model. [Google's Gemini 4 availability post](https://blog.google/innovation-and-ai/products/gemini-app/gemini-4-availability), dated October 13, 2026, says Google AI Pro and Ultra subscribers can now use it.
+- **What is new:** a toggle that turns a chat into a task Gemini keeps working on, connections to "more than 40 apps" including Shopify, and Antigravity's agentic coding in the Gemini macOS app.
+- **Access and cost:** Pro and Ultra plans. The post does not list prices or which countries get it first.
+
+[Google shared the rollout on Threads](https://www.threads.com/@google/post/Dejr2e-kUg4). I covered the model itself in [my Gemini 4 Argon take](/news/gemini-4-argon).
+
+## Which open-source tools help you build your own agents?
+
+Two of the most useful finds were free, open-source tools that solve problems every agent builder hits: connecting tools and using a browser.
+
+### Executor
+
+- **What it is:** "The missing integration layer for AI agents," per the [Executor repository on GitHub](https://github.com/UsefulSoftwareCo/executor). You set up each integration once, with its login and rules, and any MCP-compatible agent can then use it.
+- **What it connects:** MCP servers, OpenAPI specs, GraphQL APIs and Google Discovery APIs.
+- **Control:** each tool is set to allowed, needs approval, or blocked. A paused run continues with `executor resume`.
+- **How to start:** it needs Node.js 20 or later. Run `npm install -g executor`, then `executor install` and `executor web`. Docker, a Cloudflare Worker and a hosted free tier are also listed.
+- **License and size:** MIT, with about 4,300 stars in October 2026.
+
+I found it through a [post by @mlworkz on Threads](https://www.threads.com/@mlworkz/post/Deqf-TiE2yE). If you run agents for several clients, setting up each tool once is a real time saver.
+
+### agent-browser
+
+- **What it is:** a "Browser automation CLI for AI agents" from Vercel Labs, written in Rust, per the [agent-browser repository](https://github.com/vercel-labs/agent-browser).
+- **How it works:** the agent reads the page as an accessibility tree, then clicks, fills or reads elements by reference, such as `@e2`. A built-in `mcp` command runs it as an MCP server.
+- **How to start:** run `npm install -g agent-browser`, then `agent-browser install` to download Chrome for Testing.
+- **License and size:** Apache-2.0, with about 41,100 stars.
+
+It was shared by [@open.source.tools on Threads](https://www.threads.com/@open.source.tools/post/De2K-NYGBaU). It suits testing your own site's forms or collecting public data you are allowed to collect.
+
+## Which GitHub repos are best for learning by example?
+
+Two repositories stood out for learning, because each one ships working code you can run and change.
+
+### Awesome LLM Apps
+
+- **What it is:** "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source," per the [Awesome LLM Apps repository](https://github.com/Shubhamsaboo/awesome-llm-apps). The apps work with Claude, Gemini, GPT, DeepSeek, Llama and Qwen.
+- **What is inside:** starter and advanced agents, multi-agent teams, voice agents, MCP agents, RAG apps and framework crash courses.
+- **How to start:** clone the repo, open one folder such as `starter_ai_agents/ai_travel_agent`, install its requirements and run it with Streamlit. Check each folder for the API keys it needs.
+- **License and size:** Apache-2.0, with about 140,000 stars.
+
+Its author, [Shubham Saboo, shared it on Threads](https://www.threads.com/@saboo_shubham_/post/DegQipXG7gU). Start with one starter agent close to your own work, not the whole list.
+
+### mg-styles-15
+
+- **What it is:** "15 motion design styles, each made by Claude Opus 5.5 writing code from one prompt," per the [mg-styles-15 repository](https://github.com/Vincentwei1021/mg-styles-15). Each 10-second film is built from code, not generated video.
+- **What is inside:** for each style, the finished film, the full prompt and the source code, including the soundtrack script.
+- **How to start:** it needs Node.js 22.12 or later, Google Chrome, ffmpeg and Python 3.11 or later. Blender is needed only for the 3D style.
+- **License and size:** MIT for the code and prompts, with about 2,500 stars.
+
+I found it in a [Spanish list post by @pabloparedes.mx](https://www.threads.com/@pabloparedes.mx/post/DewydQMkaZN). It is a free way to learn how to make short branded promo videos with an AI model writing the code.
+
+## How do the six compare?
+
+The six tools split into ready-made assistants, building blocks for agents, and repos to learn from.
+
+| Tool | Type | Cost as of October 2026 | Works in the Philippines today | Needs code |
+| --- | --- | --- | --- | --- |
+| Claude Duet | Proactive assistant | Pro or Max plan | No, US waitlist first | No |
+| Gemini 4 Argon | Model and assistant | Google AI Pro or Ultra | Not stated | No |
+| Executor | Agent tool hub | Free, MIT | Yes, self-hosted | Yes |
+| agent-browser | Browser tool for agents | Free, Apache-2.0 | Yes | Yes |
+| Awesome LLM Apps | Example repo | Free, Apache-2.0 | Yes | Yes |
+| mg-styles-15 | Example repo | Free, MIT | Yes | Yes |
+
+The four free, open-source tools are the ones a Philippine builder can use today without waiting for a rollout.
+
+## Which one should you try first?
+
+The right first tool depends on whether you want to use an agent or build one.
+
+If you run a small business and do not code, join the Claude Duet waitlist now, or check whether Gemini 4 Argon is in your Google AI plan. Both keep the approval step in your hands, so start with low-risk tasks like summaries and drafts.
+
+If you build agents, start with Executor. Setting up your tools and approval rules once makes every later agent safer and faster to ship. Add agent-browser when an agent needs to work on a website that has no API.
+
+If you are still learning, clone Awesome LLM Apps and run one starter agent this week. Then change one thing in it, such as the prompt or the model, and see what breaks.
+
+## Where can you learn more?
+
+- [Anthropic's Claude Duet announcement](https://claude.com/resources/articles/claude-duet) - what the preview does, who can join and how approvals work.
+- [Google's Gemini 4 availability post](https://blog.google/innovation-and-ai/products/gemini-app/gemini-4-availability) - the plans, task mode and app connections.
+- [Executor on GitHub](https://github.com/UsefulSoftwareCo/executor) - setup steps for local, Docker and hosted use.
+- [Gemini 4 Argon Is Out: What Google's New Top Model Costs](/news/gemini-4-argon) - my take on the model behind Gemini's new task mode.
