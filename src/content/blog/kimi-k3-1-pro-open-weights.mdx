@@ -1,0 +1,78 @@
+---
+title: 'Kimi K3.1 Pro: Moonshot''s Open-Weight Model With a 1M Context'
+seoTitle: 'Kimi K3.1 Pro: Open Weights by November 4'
+description: >-
+  Moonshot AI released Kimi K3.1 Pro, an open-weight model with a 1M-token
+  context window and weights due by November 4. What changed and who it helps.
+dek: >-
+  Moonshot AI's new flagship is live in its apps and API now, with full weights
+  promised by November 4, 2026. The benchmark claims are Moonshot's own.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    Moonshot AI launched Kimi K3.1 Pro on October 23, 2026, and says the full
+    model weights will be released by November 4, 2026.
+  - >-
+    Kimi K3.1 Pro is a mixture-of-experts model with 2.8 trillion total and 104
+    billion active parameters, and a 1-million-token context window.
+  - >-
+    On Moonshot's own internal stress test, Kimi K3.1 Pro's claim-level
+    hallucination rate fell from 23.4% for Kimi K3 to 8.3%.
+businessImpact:
+  - >-
+    Another frontier-class model with open weights gives businesses more
+    hosting choices and less dependence on a single AI vendor.
+  - >-
+    A 1M-token context window means long contracts, reports or codebases can
+    go into one request.
+  - >-
+    The weights and license are not out yet, so self-hosting plans should wait
+    for the November release.
+sourceUrl: https://www.kimi.ai/blog/kimi-k3-1-pro
+published: 2026-10-26
+related:
+  - mistral-large-4
+  - deepseek-v4-1-flash
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: true
+---
+Moonshot AI has released Kimi K3.1 Pro, a flagship model with a 1-million-token context window. Moonshot says the full weights will be public by November 4, 2026. It matters because open weights let other companies host the model, which adds competition at the top end, though every benchmark so far is Moonshot's own.
+
+This take is part of my [AI, in Depth](/topics/ai) writing, next to my news takes on other open-weight releases.
+
+## What happened?
+
+On October 23, 2026, Moonshot AI published [Introducing Kimi K3.1 Pro](https://www.kimi.ai/blog/kimi-k3-1-pro) and announced it in a [launch thread on X](https://x.com/Kimi_Moonshot/status/2113680701770068067). The @Kimi_Moonshot account calls it "our most capable 3T-class open-weight model." The model is live on Kimi.ai, the Kimi apps, Kimi Work, Kimi Code and the Kimi API. A [follow-up post](https://x.com/Kimi_Moonshot/status/2113680718249500786) confirms both API versions are available now.
+
+## What changed, in plain words?
+
+Kimi K3.1 Pro is a post-trained version of Kimi K3, trained with much more reinforcement learning. These are the main points from the [announcement](https://www.kimi.ai/blog/kimi-k3-1-pro):
+
+* **A very large mixture-of-experts model.** It has 2.8 trillion total parameters, with 104 billion active at a time. It is multimodal and reads up to 1 million tokens in one request.
+* **A faster version.** Kimi K3.1 Pro Highspeed runs 2 to 3 times faster than the standard model.
+* **Coding claims.** Moonshot reports 65.7% on Terminal-Bench 4.0, just behind Claude Opus 5.5 at 66.4% in its comparison.
+* **Finance and accuracy claims.** Moonshot reports gains over Kimi K3 on its [internal finance benchmarks](https://x.com/Kimi_Moonshot/status/2113680714311094458). On an internal stress test, the claim-level hallucination rate fell from 23.4% to 8.3%. Moonshot says that rate does not reflect everyday error rates.
+* **Cyber limits.** For the open-weight release, Moonshot removed cyber-related training data to reduce misuse risk.
+
+## What does it mean for small businesses and founders?
+
+Kimi K3.1 Pro adds another strong option that you will not be locked into. Once the weights are public, other hosting providers can serve the model, and that kind of competition tends to push prices down. A business can also switch hosts without rewriting its prompts for a new model.
+
+Self-hosting is a different story. A 2.8-trillion-parameter model needs data-center hardware, so running it on your own servers is not realistic for most small teams. In my view, the practical gain is choice, not a model on your office machine.
+
+The 1M-token context window is useful for long documents, such as a full contract set or a large codebase in one request. Still, a model can miss details buried deep in a long input, so test it on your own files.
+
+Two things are still unknown. The post does not name a license for the weights, and that license decides commercial use. And the benchmark scores are Moonshot's own, so independent results will matter more.
+
+## What should you do now?
+
+* **Test it on your own tasks.** Run the same prompts through Kimi K3.1 Pro and your current model, then compare quality.
+* **Wait for the weights and license.** If self-hosting is your reason for interest, read the license when the weights ship.
+* **Check data terms.** Moonshot says Zero Data Retention is available for API customers. Confirm it before you send client data.
+
+For a similar release whose weights are already public, see my take on [DeepSeek-V4.1-Flash](/news/deepseek-v4-1-flash). For another trillion-parameter model with open weights promised, see my take on [Mistral Large 4](/news/mistral-large-4).

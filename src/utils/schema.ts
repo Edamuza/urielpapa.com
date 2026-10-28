@@ -17,7 +17,7 @@ export const personNode = () => ({
   ...(SITE.photo && { image: abs(SITE.photo) }),
   jobTitle: SITE.jobTitle,
   description:
-    "Filipino technical founder who shares knowledge on AI and LLMs, automation, tech stacks, SEO, GEO and AEO, marketing and how technology affects business and society.",
+    "Filipino builder and founder who shares knowledge on AI and LLMs, automation, tech stacks, SEO, GEO and AEO, marketing and how technology affects business and society.",
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "Technological University of the Philippines",
