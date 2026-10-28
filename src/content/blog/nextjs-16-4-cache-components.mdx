@@ -48,6 +48,10 @@ The ERP I led and co-developed at my former agency used a Next.js 16 and React 1
 
 The Next.js team published [Next.js 16.4](https://nextjs.org/blog/next-16-4) on October 6, 2026. The post says that "starting with Next.js 16.4," Cache Components are recommended "as the best choice for every Next.js app," and that all new apps from `create-next-app` have them on by default.
 
+The Next.js team listed the headline changes on X:
+
+<SocialPost platform="x" url="https://x.com/nextjs/status/2107579978854645875" author="Next.js" handle="nextjs" date="2026-10-06" text={"Next.js 16.4\n\n• Cache Components by default in new apps\n• Static output guarantees and more control over prefetching\n• Agent-guided upgrades and feedback\n• 20–25% smaller Turbopack disk cache\n• Faster development and smaller bundles\n\nhttps://nextjs.org/blog/next-16-4"} card={{ url: "https://nextjs.org/blog/next-16-4", title: "Next.js 16.4", description: "Next.js 16.4 introduces lazy compilation, smaller Turbopack output, React 19.3 features, Cache Components improvements, and new developer tooling.", domain: "nextjs.org", image: "https://pbs.twimg.com/card_img/2115174076830666752/Mw-diEqd?format=png&name=600x314", imageAlt: "The Next.js wordmark next to \"16.4\" in an outlined box, in white on black" }} />
+
 ## What changed, in plain words?
 
 Cache Components are a way to mark which parts of a page can be cached, using a `'use cache'` line inside a component or function. The team describes it as a component-level version of the Cache-Control header. It replaces the implicit caching of earlier App Router versions and makes caching opt-in. These are the main changes in the [release post](https://nextjs.org/blog/next-16-4):

@@ -80,6 +80,10 @@ Both flaws carry a CVSS v4.0 score of 9.2, which is critical. The PHP Foundation
 
 On exploitation, the sources are careful. [CISA's alert](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching) of October 21 says it "has not observed exploitation of these vulnerabilities as of the time of publication." The PHP security team said it found no functional exploits at release. But the leaked video sped up work on proofs of concept, and [Qualys's post](https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities), updated October 22, says Cloudflare has reported attack traffic aimed at these flaws. Attack traffic is not proof of a break-in, but it means people are trying.
 
+Cloudflare's CTO, Dane Knecht, posted about those early attacks and the free WAF rules on X:
+
+<SocialPost platform="x" url="https://x.com/dok2001/status/2112811965735202970" author="Dane Knecht 🦭" handle="dok2001" date="2026-10-21" text={"PHP sites behind Cloudflare already have an initial set of WAF rules deployed for the known exploit vectors in these vulnerabilities. The rules are available to all customers, including free.\n\nWe are seeing early attacks emerging and are updating mitigations as new vectors show up.\n\nThis is a STOPGAP only. Patch as soon as @ThePHPF releases the update at 14:00 UTC today."} />
+
 The CVSS vector rates attack complexity as high, so not every site will fall to the same request. Even so, a remote attack that needs no login, on software as widely used as PHP, is the kind of bug worth patching the same day.
 
 Kevin Powell's video covers the same flaws, including where the "70% of the internet" headline comes from and why so many sites are stuck without a fix:
