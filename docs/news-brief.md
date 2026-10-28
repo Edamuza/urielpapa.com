@@ -23,12 +23,20 @@ A news take is a short post (frame `news-take`, shown under /news) on a real ann
 - H2 questions, in this order: "What happened?", "What changed, in plain words?" (or, for incidents, "Who is affected?" and "How serious is it?"), "What does it mean for small businesses and founders?", "What should you do now?" (a numbered checklist for incidents). In-depth security takes can add a timeline table and a "What can we learn from it?" section.
 - Takeaways: 3-4 quotable sentences, each with a specific fact.
 
+## Embeds (only when they add value)
+
+Embed a YouTube video, an X post or thread, or a Threads post when it genuinely helps the reader: the official announcement video, the company's or executive's own post that broke the news, or a thread that explains it. Skip embeds when nothing fits; they are never required, and one or two per take is plenty.
+
+- **YouTube:** `<YouTube id="VIDEO_ID" title="Exact title" channel="Exact channel" />`, verified with YouTube's oEmbed (see docs/enrich-brief.md).
+- **X or Threads:** `<SocialPost platform="x" url="https://x.com/user/status/ID" author="Account name" handle="user" date="YYYY-MM-DD" text={"Exact post text, with \n between paragraphs"} />` (`platform="threads"` for Threads). Copy the text exactly from the post, read through `https://cdn.syndication.twimg.com/tweet-result?id=ID&token=a` or `https://api.fxtwitter.com/user/status/ID` for X. Drop trailing t.co links. Only official company or named-executive accounts, as in "Facts" above. The card is static, so no X or Threads script loads.
+- Put the embed right after the paragraph it supports, with a one-line lead-in ("Moonshot announced it on X:"), never before the first H2.
+
 ## Frontmatter specifics
 
 ```yaml
 frame: news-take
 sourceUrl: https://<primary source>
-published: 2026-10-22
+published: <today, YYYY-MM-DD>
 updated omitted
 businessImpact: []
 related: [] or up to 2 published slugs
@@ -36,7 +44,7 @@ projects: []
 draft: false
 ```
 
-`published` is 2026-10-22 for every take written now (never a later date). Hub: the closest of ai, automation, tech-and-business, seo-geo-aeo, tech-stacks, marketing, founder-journey. Security incidents in developer tools go under tech-stacks; incidents about business software or certificates go under tech-and-business; search spam and SERP poisoning go under seo-geo-aeo.
+`published` is the day the take goes live (never a later date). Hub: the closest of ai, automation, tech-and-business, seo-geo-aeo, tech-stacks, marketing, founder-journey. Security incidents in developer tools go under tech-stacks; incidents about business software or certificates go under tech-and-business; search spam and SERP poisoning go under seo-geo-aeo.
 
 ## Model
 

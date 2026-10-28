@@ -41,6 +41,25 @@ const mdxComponents = {
       channel: fields.text({ label: "Channel name" }),
     },
   }),
+  SocialPost: block({
+    label: "X or Threads post",
+    description: "An official post from X or Threads that adds to the section above it, shown as a fast static card. Copy the text exactly.",
+    schema: {
+      platform: fields.select({
+        label: "Platform",
+        options: [
+          { label: "X", value: "x" },
+          { label: "Threads", value: "threads" },
+        ],
+        defaultValue: "x",
+      }),
+      url: fields.url({ label: "Post URL" }),
+      author: fields.text({ label: "Account name" }),
+      handle: fields.text({ label: "Handle, without @" }),
+      date: fields.text({ label: "Date posted (YYYY-MM-DD)" }),
+      text: fields.text({ label: "Post text, exactly as posted", multiline: true }),
+    },
+  }),
 };
 
 const body = (label = "Body") =>

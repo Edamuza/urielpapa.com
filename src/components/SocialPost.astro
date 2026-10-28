@@ -1,0 +1,45 @@
+---
+/**
+ * MDX: <SocialPost platform="x" url="https://x.com/user/status/123" author="Name"
+ *   handle="user" date="2026-10-25" text="The post's text, copied exactly." />
+ * A static card for an X or Threads post: the verified text, who posted it and
+ * when, and a link to the original. No third-party script loads, so the page
+ * stays fast and private; readers open the post itself on X or Threads.
+ */
+import X from "@/assets/icons/socials/x.svg";
+import Threads from "@/assets/icons/socials/threads.svg";
+import { formatDate } from "@/utils/content";
+
+type Props = {
+  platform: "x" | "threads";
+  url: string;
+  author: string;
+  handle: string;
+  date: string;
+  text: string;
+};
+const { platform, url, author, handle, date, text } = Astro.props;
+const site = platform === "threads" ? "Threads" : "X";
+const Icon = platform === "threads" ? Threads : X;
+const paragraphs = text.split(/\n{2,}|\n/).filter(Boolean);
+const when = formatDate(new Date(date), "D MMM YYYY");
+---
+
+<figure class="not-prose my-8">
+  <blockquote
+    cite={url}
+    class="border-border rounded-lg border p-5 text-base leading-relaxed"
+  >
+    <p class="mb-3 flex items-center gap-2 text-sm">
+      <Icon class="size-4 shrink-0" aria-hidden="true" />
+      <span class="font-semibold">{author}</span>
+      <span class="text-muted-foreground">@{handle}</span>
+    </p>
+    {paragraphs.map(p => <p class="mt-2 first:mt-0">{p}</p>)}
+  </blockquote>
+  <figcaption class="meta mt-2">
+    <a href={url} title={`${author} on ${site}, ${when}`}
+      >Post by {author} (@{handle}) on {site}, {when}</a
+    >
+  </figcaption>
+</figure>

@@ -88,6 +88,14 @@ function convertProse(text: string): string {
       const label = channel ? `${title} (${channel})` : title;
       return `[Video: ${linkText(label)}](https://www.youtube.com/watch?v=${encodeURIComponent(id)})`;
     })
+    .replace(/<SocialPost\b([\s\S]*?)\/>/g, (_, attrs: string) => {
+      const url = jsxAttr(attrs, "url") ?? "";
+      const author = jsxAttr(attrs, "author") ?? "";
+      const handle = jsxAttr(attrs, "handle") ?? "";
+      const text = (jsxAttr(attrs, "text") ?? "").replace(/\n+/g, " ");
+      const site = jsxAttr(attrs, "platform") === "threads" ? "Threads" : "X";
+      return `> ${text}\n>\n> [${linkText(`${author} (@${handle}) on ${site}`)}](${url})`;
+    })
     .replace(/\n{3,}/g, "\n\n");
 }
 
