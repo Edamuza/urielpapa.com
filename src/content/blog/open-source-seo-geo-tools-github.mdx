@@ -1,0 +1,204 @@
+---
+title: The Best Open-Source SEO and GEO Tools on GitHub for AI Search
+seoTitle: Best Open-Source SEO and GEO Tools on GitHub (2026)
+description: >-
+  The best open-source SEO and GEO tools on GitHub in 2026: OpenSEO, Claude
+  SEO, GEO Optimizer and two more, with licenses, costs and honest limits.
+dek: >-
+  Five MIT-licensed repos for SEO data, site audits and AI search readiness,
+  checked on October 28, 2026. Their GEO scores are heuristics, so I also show
+  where to measure real AI citations.
+hub: seo-geo-aeo
+frame: best-of
+takeaways:
+  - >-
+    OpenSEO is MIT-licensed open-source code, but its SEO data comes from
+    DataForSEO, which asks for a $50 minimum top-up after $1 of free credit.
+  - >-
+    Claude SEO packs 26 sub-skills and 19 agents into one free Claude Code
+    plugin, and a full audit uses more of your Claude plan because five agents
+    run on Opus.
+  - >-
+    GEO Optimizer runs as a CLI, a Python library, an MCP server and a GitHub
+    Action, and its README says it cannot guarantee that any engine will cite
+    you.
+  - >-
+    The citability scorer in geo-seo-claude awards points for passages of 134
+    to 167 words and for counting percentages, which is a writing heuristic,
+    not a measurement of AI citations.
+  - >-
+    Real AI citation data comes from Search Console's Generative AI report,
+    Bing Webmaster Tools' AI Performance report and your own prompt tests, not
+    from a GitHub repo's score.
+published: 2026-10-28
+related:
+  - how-to-check-if-chatgpt-cites-your-site
+  - geo-and-aeo-fundamentals
+projects: []
+stack:
+  - claude-code
+  - github
+  - google-search-console
+  - semrush
+  - ahrefs
+faq:
+  - q: Do these tools work without Claude Code?
+    a: >-
+      Some do. OpenSEO is a web app with an MCP server, and GEO Optimizer runs
+      from the terminal with uvx or pip. Claude SEO and geo-seo-claude are
+      built for Claude Code, while the marketingskills SEO skills also install
+      into Codex, Cursor and other agents that support the Agent Skills spec.
+  - q: Can an open-source tool replace Semrush or Ahrefs?
+    a: >-
+      For keyword, backlink and rank data, OpenSEO comes closest, but it still
+      buys that data from DataForSEO per request. The Claude Code skills audit
+      pages and suggest fixes; they do not ship their own keyword or backlink
+      databases.
+  - q: Should I add llms.txt because a GEO audit flagged it?
+    a: >-
+      Not for Google. Google's AI optimization guide says Google Search ignores
+      llms.txt, so adding it neither helps nor harms there. Claude SEO reports
+      it but gives it no weight in its score.
+event: {}
+syndication: []
+draft: false
+---
+
+The best open-source SEO and GEO tools on GitHub in 2026 are OpenSEO for keyword, backlink and rank data, Claude SEO for full site audits inside Claude Code, and GEO Optimizer for checking AI search readiness from the terminal or CI. All three are MIT-licensed and active as of October 28, 2026, and OpenSEO is the one with real running costs, because its data comes from the paid DataForSEO API. Two more, geo-seo-claude and the SEO skills in marketingskills, are useful for specific jobs.
+
+This review is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. I ran an SEO agency and co-developed 5 WordPress SEO plugins, so I read SEO tools for what they actually measure, and many GEO tools measure less than their scores suggest.
+
+## How did I choose these repos?
+
+I judged every repo on the same six criteria, checked against the GitHub API and each README on October 28, 2026:
+
+- **Free:** the code is free to use. Paid data or hosting is allowed if the README says so plainly.
+- **License:** an open-source license that allows commercial use. All five are MIT.
+- **Active maintenance:** a commit to the main branch in October 2026.
+- **Stars:** a popularity signal only. Stars do not prove a tool works.
+- **Hands-on code:** something you run, not a list of links.
+- **Who maintains it:** a named person or team, and how the project makes money.
+
+The last point matters more than it looks. Most of these projects fund themselves with a hosted plan, a paid community or sponsors, and that shapes what the free version pushes you toward.
+
+## Which free GitHub repos are worth using for SEO and GEO?
+
+Five repos passed. Each one gets the same checks.
+
+### OpenSEO
+
+[every-app/open-seo](https://github.com/every-app/open-seo) is an open-source SEO tool that its README calls an "open source alternative to Semrush and Ahrefs".
+
+- **Who it's for:** site owners and freelancers who want keyword and backlink data without a monthly suite, and who use AI agents.
+- **What's inside:** keyword research, rank tracking, competitor insights, backlinks, site audits and AI visibility. An [MCP server](https://openseo.so/docs/mcp) lets Claude Code, ChatGPT, Codex and Cursor read your SEO data. You can self-host with Docker or on a free Cloudflare account.
+- **Cost:** self-hosting needs a DataForSEO API key. Its own setup doc says new accounts get $1 of free credit and the minimum top-up is $50. The [hosted version](https://openseo.so/pricing) starts at $10 a month, and the README says it charges 28% on top of each DataForSEO request.
+- **License and activity:** MIT, about 25,400 stars, last commit October 26, 2026. Maintained by the EveryApp organization.
+- **Watch out for:** the API key is your DataForSEO email and API password in base64, stored in an env file. Treat it like a password.
+
+Chris Porter shared it on Threads in July 2026:
+
+<SocialPost platform="threads" url="https://www.threads.com/@automatewithchris/post/DbR8ijsFocT" author="Chris Porter" handle="automatewithchris" date="2026-07-27" text={"This GitHub repo is called OpenSEO it has keywords, rankings, backlinks, audits, and MCP for AI agents 😮"} />
+
+### Claude SEO
+
+[AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) is a free Claude Code plugin that audits a website and returns a prioritized action plan.
+
+- **Who it's for:** agencies, in-house teams and freelancers who already work in Claude Code.
+- **What's inside:** 26 sub-skills, 19 specialist agents and 30 commands, covering technical SEO, E-E-A-T, schema, GEO, local, e-commerce and international SEO. Reports come out as Markdown, PDF and JSON. Free Google APIs (PageSpeed Insights, CrUX, Search Console, GA4) are optional.
+- **Cost:** free, but it runs on your Claude plan. The README warns that five agents run on Opus, so a full audit uses more of your plan.
+- **License and activity:** MIT, about 23,100 stars, last commit October 22, 2026. Built by Agrici Daniel, with a private early-access version for paying Skool members.
+- **Watch out for:** the FAQ says audited pages go to Anthropic's model, like anything in Claude Code. In its favor, its GEO skill calls its 130 to 170 word passage target "a readability heuristic, not a Google requirement".
+
+### GEO Optimizer
+
+[Auriti-Labs/geo-optimizer-skill](https://github.com/Auriti-Labs/geo-optimizer-skill) is a Python tool that scores a website from 0 to 100 on whether AI answer engines can crawl, parse and quote it.
+
+- **Who it's for:** developers who want GEO checks in a terminal, an MCP client or a CI pipeline.
+- **What's inside:** 16 CLI commands, 9 scoring categories, 27 AI crawlers checked and 12 MCP tools. A GitHub Action can fail a build below a score you set. `geo citations` asks real answer engines about your brand, using your own API key.
+- **Cost:** free and runs locally. The hosted GeoReady platform adds monitoring from $19 a month.
+- **License and activity:** MIT, about 1,200 stars, last commit October 27, 2026. Maintained by Juan Camilo Auriti under Auriti Labs.
+- **Watch out for:** `geo fix` can write llms.txt and AI discovery files that Google Search ignores. The README is candid that the tool "cannot guarantee that any engine will cite you".
+
+### geo-seo-claude
+
+[zubair-trabzada/geo-seo-claude](https://github.com/zubair-trabzada/geo-seo-claude) is a GEO-first Claude Code skill that audits a site for AI search and produces client reports.
+
+- **Who it's for:** people selling GEO audits to clients. It even ships prospect, proposal and monthly report skills.
+- **What's inside:** 13 sub-skills, 5 parallel subagents and commands such as `/geo audit`, `/geo citability`, `/geo crawlers` and `/geo report-pdf`. It combines six weighted categories into one GEO Score.
+- **Cost:** free. The README promotes a paid Skool community on selling GEO services.
+- **License and activity:** MIT, about 11,300 stars, last commit to the main branch October 5, 2026. Built by Zubair Trabzada.
+- **Watch out for:** the README's market statistics carry no sources, and the quick install pipes a script from the internet straight into bash. Client data stays in `~/.geo-prospects/` after you uninstall.
+
+### Marketing Skills (SEO skills only)
+
+[coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) is a library of marketing skills for AI agents. I only cover its SEO skills here: `seo-audit`, `ai-seo`, `schema`, `programmatic-seo`, `site-architecture`, `competitors` and `link-building`.
+
+- **Who it's for:** founders and marketers who want SEO guidance inside Claude Code, Codex, Cursor or any agent that supports the [Agent Skills spec](https://agentskills.io).
+- **What's inside:** Markdown instructions and references, not a crawler or a database. You can install only what you need with `npx skills add coreyhaines31/marketingskills --skill seo-audit ai-seo schema`.
+- **Cost:** free. Sponsors, listed as Verified Partners, fund the work.
+- **License and activity:** MIT, about 57,000 stars for the whole library, last commit October 27, 2026. Built by Corey Haines.
+- **Watch out for:** the `ai-seo` skill (version 2.11.0) still says Google has "No AI-specific Search Console reporting", but Google's [Generative AI performance report](https://support.google.com/webmasters/answer/16984139) reached all sites by August 31, 2026.
+
+## How do the five repos compare?
+
+The five repos split into one data tool, three audit tools and one guidance library.
+
+| Repo | Best for | License | Stars (Oct 28, 2026) | Last commit |
+| --- | --- | --- | --- | --- |
+| every-app/open-seo | Keyword, backlink and rank data | MIT | about 25,400 | Oct 26, 2026 |
+| AgriciDaniel/claude-seo | Full site audits in Claude Code | MIT | about 23,100 | Oct 22, 2026 |
+| Auriti-Labs/geo-optimizer-skill | AI readiness checks in a CLI or CI | MIT | about 1,200 | Oct 27, 2026 |
+| zubair-trabzada/geo-seo-claude | Client-ready GEO reports | MIT | about 11,300 | Oct 5, 2026 |
+| coreyhaines31/marketingskills | SEO guidance for any agent | MIT | about 57,000 | Oct 27, 2026 |
+
+Only OpenSEO brings outside search data by default, which is why it is the only one with a usage bill.
+
+## Are GEO scores and citability scores real measurements?
+
+GEO scores and citability scores are heuristics. They check whether a page looks quotable, not whether any AI system actually quoted it. The citability scorer in geo-seo-claude shows this plainly: [its code](https://github.com/zubair-trabzada/geo-seo-claude/blob/main/scripts/citability_scorer.py) adds points for passages of 134 to 167 words, few pronouns, and matches on percentages and dollar signs.
+
+Google also contradicts several common audit items. Its [guide to optimizing for generative AI](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide) says you don't need llms.txt or special markup, that structured data "isn't required for generative AI search", and that content doesn't need chunking. The guide points to Search Console for measurement.
+
+So treat a GEO audit as a checklist, then measure in three places:
+
+1. **Search Console's Generative AI performance report** counts impressions in AI Overviews and AI Mode.
+2. **Bing Webmaster Tools' [AI Performance report](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview)** counts citations in Copilot and Bing's AI summaries.
+3. **Manual prompt tests** in ChatGPT, Gemini and Perplexity, logged monthly, as in my guide on [how to check if ChatGPT cites your site](/blog/how-to-check-if-chatgpt-cites-your-site).
+
+A higher score that never shows up in those three places has not changed anything that matters.
+
+This Google Search Central episode from Q2 2026 covers the Generative AI reports in Search Console:
+
+<YouTube id="sq55KB5icQ4" title="Google Search Gen AI Reports, Search Profiles & more  (Q2 ‘26)" channel="Google Search Central" />
+
+## How do you run a third-party Claude Code skill safely?
+
+A Claude Code skill runs with your permissions, so it can read files, run commands and call APIs on your machine. Claude Code's [skills documentation](https://code.claude.com/docs/en/skills) warns that "A skill can grant itself broad tool access", and the `geo` skill in geo-seo-claude pre-approves Bash, WebFetch and Write. Before you install any of these:
+
+- **Read the skill files**, including the `allowed-tools` line and any scripts they call.
+- **Avoid piping install scripts into bash.** Claude SEO's README recommends cloning first so you can inspect the installer.
+- **Check what data leaves your machine.** Audited pages go to Anthropic, and extensions or `geo citations` send data to the providers you connect.
+- **Use scoped API keys** with spending limits, and never commit them.
+
+Five minutes of reading is cheap next to a skill that runs commands you never saw.
+
+## Which one should you start with?
+
+Start with the tool that matches the job:
+
+- **You need keyword and backlink data on a budget:** OpenSEO, hosted for $10 a month or self-hosted with your own DataForSEO key.
+- **You work in Claude Code and want one full audit:** Claude SEO. Start with `/seo page` on one URL before a full `/seo audit`.
+- **You want AI readiness checks in every deploy:** GEO Optimizer's GitHub Action with a minimum score.
+- **You sell GEO audits to clients:** geo-seo-claude, after you review its install script and skill permissions.
+- **You want SEO advice inside any agent:** the `seo-audit`, `ai-seo` and `schema` skills from marketingskills.
+
+Whichever you pick, judge the result by Search Console, Bing and your prompt log. If you are new to the topic, [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals) explains which crawlers and indexes each AI system uses.
+
+## Where can you learn more?
+
+- [GEO: Generative Engine Optimization](https://arxiv.org/abs/2311.09735) - the KDD 2024 paper that defined GEO and tested which content changes raised source visibility.
+- [Claude Code security documentation](https://code.claude.com/docs/en/security) - how permissions, workspace trust and prompt injection protection work before you add third-party skills.
+- [DataForSEO pricing](https://dataforseo.com/pricing) - what each API call costs, which sets your real bill for a self-hosted OpenSEO.
+- [Any site can now opt out of Google AI Overviews and AI Mode](/news/google-search-generative-ai-control) - my take on the Search Console control that removes a site from Google's AI answers.
+
+*Repository details are from the GitHub API and each README, checked on October 28, 2026. Semrush, Ahrefs and Claude are trademarks of their owners. This post is not endorsed by or affiliated with any of the projects listed.*

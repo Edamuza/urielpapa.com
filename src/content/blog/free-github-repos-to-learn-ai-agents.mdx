@@ -1,0 +1,196 @@
+---
+title: The Best Free GitHub Repos to Learn How to Build AI Agents
+seoTitle: Best Free GitHub Repos to Learn AI Agents in 2026
+description: >-
+  The best free GitHub repos to learn to build AI agents in 2026: Microsoft's
+  and Hugging Face's courses, awesome-llm-apps, Claude's cookbooks and more.
+dek: >-
+  Six free GitHub repos that teach AI agents with real code, checked on October
+  28, 2026 for license, activity and what each one actually contains.
+hub: ai
+frame: best-of
+takeaways:
+  - >-
+    Microsoft's AI Agents for Beginners is the most structured free start as
+    of October 2026: 18 lessons with Python code, under the MIT license, with a
+    Tagalog translation.
+  - >-
+    Hugging Face's free Agents Course covers smolagents, LlamaIndex and
+    LangGraph in 4 units and ends with a benchmarked final project and an
+    optional certificate.
+  - >-
+    Shubhamsaboo/awesome-llm-apps had about 143,000 GitHub stars on October 28,
+    2026, and its README lists 100+ agents, agent skills and RAG apps under
+    Apache-2.0.
+  - >-
+    NirDiamant/GenAI_Agents is free to learn from, but its custom license
+    allows non-commercial use only, so its code cannot go into a paid product
+    without written permission.
+  - >-
+    The repos are free, but most examples call a paid model API, so budget for
+    tokens or pick the examples that run local models.
+published: 2026-10-28
+related:
+  - what-is-tokenization
+  - agent-skills-agentic-ai-foundation
+projects: []
+stack:
+  - github
+  - python
+  - claude
+  - claude-code
+faq:
+  - q: Do I need to pay anything to learn AI agents from these repos?
+    a: >-
+      The repos and courses are free, but most examples call a model API that
+      bills per token, such as Claude, OpenAI or Azure. Microsoft's course
+      needs an Azure account for its main samples. To spend nothing, pick
+      examples that run local models, such as the local RAG agents in
+      awesome-llm-apps.
+  - q: Can I use code from these repos in a client project?
+    a: >-
+      Code under MIT or Apache-2.0, which covers five of the six repos, allows
+      commercial use if you keep the copyright and license notices.
+      NirDiamant/GenAI_Agents is the exception: its custom license reserves
+      all commercial use for the author, so ask for written permission first.
+  - q: Do I need to know Python before starting?
+    a: >-
+      Yes, basic Python helps with all six. Hugging Face lists basic Python and
+      basic knowledge of LLMs as its only prerequisites, and nearly every
+      example in these repos is a Python script or Jupyter notebook.
+event: {}
+syndication: []
+draft: false
+---
+
+The best free GitHub repos to learn how to build AI agents in 2026 are Microsoft's [AI Agents for Beginners](https://github.com/microsoft/ai-agents-for-beginners) and Hugging Face's [Agents Course](https://github.com/huggingface/agents-course) for structured lessons, and [awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) for working projects to copy. Anthropic's [Claude Cookbooks](https://github.com/anthropics/claude-cookbooks), NirDiamant's GenAI_Agents and Arindam200's awesome-ai-apps fill in agent patterns, notebooks and framework starters.
+
+I build with agents myself, including a multi-agent Claude Code pipeline that audits a production codebase in under 6 minutes, so I wanted a shortlist I could hand to anyone starting out. This list is part of my writing on [AI, in depth](/topics/ai).
+
+## How did I choose these repos?
+
+A good repo for learning agents has to teach with code you can run, not just links. I checked every repo on October 28, 2026 against six criteria:
+
+- **Free:** no paywall on the lessons or the code.
+- **License:** a license file you can read. GitHub's [licensing guide](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository) says that without one, default copyright applies and no one may reuse the work.
+- **Active:** a commit to the main branch in October 2026.
+- **Hands-on:** runnable scripts or notebooks, not only reading.
+- **Maintainer:** a company or a named person who answers for it.
+- **Stars:** a popularity signal only, never proof of quality.
+
+All six picks passed. One of them, GenAI_Agents, passes with a license caveat you should read before you reuse its code.
+
+## Which free GitHub repos teach you to build AI agents?
+
+The six repos below are in the order I would suggest a beginner open them, with the same facts for each.
+
+### 1. microsoft/ai-agents-for-beginners
+
+- **What it is:** microsoft/ai-agents-for-beginners is Microsoft's free course of 18 lessons on building AI agents.
+- **Who it's for:** beginners who want a set order, from what an agent is to deploying and securing one.
+- **What's inside:** a written lesson and Python code for each topic, plus short videos for the first 13. Topics include tool use, agentic RAG, planning, multi-agent design, MCP and A2A protocols, context engineering, memory and computer use. It has 50+ translations, including Tagalog.
+- **License:** MIT.
+- **Stars and last update:** about 78,000 stars and a commit on October 27, 2026.
+- **Caution:** the code uses the [Microsoft Agent Framework](https://learn.microsoft.com/agent-framework/overview/) and Foundry, and the README says an Azure account is required. Some samples accept other OpenAI-compatible providers.
+
+Microsoft's own video for lesson 1 explains what an AI agent is before any code:
+
+<YouTube id="3zgm60bXmQk" title="What are AI agents?" channel="Microsoft Developer" />
+
+### 2. huggingface/agents-course
+
+- **What it is:** huggingface/agents-course is the source repo of Hugging Face's free Agents Course, which you take on [hf.co/learn](https://huggingface.co/learn/agents-course).
+- **Who it's for:** learners who want to compare frameworks and finish with a graded project.
+- **What's inside:** 4 units plus bonus units. They cover what agents are, the smolagents, LlamaIndex and LangGraph frameworks, agentic RAG, and a final project scored on a benchmark with a leaderboard. A bonus unit teaches fine-tuning a model for function calling.
+- **License:** Apache-2.0.
+- **Stars and last update:** about 34,000 stars and a commit to main on October 6, 2026.
+- **Caution:** the repo holds the course source, so the lessons read better on the course site. The listed prerequisites are basic Python and basic knowledge of LLMs.
+
+### 3. Shubhamsaboo/awesome-llm-apps
+
+- **What it is:** Shubhamsaboo/awesome-llm-apps is a collection of open-source agent projects. Its README lists 100+ AI agents, agent skills and RAG apps.
+- **Who it's for:** builders who learn faster from a finished app than from a lesson.
+- **What's inside:** single-file starter agents that run with an API key, multi-agent teams, voice agents, MCP agents, always-on agents and RAG tutorials. Some, like the Local RAG Agent with Llama 3.2, need no API key. Its [agent skills](/news/agent-skills-agentic-ai-foundation) install into coding agents such as Claude Code.
+- **License:** Apache-2.0. The README says you can "clone it, ship it, sell it."
+- **Stars and last update:** about 143,000 stars, the most on this list, and a commit on October 21, 2026.
+- **Caution:** the README calls the apps tested end-to-end. That is the maintainer's claim, and each app brings its own dependencies and keys.
+
+Shubham Saboo, who maintains the repo, shared it on Threads in June 2025. The post counted 75+ tutorials then, and the README lists 100+ as of October 28, 2026:
+
+<SocialPost platform="threads" url="https://www.threads.com/@saboo_shubham_/post/DKyOsV3tADD" author="Shubham Saboo" handle="saboo_shubham_" date="2025-06-12" text={"This GitHub repo literally contains 75+ AI tutorials on AI Agents, MCP, RAG, Voice Agents, and Multi-agent teams.\nStep-by-step AI tutorials with complete code examples.\n100% free and Opensource.\n𝐒𝐭𝐚𝐫𝐭𝐞𝐫 𝐀𝐈 𝐀𝐠𝐞𝐧𝐭𝐬\n🎙️ AI Blog to Podcast Agent\n❤️‍🩹 AI Breakup Recovery Agent\n📊 AI Data Analysis Agent\n🩻 AI Medical Imaging Agent\n😂 AI Meme Generator Agent (Browser)\n🎵 AI Music Generator Agent\n🛫 AI Travel Agent (Local & Cloud)\n✨ Gemini Multimodal Agent"} />
+
+### 4. anthropics/claude-cookbooks
+
+- **What it is:** anthropics/claude-cookbooks is Anthropic's official set of notebooks and code for building with Claude.
+- **Who it's for:** developers building on the Claude API who want the patterns behind agents, not a framework.
+- **What's inside:** the `patterns/agents` folder implements prompt chaining, routing, parallelization, orchestrator-workers and evaluator-optimizer workflows. The `claude_agent_sdk` folder has 9 recipes, from a one-line research agent to multi-agent systems and hosting an agent.
+- **License:** MIT.
+- **Stars and last update:** about 54,000 stars and a commit on October 24, 2026.
+- **Caution:** you need a Claude API key, and [API calls are billed per token](https://platform.claude.com/docs/en/about-claude/pricing). The Agent SDK recipes assume you already know Claude Code. If token costs are new to you, start with [what tokenization is and why it decides what AI costs](/blog/what-is-tokenization).
+
+### 5. NirDiamant/GenAI_Agents
+
+- **What it is:** [NirDiamant/GenAI_Agents](https://github.com/NirDiamant/GenAI_Agents) is a collection of Jupyter notebook tutorials, from simple chatbots to multi-agent systems. Its README counts 57 tutorials.
+- **Who it's for:** learners who like one notebook per idea, with the reasoning written out.
+- **What's inside:** beginner agents, an introduction to LangGraph and an MCP tutorial. There are also business agents such as customer support and contract analysis, and a notebook that builds the smallest agent loop from scratch. Most use LangGraph.
+- **License:** custom. GitHub shows NOASSERTION because it cannot match the [license text](https://github.com/NirDiamant/GenAI_Agents/blob/main/LICENSE) to a standard one. It allows use, changes and sharing for non-commercial purposes only, with credit and a link to the repo. Commercial use needs the author's written permission.
+- **Stars and last update:** about 24,700 stars and a commit on October 27, 2026.
+- **Caution:** fine for learning, not for client work. The README also promotes the author's book and newsletter.
+
+### 6. Arindam200/awesome-ai-apps
+
+- **What it is:** [Arindam200/awesome-ai-apps](https://github.com/Arindam200/awesome-ai-apps) is a collection of agent and RAG projects. Its README counts 132 projects.
+- **Who it's for:** builders choosing a framework, because it has a starter for almost every one.
+- **What's inside:** 21 starter agents across frameworks such as CrewAI, Google ADK, LangGraph, Mastra, the OpenAI Agents SDK, PydanticAI and smolagents. It also has sections for voice, MCP, memory, RAG, advanced agents and fine-tuning.
+- **License:** MIT.
+- **Stars and last update:** about 16,600 stars and a commit on October 9, 2026.
+- **Caution:** the project has sponsors, and many starters are wired to sponsor services such as Nebius Token Factory. Swapping in your own model provider may take edits.
+
+Arindam Majumder, who maintains the repo, shared it on Threads in July 2025. The post counted 30+ tutorials then, and the README counts 132 projects as of October 28, 2026:
+
+<SocialPost platform="threads" url="https://www.threads.com/@arindam_1729m/post/DMfnnbjRoqX" author="Arindam Majumder 🇮🇳" handle="arindam_1729m" date="2025-07-24" text={"This GitHub repo has 30+ tutorials to help you build real AI Agents!\nI update Awesome AI Apps every week with fresh examples. It has:\n- Starter agent templates\n- Complex agentic workflows\n- MCP-powered agents\n- RAG demos\n- Multiple agentic frameworks\n100% free & open-source"} />
+
+## How do the repos compare?
+
+The six repos split into two courses, one official cookbook and three project collections.
+
+| Repo | Best for | License | Stars (Oct 28, 2026) | Last commit |
+| --- | --- | --- | --- | --- |
+| microsoft/ai-agents-for-beginners | A structured first course | MIT | about 78,000 | Oct 27, 2026 |
+| huggingface/agents-course | Comparing frameworks, a certificate | Apache-2.0 | about 34,000 | Oct 6, 2026 |
+| Shubhamsaboo/awesome-llm-apps | Finished apps to copy | Apache-2.0 | about 143,000 | Oct 21, 2026 |
+| anthropics/claude-cookbooks | Agent patterns on the Claude API | MIT | about 54,000 | Oct 24, 2026 |
+| NirDiamant/GenAI_Agents | Notebook tutorials, non-commercial | Custom, non-commercial | about 24,700 | Oct 27, 2026 |
+| Arindam200/awesome-ai-apps | A starter for each framework | MIT | about 16,600 | Oct 9, 2026 |
+
+Stars track attention, not teaching quality, so pick by the "best for" column.
+
+## Which one should you start with?
+
+The right first repo depends on how you learn and what you plan to build.
+
+- **You are new to agents:** start with Microsoft's AI Agents for Beginners. It has a clear order, and each lesson stands alone if you want to skip ahead.
+- **You want proof you finished:** take the Hugging Face Agents Course for its final project and certificate.
+- **You learn by copying a working app:** open awesome-llm-apps, pick one starter agent, and get it running before you read anything else.
+- **You build on Claude:** go to the `patterns/agents` notebooks in the Claude Cookbooks, then the Agent SDK recipes.
+- **You are choosing a framework:** run two or three starters from awesome-ai-apps side by side.
+
+A course plus one collection is enough. Finish one agent end to end before you open a second repo.
+
+## How do you run agent code from GitHub safely?
+
+Agent code from GitHub deserves more care than a normal script, because an agent can call tools, browse and run code with your keys. Read the README and the requirements file before you install anything.
+
+- **Keys:** put API keys in a `.env` file that stays out of git, and set a spending limit on every provider account.
+- **Tools:** give a new agent read-only tools first. Let it write files, send messages or spend money only after you have watched it work.
+- **Skills and MCP servers:** read a skill's instructions and scripts, or an MCP server's code, before you install it, since both run with your access.
+- **Licenses:** check the license before code goes into client work, as with GenAI_Agents.
+
+Even frontier models can take actions nobody asked for, as I covered in [Anthropic's report on Claude's unsanctioned actions](/news/anthropic-claude-agent-unsanctioned-actions). Start small, and widen an agent's permissions one step at a time.
+
+## Where can you learn more?
+
+- [Anthropic's Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) - the essay behind the cookbook's agent patterns, and its line between workflows and agents.
+- [The Model Context Protocol introduction](https://modelcontextprotocol.io/docs/getting-started/intro) - the official explanation of MCP, which most of these repos use to connect agents to tools.
+- [Hands-On Large Language Models code repo](https://github.com/HandsOnLLM/Hands-On-Large-Language-Models) - free Colab notebooks for an O'Reilly book on tokens, embeddings, prompting and RAG. It is a foundations resource, not an agents course, and its last commit was April 24, 2026.
+- [Choose a License: Apache 2.0](https://choosealicense.com/licenses/apache-2.0/) - a plain summary of what the Apache license lets you do with code like awesome-llm-apps.
