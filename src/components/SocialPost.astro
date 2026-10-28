@@ -6,8 +6,8 @@
  *   card={{ url: "https://…", title: "…", domain: "example.com", image: "https://…", imageAlt: "…" }} />
  * Shows a static card first: the verified text (links and @mentions clickable),
  * the post's photos or video poster, its link preview, who posted it and when.
- * Photos come from X's image server, like YouTube thumbnails do. "Show the post
- * on X/Threads" swaps in the platform's own embed (video, replies, the thread);
+ * Photos come from X's image server, like YouTube thumbnails do. "Show full post"
+ * swaps in the platform's own embed (video, replies, the thread);
  * X's or Threads' script loads only for readers who click. Without JavaScript
  * the links open the post on the platform.
  */
@@ -213,9 +213,10 @@ const grid =
     <button
       type="button"
       data-social-load
+      aria-label={`Show full post from ${site}, with replies and video`}
       class="border-border rounded-lg border px-3 py-1.5 font-medium hover:underline"
     >
-      Show the post on {site}
+      Show full post
     </button>
   </figcaption>
   <p data-social-status class="meta mt-1" role="status" aria-live="polite"></p>
