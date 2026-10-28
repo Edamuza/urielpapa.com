@@ -228,14 +228,19 @@ const field =
 
   // #work (from every "Work with me" link) or #speaking preselects the topic. A fragment
   // keeps one crawlable URL for this page; ?topic= still works for links shared before.
-  const topic =
-    location.hash.slice(1) || new URLSearchParams(location.search).get("topic");
-  if (topic && form) {
+  function preselectTopic() {
+    const topic =
+      location.hash.slice(1) ||
+      new URLSearchParams(location.search).get("topic");
+    if (!topic || !form) return;
     const radio = form.querySelector<HTMLInputElement>(
       `input[name=topic][value="${CSS.escape(topic)}"]`
     );
     if (radio) radio.checked = true;
   }
+  preselectTopic();
+  // The footer's "Work with me" link only changes the hash when you're already here.
+  window.addEventListener("hashchange", preselectTopic);
 
   function showErrors(errors: Record<string, string>) {
     for (const el of form?.querySelectorAll<HTMLElement>("[data-error-for]") ??
