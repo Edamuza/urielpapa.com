@@ -1,0 +1,175 @@
+---
+title: "Free n8n Workflow Templates on GitHub: The Best Libraries in 2026"
+seoTitle: "Free n8n Workflow Templates on GitHub (2026)"
+description: >-
+  Where to find free n8n workflow templates on GitHub in 2026: four libraries
+  compared with n8n's official library, plus what to check before you import.
+dek: >-
+  GitHub has large free n8n template collections, but their quality varies a
+  lot. Which libraries are worth using as of October 2026, how they compare
+  with n8n's own library, and what to check before you import a workflow.
+hub: automation
+frame: best-of
+takeaways:
+  - >-
+    n8n's official template library at n8n.io/workflows listed 13,778 templates
+    on October 28, 2026, each with its creator's name and a "Use for free" button.
+  - >-
+    enescingoz/awesome-n8n-templates, with about 26,000 GitHub stars, is the
+    best-documented free collection on GitHub, and its README says none of the
+    templates were created by the repo's author.
+  - >-
+    In 756 of the 2,061 workflow files in Zie619/n8n-workflows, nodes that the
+    file's own notes describe as AI nodes are stored as No Operation placeholders.
+  - >-
+    czlonkowski/n8n-mcp is an MIT-licensed MCP server that lets Claude, Cursor
+    and other AI tools look up n8n's nodes and templates and build workflows,
+    with telemetry on by default.
+  - >-
+    n8n's own docs say exported workflow JSON includes credential names and IDs,
+    so review every imported workflow before you publish it.
+published: 2026-10-28
+related:
+  - n8n-messenger-instagram-chatbot
+  - zapier-next-gen-zaps
+projects: []
+stack:
+  - n8n
+  - github
+  - claude-code
+  - cursor
+faq:
+  - q: Are templates from n8n's official library free to use?
+    a: >-
+      The template pages on n8n.io show a "Use for free" button, the creator's
+      name and the last update. You still need an n8n instance, n8n Cloud or
+      self-hosted, plus your own accounts for every service the workflow uses.
+  - q: Do imported n8n workflows include API keys?
+    a: >-
+      They should not include credential values, but n8n's docs say exported
+      JSON includes credential names and IDs, and HTTP Request nodes imported
+      from cURL may carry authentication headers. Open each node and check
+      before you connect your own credentials.
+  - q: Can I sell n8n workflows I build from these templates?
+    a: >-
+      n8n's License FAQ says you can charge clients for building, setting up and
+      maintaining workflows on your instance. The template itself may belong to
+      its original author, so check the template's source and license too.
+event: {}
+syndication: []
+draft: false
+---
+
+The best place to find free n8n workflow templates in 2026 is n8n's own library at [n8n.io/workflows](https://n8n.io/workflows/). On GitHub, the best pick is [enescingoz/awesome-n8n-templates](https://github.com/enescingoz/awesome-n8n-templates), a curated collection that says plainly it does not own the templates. For building workflows with an AI assistant, [czlonkowski/n8n-mcp](https://github.com/czlonkowski/n8n-mcp) and its companion skills are the most actively maintained projects on this list. The largest repo, Zie619/n8n-workflows, is useful for browsing ideas, but many of its AI workflows are missing their AI nodes.
+
+I have led and co-developed AI chatbots and outreach workflows on n8n. One is the subject of my guide to an [n8n chatbot for Messenger and Instagram](/blog/n8n-messenger-instagram-chatbot), and an ERP I co-developed ran 5 n8n outreach workflows. A template is a fast way to start, but only if you can trust where it came from. This post is part of my [Automation](/topics/automation) writing.
+
+## How did I choose these repos?
+
+I judged each library on six criteria, checked on October 28, 2026:
+
+- **Free:** the workflows can be downloaded at no cost.
+- **License:** a license file exists, and the README is honest about who wrote the workflows.
+- **Maintenance:** recent commits, not just a popular name.
+- **Stars:** a popularity signal only, not proof of quality.
+- **Hands-on code:** real workflow JSON or a working tool, not a list of links.
+- **Maintainer:** a named person or team who answers issues.
+
+Every number below comes from the GitHub API and each repo's README on that date. Star counts are rounded.
+
+## What does n8n's official template library offer?
+
+n8n's official template library is the baseline every GitHub collection should be measured against. On October 28, 2026, [n8n.io/workflows](https://n8n.io/workflows/) listed 13,778 workflow automation templates, sorted by category and app. Each template page shows the creator's name, the last update and a "Use for free" button. n8n's [templates documentation](https://docs.n8n.io/build/ways-of-building-workflows/use-templates) says the Templates button inside n8n opens this same library. A self-hosted team can even point that button at its own library.
+
+n8n itself is not open source. Its [Community license page](https://docs.n8n.io/n8n-community-license/community-license) says n8n uses the Sustainable Use License, a fair-code license. For a small business, the [License FAQ](https://docs.n8n.io/n8n-community-license/community-license/license-faq) means you can self-host n8n free and charge clients to build workflows, but clients cannot build their own on your instance.
+
+The official library is the safest place to start, because every template has a named creator.
+
+## Which free GitHub repos have n8n workflow templates?
+
+Four GitHub repos come up most often when people share n8n templates. Here is what each one holds.
+
+### enescingoz/awesome-n8n-templates
+
+- **What it is:** [enescingoz/awesome-n8n-templates](https://github.com/enescingoz/awesome-n8n-templates) is a curated list of n8n workflow JSON files. It sorts them into categories such as Gmail, Telegram, WhatsApp, Notion, and OpenAI and LLMs.
+- **Who it's for:** small teams who want ready examples for common apps.
+- **What's inside:** the README lists more than 280 templates in 18 categories. Each one has a title, a description, a department and a link, and some links point to n8n.io instead of a file.
+- **License:** GitHub shows "NOASSERTION," but the LICENSE file is Creative Commons Attribution 4.0. The README's disclaimer says none of the templates were created or owned by the repo's author. Its FAQ adds that individual templates may be subject to their original authors' terms.
+- **Stars and last update:** about 26,000 stars, last push September 12, 2026.
+- **Caution:** the README's sign-up links are referral links, and it says so. The README also tells you to review, configure and test each workflow before use.
+
+### Zie619/n8n-workflows
+
+- **What it is:** [Zie619/n8n-workflows](https://github.com/Zie619/n8n-workflows) is a large collection of n8n workflow JSON files with a searchable web interface.
+- **Who it's for:** people browsing for ideas across many apps.
+- **What's inside:** the README badge says 4,343 workflows. The repository's `workflows` folder held 2,061 JSON files on October 28, 2026, with a FastAPI search app and a [searchable site](https://zie619.github.io/n8n-workflows).
+- **Where the workflows came from:** the README does not say. The repo's GitHub description reads "all of the workflows of n8n i could find (also from the site itself)." It does not name the original authors.
+- **License:** MIT, which covers the collection. The README does not address the rights of the people who wrote the workflows.
+- **Stars and last update:** about 57,000 stars. The last push, on June 24, 2026, was a README edit, and the `workflows` folder last changed on November 29, 2025.
+- **Caution:** a count across all 2,061 files found 767 where nodes are stored as `n8n-nodes-base.noOp`, n8n's No Operation node. In 756 of them, the notes say the nodes were originally AI nodes such as `lmChatOpenAi`, `agent` and `chainLlm`. Only 1 file in the folder contains a real n8n AI node, so most AI steps in this repo are placeholders, not working nodes.
+
+### czlonkowski/n8n-mcp and n8n-skills
+
+- **What it is:** [czlonkowski/n8n-mcp](https://github.com/czlonkowski/n8n-mcp) is an MCP server for AI tools such as Claude Code, Cursor and Windsurf. It gives them structured access to n8n's nodes, docs and templates, so they can build and validate workflows.
+- **Who it's for:** builders who already use an AI coding tool and want it to draft n8n workflows.
+- **What's inside:** the README lists 3,143 nodes (841 core and 2,302 community), 2,352 templates and 7 core tools. With an n8n API key it adds 21 management tools that create, update, test and delete workflows. The companion [czlonkowski/n8n-skills](https://github.com/czlonkowski/n8n-skills) adds 14 Claude Code skills for expressions, validation, code nodes and AI agents.
+- **License:** MIT for both.
+- **Stars and last update:** n8n-mcp has about 23,000 stars and released v2.99.2 on October 27, 2026. n8n-skills has about 6,500 stars and released v1.37.1 on October 24, 2026.
+- **Caution:** the README warns never to edit production workflows directly with AI. Its [privacy policy](https://github.com/czlonkowski/n8n-mcp/blob/main/PRIVACY.md) says telemetry is on by default and collects sanitized workflow structures, which you can turn off.
+
+### wassupjay/n8n-free-templates
+
+- **What it is:** [wassupjay/n8n-free-templates](https://github.com/wassupjay/n8n-free-templates) is a set of about 200 AI-focused n8n workflows.
+- **Who it's for:** nobody as a first choice in 2026, which is why it is listed here as a caution.
+- **What's inside:** 202 JSON files in category folders. The README itself says some templates are incomplete.
+- **License:** none, so you have no written permission to reuse the files.
+- **Stars and last update:** about 6,200 stars, last push August 1, 2025.
+- **Caution:** it was popular in 2025. A [July 2025 Threads post](https://www.threads.com/@thedevfounder/post/DMP2vm3sFcQ) recommended it as a good library of free templates, and posts like that are how many of these repos spread. It has had no commits for more than a year, while n8n itself reached version 2.45.5 on October 28, 2026.
+
+## How do the libraries compare?
+
+The libraries split into two kinds: collections of workflow files, and tools that help an AI build workflows for you.
+
+| Library | Best for | License | Stars (Oct 28, 2026) | Last update |
+| --- | --- | --- | --- | --- |
+| n8n.io/workflows (official) | Any first template | Hosted by n8n | Not on GitHub | Ongoing |
+| enescingoz/awesome-n8n-templates | Curated examples by app | CC BY 4.0 | About 26,000 | Sep 12, 2026 |
+| Zie619/n8n-workflows | Browsing ideas | MIT | About 57,000 | Jun 24, 2026 |
+| czlonkowski/n8n-mcp | AI-built workflows | MIT | About 23,000 | Oct 27, 2026 |
+| czlonkowski/n8n-skills | Claude Code skills for n8n | MIT | About 6,500 | Oct 24, 2026 |
+| wassupjay/n8n-free-templates | Not recommended | None | About 6,200 | Aug 1, 2025 |
+
+The most-starred repo is not the most reliable one, which is why stars only count as a signal.
+
+## Which one should you start with?
+
+The right starting point depends on how you plan to use n8n:
+
+- **You are new to n8n:** start with the official library. Every template has a named creator and opens straight into n8n.
+- **You want examples for one app:** browse enescingoz/awesome-n8n-templates by category, then check the original creator.
+- **You build with Claude Code or Cursor:** set up n8n-mcp with n8n-skills, and point it at a test instance first.
+- **You want inspiration across hundreds of apps:** browse Zie619/n8n-workflows, but rebuild any AI step yourself.
+
+If you would rather describe a workflow in plain language than import one, compare n8n's approach with [Zapier's Next Gen Zaps](/blog/zapier-next-gen-zaps) and [Maia by Make](/blog/make-maia-ai-automation-builder).
+
+## What should you check before you import a workflow JSON?
+
+A workflow JSON file from GitHub is someone else's automation, so read it before it runs. n8n's [export and import guide](https://docs.n8n.io/build/manage-workflows/export-and-import) says you can import a file from the Workflow menu, and warns that exported JSON includes credential names and IDs. HTTP Request nodes imported from cURL may also carry authentication headers. Check these five things:
+
+1. **Credentials:** none of your keys come with the file. Connect your own in each node, and delete any leftover headers or tokens.
+2. **Node versions:** n8n's [versioning docs](https://docs.n8n.io/connect/create-nodes/build-your-node/reference/versioning) say a saved workflow keeps the node version it was built with. An old template can run older node versions than a new workflow would.
+3. **Hard-coded values:** look for URLs, sheet IDs, chat IDs and email addresses that belong to the original author.
+4. **Community nodes:** n8n's [community node risks page](https://docs.n8n.io/integrations/community-nodes/risks) says these nodes have full access to the machine n8n runs on.
+5. **Publish last:** n8n's [publishing docs](https://docs.n8n.io/build/understand-workflows/save-and-publish-workflows) say webhooks switch to their production URLs when you publish. Test with sample data first.
+
+Futurepedia's July 2025 tutorial walks through importing free templates and the mistakes that break them:
+
+<YouTube id="tf6L9gzShf0" title="How to Use Free n8n Templates Without Breaking Everything – Beginner Tutorial" channel="Futurepedia" />
+
+A ten-minute review of each node is cheaper than a workflow that emails the wrong people.
+
+## Where can you learn more?
+
+- [n8n's Webhook node documentation](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.webhook) - the difference between test and production webhook URLs, which most imported templates rely on.
+- [n8n's guide to creating credentials](https://docs.n8n.io/build/understand-workflows/create-and-edit-credentials) - how to connect your own accounts to an imported workflow.
+- [The n8n Sustainable Use License text](https://github.com/n8n-io/n8n/blob/master/LICENSE.md) - the full license behind the community edition, for anyone building client work on n8n.
