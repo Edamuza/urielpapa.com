@@ -34,11 +34,33 @@ const SITEMAP_EXCLUDE = [
 ];
 
 /** Last-changed date per content URL, for the sitemap's lastmod. */
-const LASTMOD = new Map(
-  contentEntries()
-    .filter(e => e.lastmod)
-    .map(e => [e.path, e.lastmod as Date])
-);
+const PUBLISHED = contentEntries().filter(e => e.lastmod && !e.draft);
+const LASTMOD = new Map(PUBLISHED.map(e => [e.path, e.lastmod as Date]));
+
+/** Newest date among published entries that match, for listing pages. */
+function newest(match: (e: (typeof PUBLISHED)[number]) => boolean) {
+  const dates = PUBLISHED.filter(match).map(e => (e.lastmod as Date).getTime());
+  return dates.length ? new Date(Math.max(...dates)) : undefined;
+}
+
+/** Listing pages change when a post in them does, so they take their newest post's date. */
+const POSTS = (e: (typeof PUBLISHED)[number]) =>
+  /^\/(blog|news|events)\//.test(e.path);
+const LISTING_LASTMOD: [RegExp, Date | undefined][] = [
+  [/^\/$/, newest(POSTS)],
+  [/^\/topics$/, newest(POSTS)],
+  [/^\/blog$/, newest(e => e.path.startsWith("/blog/"))],
+  [/^\/news(\/page\/\d+)?$/, newest(e => e.path.startsWith("/news/"))],
+  [/^\/events$/, newest(e => e.path.startsWith("/events/"))],
+  [/^\/notes$/, newest(e => e.path.startsWith("/notes/"))],
+  [/^\/projects$/, newest(e => e.path.startsWith("/projects/"))],
+];
+for (const hub of new Set(PUBLISHED.map(e => e.hub).filter(Boolean))) {
+  LISTING_LASTMOD.push([
+    new RegExp(`^/topics/${hub}$`),
+    newest(e => POSTS(e) && e.hub === hub),
+  ]);
+}
 
 /** A self-hosted Latin font family from an @fontsource package (woff2 for browsers, woff for OG images). */
 function localFont(
@@ -94,7 +116,9 @@ export default defineConfig({
       // lastmod tells search engines which pages changed; only entries with a real date get one.
       serialize: item => {
         const path = new URL(item.url).pathname.replace(/\/$/, "") || "/";
-        const lastmod = LASTMOD.get(path);
+        const lastmod =
+          LASTMOD.get(path) ??
+          LISTING_LASTMOD.find(([re]) => re.test(path))?.[1];
         return lastmod ? { ...item, lastmod: lastmod.toISOString() } : item;
       },
     }),

@@ -38,7 +38,7 @@ const COLLECTIONS = [
 /**
  * The content entry for one source file (path relative to the repo root, e.g.
  * "src/content/blog/foo.md") given its text: public path, last-changed date
- * (`updated`, else `published`) and draft flag. Undefined for files that are not
+ * (`updated`, else `published`), draft flag and hub. Undefined for files that are not
  * a content entry. Takes the text so callers can pass an older git revision.
  */
 export function entryFor(file, text) {
@@ -54,6 +54,7 @@ export function entryFor(file, text) {
     path: collection.url(slug, data),
     lastmod: date && !Number.isNaN(Date.parse(date)) ? new Date(date) : undefined,
     draft: data.draft === "true",
+    hub: data.hub || undefined,
   };
 }
 
