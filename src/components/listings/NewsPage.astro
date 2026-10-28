@@ -18,8 +18,19 @@ const news = pageItems(allNews, page);
 const path = pageHref("/news", page);
 const pageLabel = page > 1 ? `Page ${page} of ${pages}` : "";
 const title = "Tech News, with Context";
+// Later pages get their own heading and a dated intro, so no two pages share an H1 or description.
+const span =
+  news.length > 0
+    ? [
+        formatDate(news[news.length - 1].data.published, "D MMMM"),
+        formatDate(news[0].data.published, "D MMMM YYYY"),
+      ].join(" to ")
+    : "";
+const heading = page > 1 ? `${title}: Page ${page}` : title;
 const intro =
-  "Recent releases and announcements in the topics I write about, and what they mean in practice.";
+  page > 1
+    ? `Older news takes, from ${span}: what happened, what changed and what it means in practice.`
+    : "Recent releases and announcements in the topics I write about, and what they mean in practice.";
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "News", href: "/news" },
@@ -45,12 +56,14 @@ const schema = [
 
 <Layout
   title={`Tech News, with Context${pageLabel ? ` (${pageLabel})` : ""}`}
-  description={`Uriel Papa's takes on recent AI, framework, search and marketing news: what happened, what changed, why it matters and what to do about it.${pageLabel ? ` ${pageLabel}.` : ""}`}
+  description={pageLabel
+    ? `Uriel Papa's takes on AI, framework, search and marketing news from ${span}. ${pageLabel}.`
+    : "Uriel Papa's takes on recent AI, framework, search and marketing news: what happened, what changed, why it matters and what to do about it."}
   schema={schema}
 >
   <div class="app-layout pt-8">
     <Breadcrumbs crumbs={crumbs} />
-    <PageIntro title={title} intro={intro}>
+    <PageIntro title={heading} intro={intro}>
       {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
     </PageIntro>
     {

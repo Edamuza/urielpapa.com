@@ -226,8 +226,10 @@ const field =
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const status = document.querySelector<HTMLElement>("#form-status");
 
-  // ?topic=work (from every "Work with me" link) or ?topic=speaking preselects the topic.
-  const topic = new URLSearchParams(location.search).get("topic");
+  // #work (from every "Work with me" link) or #speaking preselects the topic. A fragment
+  // keeps one crawlable URL for this page; ?topic= still works for links shared before.
+  const topic =
+    location.hash.slice(1) || new URLSearchParams(location.search).get("topic");
   if (topic && form) {
     const radio = form.querySelector<HTMLInputElement>(
       `input[name=topic][value="${CSS.escape(topic)}"]`
