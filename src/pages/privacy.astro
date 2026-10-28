@@ -11,12 +11,12 @@ const crumbs = [
   { name: "Privacy", href: "/privacy" },
 ];
 /** Change this date whenever the policy text changes. */
-const updated = new Date("2026-10-22");
+const updated = new Date("2026-10-28");
 ---
 
 <Layout
   title="Privacy Policy"
-  description="What urielpapa.com collects and why: Google Analytics, the contact form, the Buttondown newsletter, Vercel hosting and YouTube embeds. No ads, no data sold."
+  description="What urielpapa.com collects and why: Google Analytics, the contact form, the Buttondown newsletter, Vercel hosting, and YouTube, X and Threads embeds. No ads, no data sold."
   modifiedTime={updated}
   schema={[breadcrumbNode(crumbs)]}
   webPage={{ about: { "@id": WEBSITE_ID } }}
@@ -86,6 +86,18 @@ const updated = new Date("2026-10-22");
         you press play, the player loads from youtube-nocookie.com, YouTube's
         privacy-enhanced mode. Without JavaScript, the link opens the video on
         YouTube itself.
+      </p>
+
+      <h2 id="social-posts">X and Threads posts</h2>
+      <p>
+        Some news posts quote a post from X or Threads. At first you see a card
+        with the post's text, served by this site, and nothing loads from X or
+        Threads. If you press "Show the post on X" or "Show the post on
+        Threads", the platform's own embed loads from X (platform.twitter.com)
+        or Threads (threads.net), and that company may set cookies or log your
+        visit under its own privacy policy. X's embed is asked not to track you
+        ("Do Not Track"). The link under each card opens the post on the
+        platform instead.
       </p>
 
       <h2 id="badge">The footer badge</h2>

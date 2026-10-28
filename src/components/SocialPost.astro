@@ -2,9 +2,12 @@
 /**
  * MDX: <SocialPost platform="x" url="https://x.com/user/status/123" author="Name"
  *   handle="user" date="2026-10-25" text="The post's text, copied exactly." />
- * A static card for an X or Threads post: the verified text, who posted it and
- * when, and a link to the original. No third-party script loads, so the page
- * stays fast and private; readers open the post itself on X or Threads.
+ * Shows a static card first: the verified text, who posted it and when, and a
+ * link to the original. "Show the post on X/Threads" swaps in the platform's
+ * own embed (photos, video, replies, the thread). X's or Threads' script loads
+ * only for readers who click, the same way the YouTube player works, so the
+ * page stays fast and private until then. Without JavaScript the link opens
+ * the post on the platform.
  */
 import X from "@/assets/icons/socials/x.svg";
 import Threads from "@/assets/icons/socials/threads.svg";
@@ -25,8 +28,10 @@ const paragraphs = text.split(/\n{2,}|\n/).filter(Boolean);
 const when = formatDate(new Date(date), "D MMM YYYY");
 ---
 
-<figure class="not-prose my-8">
+<figure class="not-prose my-8" data-social-post={platform} data-url={url}>
+  <div data-social-embed class="hidden"></div>
   <blockquote
+    data-social-card
     cite={url}
     class="border-border rounded-lg border p-5 text-base leading-relaxed"
   >
@@ -37,9 +42,120 @@ const when = formatDate(new Date(date), "D MMM YYYY");
     </p>
     {paragraphs.map(p => <p class="mt-2 first:mt-0">{p}</p>)}
   </blockquote>
-  <figcaption class="meta mt-2">
+  <figcaption class="meta mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
     <a href={url} title={`${author} on ${site}, ${when}`}
       >Post by {author} (@{handle}) on {site}, {when}</a
     >
+    <button
+      type="button"
+      data-social-load
+      class="border-border rounded-lg border px-3 py-1.5 font-medium hover:underline"
+    >
+      Show the post on {site}
+    </button>
   </figcaption>
+  <p data-social-status class="meta mt-1" role="status" aria-live="polite"></p>
 </figure>
+
+<script>
+  const scripts: Record<string, Promise<void>> = {};
+  const loadScript = (src: string) =>
+    (scripts[src] ??= new Promise((resolve, reject) => {
+      const el = document.createElement("script");
+      el.src = src;
+      el.async = true;
+      el.onload = () => resolve();
+      el.onerror = () => reject(new Error(`Could not load ${src}`));
+      document.head.appendChild(el);
+    }));
+
+  type Twttr = {
+    widgets: {
+      createTweet: (
+        id: string,
+        target: HTMLElement,
+        options: Record<string, string>
+      ) => Promise<HTMLElement | undefined>;
+    };
+  };
+
+  async function showX(url: string, target: HTMLElement) {
+    await loadScript("https://platform.twitter.com/widgets.js");
+    const twttr = (window as unknown as { twttr?: Twttr }).twttr;
+    const id = url.match(/status\/(\d+)/)?.[1];
+    if (!twttr || !id) return false;
+    const theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "light";
+    const el = await twttr.widgets.createTweet(id, target, {
+      dnt: "true",
+      theme,
+      align: "center",
+    });
+    return Boolean(el);
+  }
+
+  async function showThreads(url: string, target: HTMLElement) {
+    const quote = document.createElement("blockquote");
+    quote.className = "text-post-media";
+    quote.setAttribute("data-text-post-permalink", url);
+    quote.setAttribute("data-text-post-version", "0");
+    const link = document.createElement("a");
+    link.href = url;
+    link.title = "View this post on Threads";
+    link.textContent = "View this post on Threads";
+    quote.appendChild(link);
+    target.appendChild(quote);
+    // Threads' script turns every blockquote on the page into an embed when it
+    // runs, so load a fresh copy for each post that is opened.
+    await new Promise<void>((resolve, reject) => {
+      const el = document.createElement("script");
+      el.src = `https://www.threads.net/embed.js?t=${Date.now()}`;
+      el.async = true;
+      el.onload = () => resolve();
+      el.onerror = () => reject(new Error("Could not load Threads"));
+      document.head.appendChild(el);
+    });
+    for (let i = 0; i < 40; i++) {
+      if (target.querySelector("iframe")) return true;
+      await new Promise(r => setTimeout(r, 200));
+    }
+    return false;
+  }
+
+  for (const figure of document.querySelectorAll<HTMLElement>(
+    "[data-social-post]"
+  )) {
+    const button =
+      figure.querySelector<HTMLButtonElement>("[data-social-load]");
+    const card = figure.querySelector<HTMLElement>("[data-social-card]");
+    const target = figure.querySelector<HTMLElement>("[data-social-embed]");
+    const status = figure.querySelector<HTMLElement>("[data-social-status]");
+    const platform = figure.dataset.socialPost;
+    const url = figure.dataset.url ?? "";
+    button?.addEventListener("click", async () => {
+      if (!target || !card) return;
+      button.disabled = true;
+      if (status) status.textContent = "Loading the post…";
+      target.classList.remove("hidden");
+      try {
+        const ok =
+          platform === "threads"
+            ? await showThreads(url, target)
+            : await showX(url, target);
+        if (!ok) throw new Error("not rendered");
+        card.remove();
+        button.remove();
+        if (status) status.textContent = "";
+      } catch {
+        target.replaceChildren();
+        target.classList.add("hidden");
+        button.disabled = false;
+        if (status)
+          status.textContent =
+            "The post couldn't load here (a blocker or the platform may be down). The link above opens it directly.";
+      }
+    });
+  }
+</script>

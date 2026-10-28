@@ -7,12 +7,12 @@ const config = JSON.parse(readFileSync(file, "utf-8"));
 
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com https://platform.twitter.com https://cdn.syndication.twimg.com https://www.threads.net https://www.threads.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://i.ytimg.com https://websitelaunches.com https://*.google-analytics.com https://*.googletagmanager.com",
+  "img-src 'self' data: https://i.ytimg.com https://pbs.twimg.com https://abs.twimg.com https://*.cdninstagram.com https://websitelaunches.com https://*.google-analytics.com https://*.googletagmanager.com",
   "font-src 'self'",
   "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://challenges.cloudflare.com",
-  "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com",
+  "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com https://platform.twitter.com https://syndication.twitter.com https://www.threads.net https://www.threads.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",
