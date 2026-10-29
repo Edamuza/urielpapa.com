@@ -241,11 +241,11 @@ export default defineConfig({
         context: "server",
         optional: true,
       }),
-      /** Search Console property, e.g. "sc-domain:urielpapa.com" or "https://urielpapa.com/". */
+      /** Search Console property, e.g. "sc-domain:urielpapa.com"; defaults to the URL-prefix property. */
       GSC_SITE_URL: envField.string({
         access: "secret",
         context: "server",
-        optional: true,
+        default: "https://urielpapa.com/",
       }),
     },
   },

@@ -10,8 +10,58 @@ import {
   GOOGLE_SERVICE_ACCOUNT_JSON,
   GSC_SITE_URL,
 } from "astro:env/server";
+import {
+  getAllBlogEntries,
+  getHubs,
+  getNewsletterIssues,
+  getNewsTakes,
+  getNotes,
+  getPosts,
+  getProjects,
+  noteUrl,
+  postUrl,
+  projectUrl,
+} from "@/utils/content";
+import { pageCount, pageHref } from "@/utils/pagination";
 
 export const LAUNCH_DATE = "2026-10-17";
+
+/** Routes that never appear in the sitemap (keep in step with SITEMAP_EXCLUDE in astro.config.ts). */
+const NOT_IN_SITEMAP = [
+  "/404",
+  "/search",
+  "/contact/thanks",
+  "/newsletter/thanks",
+];
+
+/** Public pages, counted at build the way the sitemap lists them. */
+export async function countPages(): Promise<number> {
+  const paths = new Set<string>();
+  // Fixed pages: every .astro file in src/pages without a [param] in its path.
+  for (const file of Object.keys(import.meta.glob("/src/pages/**/*.astro"))) {
+    if (file.includes("[")) continue;
+    const path =
+      file
+        .replace(/^\/src\/pages/, "")
+        .replace(/\.astro$/, "")
+        .replace(/\/index$/, "") || "/";
+    if (!NOT_IN_SITEMAP.includes(path)) paths.add(path);
+  }
+  for (const p of await getAllBlogEntries()) paths.add(postUrl(p));
+  for (const n of await getNotes()) paths.add(noteUrl(n));
+  for (const p of await getProjects()) paths.add(projectUrl(p));
+  for (const h of await getHubs()) paths.add(`/topics/${h.id}`);
+  for (const i of await getNewsletterIssues()) paths.add(`/newsletter/${i.id}`);
+  // Listing pages after the first: /blog/page/2, /news/page/2 and so on.
+  const listings = [
+    ["/blog", (await getPosts()).length],
+    ["/news", (await getNewsTakes()).length],
+  ] as const;
+  for (const [base, total] of listings)
+    for (let page = 2; page <= pageCount(total); page++)
+      paths.add(pageHref(base, page));
+  return paths.size;
+}
 
 const SCOPES = [
   "https://www.googleapis.com/auth/analytics.readonly",
@@ -80,7 +130,7 @@ async function visitors(token: string): Promise<number> {
 
 async function impressions(token: string): Promise<number> {
   const data = await post(
-    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_SITE_URL!)}/searchAnalytics/query`,
+    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_SITE_URL)}/searchAnalytics/query`,
     {
       startDate: LAUNCH_DATE,
       endDate: new Date().toISOString().slice(0, 10),
@@ -118,7 +168,7 @@ export function getSiteStats(): Promise<SiteStats> {
     };
     const [v, i] = await Promise.all([
       settle(Boolean(GA4_PROPERTY_ID), () => visitors(token)),
-      settle(Boolean(GSC_SITE_URL), () => impressions(token)),
+      settle(true, () => impressions(token)),
     ]);
     return { visitors: v, impressions: i };
   })();

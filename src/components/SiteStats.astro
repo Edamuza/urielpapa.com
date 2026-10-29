@@ -2,15 +2,16 @@
 /**
  * Home page stats: unique visitors and search impressions since launch
  * (fetched at build, see src/lib/site-stats.ts), published posts, and the
- * number of pages in the sitemap (counted in the browser so it always
- * matches the live sitemap). A tile with no real number is not shown.
+ * number of pages in the sitemap (counted at build with the sitemap's rules,
+ * so no script runs). A tile with no real number is not shown.
  */
 import { formatDate, getAllBlogEntries } from "@/utils/content";
-import { getSiteStats, LAUNCH_DATE } from "@/lib/site-stats";
+import { countPages, getSiteStats, LAUNCH_DATE } from "@/lib/site-stats";
 
 const entries = await getAllBlogEntries();
 const newsCount = entries.filter(p => p.data.frame === "news-take").length;
 const { visitors, impressions } = await getSiteStats();
+const pages = await countPages();
 const fmt = (n: number) => n.toLocaleString("en-US");
 const since = formatDate(new Date(LAUNCH_DATE));
 const built = formatDate(new Date());
@@ -49,25 +50,11 @@ const built = formatDate(new Date());
       </dd>
       <dd class="meta mt-1">Including {fmt(newsCount)} news takes</dd>
     </div>
-    <div class="border-foreground/80 rounded-lg border p-4" data-pages hidden>
+    <div class="border-foreground/80 rounded-lg border p-4">
       <dt class="label-caps text-muted-foreground">Pages</dt>
-      <dd class="font-display mt-1 text-3xl font-bold" data-pages-count></dd>
+      <dd class="font-display mt-1 text-3xl font-bold">{fmt(pages)}</dd>
       <dd class="meta mt-1">In the sitemap</dd>
     </div>
   </dl>
   <p class="meta mt-4">Updated {built}.</p>
 </section>
-
-<script>
-  const tile = document.querySelector<HTMLElement>("[data-pages]");
-  const count = document.querySelector<HTMLElement>("[data-pages-count]");
-  fetch("/sitemap-0.xml")
-    .then(r => (r.ok ? r.text() : Promise.reject()))
-    .then(xml => {
-      const n = (xml.match(/<url>/g) ?? []).length;
-      if (!tile || !count || n === 0) return;
-      count.textContent = n.toLocaleString("en-US");
-      tile.hidden = false;
-    })
-    .catch(() => {});
-</script>
