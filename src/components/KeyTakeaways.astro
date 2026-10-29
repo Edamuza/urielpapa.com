@@ -3,7 +3,10 @@ type Props = { items: string[] };
 const { items } = Astro.props;
 ---
 
-<section class="bg-muted my-8 rounded-lg p-5" aria-labelledby="key-takeaways">
+<section
+  class="bg-muted max-w-read my-8 rounded-lg p-5"
+  aria-labelledby="key-takeaways"
+>
   <h2 id="key-takeaways" class="label-caps mb-3 font-sans">Key takeaways</h2>
   <ul class="list-disc space-y-2 ps-5">
     {items.map(item => <li>{item}</li>)}

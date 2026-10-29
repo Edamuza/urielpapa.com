@@ -3,7 +3,7 @@ type Props = { items: { q: string; a: string }[] };
 const { items } = Astro.props;
 ---
 
-<section class="my-12" aria-labelledby="faq">
+<section class="max-w-read my-12" aria-labelledby="faq">
   <h2 id="faq" class="h2 mb-4">Questions people ask</h2>
   {
     items.map(({ q, a }) => (

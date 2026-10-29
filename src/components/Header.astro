@@ -8,6 +8,9 @@ import { NAV, SITE } from "@/config";
 
 const path = Astro.url.pathname.replace(/\.html$/, "");
 const section = "/" + (path.split("/")[1] ?? "");
+// The quote bar stays pinned on the homepage only; elsewhere it scrolls away,
+// so the header sticks to the very top.
+const isHome = path === "/" || path === "";
 const isActive = (href: string) =>
   section === href ||
   // Notes are part of "Writing"
@@ -21,10 +24,13 @@ const isActive = (href: string) =>
   Skip to content
 </a>
 
-<!-- Sticks under the quote bar (h-9); slides up out of view while scrolling down. -->
+<!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down. -->
 <header
   id="site-header"
-  class="bg-background sticky top-9 z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none"
+  class:list={[
+    "bg-background sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none",
+    isHome ? "top-9" : "top-0",
+  ]}
 >
   <div class="app-layout">
     <div
@@ -107,11 +113,29 @@ const isActive = (href: string) =>
             aria-label="Mobile"
             class="bg-background fixed inset-x-0 top-28 bottom-0 z-40 overflow-y-auto px-4 pb-8"
           >
+            <!-- Same pages as the desktop menu, then the smaller sections below. -->
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
+                [...NAV, { href: "/contact", label: "Contact" }].map(item => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class:list={[
+                        "flex min-h-12 items-center py-3 font-medium",
+                        isActive(item.href) ? "underline" : "no-underline",
+                      ]}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <ul class="mt-4 flex flex-wrap gap-x-6">
+              {
                 [
-                  ...NAV,
-                  { href: "/contact", label: "Contact" },
+                  { href: "/events", label: "Events" },
                   { href: "/notes", label: "Notes" },
                   { href: "/newsletter", label: "Newsletter" },
                 ].map(item => (
@@ -119,7 +143,7 @@ const isActive = (href: string) =>
                     <a
                       href={item.href}
                       class:list={[
-                        "flex min-h-12 items-center py-3 font-medium",
+                        "flex min-h-11 items-center",
                         isActive(item.href) ? "underline" : "no-underline",
                       ]}
                       aria-current={isActive(item.href) ? "page" : undefined}

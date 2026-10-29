@@ -104,7 +104,7 @@ export const NAV = [
   { href: "/blog", label: "Writing" },
   { href: "/news", label: "News" },
   { href: "/topics", label: "Topics" },
-  { href: "/events", label: "Events" },
+  { href: "/projects", label: "Projects" },
   { href: "/about", label: "About" },
 ];
 

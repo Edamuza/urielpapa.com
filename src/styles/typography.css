@@ -86,7 +86,7 @@
     }
 
     figcaption {
-      @apply opacity-75;
+      @apply text-muted-foreground;
     }
 
     table {
@@ -172,5 +172,21 @@
     .highlighted-word {
       @apply border-border rounded-sm border px-0.5 py-px;
     }
+  }
+}
+
+/* "#" links next to post headings (added by ArticleLayout): visible on hover,
+   always faintly visible on touch screens, which have no hover. */
+.heading-anchor {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+:is(h2, h3):hover > .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 0.6;
+}
+@media (hover: none) {
+  .heading-anchor {
+    opacity: 0.35;
   }
 }

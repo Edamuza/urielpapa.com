@@ -1,23 +1,52 @@
 ---
 import type { MarkdownHeading } from "astro";
+import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 
-type Props = { headings: MarkdownHeading[] };
+/** collapsible: a closed "On this page" disclosure (the in-article TOC below xl). */
+type Props = { headings: MarkdownHeading[]; collapsible?: boolean };
+const { collapsible = false } = Astro.props;
 const items = Astro.props.headings.filter(h => h.depth === 2);
 ---
 
 {
-  items.length > 2 && (
-    <nav aria-labelledby="toc-h" class="my-8 xl:sticky xl:top-36 xl:my-0">
-      <h2 id="toc-h" class="label-caps text-muted-foreground mb-2 font-sans">
-        On this page
-      </h2>
-      <ul class="space-y-1.5 text-[0.95rem]">
-        {items.map(h => (
-          <li>
-            <a href={`#${h.slug}`}>{h.text}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
+  items.length > 2 &&
+    (collapsible ? (
+      <details class="border-border group my-8 border-y">
+        <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between font-semibold [&::-webkit-details-marker]:hidden">
+          <span>
+            On this page
+            <span class="text-muted-foreground font-normal">
+              {" "}
+              · {items.length} sections
+            </span>
+          </span>
+          <IconChevronLeft
+            aria-hidden="true"
+            class="size-5 -rotate-90 transition-transform group-open:rotate-90 motion-reduce:transition-none"
+          />
+        </summary>
+        <nav aria-label="On this page" class="pb-4">
+          <ul class="space-y-1.5 text-[0.95rem]">
+            {items.map(h => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    ) : (
+      <nav aria-labelledby="toc-h" class="my-8 xl:sticky xl:top-28 xl:my-0">
+        <h2 id="toc-h" class="label-caps text-muted-foreground mb-2 font-sans">
+          On this page
+        </h2>
+        <ul class="space-y-1.5 text-[0.95rem]">
+          {items.map(h => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    ))
 }

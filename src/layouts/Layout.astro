@@ -71,6 +71,7 @@ const fullTitle = !title
 const path =
   Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
+const isHome = path === "/";
 const socialImageURL = new URL(ogImage, SITE.url).href;
 const socialImageAlt = ogImageAlt || (title ?? fullTitle);
 // The default and generated OG images are always 1200×630; other images only
@@ -287,12 +288,16 @@ const robots =
       <slot />
     </main>
     <Footer />
-    <!-- Always visible: sticks to the top; the header below hides on scroll down.
+    <!-- Pinned to the top on the homepage (the header below hides on scroll down);
+         on other pages it scrolls away so readers get the space back.
          It sits last in the HTML and order-first puts it on top, so crawlers and AI
          fetchers read each page's own text first. data-nosnippet keeps it out of snippets. -->
     <p
       data-nosnippet
-      class="bg-accent text-accent-foreground sticky top-0 z-50 order-first flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs"
+      class:list={[
+        "bg-accent text-accent-foreground z-50 order-first flex h-9 items-center justify-center px-4 text-center text-sm font-semibold whitespace-nowrap max-[22rem]:text-xs",
+        isHome ? "sticky top-0" : "relative",
+      ]}
     >
       <!-- One inline box, so flex layout keeps the spaces between the parts. -->
       <span

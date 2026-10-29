@@ -156,7 +156,7 @@ const schema = [
   />
 
   <div
-    class="app-layout pt-8 xl:grid xl:grid-cols-[14rem_minmax(0,68ch)] xl:gap-12"
+    class="app-layout pt-8 xl:grid xl:grid-cols-[14rem_minmax(0,34rem)] xl:gap-12"
   >
     <div class="hidden xl:block">
       {kind === "post" && <TOC headings={headings} />}
@@ -270,7 +270,7 @@ const schema = [
               alt={data.heroAlt ?? ""}
               title={data.heroAlt ?? ""}
               widths={[720, 1080, 1440]}
-              sizes="(min-width: 768px) 68ch, 100vw"
+              sizes="(min-width: 768px) 34rem, 100vw"
               loading="eager"
               class="rounded-lg"
             />
@@ -280,12 +280,10 @@ const schema = [
 
       {kind !== "news" && <KeyTakeaways items={data.takeaways} />}
 
-      <p class="meta mb-6">Part of <a href={`/topics/${data.hub}`}>{hub}</a></p>
-
       {
         kind === "post" && (
           <div class="xl:hidden">
-            <TOC headings={headings} />
+            <TOC headings={headings} collapsible />
           </div>
         )
       }
@@ -304,48 +302,52 @@ const schema = [
     </article>
   </div>
 
-  <!-- Centered on the page, not in the article column, to match other pages -->
-  <div class="app-layout">
-    <div class="max-w-read mx-auto mt-12">
-      <AuthorBox />
-      <StackChips items={data.stack} />
-      <Syndication links={data.syndication} />
-      <ShareLinks url={url} title={data.title} />
+  <!-- In the article's own column, so the end of the post lines up with its text. -->
+  <div
+    class="app-layout xl:grid xl:grid-cols-[14rem_minmax(0,34rem)] xl:gap-12"
+  >
+    <div class="xl:col-start-2">
+      <div class="max-w-read mt-12">
+        <AuthorBox />
+        <StackChips items={data.stack} />
+        <Syndication links={data.syndication} />
+        <ShareLinks url={url} title={data.title} />
+      </div>
+
+      <section
+        class="max-w-read border-border mt-10 border-t pt-8"
+        aria-labelledby="keep-reading"
+      >
+        <h2 id="keep-reading" class="h2 mb-2">Keep reading</h2>
+        <p class="mb-4">
+          More in <a
+            href={`/topics/${data.hub}`}
+            data-event="next_post_click"
+            data-event-to="hub">{hub}</a
+          >.
+        </p>
+        {
+          related.length > 0 && (
+            <ul>
+              {related.map(p => (
+                <PostCard
+                  href={postUrl(p)}
+                  title={p.data.title}
+                  summary={p.data.dek}
+                  hub={p.data.hub}
+                  date={p.data.published}
+                  draft={p.data.draft}
+                  showHub={p.data.hub !== data.hub}
+                />
+              ))}
+            </ul>
+          )
+        }
+      </section>
+
+      <NewsletterBox from={`${kind}-end`} align="start" />
+      {kind === "post" && <WorkWithMe from={`post:${post.id}`} align="start" />}
     </div>
-
-    <section
-      class="max-w-read border-border mx-auto mt-10 border-t pt-8"
-      aria-labelledby="keep-reading"
-    >
-      <h2 id="keep-reading" class="h2 mb-2 text-center">Keep reading</h2>
-      <p class="mb-4 text-center">
-        More in <a
-          href={`/topics/${data.hub}`}
-          data-event="next_post_click"
-          data-event-to="hub">{hub}</a
-        >.
-      </p>
-      {
-        related.length > 0 && (
-          <ul>
-            {related.map(p => (
-              <PostCard
-                href={postUrl(p)}
-                title={p.data.title}
-                summary={p.data.dek}
-                hub={p.data.hub}
-                date={p.data.published}
-                draft={p.data.draft}
-                showHub={p.data.hub !== data.hub}
-              />
-            ))}
-          </ul>
-        )
-      }
-    </section>
-
-    <NewsletterBox from={`${kind}-end`} />
-    {kind === "post" && <WorkWithMe from={`post:${post.id}`} />}
   </div>
 </Layout>
 
@@ -356,9 +358,10 @@ const schema = [
   )) {
     const a = document.createElement("a");
     a.href = `#${h.id}`;
-    a.className =
-      "heading-anchor ms-2 no-underline opacity-60 hover:opacity-100 focus:opacity-100";
-    a.setAttribute("aria-label", `Link to section: ${h.textContent}`);
+    a.className = "heading-anchor ms-2 no-underline";
+    // aria-hidden keeps "#" out of the heading's name; the link stays clickable.
+    a.setAttribute("aria-hidden", "true");
+    a.tabIndex = -1;
     a.title = `Link to section: ${h.textContent}`;
     a.textContent = "#";
     h.appendChild(a);

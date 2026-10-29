@@ -31,6 +31,13 @@
     line-height: 1.2;
     text-wrap: balance;
   }
+  /* No one-word last lines in running text (browsers without support ignore it). */
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
   /* Links are always underlined: the accent equals the text colour. */
   a {
     text-decoration-line: underline;
@@ -72,8 +79,10 @@
   @apply max-w-app mx-auto w-full px-4 sm:px-6;
 }
 
+/* About 75 characters a line in Albert Sans (68ch ran to ~93, since "ch" is
+   the width of a zero, wider than the average letter). */
 @utility max-w-read {
-  max-width: 68ch;
+  max-width: 34rem;
 }
 
 @utility h1 {
