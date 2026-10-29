@@ -6,6 +6,7 @@ import PostCard from "@/components/PostCard.astro";
 import HubCard from "@/components/HubCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
+import SiteStats from "@/components/SiteStats.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
@@ -233,6 +234,8 @@ const [city, country] = SITE.location.split(", ");
         <p class="mt-4"><a href="/events">All events →</a></p>
       </section>
     </div>
+
+    <SiteStats />
 
     <NewsletterBox from="home" />
     <WorkWithMe

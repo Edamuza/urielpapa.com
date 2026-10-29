@@ -229,6 +229,24 @@ export default defineConfig({
         context: "server",
         optional: true,
       }),
+      /** Home page stats: a Google service account key (the whole JSON) with read access to GA4 and Search Console. */
+      GOOGLE_SERVICE_ACCOUNT_JSON: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Numeric GA4 property ID (not the G- measurement ID). */
+      GA4_PROPERTY_ID: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Search Console property, e.g. "sc-domain:urielpapa.com" or "https://urielpapa.com/". */
+      GSC_SITE_URL: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
     },
   },
   experimental: {
