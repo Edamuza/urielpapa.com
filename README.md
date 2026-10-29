@@ -68,12 +68,7 @@ Until the Resend and Buttondown keys are set, the forms answer with a polite mes
 
 ### The site in numbers (homepage)
 
-The homepage shows published posts and pages (counted at build from the content), plus unique visitors (GA4) and Google Search impressions (Search Console) since launch. Everything is read at build time, so it refreshes on every deploy. The two Google numbers need a read-only service account; until it is set up, those tiles are left out.
-
-1. In [Google Cloud](https://console.cloud.google.com/), create a project, enable the **Google Analytics Data API** and the **Google Search Console API**, then create a service account and download a JSON key for it.
-2. GA4 → Admin → Property access management: add the service account's email as **Viewer**. Copy the numeric property ID (Admin → Property details), not the `G-` measurement ID.
-3. Search Console → Settings → Users and permissions: add the same email with **Restricted** permission on `https://urielpapa.com/`.
-4. In Vercel, add `GOOGLE_SERVICE_ACCOUNT_JSON` (the whole key file) and `GA4_PROPERTY_ID` as Sensitive variables for Production, then redeploy. `GSC_SITE_URL` defaults to `https://urielpapa.com/`; set it to `sc-domain:urielpapa.com` if you add a Domain property.
+The homepage shows published posts, pages, days since launch and outside sources cited. All four are counted at build from the content, with no outside service, so they refresh on every deploy.
 
 ### Editing on the live site (Keystatic GitHub mode)
 
