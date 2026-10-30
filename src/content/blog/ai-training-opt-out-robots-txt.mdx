@@ -1,0 +1,95 @@
+---
+title: "Google, Bing and Anthropic Back One Robots.txt AI Training Opt-Out"
+seoTitle: "One Robots.txt Opt-Out for AI Training"
+description: >-
+  Google, Bing and Anthropic will honor one robots.txt rule that opts a site out
+  of AI training. What the new token does, when it starts and what it leaves alone.
+dek: >-
+  One rule now speaks to several AI companies at once. It covers training only,
+  so you can still choose to show up in AI answers.
+hub: seo-geo-aeo
+frame: news-take
+takeaways:
+  - >-
+    On October 30, 2026, Microsoft Bing announced support for a shared robots.txt
+    token, __usage_ai-training, that tells AI companies not to train on a site.
+  - >-
+    Anthropic has started implementing the same signal, and Google's crawler
+    documentation says Google intends to support it in early 2027.
+  - >-
+    Bing says the training and grounding preferences do not change eligibility
+    for its regular search results, and both default to Allow.
+businessImpact:
+  - >-
+    A site can opt out of AI training across several providers with one
+    robots.txt group, while staying eligible for regular search results.
+  - >-
+    Sites that use NoArchive or NoCache on Bing need to set the new preferences
+    before March 1, 2027, when Bing stops reading those tags this way.
+sourceUrl: https://blogs.bing.com/search/2026/10/your-content-your-choice-clearer-preferences-for-training-and-grounding/
+published: 2026-10-31
+related:
+  - google-search-generative-ai-control
+  - geo-and-aeo-fundamentals
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+A single robots.txt rule, `User-Agent: __usage_ai-training` followed by `Disallow: /`, will soon tell Google, Microsoft Bing and Anthropic not to use a site's content for AI training, without changing how the site ranks in regular search.
+
+This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing.
+
+## What happened?
+
+On October 30, 2026, Microsoft Bing published [Your content, your choice: clearer preferences for training and grounding](https://blogs.bing.com/search/2026/10/your-content-your-choice-clearer-preferences-for-training-and-grounding/). It splits AI use into two preferences: **AI training**, a shared industry signal set in robots.txt, and **AI grounding**, Bing's term for using a page to inform AI answers, set page by page.
+
+The same day, Kevin Kelley of Anthropic posted [the training preference signal draft](https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal/) to the IETF. His [message to the AI Preferences working group](https://mailarchive.ietf.org/arch/msg/ai-control/mddjatOxSR0h6GmLRBWlc839c7w/) says Anthropic has started implementing it, with rollout across its services taking time. It is an individual draft, not yet an IETF standard.
+
+Google's [common crawlers documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) now says Google "intends to support the AIPREF shared machine-readable training preference signal" in early 2027. According to [Search Engine Roundtable](https://www.seroundtable.com/google-ai-training-control-42430.html), Google's John Mueller said a site that opts out with the token, without naming Google-Extended, will be treated as disallowing Google-Extended. The same report says OpenAI made a similar move.
+
+## What changed?
+
+The opt-out is an ordinary robots.txt group:
+
+```txt
+User-Agent: __usage_ai-training
+Disallow: /
+```
+
+- **Existing files say nothing.** The draft says `User-Agent: *` groups never match the token, so a robots.txt without this group expresses no preference.
+- **Paths work.** You can disallow one folder, or allow one back, using normal robots.txt path rules.
+- **Bing adds page-level controls.** A `bingbot` meta tag or `X-Robots-Tag` header can set `ai-training:disallow`, and grounding can be set to `ai-grounding:disallow` or `ai-grounding:disallowextended`. There is no site-wide grounding setting in robots.txt.
+- **Both default to Allow** when nothing is published.
+
+Bing's timeline:
+
+| Date | What happens |
+| --- | --- |
+| December 15, 2026 | Temporary grounding preferences open in Bing Webmaster Tools |
+| February 1, 2027 | The new preferences take effect as pages are crawled |
+| March 1, 2027 | NoArchive and NoCache stop counting as training or grounding preferences |
+| September 30, 2027 | Temporary grounding preferences expire |
+
+## What does it mean for businesses and site owners?
+
+Training and AI answers are now separate choices, so a small business can say no to training and still be cited. Bing says Disallow or DisallowExtended on grounding will reduce brand visibility in AI experiences, and Google says [Google-Extended](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) does not affect inclusion in Google Search.
+
+One catch, as I read Google's docs: Google-Extended also covers grounding in Gemini, and Mueller said sites that explicitly allow Google-Extended stay eligible there. If you block training with the shared token but still want Gemini to cite you, allow Google-Extended explicitly. Google's separate opt-out for AI Overviews and AI Mode is the [Search Console control I covered earlier](/news/google-search-generative-ai-control).
+
+## What should you do now?
+
+1. **Decide on training separately** from showing up in AI answers.
+2. **Do nothing** if you are happy to allow training, the default.
+3. **Add the group** above if you want to opt out.
+4. **Check NoArchive and NoCache** if you use them, and set Bing's new preferences before March 1, 2027.
+
+## Where can you learn more?
+
+- [Microsoft Bing's announcement](https://blogs.bing.com/search/2026/10/your-content-your-choice-clearer-preferences-for-training-and-grounding/) - Syntax, defaults and the full timeline.
+- [The IETF draft](https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal/) - How the token works in robots.txt.
+- [Google's common crawlers documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) - Google-Extended and the early 2027 plan.
+- [GEO and AEO Fundamentals](/blog/geo-and-aeo-fundamentals) - How AI answers choose which pages to cite.
