@@ -1,0 +1,108 @@
+---
+title: PolicyDesk
+description: An HR and payroll policy assistant that answers only from company documents, cites every passage it uses and scored 100% on a 15-question test set.
+summary: >-
+  Employees ask HR the same policy questions every week, and a general chatbot can't be trusted to answer them because it may invent a rule that sounds right. I built PolicyDesk, an assistant that answers only from a company's own documents, cites the exact passage behind every answer, refuses when the documents don't cover a question, and measures its own accuracy on a 15-question test set.
+outcome: A policy assistant that cites its sources, refuses when it doesn't know, and scored 100% across 15 test questions.
+period: November 2026
+year: 2026
+role: Directed the AI agents that specified, built and tested it in Lovable
+team: Solo, with AI agents
+status: Live demo (fictional sample data)
+kind: SoftwareApplication
+liveUrl: https://policydesk-uriel.lovable.app
+stack:
+  - lovable
+  - tanstack-start
+  - react
+  - typescript
+  - supabase
+  - postgresql
+  - gemini
+  - gpt
+  - vitest
+hubs:
+  - ai
+  - tech-stacks
+order: 8
+draft: false
+---
+
+## The problem
+
+HR teams answer the same questions over and over: how many leave days are left, when payroll lands, whether overtime needs approval. Every answer takes staff time, and the answers already sit in the handbook and policy documents.
+
+A general AI chatbot is the obvious shortcut, and it's the wrong one. A model that hasn't read your policies will still answer, and a wrong leave rule or payroll date that sounds right is worse than no answer. An assistant for HR has to show where each answer came from and say "I don't know" when the documents don't cover the question.
+
+HR and payroll rules are familiar ground for me. The HRIS module of the [VITE SEO ERP](/projects/vite-seo-erp) computes SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay. PolicyDesk covers the other half of HR: the questions employees ask about those rules.
+
+## What I built
+
+![PolicyDesk answering "How many sick leave days do I get?" with 10 days and an open citation to the Leave Policy's Sick Leave section](../../assets/images/content/policydesk-ask-answer-with-citation.png)
+
+- **Ask:** a chat screen where every answer carries numbered citations. Clicking a citation opens the passage, its document title, its section heading and its relevance score.
+- **Refusal:** when no passage is relevant enough, the reply is "I couldn't find this in the company documents. Please ask HR." with no citations.
+- **Knowledge base:** add a policy by pasting text or uploading a .txt or .md file. The app splits it into passages that keep their section heading, then indexes them for search.
+- **Evaluations:** a 15-question test set that runs through the same answer pipeline as the Ask screen, with scores for correctness, citation accuracy and refusals, a per-question table and a history of past runs.
+- **Demo data:** three fictional policy documents for a made-up company, Bayanihan Digital Inc., and a Reset button that restores them.
+
+## How it works
+
+PolicyDesk uses retrieval-augmented generation with a refusal threshold. The model only sees the passages the search finds, and a low search score stops the answer before the model is called.
+
+1. The question is turned into an embedding with Google's `gemini-embedding-2` model, through the Lovable AI gateway.
+2. A vector search in Postgres (pgvector) returns the 4 closest passages.
+3. Passages scoring below 0.70 are dropped. If none are left, the app refuses without calling the chat model at all.
+4. The remaining passages are numbered and sent to the answer model, `gpt-6-astra`, with instructions to use only those passages, cite them by number, and use the exact refusal sentence if they don't contain the answer.
+5. The server keeps only the passages the answer actually cited and sends them to the browser.
+
+The Evaluations screen calls the same answer function, so its scores measure the real behavior, not a copy of it. An AI grader checks each answer against the expected facts. Citation accuracy and refusals are checked by fixed rules in code, so the parts that can be checked exactly are never left to a model's judgment.
+
+All model calls run on the server, with a 45-second timeout and plain error messages for rate limits and timeouts. The browser can read the demo tables but can't write to them, and the AI key and the privileged database client never leave the server.
+
+## How I built it
+
+I built PolicyDesk by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks and built the app in Lovable, an AI app builder. The first build took one detailed message, and one follow-up closed the gaps the agent found in a code review.
+
+A separate QA agent then tested the published app in a real browser, check by check, without trusting the build report. Failures went back to Lovable as exact bug reports, and the fixed app was published and tested again.
+
+## How I tested it
+
+![PolicyDesk Evaluations screen showing 100% overall, correctness, citation accuracy and abstention, with per-question results](../../assets/images/content/policydesk-evaluations-dashboard.png)
+
+The evaluation set has 15 questions: 12 the documents answer and 3 they don't, such as "Can I bring my dog to the office?" and "What is the CEO's salary?" On the published app, the run scored 100% on correctness, citation accuracy and refusals.
+
+QA also tested the full knowledge-base loop. "How many sick leave days do I get?" returned 10 days with a citation to the Leave Policy. A newly pasted travel policy was cited for a per diem of PHP 1,500 a day, and after the document was deleted, the same question was refused.
+
+Five extra questions from the QA agent, worded differently from the test set, all came back right:
+
+- Bereavement leave, the payslip dispute window and HMO eligibility were answered with the correct citations.
+- Maternity leave and the overtime rate on a regular holiday were refused, because the sample documents don't cover them.
+
+The holiday overtime question shows the prompt doing its job. The overtime passage matched strongly, at 0.77, but it only gives the rate for regular days. The model refused instead of stretching that rate to holidays, which is exactly the behavior an HR tool needs.
+
+QA also caught a real bug. In current Chrome, `scrollIntoView()` returns a Promise, and one React effect on the Ask page passed that Promise back as its cleanup function. Every answer crashed the page. The server was answering correctly the whole time, which is why only a browser test could find it. The fix shipped with a regression test that fails against the old code.
+
+## Stack and why
+
+- **App:** TanStack Start with React 19 and TypeScript, built in Lovable.
+- **Database and search:** Postgres with pgvector on Lovable Cloud (Supabase).
+- **AI:** the Lovable AI gateway, with Gemini embeddings for search and a GPT model for answers and grading.
+- **Tests:** Vitest, covering the grading rules, the document splitter, routing and the Chrome crash.
+
+Keeping the documents in Postgres with pgvector puts the policies and their embeddings in one database, with row-level security on every table. Server functions keep every model call and every write off the browser. Lovable let me spend my time on the spec, the test set and the checks instead of the scaffolding.
+
+## Results
+
+- 100% on correctness, citation accuracy and refusals across the 15-question test set.
+- The acceptance checks passing in browser testing after one round of fixes. The phone-width layout wasn't part of the browser test.
+- Every answer traceable to a passage, and a fixed refusal for anything the documents don't cover.
+- Live at [policydesk-uriel.lovable.app](https://policydesk-uriel.lovable.app), with fictional sample data.
+
+## What I'd do next for a real company
+
+- Add single sign-on, so answers and logs are tied to real employees.
+- Limit document changes to HR admins and keep version history for every policy.
+- Grow the test set from real employee questions and re-run it whenever a document or prompt changes.
+- Re-tune the 0.70 threshold on a larger document set, since it was set on three sample documents.
+- Sync documents from the HR system instead of pasting them in.

@@ -1,0 +1,5 @@
+name: "Lovable"
+group: ai
+use: "The AI app builder behind five portfolio apps I specified, tested and shipped: PolicyDesk, ProcessLens, InboxPilot, DocuSift and ModelBench."
+url: https://lovable.dev
+order: 10

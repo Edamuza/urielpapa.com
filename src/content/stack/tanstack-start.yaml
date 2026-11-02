@@ -1,0 +1,5 @@
+name: "TanStack Start"
+group: languages-frameworks
+use: "Server functions and routing in PolicyDesk, ProcessLens, InboxPilot, DocuSift and ModelBench."
+url: https://tanstack.com/start
+order: 16
