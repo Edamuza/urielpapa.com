@@ -30,7 +30,7 @@ draft: false
 
 ## Abstract
 
-HR teams answer the same policy questions again and again, and a general AI chatbot is a risky shortcut. In a 2026 Eagle Hill Consulting survey, 51% of HR respondents spent at least half their week on routine administrative work. A 2024 study found general chatbots hallucinated on 58% to 88% of verifiable legal questions. I built PolicyDesk, a live demo with fictional sample data. It answers only from company documents, cites the passage behind every answer and refuses when the documents are silent. On its 15-question test set, it scored 100% on correctness, citation accuracy and refusals.
+HR teams answer the same policy questions again and again, and a general AI chatbot is a risky shortcut. In a 2026 Eagle Hill Consulting survey, 51% of HR respondents spent at least half their week on routine administrative work. A 2024 study found general chatbots hallucinated on 58% to 88% of verifiable questions about US federal court cases. I built PolicyDesk, a live demo with fictional sample data. It answers only from company documents, cites the passage behind every answer and refuses when the documents are silent. On its 15-question test set, it scored 100% on correctness, citation accuracy and refusals.
 
 ## The problem I saw
 
@@ -59,7 +59,7 @@ HR and payroll rules are familiar ground for me. The HRIS module of the [VITE SE
 
 ## Why I chose this solution
 
-**Answer only from the company's documents.** A model that hallucinates on most verifiable legal questions will likely guess at an unseen leave rule too. So the answer model only sees passages found in the company's own documents.
+**Answer only from the company's documents.** A model that hallucinates on most verifiable case-law questions will likely guess at an unseen leave rule too. So the answer model only sees passages found in the company's own documents.
 
 **Cite every passage.** The Air Canada decision means a company answers for what its bot says. In the Eagle Hill survey, 36% of HR staff are often or always unclear how AI output was generated. A citation lets anyone check the answer against the passage.
 
@@ -137,8 +137,8 @@ QA also caught a real bug. In current Chrome, `scrollIntoView()` returns a Promi
 As a demo on fictional data, PolicyDesk shows the design works, not that it would work at a real company.
 
 - **The test set is small.** A 100% score on 15 questions and three fictional documents is not an error rate for real use. An AI grader, not code, judges correctness.
-- **Time saved was not measured.** No real employees used it, so there are no hours saved to report. The phone-width layout wasn't tested either.
-- **The outside evidence is indirect.** The surveys cover US and UK workers, not Filipinos, and the hallucination studies test legal research, not HR policies.
+- **Time saved was not measured.** The demo uses fictional data, so there are no hours saved to report.
+- **The outside evidence is indirect.** The surveys cover US and UK workers at large organizations, not Filipinos, and the hallucination studies test legal research, not HR policies.
 - **It is only as right as its documents.** If a policy conflicts with the Labor Code or a DOLE advisory, PolicyDesk will cite the wrong rule faithfully. HR review of each policy against current DOLE rules would close that gap.
 
 What I'd do next for a real company:
