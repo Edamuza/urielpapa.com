@@ -7,6 +7,7 @@ import HubCard from "@/components/HubCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import SiteStats from "@/components/SiteStats.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
@@ -17,9 +18,11 @@ import {
   getNewsTakes,
   getNotes,
   getPosts,
+  getProjects,
   isoDate,
   noteUrl,
   postUrl,
+  projectUrl,
   readingTime,
 } from "@/utils/content";
 
@@ -30,6 +33,12 @@ const events = (await getEventNotes()).slice(0, 2);
 const hubEntries = await getHubs();
 const allBlog = await getAllBlogEntries();
 const allNotes = await getNotes();
+// Projects built with Lovable lead the section; the rest follow as a short list.
+const projects = await getProjects();
+const builtWithLovable = (p: (typeof projects)[number]) =>
+  p.data.stack.some(s => s.id === "lovable");
+const lovableProjects = projects.filter(builtWithLovable);
+const otherProjects = projects.filter(p => !builtWithLovable(p));
 
 const hubCount = (id: string) =>
   allBlog.filter(p => p.data.hub === id).length +
@@ -126,6 +135,7 @@ const [city, country] = SITE.location.split(", ");
         </p>
         <p class="mt-6 flex flex-wrap gap-3">
           <a href="/blog" class="btn btn-filled">Read the writing</a>
+          <a href="#projects-h" class="btn">See my projects</a>
           <a href="/about" class="btn">About me</a>
         </p>
       </div>
@@ -133,7 +143,71 @@ const [city, country] = SITE.location.split(", ");
 
     <SiteStats />
 
-    <section class="py-10" aria-labelledby="latest-h">
+    {
+      projects.length > 0 && (
+        <section class="py-10" aria-labelledby="projects-h">
+          <h2 id="projects-h" class="h2 mb-2 scroll-mt-24">
+            Projects
+          </h2>
+          {lovableProjects.length > 0 && (
+            <>
+              <p class="max-w-read mb-6">
+                I built these AI apps in <a href="/stack#lovable">Lovable</a> by
+                directing AI agents. Each one is live with fictional sample
+                data, and each has a research-style case study with its test
+                results.
+              </p>
+              <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {lovableProjects.map(p => (
+                  <ProjectCard
+                    href={projectUrl(p)}
+                    title={p.data.title}
+                    summary={p.data.description}
+                    liveUrl={p.data.liveUrl}
+                  />
+                ))}
+                <li class="bg-muted flex flex-col rounded-lg p-4">
+                  <h3 class="text-lg font-semibold">How I built them</h3>
+                  <p class="mt-1 text-[0.95rem]">
+                    For each app, one AI agent turned my brief into a spec and
+                    built it in Lovable. A separate QA agent then tested the
+                    live app in a real browser, and the bugs it found were
+                    fixed.
+                  </p>
+                </li>
+              </ul>
+            </>
+          )}
+          {otherProjects.length > 0 && (
+            <>
+              <h3 class="mt-10 mb-1 text-lg font-semibold">
+                Systems and products
+              </h3>
+              <p class="max-w-read mb-2">
+                Work I built with my teams, from an agency ERP to a tourism
+                portal.
+              </p>
+              <ul class="grid gap-x-8 sm:grid-cols-2">
+                {otherProjects.map(p => (
+                  <li class="border-border border-b py-3">
+                    <a href={projectUrl(p)} class="font-semibold">
+                      {p.data.title}
+                    </a>{" "}
+                    <span class="meta">{p.data.year}</span>
+                    <p class="mt-0.5 text-[0.95rem]">{p.data.outcome}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <p class="mt-4">
+            <a href="/projects">All projects →</a>
+          </p>
+        </section>
+      )
+    }
+
+    <section class="border-border border-t py-10" aria-labelledby="latest-h">
       <h2 id="latest-h" class="h2 mb-5">Latest writing</h2>
       {
         posts.length > 0 ? (

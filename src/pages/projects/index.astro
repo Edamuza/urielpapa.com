@@ -8,16 +8,43 @@ import { getProjects, projectUrl } from "@/utils/content";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 
 const projects = await getProjects();
-const stacks = await Promise.all(
-  projects.map(
-    async p =>
-      (await getEntries(p.data.stack.slice(0, 5))) as CollectionEntry<"stack">[]
+const stacks = new Map(
+  await Promise.all(
+    projects.map(
+      async p =>
+        [
+          p.id,
+          (await getEntries(
+            p.data.stack.slice(0, 5)
+          )) as CollectionEntry<"stack">[],
+        ] as const
+    )
   )
 );
 
+// Apps built with Lovable come first, then the systems built with my teams.
+const builtWithLovable = (p: (typeof projects)[number]) =>
+  p.data.stack.some(s => s.id === "lovable");
+const groups = [
+  {
+    id: "lovable",
+    heading: "AI apps built with Lovable",
+    intro:
+      "I built these by directing AI agents in Lovable. Each one is live with fictional sample data, and each case study shows how it was tested.",
+    items: projects.filter(builtWithLovable),
+  },
+  {
+    id: "systems",
+    heading: "Systems and products",
+    intro:
+      "Work I built with my teams. Most were internal systems, so they're described rather than linked.",
+    items: projects.filter(p => !builtWithLovable(p)),
+  },
+].filter(g => g.items.length > 0);
+
 const title = "Projects";
 const intro =
-  "Things I've built. Most are internal systems, so they're described rather than linked.";
+  "Things I've built, from AI apps I made in Lovable to the ERP I led at my agency. Each one has a case study on the problem, the evidence and the results.";
 const crumbs = [
   { name: "Home", href: "/" },
   { name: title, href: "/projects" },
@@ -35,39 +62,57 @@ const schema = [
 
 <Layout
   title="Projects"
-  description="Projects Uriel Papa has built: an ERP, an NFC card platform, the TravelEase tourism portal, a quotation portal, WordPress SEO plugins and more."
+  description="Projects Uriel Papa has built: five AI apps made in Lovable, an ERP, an NFC card platform, the TravelEase tourism portal, WordPress SEO plugins and more."
   schema={schema}
 >
   <div class="app-layout pt-8">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro} />
-    <ul class="max-w-read">
-      {
-        projects.map((p, i) => (
-          <li class="border-border border-b py-5 first:pt-0">
-            <h2 class="text-xl font-semibold">
-              <a href={projectUrl(p)}>{p.data.title}</a>{" "}
-              <span class="meta font-normal">{p.data.year}</span>
-            </h2>
-            <p class="mt-1">{p.data.outcome}</p>
-            {stacks[i].length > 0 && (
-              <ul class="mt-2 flex flex-wrap gap-2">
-                {stacks[i].map(s => (
-                  <li>
-                    <a
-                      href={`/stack#${s.id}`}
-                      class="bg-muted inline-block rounded-full px-2.5 py-0.5 text-xs no-underline hover:underline"
-                    >
-                      {s.data.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))
-      }
-    </ul>
+    {
+      groups.map(g => (
+        <section aria-labelledby={`${g.id}-h`} class="mb-10">
+          <h2 id={`${g.id}-h`} class="h2 mb-2">
+            {g.heading}
+          </h2>
+          <p class="max-w-read text-muted-foreground mb-4">{g.intro}</p>
+          <ul class="max-w-read">
+            {g.items.map(p => {
+              const stack = stacks.get(p.id) ?? [];
+              return (
+                <li class="border-border border-b py-5 first:pt-0">
+                  <h3 class="text-xl font-semibold">
+                    <a href={projectUrl(p)}>{p.data.title}</a>{" "}
+                    <span class="meta font-normal">{p.data.year}</span>
+                  </h3>
+                  <p class="mt-1">{p.data.outcome}</p>
+                  {p.data.liveUrl && (
+                    <p class="mt-1 text-sm font-semibold">
+                      <a href={p.data.liveUrl} rel="noopener">
+                        Live: {new URL(p.data.liveUrl).hostname} ↗
+                      </a>
+                    </p>
+                  )}
+                  {stack.length > 0 && (
+                    <ul class="mt-2 flex flex-wrap gap-2">
+                      {stack.map(s => (
+                        <li>
+                          <a
+                            href={`/stack#${s.id}`}
+                            class="bg-muted inline-block rounded-full px-2.5 py-0.5 text-xs no-underline hover:underline"
+                          >
+                            {s.data.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ))
+    }
     <WorkWithMe
       text="Want to work together?"
       linkText="Get in touch."

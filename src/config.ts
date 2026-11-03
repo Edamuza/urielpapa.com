@@ -102,6 +102,7 @@ export const CONTACT = {
 /** Header navigation (ux-ui-spec.md §4). */
 export const NAV = [
   { href: "/blog", label: "Writing" },
+  { href: "/projects", label: "Projects" },
   { href: "/news", label: "News" },
   { href: "/topics", label: "Topics" },
   { href: "/events", label: "Events" },
