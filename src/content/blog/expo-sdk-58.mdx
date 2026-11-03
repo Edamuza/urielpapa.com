@@ -46,6 +46,10 @@ I co-developed [Tell Liora](/projects/tell-liora), an offline mobile app, with E
 
 The Expo team published [Expo SDK 58](https://expo.dev/changelog/sdk-58) on October 15, 2026, a month after the [SDK 58 beta](https://expo.dev/changelog/sdk-58-beta) opened on September 15. The release notes describe it as built for iOS 27 and the iOS 27 SDK, with React Native 0.88, which also brings in the changes from 0.87.
 
+![Five different smartphones lined up side by side](../../assets/images/content/expo-sdk-58-1.jpg "Five different smartphones lined up side by side")
+
+*Expo builds apps for iOS and Android from one React Native codebase. Photo: [Kskhh](https://commons.wikimedia.org/wiki/File:5_different_Smartphones.jpg "Kskhh's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 ## What changed, in plain words?
 
 These are the main changes from the [official release notes](https://expo.dev/changelog/sdk-58):
@@ -57,6 +61,10 @@ These are the main changes from the [official release notes](https://expo.dev/ch
 * **Breaking changes.** R8 code shrinking is on by default in Android release builds. `File.write()` in `expo-file-system` is now async. Foreground notifications show by default. libSQL support is removed from `expo-sqlite`. React Native 0.87 and later make the strict TypeScript API the default and remove some APIs, including `InteractionManager`. macOS is not supported in SDK 58.
 * **Tooling minimums.** Node.js must be 22.13 or newer, 24.3 or newer, or 26 and later. Odd-numbered releases such as 23 and 25 are not supported.
 
+![An organizer leading a mobile app development session](../../assets/images/content/expo-sdk-58-2.jpg "An organizer leading a mobile app development session")
+
+*Expo SDK 58 jumps from React Native 0.86 to 0.88 and targets iOS 27. Photo: [Shivaansh Singh](https://commons.wikimedia.org/wiki/File:GDGoC-UIT_organizer_conducting_an_app_development_session.jpg "Shivaansh Singh's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Expo's own seven-minute video runs through the biggest SDK 58 updates, a quick way to spot what affects your app:
 
 <YouTube id="vqMYeWjBWkI" title="Expo SDK 58 just dropped. Here are the 24 biggest updates" channel="Expo" />
@@ -64,6 +72,10 @@ Expo's own seven-minute video runs through the biggest SDK 58 updates, a quick w
 ## What does it mean for small businesses and founders?
 
 For a business with an Expo app, SDK 58 is mostly good news with a bill attached. Faster Android builds and stable routing features cut the time a small team spends waiting and wiring things by hand. The bill is the upgrade work: a two-version React Native jump, a new iOS life cycle and default changes like R8 can each break something that worked yesterday.
+
+![Smartphones on display in an electronics store](../../assets/images/content/expo-sdk-58-3.jpg "Smartphones on display in an electronics store")
+
+*A long list of breaking changes means the upgrade belongs on a branch first. Photo: [HendrixHammer](https://commons.wikimedia.org/wiki/File:Smartphones_-_MediaMarkt_-_HUMA_Einkaufspark_2025_-_01.jpg "HendrixHammer's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 The R8 change deserves attention. Code shrinking makes Android release builds smaller, but it can strip classes that a library loads by name, and that kind of bug often shows up only in a release build. That is why a release build on a real device belongs in the test plan, not just a development build.
 

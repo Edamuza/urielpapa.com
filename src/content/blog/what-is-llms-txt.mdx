@@ -64,6 +64,10 @@ This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. urielpa
 
 llms.txt is a proposed file format for giving language models a short, curated guide to a website. Jeremy Howard published the idea on the Answer.AI blog on [September 3, 2024](https://www.answer.ai/posts/2024-09-03-llmstxt.html), and the spec now lives at [llmstxt.org](https://llmstxt.org/). The problem it targets is context: a model answering a question about your site cannot read every page, and HTML is full of menus, scripts and ads that waste its limited space.
 
+![The contents page of an old book, listing each chapter with its page number](../../assets/images/content/what-is-llms-txt-1.jpg "The contents page of an old book, listing each chapter with its page number")
+
+*An llms.txt file works like a contents page: a short list that points readers to the pages that matter. Scan: [Hsiang Fei (contents) on Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Hsiang_Fei_%28contents%29.jpg "The scanned contents page on Wikimedia Commons"), public domain.*
+
 So instead of making an AI tool guess from your sitemap or a crawl, you tell it directly which pages matter and what each one covers. The proposal says the file is meant mainly for inference, meaning the moment a tool reads your site to answer a question, rather than for training models.
 
 In short, llms.txt is a table of contents for AI tools, written in Markdown so both people and programs can read it.
@@ -99,6 +103,10 @@ The spec also suggests a clean Markdown copy of each page at the same URL plus .
 ## Who actually reads llms.txt today?
 
 Very few systems read llms.txt files today, and Google Search is not one of them. Google's [guide to optimizing for generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide), last updated July 10, 2026, lists llms.txt among the tactics you can ignore. It says creating one "will neither harm nor help" your visibility, "as Google Search ignores them."
+
+![A technician with a laptop working on a server rack in a data center](../../assets/images/content/what-is-llms-txt-2.jpg "A technician with a laptop working on a server rack in a data center")
+
+*Very few crawlers request llms.txt today. Ahrefs found that 97% of the files it studied got no requests in May 2026. Photo: [Derrick Coetzee](https://commons.wikimedia.org/wiki/File:Technician_with_laptop_working_on_server_rack_at_NERSC.jpg "Derrick Coetzee's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 Another Google team takes a different view. As of October 2026, Chrome's Lighthouse has an [llms.txt audit](https://developer.chrome.com/docs/lighthouse/agentic-browsing/llms-txt) in its experimental agentic browsing category. It calls llms.txt an emerging convention, flags a server error when fetching the file, and marks a missing file as not applicable, because the file is optional.
 

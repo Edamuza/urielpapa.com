@@ -70,6 +70,10 @@ This explainer is part of my [AI, in Depth](/topics/ai) writing. I build with Cl
 
 A context window is the working space a language model reads from while it writes a reply. Anthropic's [context window documentation](https://platform.claude.com/docs/en/build-with-claude/context-windows) describes it as all the text a model can reference when it generates a response, including the response itself. OpenAI's [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state) defines it as the maximum number of tokens that can be used in a single request.
 
+![A view through a window in a cafe in San Gimignano, Italy](../../assets/images/content/what-is-a-context-window-1.jpg "A view through a window in a cafe in San Gimignano, Italy")
+
+*A context window is how much a model can see in one request, like the view through a window. Photo: [Rhododendrites](https://commons.wikimedia.org/wiki/File:Window_in_a_cafe_in_San_Gimignano_%2802182%292.jpg "Rhododendrites's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Everything you send lands in that space. That includes the system prompt, your question, attached files, tool definitions, tool results and every earlier turn of the chat. The reply takes space too, and so does any reasoning the model does before it answers. OpenAI says the limit covers input, output and reasoning tokens together.
 
 Anthropic also calls the context window the model's "working memory", separate from the data it was trained on. So a context window is the full set of tokens a model can see and write in one request, and nothing more.
@@ -143,6 +147,10 @@ A context window, memory and training data are three different places where a mo
 | What it holds | What the model learned before release | What you send in this request | Notes saved outside the model |
 | How long it lasts | Fixed at a cutoff date | One request | Until you or the tool deletes it |
 | How you change it | Use a newer model | Change the request | Edit the stored notes |
+
+![Two computer memory modules side by side](../../assets/images/content/what-is-a-context-window-2.jpg "Two computer memory modules side by side")
+
+*A context window is not memory: anything outside it is gone once the request ends. Photo: [Veeblefetzer](https://commons.wikimedia.org/wiki/File:168_pin_and_184_pin_DIMM.jpg "Veeblefetzer's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
 
 Training data stops at a cutoff. Anthropic lists June 2026 for its current Claude models, and OpenAI lists April 30, 2026 for GPT-6.1 Sol. Anything newer has to come in through the context window, for example from a web search or a document you attach.
 

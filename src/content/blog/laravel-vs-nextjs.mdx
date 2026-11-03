@@ -86,6 +86,10 @@ I led the team that built a four-module ERP on Laravel and Next.js in 2026, so t
 
 Laravel runs on the server and is written in PHP. It gives you routing, a database layer (Eloquent), migrations, queues, authentication, validation and testing tools out of the box, so most of the work of a business system, the rules and the data, has a clear home.
 
+![PHP code on a computer screen](../../assets/images/content/laravel-vs-nextjs-1.jpg "PHP code on a computer screen")
+
+*Laravel is a PHP framework that suits data-heavy business rules. Photo: [Ron23545](https://commons.wikimedia.org/wiki/File:Custom-software-developement-php-net.JPG "Ron23545's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Next.js is built on React and runs JavaScript or TypeScript on both the server and the browser. Its strength is the interface: pages that load fast, render on the server when it helps search and speed, and stay interactive once loaded.
 
 |                | Laravel                                                          | Next.js                                                    |
@@ -107,6 +111,10 @@ The Laravel team's own 10-minute video walks through starting a new Laravel app 
 
 For systems with many related records and strict rules, Laravel gives a lot for free: models, relationships, migrations, validation and queues all follow one set of conventions. In the ERP, the payroll rules (SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay) and the double-entry accounting all lived in the Laravel API.
 
+![The Visual Studio Code editor with a project open](../../assets/images/content/laravel-vs-nextjs-2.jpg "The Visual Studio Code editor with a project open")
+
+*Next.js is a React framework that suits fast interfaces; our ERP used it for its 115 pages. Photo: [Gátomo Dev](https://commons.wikimedia.org/wiki/File:Visual_studio_code_updated.png "Gátomo Dev's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Next.js can talk to a database directly too, but you usually assemble more of the pieces yourself: an ORM, an auth library, a job runner. That flexibility is useful for smaller apps, as in the client quotation portal I led and co-developed on Next.js 14 with Prisma and PostgreSQL.
 
 Laravel was faster than I expected for the core records. Once our conventions were set, adding a new model with its migration, validation and tests felt routine, which mattered with 144 models. It was slower where the logic was unusual, like payroll edge cases and the accounting reports. There the framework could not help much, and we had to think through every rule and write a test for it.
@@ -114,6 +122,10 @@ Laravel was faster than I expected for the core records. Once our conventions we
 ## What do hosting and maintenance look like for each?
 
 A Laravel app needs a PHP runtime, a database, and often a queue worker and a scheduler running in the background. A Next.js app needs a Node.js runtime or a platform built for it, and much of it can be served as static or cached pages.
+
+![A rack of servers in a data center near Paris](../../assets/images/content/laravel-vs-nextjs-3.jpg "A rack of servers in a data center near Paris")
+
+*Laravel runs on a PHP server, while Next.js runs on Node.js or a platform built for it. Photo: [David Monniaux](https://commons.wikimedia.org/wiki/File:Paris_servers_DSC00190.jpg "David Monniaux's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
 
 Running both means two deployments, two sets of dependencies to keep updated, and two places where something can break. The upside is that each side can be updated, scaled and tested on its own.
 

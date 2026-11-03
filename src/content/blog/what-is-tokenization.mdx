@@ -78,6 +78,10 @@ This explainer is part of my [AI, in Depth](/topics/ai) writing. I use models th
 
 A token is the basic unit a large language model works with. It can be a whole word, part of a word, a single character, a space attached to a word, or a punctuation mark. Before a model sees your text, a tokenizer turns it into a list of tokens, and each token into a number the model can process.
 
+![Stacks of Scrabble letter tiles](../../assets/images/content/what-is-tokenization-1.jpg "Stacks of Scrabble letter tiles")
+
+*A model reads text as tokens, small pieces of words, a bit like letter tiles. Photo: [Dascandy](https://commons.wikimedia.org/wiki/File:Older_Scrabble_Dutch_edition_letter_stacks.jpg "Dascandy's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
+
 Models do this because working with whole words would need an enormous vocabulary and would fail on new words, names and typos. Working with single characters would make every text very long. Tokens sit in between: common words become one token, and rare words get split into familiar pieces.
 
 ## How does text become tokens?
@@ -112,6 +116,10 @@ To see a tokenizer built step by step, Andrej Karpathy's two-hour lecture builds
 ## Why do tokens decide what AI costs?
 
 Providers charge per token, usually quoted per million tokens, with one price for input (what you send) and a higher price for output (what the model writes back). Every request is billed as input tokens times the input price plus output tokens times the output price.
+
+![A plastic deposit token from a beach club](../../assets/images/content/what-is-tokenization-2.jpg "A plastic deposit token from a beach club")
+
+*Like a token you pay with at a venue, an AI token is the unit a model reads and bills you in. Photo: [Pittigrilli](https://commons.wikimedia.org/wiki/File:Deposit_token_%28Pfandmarke%29_from_%27Munich_Beach_Resort%27_beach_club_in_Munich,_Germany.jpg "Pittigrilli's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 These are the standard API prices for one mid-range model from each of the three big providers, checked on October 17, 2026:
 

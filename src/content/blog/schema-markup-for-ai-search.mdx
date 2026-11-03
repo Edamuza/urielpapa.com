@@ -62,6 +62,10 @@ This post is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing. Every p
 
 Schema markup is a set of machine-readable labels added to a page, written with the shared vocabulary at schema.org. Instead of guessing from the text that a page is a blog post by a named person, a search engine reads it directly: this is a `BlogPosting`, its author is this `Person`, it was published on this date. Each search engine uses the parts of the vocabulary it supports.
 
+![An open drawer of library catalog cards showing a book's details](../../assets/images/content/schema-markup-for-ai-search-1.jpg "An open drawer of library catalog cards showing a book's details")
+
+*Schema markup describes a page for machines, the way a catalog card describes a book. Photo: [TBurmeister (WMF)](https://commons.wikimedia.org/wiki/File:Card_catalog_at_the_Indiana_State_Library_-_interior_view_of_catalog_cards.jpg "TBurmeister (WMF)'s photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 The markup can be written in three formats: JSON-LD, Microdata and RDFa. JSON-LD is the usual choice. Microsoft Bing, whose guidance I cover below, says schema is "usually added in JSON-LD format as a script in the backend of your site." Your CMS or a developer adds it. It sits in a `<script type="application/ld+json">` block, apart from the visible HTML.
 
 That separation is also the risk. Because readers never see the JSON-LD, it can drift from what the page says, or claim things the page never shows. The useful way to think about schema is as a confirmation layer: it restates, in a form machines can parse, what the page already tells its readers.
@@ -105,6 +109,10 @@ A content site needs only a handful of types, the ones that say who is behind it
 | BreadcrumbList              | Where the page sits in the site                      | Every page below the home page        |
 | ProfilePage                 | A page about one person or organization              | About or author page                  |
 | CollectionPage and ItemList | A page that lists other pages                        | Topic and archive pages               |
+
+![Amber glass jars with labels on a museum shelf](../../assets/images/content/schema-markup-for-ai-search-2.jpg "Amber glass jars with labels on a museum shelf")
+
+*Each schema type is a label, and it has to match what readers actually see on the page. Photo: [Jules Verne Times Two](https://commons.wikimedia.org/wiki/File:Amber_glass_apothecary_jars_with_labels_on_a_shelf,_Museu_do_Vidro,_Marinha_Grande,_Portugal_julesvernex2.jpg "Jules Verne Times Two's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 Those seven types cover who wrote a page, who stands behind the site and what each page is, which is what a search engine needs to tie your pages to one entity.
 

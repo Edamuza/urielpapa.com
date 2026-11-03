@@ -60,6 +60,10 @@ This one is close to home. [TravelEase](/projects/travelease), the tourism porta
 
 Railway detected "anomalous activity involving systems that store customer environment variables" on the morning of October 21, according to its [security disclosure](https://blog.railway.com/p/security-disclosure-wednesday-october-21st), written by Jacob Cooper. The company believes the attack is part of a series aimed at platform companies, with the goal of compromising AI inference providers. Railway says it notified upstream providers so they could revoke keys proactively.
 
+![Railway tracks running into the distance](../../assets/images/content/railway-security-incident-environment-variables-1.jpg "Railway tracks running into the distance")
+
+*Railway, the app hosting platform, disclosed that customer environment variables may have been accessed. Photo: [Dr. Chinchu C.](https://commons.wikimedia.org/wiki/File:Railway_Track_India.jpg "Dr. Chinchu C.'s photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Railway founder Jake Cooper shared the notice on X:
 
 <SocialPost platform="x" url="https://x.com/JustJake/status/2113028631463436786" author="Jake" handle="JustJake" date="2026-10-21" text={"Today, we were alerted of malicious activity that compromised Railway's servers\n\nWe are sharing this with you broadly and swiftly. We recommend folks rotate their keys out of an abundance of caution."} />
@@ -84,6 +88,10 @@ As of the 12:30 UTC update on October 22, the incident was still marked "Identif
 ## Who is affected?
 
 Railway's initial analysis suggests the impact "may be limited to a subset of users," and the company says it will email affected accounts. The review is still ongoing, which is why the disclosure asks every customer, not only the emailed ones, to roll their secrets.
+
+![A rack-mount server with its cover off, showing memory and drives](../../assets/images/content/railway-security-incident-environment-variables-2.jpg "A rack-mount server with its cover off, showing memory and drives")
+
+*Environment variables hold an app's secrets, such as API keys and database passwords. Photo: [Mynameismael](https://commons.wikimedia.org/wiki/File:Virtual_Private_Server.png "Mynameismael's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 Railway has not said how many accounts are in that subset, how the attacker got in or how the decryption happened. Sealed variables are another open question. [Railway's variables docs](https://docs.railway.com/guides/variables) say a sealed value is never shown in the UI and cannot be retrieved through the API or CLI. GitGuardian's [analysis of the incident](https://blog.gitguardian.com/railway-october-2026-incident-environment-variables/) notes the disclosure does not say whether sealed variables were in scope, and recommends rotating them as well. Until Railway answers these questions, every Railway user should act as if affected.
 
