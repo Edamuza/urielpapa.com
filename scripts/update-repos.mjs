@@ -1,9 +1,11 @@
 /* eslint-disable no-console -- a CLI script; its output is the terminal log. */
 // Refreshes src/data/repos.json, the saved GitHub details behind the repo cards
-// on project pages. Reads every project's `repo` field and asks the GitHub API.
+// on project pages, including a short glimpse of each README. Reads every
+// project's `repo` field and asks the GitHub API.
 // Usage: GITHUB_TOKEN=... node scripts/update-repos.mjs (the token is optional,
 // but unauthenticated requests are limited to 60 an hour).
 import { readFile, readdir, writeFile } from "node:fs/promises";
+import { readmeGlimpse } from "./lib/readme-glimpse.mjs";
 
 const DIR = "src/content/projects";
 const OUT = "src/data/repos.json";
@@ -31,16 +33,24 @@ for (const repo of repos.sort()) {
   const res = await fetch(`https://api.github.com/repos/${repo}`, { headers });
   if (!res.ok) {
     console.warn(`${repo}: HTTP ${res.status}, keeping the saved details`);
-    out.push(byRepo.get(repo.toLowerCase()) ?? { repo, description: null, language: null, license: null, stars: null });
+    out.push(byRepo.get(repo.toLowerCase()) ?? { repo, description: null, language: null, license: null, stars: null, readme: null });
     continue;
   }
   const d = await res.json();
+  const rd = await fetch(`https://api.github.com/repos/${repo}/readme`, {
+    headers: { ...headers, Accept: "application/vnd.github.raw" },
+  });
+  const readme = rd.ok
+    ? readmeGlimpse(await rd.text())
+    : (byRepo.get(repo.toLowerCase())?.readme ?? null);
+  if (!rd.ok) console.warn(`${repo}: README HTTP ${rd.status}, keeping the saved glimpse`);
   out.push({
     repo: d.full_name,
     description: d.description ?? null,
     language: d.language ?? null,
     license: d.license?.spdx_id && d.license.spdx_id !== "NOASSERTION" ? d.license.spdx_id : null,
     stars: d.stargazers_count ?? null,
+    readme,
   });
   console.log(`${repo}: ok`);
 }

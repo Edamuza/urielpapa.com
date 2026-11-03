@@ -3,7 +3,8 @@
 // Builds read the saved snapshot in repos.json, so they never depend on the
 // network. When GITHUB_TOKEN is set (for example in Vercel's environment), the
 // build also asks the GitHub API for fresh details and falls back to the
-// snapshot if that fails. Refresh the snapshot with `node scripts/update-repos.mjs`.
+// snapshot if that fails. The README glimpse always comes from the snapshot.
+// Refresh the snapshot with `node scripts/update-repos.mjs`.
 import snapshot from "./repos.json";
 
 export type RepoInfo = {
@@ -15,6 +16,7 @@ export type RepoInfo = {
   language: string | null;
   license: string | null;
   stars: number | null;
+  readme: string[] | null; // opening paragraphs of the README, as plain text
 };
 
 type Snapshot = {
@@ -23,6 +25,7 @@ type Snapshot = {
   language: string | null;
   license: string | null;
   stars: number | null;
+  readme?: string[] | null;
 };
 
 const saved = new Map(
@@ -65,6 +68,7 @@ export function getRepo(repo: string): Promise<RepoInfo> {
   if (!hit) {
     hit = (async () => {
       const data = (await fetchLive(repo)) ?? saved.get(key);
+      const readme = saved.get(key)?.readme;
       const full = data?.repo ?? repo;
       const [owner, name] = full.split("/");
       return {
@@ -76,6 +80,7 @@ export function getRepo(repo: string): Promise<RepoInfo> {
         language: data?.language ?? null,
         license: data?.license ?? null,
         stars: data?.stars ?? null,
+        readme: readme?.length ? readme : null,
       };
     })();
     cache.set(key, hit);

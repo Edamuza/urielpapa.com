@@ -4,83 +4,125 @@
     "description": null,
     "language": "PHP",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": null
   },
   {
     "repo": "Edamuza/viteseo-nfc",
     "description": null,
     "language": "PHP",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "NFC card platform built with Laravel. It has a public side and an admin side, and manages NFC cards, the links and profiles behind them, and the sticker templates used for printing."
+    ]
   },
   {
     "repo": "Edamuza/Travel_Ease",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 1
+    "stars": 1,
+    "readme": [
+      "Travel planning, business discovery, and LGU-assisted destination management in one full-stack web platform.",
+      "TravelEase is a full-stack travel management web application built for trip planning, destination discovery, business registration, and administrative coordination."
+    ]
   },
   {
     "repo": "Edamuza/viteseo-client-portal",
     "description": "Secure client quotation portal with OTP authentication",
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "A private Next.js app for sharing quotations with clients. Clients sign in with a one-time passcode (OTP) to view their quotes and download them as PDFs. There are no client passwords: admins generate the access codes."
+    ]
   },
   {
     "repo": "Edamuza/Wordpress-Plugins",
     "description": null,
     "language": null,
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "A small set of WordPress plugins built for SEO and content work at Vite SEO. Each plugin is a zip file at the root of this repo."
+    ]
   },
   {
     "repo": "Edamuza/archive-downloader",
     "description": "Scrape pages from web archives using URLs. Useful for restoring expired domain pages as a child theme.",
     "language": "CSS",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "This tool saves web pages so you can use them later, or bring them into WordPress. It grabs the page, pulls down images and fonts, and puts everything into a tidy folder.",
+      "You run it from your computer and it creates a new folder with your saved pages."
+    ]
   },
   {
     "repo": "joshfermano/liora-local",
     "description": "Offline AI companion for Filipino mothers. Gemma 4 runs on the iPhone; WHO-based rules say when to go to the hospital. Expo + llama.rn, works in airplane mode.",
     "language": "TypeScript",
     "license": null,
-    "stars": 1
+    "stars": 1,
+    "readme": [
+      "Know when to go, even with no signal.",
+      "An offline AI companion for Filipino mothers. She tells Liora how she feels in Tagalog, English or Taglish. Gemma 4 runs on her iPhone, and rules written from WHO guidance tell her whether to go to the hospital now, go to the health centre soon, or wait."
+    ]
   },
   {
     "repo": "Edamuza/policydesk-uriel",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "An HR and payroll policy assistant that answers only from company documents, cites every passage it uses, and measures its own accuracy.",
+      "Employees ask HR the same policy questions over and over: leave balances, payroll dates, overtime rules. HR staff spend time answering them, and a general chatbot can't be trusted to answer, because it may invent a policy that sounds right."
+    ]
   },
   {
     "repo": "Edamuza/processlens-uriel",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "Turn a small business's manual workflow into a step map, a peso cost, and an ROI report with an implementation plan.",
+      "Small businesses run core workflows by hand: billing, claims, dispatch, payroll. Owners rarely know how many staff hours these take each month or what that time costs. Without numbers, it is hard to decide what to automate first or whether the investment pays back."
+    ]
   },
   {
     "repo": "Edamuza/inboxpilot-uriel",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "An AI triage agent for a small business inbox. It classifies messages, drafts grounded replies and proposes actions. A human approves every one of them.",
+      "Small businesses such as cafés and caterers get customer messages from email, Facebook and website forms. Someone has to read each one, work out what it is, look up hours, prices or open slots, and write a reply."
+    ]
   },
   {
     "repo": "Edamuza/docusift-uriel",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "Turns Philippine invoices and official receipts into validated, structured data, with a human review step for anything uncertain.",
+      "Bookkeepers, accounting staff and small finance teams in the Philippines still key invoices and official receipts into spreadsheets by hand. It is slow, and typing errors in TINs, VAT amounts or totals surface later as mismatches during reconciliation or tax filing."
+    ]
   },
   {
     "repo": "Edamuza/modelbench-uriel",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0
+    "stars": 0,
+    "readme": [
+      "Compare LLMs on cost, speed and quality for one business task, and get a recommendation for the cheapest model that is good enough.",
+      "Teams that add an LLM to a business process have to pick a model, and they usually ask \"which one, and what will it cost?\" The answer is often a guess, based on the largest model or a public leaderboard rather than their own task."
+    ]
   }
 ]

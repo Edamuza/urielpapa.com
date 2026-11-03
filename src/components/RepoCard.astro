@@ -60,4 +60,21 @@ const dot = info.language ? LANGUAGE_COLORS[info.language] : undefined;
     }
   </div>
   <a href={info.url} rel="noopener" class="btn shrink-0"> View on GitHub ↗ </a>
+  {
+    info.readme && (
+      <div class="border-border basis-full border-t pt-3">
+        <p class="label-caps text-muted-foreground">From the README</p>
+        <div class="mt-1.5 space-y-2 text-[0.95rem]">
+          {info.readme.map(p => (
+            <p>{p}</p>
+          ))}
+        </div>
+        <p class="mt-2 text-[0.95rem]">
+          <a href={`${info.url}#readme`} rel="noopener">
+            Read the full README ↗
+          </a>
+        </p>
+      </div>
+    )
+  }
 </aside>
