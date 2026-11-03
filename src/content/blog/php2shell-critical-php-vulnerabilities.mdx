@@ -52,6 +52,10 @@ The PHP security team published a [security advisory on php.net](https://www.php
 * **CVE-2026-109618, "RCE via OOM corruption"** ([GHSA-w8hw-w9fx-j79w](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w)). When a request runs out of memory at the wrong moment, PHP can stop while internal request data is only half set up. The cleanup step may then treat that broken data as valid.
 * **CVE-2026-109619, "RCE via stale global state"** ([GHSA-6wmf-4rv5-p3rp](https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp)). Internal state from one request can survive after its memory is freed, and a later request on the same worker may use it.
 
+![A plush purple elePHPant, the PHP mascot](../../assets/images/content/php2shell-critical-php-vulnerabilities-1.jpg "A plush purple elePHPant, the PHP mascot")
+
+*The elePHPant is the mascot of PHP, the language behind WordPress and Laravel. Photo: [Atomic Taco](https://commons.wikimedia.org/wiki/File:Heroku_elePHPant_%2838171946464%29.jpg "Atomic Taco's photo on Wikimedia Commons"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
+
 The release came a day earlier than planned. The [PHP Foundation's write-up](https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/) explains that the CVE IDs, a video of a working proof of concept and some mitigation advice all leaked on October 20. The flaws were found by researchers at Calif, Wiz and OpenAI, among others.
 
 | Date (2026, UTC) | Event |
@@ -77,6 +81,10 @@ WordPress, Laravel and custom PHP apps are all exposed through the server they r
 ## How serious is it?
 
 Both flaws carry a CVSS v4.0 score of 9.2, which is critical. The PHP Foundation notes that the 10.0 score that leaked early was incorrect. The reporters demonstrated full remote code execution, and for the out-of-memory bug on mod_php it worked with default settings.
+
+![Racks of web servers in a data center](../../assets/images/content/php2shell-critical-php-vulnerabilities-2.jpg "Racks of web servers in a data center")
+
+*The two flaws can let an attacker run code on a web server without logging in. Photo: [Victor Grigas](https://commons.wikimedia.org/wiki/File:Wikimedia_Foundation_Servers-8055_35.jpg "Victor Grigas's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
 
 On exploitation, the sources are careful. [CISA's alert](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching) of October 21 says it "has not observed exploitation of these vulnerabilities as of the time of publication." The PHP security team said it found no functional exploits at release. But the leaked video sped up work on proofs of concept, and [Qualys's post](https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities), updated October 22, says Cloudflare has reported attack traffic aimed at these flaws. Attack traffic is not proof of a break-in, but it means people are trying.
 
@@ -106,6 +114,10 @@ For businesses with a custom Laravel app on a VPS or in Docker, the job is yours
 6. **Get off PHP 8.1 and older.** These versions get no official release. Move to PHP 8.3 or newer, test the site on a staging copy first, and plan the 8.2 upgrade before December 31, 2026.
 7. **Use stopgaps only if you truly cannot update today.** The php.net advisory lists settings such as `session.upload_progress.enabled=0` and lower `post_max_size`, but warns they "do not make an installation safe." CISA adds that systems you cannot patch should be taken offline.
 8. **Watch for signs of trouble.** CISA suggests watching for PHP worker processes that launch shells or download tools. If you see that, treat it as an incident, not a patching task.
+
+![PHP source code in a text editor](../../assets/images/content/php2shell-critical-php-vulnerabilities-3.jpg "PHP source code in a text editor")
+
+*Updating WordPress or Laravel does not fix this: the PHP version on the server has to change. Photo: [lmonk72](https://commons.wikimedia.org/wiki/File:Codigo_php.jpg "lmonk72's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 ## What can we learn from it?
 

@@ -47,6 +47,10 @@ I build chatbots on Meta's messaging platforms with n8n, so pricing rules like t
 
 Meta's official page on [pricing for the WhatsApp Business Platform](https://developers.facebook.com/documentation/business-messaging/whatsapp/pricing) says Meta "resumed charging, on a per-message basis, for messages that were previously free" on October 1, 2026. Two kinds of messages are affected. Service messages, which Meta defines as any non-template message not powered by its Business Agent, had been free since November 1, 2024. Utility templates sent inside an open customer service window had been free since July 1, 2025.
 
+![A chat app being used for customer service](../../assets/images/content/whatsapp-service-message-charges-1.jpg "A chat app being used for customer service")
+
+*Free-form replies inside the 24-hour window are no longer free past a monthly allowance. Image: [Tantonp](https://commons.wikimedia.org/wiki/File:AspaChat.png "Tantonp's image on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 The change applies to the WhatsApp Business Platform, the API that chatbots, CRMs and support tools connect to. The pricing page does not cover the WhatsApp Business App that many small shops run on a single phone.
 
 ## What changed, in plain words?
@@ -58,6 +62,10 @@ When a customer messages or calls your business, a 24-hour customer service wind
 * **Still free.** Messages your customers send you are never charged. A reply to someone who came from a Click to WhatsApp ad opens a free entry point window of up to 7 days, in which Meta does not charge for marketing, utility, authentication or service messages.
 * **Rates by market.** The price depends on the message category and the recipient's country calling code, and Meta says it changes prices only on January 1, April 1, July 1 or October 1.
 * **No payment method, no messages.** Meta asked businesses to add a payment method by September 30, 2026. Without one, it delivers service messages within the free tier and stops after that.
+
+![A pile of Southeast Asian coins](../../assets/images/content/whatsapp-service-message-charges-2.jpg "A pile of Southeast Asian coins")
+
+*Each business number gets 1,000 free service messages a month, then every message is charged. Photo: [Vyacheslav Argenberg](https://commons.wikimedia.org/wiki/File:Koh_Samui,_Coins,_Southeast_Asia,_Thailand.jpg "Vyacheslav Argenberg's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
 
 For developers, status webhooks now report the pricing type as `regular` instead of `free_customer_service` for messages beyond the free tier.
 

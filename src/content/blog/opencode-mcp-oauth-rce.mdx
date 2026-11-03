@@ -51,6 +51,10 @@ I use OpenCode as a terminal coding agent for trying open and local models on re
 
 Eilon Cohen, head of security research at Pillar Security, published [the full write-up](https://www.pillar.security/blog/open-and-shut-remote-code-execution-in-opencode-via-mcp-oauth) on the bug. MCP (Model Context Protocol) servers give an AI agent extra tools, and remote ones often ask you to sign in with OAuth. During that sign-in, the remote server tells OpenCode the address of its sign-in page.
 
+![A command-line app running in a terminal window](../../assets/images/content/opencode-mcp-oauth-rce-1.jpg "A command-line app running in a terminal window")
+
+*OpenCode is an AI coding agent that runs in the terminal. Photo: [Vitaly Zdanevich](https://commons.wikimedia.org/wiki/File:Evernote-cli-geeknote.png "Vitaly Zdanevich's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
+
 OpenCode passed that address straight to a helper that opens your browser, the `open` npm package, pinned at version 10.1.2. It did not check the address scheme or confirm that it matched the server you configured. On Windows, that version of `open` built a PowerShell command without escaping the address, so part of a crafted address could run as a command. Pillar classifies it as OS command injection (CWE-78).
 
 | Date (2026) | Event |
@@ -66,6 +70,10 @@ The [OpenCode 1.18.33 release notes](https://github.com/anomalyco/opencode/relea
 ## Who is affected?
 
 You are affected if you run OpenCode version 1.0.137 through 1.18.32 on Windows or in Windows Subsystem for Linux (WSL), and you have a remote MCP server configured that uses OAuth sign-in. Pillar says macOS and Linux are not affected.
+
+![Illustration of a username and password login form](../../assets/images/content/opencode-mcp-oauth-rce-2.jpg "Illustration of a username and password login form")
+
+*The flaw sat in OpenCode's MCP sign-in flow, which uses OAuth. Photo: [Santeri Viinamäki](https://commons.wikimedia.org/wiki/File:Username_and_password_20170626.jpg "Santeri Viinamäki's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 The MCP server does not have to be malicious on the day you add it. Pillar notes that a server compromised later, a hijacked registry entry, a typosquatted name or an expired domain could all lead to the same code path. A server you trusted in June can turn hostile in October without any change on your side.
 

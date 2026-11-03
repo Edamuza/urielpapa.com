@@ -50,6 +50,10 @@ I build with Node.js, TypeScript, Astro and Next.js, and this site's own lockfil
 
 The attacker pushed malicious files to the keyv repository and let the project's own GitHub Actions workflow publish them. According to [Datadog Security Labs](https://securitylabs.datadoghq.com/articles/npm-worm-compromises-popular-npm-packages/), the resulting keyv 6.0.0 had genuine SLSA provenance bound to the malicious commit. GitHub published the malware advisory [GHSA-3p9h-f68w-m6fx](https://github.com/advisories/GHSA-3p9h-f68w-m6fx) the same day, listing keyv 6.0.0 as affected with no patched version. Security vendors tie the payload to the Shai-Hulud worm family, and Datadog calls this wave ChainDrop.
 
+![A small red worm on a white wall](../../assets/images/content/keyv-npm-worm-supply-chain-attack-1.jpg "A small red worm on a white wall")
+
+*A worm is malware that spreads by itself; this one moved through npm packages. Photo: [Gannu03](https://commons.wikimedia.org/wiki/File:Earthworm_6.jpg "Gannu03's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 | Time (UTC) | Event | Source |
 |---|---|---|
 | Aug 4, 09:02 | Earliest recovered malicious commit adds a loader, a payload and a preinstall script to keyv | [Datadog](https://securitylabs.datadoghq.com/articles/npm-worm-compromises-popular-npm-packages/) |
@@ -81,6 +85,10 @@ Anyone whose install resolved one of the bad versions is affected. Importing the
 | @cacheable/node-cache | 3.1.2 | 3.1.1 |
 | ecto | 5.0.1 | 5.0.0 |
 
+![Container cranes at the port of Bremerhaven](../../assets/images/content/keyv-npm-worm-supply-chain-attack-2.jpg "Container cranes at the port of Bremerhaven")
+
+*A software supply chain works like a port: one tampered container reaches everyone downstream. Photo: [H. Zell](https://commons.wikimedia.org/wiki/File:Container-Terminal_Bremerhaven_02.jpg "H. Zell's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
+
 Snyk notes that flat-cache and file-entry-cache often arrive through development tools such as ESLint. The worm-spread packages are a much longer list, which [CSA says Socket.dev maintains](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/). As of October 22, 2026, keyv 6.0.0 is gone from the [npm version list for keyv](https://www.npmjs.com/package/keyv?activeTab=versions), and registry data shows the same for the other ten, but internal mirrors and caches can still hold copies.
 
 ## How serious is it?
@@ -107,6 +115,10 @@ The trust signals failed too. The keyv release had valid provenance and GitHub-v
 6. **Block install scripts by default** (standard practice). In pnpm, packages not listed in [`allowBuilds`](https://pnpm.io/settings/build) cannot run scripts; with npm, use `--ignore-scripts` where your build allows it.
 7. **If you publish packages, lock down publishing** (standard practice). npm's [trusted publishing docs](https://docs.npmjs.com/trusted-publishers) recommend requiring 2FA and disallowing tokens, and offer staged publishing that needs a 2FA approval per release.
 8. **Update Node.js while you are at it** (separate issue). The [October 21, 2026 security release](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) ships v22.23.4, v24.22.1 and v26.12.1, fixing four high-severity issues.
+
+![HTML and JavaScript code with highlighted functions](../../assets/images/content/keyv-npm-worm-supply-chain-attack-3.jpg "HTML and JavaScript code with highlighted functions")
+
+*Check your lockfiles for affected keyv versions and rotate any secrets on machines that installed them. Photo: [Martin Vorel](https://commons.wikimedia.org/wiki/File:Programming_code.jpg "Martin Vorel's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 Better Stack's general npm and pnpm hardening guide, not specific to keyv, shows how to disable install scripts and hold back brand-new versions:
 
