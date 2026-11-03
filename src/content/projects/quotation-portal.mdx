@@ -26,7 +26,7 @@ draft: false
 
 Quotations sent as email attachments made it hard to know which version a client saw and what they agreed to. Email is also a common channel for business fraud. In 2025, the FBI's Internet Crime Complaint Center logged 24,768 business email compromise complaints, with about $3.05 billion in losses. Philippine law also recognizes offers and acceptances made electronically. For VITE SEO Digital Advertising, I led and co-developed a private Next.js portal to replace those attachments. Clients sign in with a one-time code to view, accept or reject quotations and download them as PDFs. Access codes are hashed with Argon2, Redis rate limiting guards the sign-in, and audit logs record what happened to each quotation. The portal has 174 automated tests.
 
-## The problem I saw
+## The problem we saw
 
 Quotations need to reach the right person, stay private, and leave a clear record of what was accepted or rejected. Email attachments do none of that well.
 
@@ -56,7 +56,7 @@ Section 8 of the same law sets a bar for electronic signatures. An electronic si
 
 Philippine law also expects care with personal data. Section 20(a) of the [Data Privacy Act (RA 10173)](https://lawphil.net/statutes/repacts/ra2012/ra_10173_2012.html) requires personal information controllers to "implement reasonable and appropriate organizational, physical and technical measures." Those measures guard personal information against accidental or unlawful destruction, alteration and disclosure, and any other unlawful processing.
 
-## Why I chose this solution
+## Why we chose this solution
 
 The realistic alternatives were to keep emailing PDFs with more care, or to share files through a general link. Both leave the quote in one place and the client's decision in another, usually an email reply. A portal puts the current quote, the decision and the record in one system.
 
@@ -75,11 +75,11 @@ For stored secrets, the [OWASP Password Storage Cheat Sheet](https://cheatsheets
 
 For PDFs, [Playwright's Page documentation](https://playwright.dev/docs/api/class-page) says `page.pdf()` "generates a pdf of the page with print css media." So the PDF comes from the same page as the web view, with its print styles applied.
 
-The stack followed the same reasoning. Next.js let one codebase serve both the client and admin sides. Prisma on PostgreSQL gave typed queries and clean records for the audit log. Clerk handled admin sign-in so I didn't build it from scratch.
+The stack followed the same reasoning. Next.js let one codebase serve both the client and admin sides. Prisma on PostgreSQL gave typed queries and clean records for the audit log. Clerk handled admin sign-in so we didn't build it from scratch.
 
 Redis kept the one-time code endpoint safe from guessing. Playwright rendered PDFs from the same page the client sees, so the PDF always matches. A portal with a few clear screens also did not need a separate back end. In [Laravel vs Next.js](/blog/laravel-vs-nextjs), I explain why I would start a small portal with Next.js alone. I would add a separate back end only when the rules get heavy.
 
-## What I built
+## What we built
 
 - **Client side:** clients sign in with a one-time code, then view, accept or reject quotations and download them as PDFs.
 - **Admin side:** management of clients, quotes, access codes and sessions, with Clerk for admin sign-in.

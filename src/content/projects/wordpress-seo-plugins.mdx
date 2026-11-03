@@ -23,7 +23,7 @@ draft: false
 
 SEO work on WordPress repeats the same checks on every site, and at my agency a missed step kept going live. Public data shows these misses are common. A 2023 Ahrefs study of 1,002,165 domains found a missing or empty meta description on 72.9% of them. The same study found a page with only one followed internal link pointing to it on 66.2% of domains. At VITE SEO Digital Advertising, I led and co-developed 5 in-house WordPress plugins, about 11,700 lines of code, that built those checks into WordPress. The scanner ran before each client report, and the publish guard stopped posts missing an SEO title or schema.
 
-## The problem I saw
+## The problem we saw
 
 SEO work on WordPress repeats the same checks and the same publishing steps on every site. They cover headings, indexability, images, broken links, internal links, titles, descriptions and schema. Doing it by hand takes time, and a missed step goes live.
 
@@ -60,7 +60,7 @@ Public data shows that WordPress is where much of this work happens, and that th
 
 **The standard SEO plugins are already everywhere.** As of November 2026, the WordPress.org directory shows 10+ million active installations for [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) and 4+ million for [Rank Math SEO](https://wordpress.org/plugins/seo-by-rank-math/). Yoast lists SEO analysis, readability analysis and Schema.org structured data. Rank Math lists content analysis, schema markup and a built-in 404 monitor.
 
-## Why I chose this solution
+## Why we chose this solution
 
 Each design choice in the suite answers one part of that evidence.
 
@@ -68,7 +68,7 @@ Each design choice in the suite answers one part of that evidence.
 
 **Work alongside Yoast SEO and Rank Math.** The plugins worked alongside Yoast SEO and Rank Math instead of replacing them. With millions of active installations between them, both are standard tools. The suite added checks around tools that were already in place.
 
-**Turn the checklist into a rule.** Checklists didn't stop the repeat mistakes. The Ahrefs figures count a domain if an issue shows up on even one page. That matches what I saw: one missed page on one site, then another.
+**Turn the checklist into a rule.** Checklists didn't stop the repeat mistakes. The Ahrefs figures count a domain if an issue shows up on even one page. That matches what we saw: one missed page on one site, then another.
 
 A publish guard checks every post at the moment it goes out, so it doesn't depend on someone remembering. WordPress is designed for checks like this. Its handbook describes [hooks](https://developer.wordpress.org/plugins/hooks/) as "a way for one piece of code to interact/modify another piece of code at specific, pre-defined spots."
 
@@ -91,7 +91,7 @@ The realistic alternatives each cover part of the job:
 
 Site audit tools are strong at finding problems across a live site. The suite had a narrower job: stop known mistakes before they shipped, inside the tool the team already used.
 
-## What I built
+## What we built
 
 With the agency's in-house team, I led and co-developed five plugins, about 11,700 lines of code in total:
 

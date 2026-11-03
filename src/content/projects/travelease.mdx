@@ -34,7 +34,7 @@ draft: false
 
 Planning a Tagaytay trip as a group usually means a chat thread, a map app and a few review sites. Public data shows how much of that work falls on travelers. In 2022, the PSA found that 97.9% of Filipino domestic travelers planned their own trips. Tagaytay drew more than 6.5 million same-day visitors in the last quarter of 2023 alone. For our capstone thesis, I led development of TravelEase, a tourism portal for Tagaytay. A group plans one trip together, finds local businesses on an interactive map, and reads reviews and blogs. Business listings go live only after local government approval. TravelEase has five user roles and 411 automated tests, and it is live at travelease.app.
 
-## The problem I saw
+## The problem we saw
 
 Travelers heading to Tagaytay need to plan together, find local businesses and know what to expect on the road. Local businesses need a trusted place to be listed, and the local government needs a say in which registrations go live.
 
@@ -68,7 +68,7 @@ Public data shows that domestic travel is large, that Tagaytay is one of its bus
 
 **Tourism businesses already need a government check.** Under the Tourism Act of 2009 rules, local governments may permit primary tourism enterprises to operate only after DOT accreditation. The [DILG reminded local governments of this rule](https://calabarzon.dilg.gov.ph/dilg-to-lgus-issue-permit-to-operate-to-tourism-enterprises-with-dot-accreditation-only/) in January 2024. Those enterprises include hotels, resorts, homestays and tour operators. DILG Secretary Benjamin Abalos Jr. said accreditation protects tourists from "unreliable transactions from sketchy service providers." The [DOT's accreditation page](https://tourism.gov.ph/accreditations/online) describes accreditation as official recognition that an enterprise meets minimum standards.
 
-## Why I chose this solution
+## Why we chose this solution
 
 Each part of TravelEase lines up with one of those findings. The table maps what a group needs to the tool it usually uses, and to the part of TravelEase that covers it.
 
@@ -91,7 +91,7 @@ Each part of TravelEase lines up with one of those findings. The table maps what
 
 **Both sides, not one.** A directory alone would help businesses but leave the group in its chat thread. A planner alone would leave travelers without trusted listings. The problem had both sides, so TravelEase covers both, across five user roles for travelers, businesses and administrators.
 
-## What I built
+## What we built
 
 - **Collaborative travel plans** with admin, editor and viewer roles, so a group can plan one trip together.
 - **A business directory** in 8 categories, with local government approval of business registrations.
@@ -109,7 +109,7 @@ TravelEase connects three kinds of users, travelers, businesses and administrato
 - **Deciding:** each place has its own reviews and travel blogs.
 - **Staying fast:** Redis caches busy pages and rate-limits requests.
 
-## How I built and tested it
+## How we built and tested it
 
 TravelEase was our capstone thesis, built from October 2025 to April 2026. I was the development lead. The project has 316 commits, and about two-thirds of them are mine. It has 411 automated tests in Vitest.
 

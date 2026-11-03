@@ -23,7 +23,7 @@ draft: false
 
 Pregnant women are not always sure whether a symptom needs care, and in much of the Philippines the answer cannot depend on a signal. Public data shows the stakes. In 2022, the Philippine Statistics Authority registered 2,008 maternal deaths, and in 2024 only 48.8% of households had internet at home. The region with the lowest prenatal care coverage also has one of the lowest internet rates. At the AppBuildersPH Hackathon 2026, I co-developed Tell Liora, an offline mobile app that pairs an on-device Gemma model with 8 WHO decision tables. It helps a pregnant woman decide when to seek care. It does not diagnose. The result was a working offline demo, an iOS build, a research brief, pitch materials and a 73-second product video.
 
-## The problem I saw
+## The problem we saw
 
 Deciding when a symptom during pregnancy needs care is stressful. A woman may not know whether it can wait for her next checkup or needs a health worker today. And help is not always a call or a connection away.
 
@@ -54,7 +54,7 @@ Public data shows the problem is real and serious, and that care and connectivit
 
 The pattern is the point. In the region where women are least likely to get prenatal care, households are also among the least likely to have internet.
 
-## Why I chose this solution
+## Why we chose this solution
 
 Each part of Tell Liora answers one piece of that evidence.
 
@@ -70,7 +70,7 @@ In WHO's [antenatal care implementation guide](https://build.fhir.org/ig/WorldHe
 
 The realistic alternatives each miss one requirement. A cloud chatbot can follow guidance but stops working without a signal. Printed guidance works offline but cannot respond to a question. A hotline needs both a signal and someone on the other end. Pairing an on-device model with fixed WHO tables was our way to meet both requirements at once.
 
-## What I built
+## What we built
 
 - **An offline mobile app** built with Expo and React Native.
 - **An on-device Gemma model** that runs on the phone, so the app does not need an internet connection.
@@ -88,7 +88,7 @@ The stack:
 - **Model:** Gemma, on device.
 - **Video:** Remotion.
 
-## How I built and tested it
+## How we built and tested it
 
 It was a long, fast build. We built the app in Expo, and I prepared the iOS build in Xcode. That iOS work is why the iOS changes in [Expo SDK 58](/news/expo-sdk-58) are the ones I read first.
 

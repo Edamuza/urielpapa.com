@@ -31,7 +31,7 @@ draft: false
 
 VITE SEO Digital Advertising grew to a team of up to 22, with its people, leads, projects and books in separate places. We paid per-seat fees for HR, CRM and project tools, and computed payroll by hand every cutoff. At list prices as of November 2026, entry plans for three comparable tools would cost an estimated US$550 plus ₱2,178 monthly for 22 seats. Philippine payroll must also apply five separate rules, from SSS to 13th-month pay. With the in-house team, I led and co-developed one ERP with four modules behind one login. The first MVP shipped in under 2 weeks. The full platform reached 115 pages, 144 data models and 5,241 automated tests in under 3 months.
 
-## The problem I saw
+## The problem we saw
 
 VITE SEO Digital Advertising, [the agency I founded and have since closed](/blog/closing-my-agency), grew to a team of up to 22. The team spanned sales, development, project management, marketing and SEO. HR, sales, project work and accounting each needed their own records. Some of them had to connect, such as payroll posting into the accounting books.
 
@@ -69,7 +69,7 @@ These rules also move. SSS raised its rate from 14% to 15% in January 2025. Pag-
 
 Payroll errors are common and costly. In a [2022 Ernst & Young survey announced by the payroll vendor Paycom](https://www.paycom.com/about/press-room/ey-survey-payroll-errors-average-291-each-impacting-the-economy/), one in five US payrolls had errors, averaging $291 each. It covered 508 people at US companies with 250 to 10,000 employees. For a small Philippine team, it is a signal, not a benchmark.
 
-## Why I chose this solution
+## Why we chose this solution
 
 We had three realistic options: keep the spreadsheets and separate tools, buy a full set of per-seat tools, or build one system. The evidence above shows the weak spot in each of the first two.
 
@@ -87,7 +87,7 @@ Building one system meant we had to build, test and maintain it ourselves. In re
 
 The stack followed the same logic, as I explain in [Laravel vs Next.js](/blog/laravel-vs-nextjs). Laravel handled the business rules, queues and real-time events, and it's strong for data-heavy systems with many models. Next.js gave all 115 pages one consistent interface. MySQL fit transactional records like payroll and journals, and keeping the API separate let back-end and front-end work move in parallel.
 
-## What I built
+## What we built
 
 One system with role-based access and four modules.
 
@@ -121,7 +121,7 @@ The Laravel API holds the data, the business rules and the permissions. Next.js 
 
 Attendance, leave, overtime and payroll all sit in the HRIS. At each cutoff, payroll computes the contributions, tax and 13th-month pay, issues payslips and posts to the accounting books. Those books feed the financial and BIR VAT reports. A queue worker and a scheduler run background jobs, and Laravel Reverb carries the real-time events behind the project module's live updates.
 
-## How I built and tested it
+## How we built and tested it
 
 The first MVP shipped in under 2 weeks. The team then grew it into the full platform in under 3 months, from July to October 2026.
 

@@ -23,7 +23,7 @@ draft: false
 
 Rebuilding an old website often starts with pages that only survive as Wayback Machine snapshots. Public data shows how often the original disappears. Pew Research Center found in 2024 that 38% of webpages that existed in 2013 were no longer accessible a decade later. The Wayback Machine passed one trillion archived web pages in October 2025. I led and co-developed Archive Downloader, a multi-threaded Python command-line tool that saves web pages and Wayback snapshots with their images and fonts. It writes them in a WordPress theme layout and ships with a block child theme base. We used it on the agency's own site rebuilds.
 
-## The problem I saw
+## The problem we saw
 
 When a site needs rebuilding, the old pages, their images and their fonts are the starting point. Sometimes the only copy left is on the Wayback Machine, and saving it page by page by hand is slow.
 
@@ -55,7 +55,7 @@ Archived copies are already used to repair the web. The same announcement says t
 
 **WordPress is the usual destination.** As of November 2, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 39.5% of all websites. That is a 58.2% share among sites that use a content management system W3Techs tracks.
 
-## Why I chose this solution
+## Why we chose this solution
 
 Each part of the tool answers one part of that evidence.
 
@@ -82,7 +82,7 @@ The realistic alternatives each solve part of the job:
 
 A general mirror is good for keeping a copy. The rebuild needed one more step: files laid out for WordPress.
 
-## What I built
+## What we built
 
 - **A multi-threaded command-line tool** that saves web pages, including Wayback Machine snapshots.
 - **Assets included:** each page comes down with its images and fonts.
