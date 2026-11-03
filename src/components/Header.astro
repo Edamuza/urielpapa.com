@@ -43,7 +43,7 @@ const isActive = (href: string) =>
         {SITE.name}
       </a>
 
-      <nav aria-label="Main" class="hidden md:block">
+      <nav aria-label="Main" class="hidden lg:block">
         <ul class="flex items-center gap-x-1 lg:gap-x-2">
           {
             NAV.map(item => (
@@ -101,7 +101,7 @@ const isActive = (href: string) =>
         </button>
 
         <!-- Mobile menu: a native <details> so it works without JavaScript -->
-        <details class="group md:hidden" id="mobile-menu">
+        <details class="group lg:hidden" id="mobile-menu">
           <summary
             class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg [&::-webkit-details-marker]:hidden"
             aria-label="Menu"
@@ -162,9 +162,9 @@ const isActive = (href: string) =>
 
 <style is:global>
   /* Lock page scroll while the mobile menu is open; the panel scrolls itself.
-     Pure CSS, so it works without JavaScript. Only below the md breakpoint, where
+     Pure CSS, so it works without JavaScript. Only below the lg breakpoint, where
      the menu is shown: a menu left open when the window widens must not lock it. */
-  @media (width < 48rem) {
+  @media (width < 64rem) {
     html:has(#mobile-menu[open]) {
       overflow: hidden;
     }

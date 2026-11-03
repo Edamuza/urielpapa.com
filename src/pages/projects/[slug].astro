@@ -9,10 +9,13 @@ import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import PostCard from "@/components/PostCard.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
+import RepoCard from "@/components/RepoCard.astro";
 import { mdxComponents } from "@/components/mdx";
 import { SHOW_DRAFTS } from "@/config";
 import {
+  formatDate,
   getProjects,
+  isoDate,
   postUrl,
   projectUrl,
   type Project,
@@ -59,14 +62,19 @@ const schema = [
       operatingSystem: "Web",
     }),
     keywords: stack.map(s => s.data.name).join(", "),
+    ...(data.repo && { sameAs: `https://github.com/${data.repo}` }),
+    ...(data.updated && { dateModified: data.updated.toISOString() }),
   },
   breadcrumbNode(crumbs),
 ];
 ---
 
 <Layout
-  title={data.title}
+  title={data.seoTitle || data.title}
   description={data.description}
+  ogImage={`/og/projects/${project.id}.png`}
+  ogImageAlt={`${data.title}: project case study by Uriel Papa`}
+  modifiedTime={data.updated}
   schema={schema}
   draft={data.draft}
 >
@@ -91,6 +99,18 @@ const schema = [
         )
       }
       <dt class="font-semibold">Status</dt><dd>{data.status}</dd>
+      {
+        data.updated && (
+          <>
+            <dt class="font-semibold">Updated</dt>
+            <dd>
+              <time datetime={isoDate(data.updated)}>
+                {formatDate(data.updated)}
+              </time>
+            </dd>
+          </>
+        )
+      }
       {
         data.liveUrl && (
           <>
@@ -121,6 +141,8 @@ const schema = [
         )
       }
     </dl>
+
+    {data.repo && <RepoCard repo={data.repo} />}
 
     <div class="app-prose mt-8"><Content components={mdxComponents} /></div>
 

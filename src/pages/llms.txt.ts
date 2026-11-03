@@ -4,8 +4,10 @@ import {
   getAllBlogEntries,
   getHubs,
   getNotes,
+  getProjects,
   noteUrl,
   postUrl,
+  projectUrl,
 } from "@/utils/content";
 
 /** Generated site summary for AI tools (schema-and-technical.md §3). Drafts are never listed. */
@@ -15,6 +17,7 @@ export const GET: APIRoute = async () => {
     .filter(p => !p.data.draft)
     .slice(0, 20);
   const notes = (await getNotes()).filter(n => !n.data.draft).slice(0, 10);
+  const projects = (await getProjects()).filter(p => !p.data.draft);
   const url = (p: string) => new URL(p, SITE.url).href;
 
   const lines = [
@@ -30,6 +33,12 @@ export const GET: APIRoute = async () => {
     `- [Projects](${url("/projects")}): systems built, described as case studies`,
     `- [Contact](${url("/contact")}): ${SITE.email}`,
     ...SOCIALS.map(s => `- [${s.label}](${s.url})`),
+    "",
+    "## Projects",
+    "",
+    ...projects.map(
+      p => `- [${p.data.title}](${url(projectUrl(p))}): ${p.data.description}`
+    ),
     "",
     "## Topics",
     "",

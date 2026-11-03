@@ -123,23 +123,42 @@ const projects = defineCollection({
     pattern: "**/[^_]*.{md,mdx}",
     base: "./src/content/projects",
   }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().min(80).max(170),
-    summary: z.string(),
-    outcome: z.string(),
-    period: z.string(),
-    year: z.number(),
-    role: z.string(),
-    team: optionalText,
-    status: z.string(),
-    kind: z.enum(["SoftwareApplication", "CreativeWork"]),
-    liveUrl: optionalUrl,
-    stack: z.array(reference("stack")).default([]),
-    hubs: z.array(z.enum(HUB_IDS)).default([]),
-    order: z.number().default(100),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      // The <title> for search results, when the name alone says too little.
+      // 47 characters or fewer keeps " | Uriel Papa" within 60.
+      seoTitle: z.string().max(60).optional(),
+      description: z.string().min(80).max(170),
+      summary: z.string(),
+      outcome: z.string(),
+      // Last meaningful change to the case study (sitemap lastmod, dateModified).
+      updated: optionalDate,
+      period: z.string(),
+      year: z.number(),
+      role: z.string(),
+      team: optionalText,
+      status: z.string(),
+      kind: z.enum(["SoftwareApplication", "CreativeWork"]),
+      liveUrl: optionalUrl,
+      stack: z.array(reference("stack")).default([]),
+      hubs: z.array(z.enum(HUB_IDS)).default([]),
+      order: z.number().default(100),
+      draft: z.boolean().default(false),
+      // GitHub repository shown as a card on the project page, as "owner/name".
+      repo: z
+        .string()
+        .regex(
+          /^[\w.-]+\/[\w.-]+$/,
+          'Use "owner/name", e.g. Edamuza/Travel_Ease'
+        )
+        .or(z.literal(""))
+        .nullish()
+        .transform(v => (v ? v : undefined)),
+      // Featured image for project cards, with its alt text.
+      cover: image().optional(),
+      coverAlt: z.string().optional(),
+    }),
 });
 
 const hubs = defineCollection({

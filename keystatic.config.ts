@@ -286,6 +286,8 @@ export default config({
       entryLayout: "content",
       schema: {
         title: fields.slug({ name: { label: "Project name" } }),
+        seoTitle: fields.text({ label: "SEO title", description: "Name plus what it is, e.g. 'TravelEase: Tagaytay Trip Planning Portal'. 47 characters or fewer keeps ' | Uriel Papa'.", validation: { length: { max: 60 } } }),
+        updated: fields.date({ label: "Updated", description: "Only for material changes to the case study." }),
         description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 80, max: 170 } } }),
         summary: fields.text({ label: "Summary", description: "Problem, what was built, result.", multiline: true }),
         outcome: fields.text({ label: "One-line outcome", description: "Shown in the projects list." }),
@@ -307,6 +309,9 @@ export default config({
         hubs: fields.multiselect({ label: "Related topic hubs", options: hubOptions }),
         order: fields.integer({ label: "Order in list", defaultValue: 100 }),
         draft: fields.checkbox({ label: "Draft", defaultValue: false }),
+        repo: fields.text({ label: "GitHub repository", description: 'Shown as a card on the project page, as "owner/name", e.g. Edamuza/Travel_Ease.' }),
+        cover: fields.image({ label: "Featured image", description: "Shown on the project cards.", directory: "src/assets/images/content", publicPath: "../../assets/images/content/" }),
+        coverAlt: fields.text({ label: "Featured image alt text", description: "Required when there is a featured image." }),
         body: body("Case study"),
       },
     }),
