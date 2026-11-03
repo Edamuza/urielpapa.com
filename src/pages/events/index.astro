@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import PageIntro from "@/components/PageIntro.astro";
 import { hubName } from "@/data/hubs";
 import events from "@/data/events.json";
+import CertificationList from "@/components/CertificationList.astro";
 import { getEventNotes, postUrl } from "@/utils/content";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 
@@ -130,6 +131,11 @@ const schema = [
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section class="mt-12" aria-labelledby="cert-h">
+      <h2 id="cert-h" class="h2 mb-4">Certifications</h2>
+      <CertificationList />
     </section>
 
     <p class="max-w-read mt-10">
