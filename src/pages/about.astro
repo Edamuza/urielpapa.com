@@ -7,6 +7,7 @@ import WorkWithMe from "@/components/WorkWithMe.astro";
 import { SITE, SOCIALS } from "@/config";
 import { HUBS } from "@/data/hubs";
 import events from "@/data/events.json";
+import CertificationList from "@/components/CertificationList.astro";
 import { getHubs } from "@/utils/content";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
@@ -129,6 +130,11 @@ const schema = [
           ))
         }
       </ul>
+    </section>
+
+    <section class="mt-10" aria-labelledby="cert-h">
+      <h2 id="cert-h" class="h2 mb-4">Certifications</h2>
+      <CertificationList />
     </section>
 
     <section class="mt-10" aria-labelledby="lang-h">
