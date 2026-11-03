@@ -17,6 +17,8 @@ hubs:
   - tech-stacks
 order: 7
 draft: false
+cover: ../../assets/images/content/archive-downloader-run.png
+coverAlt: "Terminal running Archive Downloader on three pages of a fictional demo site with 8 workers"
 ---
 
 ## Abstract
@@ -88,6 +90,14 @@ A general mirror is good for keeping a copy. The rebuild needed one more step: f
 - **Assets included:** each page comes down with its images and fonts.
 - **A WordPress theme layout** for the saved files.
 - **A WordPress block child theme base** packaged with the tool, for bringing the saved pages into WordPress.
+
+The screenshots below come from a real run of the tool in November 2026. To keep them free of anyone's real site, I ran it against a small fictional bakery site served on localhost.
+
+![Terminal running Archive Downloader on three pages of a fictional demo site with 8 workers, logging each saved image and font and the WordPress folders it wrote](../../assets/images/content/archive-downloader-run.png)
+
+![Terminal listing the saved WordPress layout: three page templates, images under wp-content/uploads by year and month, a font file, and the first line of the manifest log](../../assets/images/content/archive-downloader-output.png)
+
+![The saved home page of the fictional demo site opened from the archive on localhost, with its image and font loading from the saved WordPress folders](../../assets/images/content/archive-downloader-saved-page.png)
 
 The stack:
 
