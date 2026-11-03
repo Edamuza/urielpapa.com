@@ -106,7 +106,7 @@ export const NAV = [
   { href: "/news", label: "News" },
   { href: "/topics", label: "Topics" },
   { href: "/events", label: "Events" },
-  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 /** Show drafts with a "Draft" banner (preview builds only, never production). */
