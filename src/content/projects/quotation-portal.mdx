@@ -20,6 +20,8 @@ hubs:
   - tech-stacks
 order: 4
 draft: false
+cover: ../../assets/images/content/quotation-portal-quote-accept-reject.png
+coverAlt: "A client's quotation in the Client Quotation Portal with line items, a peso total, and Accept and Reject buttons"
 ---
 
 ## Abstract
@@ -85,6 +87,16 @@ Redis kept the one-time code endpoint safe from guessing. Playwright rendered PD
 - **Admin side:** management of clients, quotes, access codes and sessions, with Clerk for admin sign-in.
 - **Security:** access codes hashed with Argon2, Redis rate limiting, and audit logs.
 - **PDFs:** quotations rendered to PDF with Playwright.
+
+The screenshots below come from the portal running on localhost in November 2026, with fictional clients and quotes loaded through its own import script. The one-time code was issued by the admin side and signed in through the normal client screen.
+
+![Client Quotation Portal sign-in screen with an 8-character one-time access code entered and the Access Portal button](../../assets/images/content/quotation-portal-sign-in-code.png)
+
+![A client's quotation for the fictional Bluebird Bakery Co., marked Awaiting Action, with two line items, a ₱222,500 total, and Download PDF, Reject Quote and Accept Quote buttons](../../assets/images/content/quotation-portal-quote-accept-reject.png)
+
+![Admin dashboard with totals for clients, quotes and active sessions, above a searchable quotes table with sent, viewed and accepted quotes for fictional clients](../../assets/images/content/quotation-portal-admin-dashboard.png)
+
+![One-page quotation PDF for the fictional Bluebird Bakery Co., rendered by the portal, with line items, a ₱222,500.00 total, the valid-until date and payment notes](../../assets/images/content/quotation-portal-pdf.png)
 
 ## How it works
 
