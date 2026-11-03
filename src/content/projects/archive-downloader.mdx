@@ -1,5 +1,7 @@
 ---
 title: Archive Downloader
+seoTitle: "Archive Downloader: Wayback Pages to WordPress"
+updated: 2026-11-03
 description: A multi-threaded Python tool that saves web pages, including Wayback Machine snapshots, with their images and fonts, ready to rebuild in WordPress.
 summary: >-
   Rebuilding an old website often starts with pages that only survive as Wayback Machine snapshots. Pew Research Center found in 2024 that 38% of webpages that existed in 2013 were no longer accessible a decade later. I led and co-developed Archive Downloader, a multi-threaded Python command-line tool that saves web pages, including Wayback Machine snapshots, with their images and fonts in a WordPress theme layout. It ships with a WordPress block child theme base for bringing the saved pages into WordPress.
@@ -22,11 +24,11 @@ coverAlt: "Terminal running Archive Downloader on three pages of a fictional dem
 repo: Edamuza/archive-downloader
 ---
 
-## Abstract
+## Abstract: Archive Downloader in brief
 
 Rebuilding an old website often starts with pages that only survive as Wayback Machine snapshots. Public data shows how often the original disappears. Pew Research Center found in 2024 that 38% of webpages that existed in 2013 were no longer accessible a decade later. The Wayback Machine passed one trillion archived web pages in October 2025. I led and co-developed Archive Downloader, a multi-threaded Python command-line tool that saves web pages and Wayback snapshots with their images and fonts. It writes them in a WordPress theme layout and ships with a block child theme base. We used it on the agency's own site rebuilds.
 
-## The problem we saw
+## The problem we saw: rebuilding sites from Wayback snapshots
 
 When a site needs rebuilding, the old pages, their images and their fonts are the starting point. Sometimes the only copy left is on the Wayback Machine, and saving it page by page by hand is slow.
 
@@ -36,9 +38,11 @@ I have built WordPress sites for clients since 2023. Before I founded [VITE SEO 
 
 A page is more than its HTML. Each one loads its images and fonts as separate files, so saving the HTML alone leaves a page without them. On a site with many pages, that means many separate downloads for every rebuild.
 
-## What the data says
+## What the data says about lost pages and WordPress rebuilds
 
 Public data shows three things. Old pages disappear often, the Wayback Machine keeps copies at a very large scale, and WordPress is the usual place to rebuild.
+
+### How often web pages disappear
 
 **Web pages disappear.** Pew Research Center's 2024 report [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/) followed a random sample of just under 1 million webpages from Common Crawl. That is about 90,000 pages for each year from 2013 to 2023. It counted a page as inaccessible only if it returned one of nine error codes. Pew calls this "the most conservative estimate possible." Pages that still exist but whose content has changed were left out. As of October 2023, the results by year were stark:
 
@@ -50,23 +54,31 @@ Public data shows three things. Old pages disappear often, the Wayback Machine k
 
 **Broken links are common.** The same report found that 23% of the news webpages it sampled contained at least one broken link. The figure was 21% for government webpages. On Wikipedia, 54% of pages had at least one reference link pointing to a page that no longer exists.
 
+### The Wayback Machine archive and its APIs
+
 **The Wayback Machine keeps copies at scale.** The Internet Archive's [one-trillion-page announcement](https://blog.archive.org/2025/10/31/one-trillion-web-pages-archived-internet-archive-celebrates-a-civilization-scale-milestone/) says the Wayback Machine has been saving the web since 1996. It passed one trillion archived web pages in October 2025.
 
 Archived copies are already used to repair the web. The same announcement says that, with the Wikimedia Foundation, the Archive has identified and fixed more than 28 million broken links from Wikipedia.
 
 **The archive is built for programs, not only people.** The Internet Archive documents [Wayback Machine APIs](https://archive.org/help/wayback_api.php) for this kind of work. The Availability API tests whether a URL is archived and returns the closest snapshot. The CDX Server API is for "complex querying, filtering and analysis of Wayback capture data." Its [documentation on GitHub](https://github.com/internetarchive/wayback/blob/master/wayback-cdx-server/README.md) shows how to ask for the captures under a path, such as one section of a site.
 
+### WordPress as the usual rebuild destination
+
 **WordPress is the usual destination.** As of November 2, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 39.5% of all websites. That is a 58.2% share among sites that use a content management system W3Techs tracks.
 
-## Why we chose this solution
+## Why we built Archive Downloader for WordPress rebuilds
 
-Each part of the tool answers one part of that evidence.
+Each part of Archive Downloader answers one part of that evidence.
+
+### Saving Wayback snapshots with Python threads
 
 **Save from the archive.** When the live site is gone, a snapshot may be the only source for the rebuild. That was the case on the client rebuild that started this tool. Pew's numbers show it is not rare: by October 2023, 38% of pages from 2013 were gone.
 
 **Automate instead of saving by hand.** Saving every page and image by hand took far too long on that client rebuild. A tool repeats the same steps the same way on every page, and it doesn't skip a file because someone got tired.
 
 **Python, with threads.** Python is quick to write for scraping and file handling, and threads made it practical to save many pages at once. Downloading pages is mostly waiting on the network. The [Python threading documentation](https://docs.python.org/3/library/threading.html) notes that "threading is still an appropriate model if you want to run multiple I/O-bound tasks simultaneously."
+
+### Keeping assets and shaping output for WordPress
 
 **Keep images and fonts with each page.** A saved page is only useful if it still looks like the original. The [GNU Wget manual](https://www.gnu.org/software/wget/manual/wget.html) describes the same need. Its page requisites option downloads "all the files that are necessary to properly display a given HTML page." So each page comes down with its images and fonts.
 
@@ -75,7 +87,9 @@ Each part of the tool answers one part of that evidence.
 - [Block themes](https://developer.wordpress.org/themes/getting-started/what-is-a-theme/) "are built entirely out of blocks," and "both creators and users can edit the templates in the Site Editor."
 - [Child themes](https://developer.wordpress.org/themes/advanced-topics/child-themes/) "allow parent themes to be updated without losing your modifications." A `style.css` file "is the one absolutely necessary file for a child theme to exist," so a base can stay small and be reused.
 
-The realistic alternatives each solve part of the job:
+### Archive Downloader compared with the alternatives
+
+The realistic alternatives to Archive Downloader each solve part of the job:
 
 | Option | What you get | Fit for a WordPress rebuild |
 | --- | --- | --- |
@@ -85,7 +99,7 @@ The realistic alternatives each solve part of the job:
 
 A general mirror is good for keeping a copy. The rebuild needed one more step: files laid out for WordPress.
 
-## What we built
+## What we built: the Archive Downloader features
 
 - **A multi-threaded command-line tool** that saves web pages, including Wayback Machine snapshots.
 - **Assets included:** each page comes down with its images and fonts.
@@ -107,13 +121,13 @@ The stack:
 
 Like the [WordPress SEO Plugin Suite](/projects/wordpress-seo-plugins), it was a tool I led and co-developed for the agency's WordPress work. I write more about tools like this under [Automation](/topics/automation).
 
-## Results
+## Results: what Archive Downloader delivered
 
 - Pages and snapshots saved with their images and fonts, in a layout ready for a WordPress rebuild.
 
 - Used on the agency's own site rebuilds. I haven't kept an exact count of the pages it has saved.
 
-## Limitations
+## Limitations of Archive Downloader
 
 **No counts or timings.** There is no record of how many pages or files the tool saved. There is also no timing of a rebuild with the tool against saving by hand. The benefit is described, not measured.
 

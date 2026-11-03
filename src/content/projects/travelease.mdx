@@ -1,5 +1,7 @@
 ---
 title: TravelEase
+seoTitle: "TravelEase: Tagaytay Trip Planning Portal"
+updated: 2026-11-03
 description: A tourism portal for Tagaytay where travelers plan trips together, find local businesses on a map and read reviews. My capstone thesis, live at travelease.app.
 summary: >-
   Planning a trip to Tagaytay as a group means juggling chats, maps and review sites, and in 2022 the PSA found that 97.9% of Filipino domestic travelers planned their own trips. For our capstone thesis, I led development of TravelEase, a tourism portal where travelers plan trips together, find local businesses on an interactive map, and read reviews and travel blogs, with local government approval of business registrations. I contributed about two-thirds of the project's 316 commits, and it shipped with 411 automated tests and is live at travelease.app.
@@ -33,11 +35,11 @@ coverAlt: "TravelEase map of Tagaytay with a search for parks, matching local bu
 repo: Edamuza/Travel_Ease
 ---
 
-## Abstract
+## Abstract: TravelEase in brief
 
 Planning a Tagaytay trip as a group usually means a chat thread, a map app and a few review sites. Public data shows how much of that work falls on travelers. In 2022, the PSA found that 97.9% of Filipino domestic travelers planned their own trips. Tagaytay drew more than 6.5 million same-day visitors in the last quarter of 2023 alone. For our capstone thesis, I led development of TravelEase, a tourism portal for Tagaytay. A group plans one trip together, finds local businesses on an interactive map, and reads reviews and blogs. Business listings go live only after local government approval. TravelEase has five user roles and 411 automated tests, and it is live at travelease.app.
 
-## The problem we saw
+## The problem we saw: planning group trips to Tagaytay
 
 Travelers heading to Tagaytay need to plan together, find local businesses and know what to expect on the road. Local businesses need a trusted place to be listed, and the local government needs a say in which registrations go live.
 
@@ -47,7 +49,7 @@ Each of those tools holds one part of the trip. The chat holds the plan, the map
 
 Businesses face the other side of the same gap. A listing only helps if travelers can trust it, and a check by the local government gives them a reason to.
 
-## What the data says
+## What the data says about how Filipinos plan trips
 
 Public data shows that domestic travel is large, that Tagaytay is one of its busiest stops, and that the planning falls on travelers themselves.
 
@@ -59,6 +61,8 @@ Public data shows that domestic travel is large, that Tagaytay is one of its bus
 | Overnight travelers in CALABARZON, 2024 | 10,863,098, of whom 10,680,294 were local | DOT, via Manila Bulletin |
 | Same-day visitors to Tagaytay, October to December 2023 | More than 6.5 million | Cavite provincial tourism office, via the Inquirer |
 
+### How Filipinos travel and where Tagaytay fits
+
 **Most Filipinos who travel plan the trip themselves.** In the [PSA's 2022 Household Survey on Domestic Visitors](https://psa.gov.ph/system/files/sdsd/2022%20HSDV%20Press%20Release_signed.pdf), 39.1% of Filipinos 15 and over traveled within the country from January to September 2022. That was 30.89 million domestic travelers. Pleasure or vacation was the top reason for travel, at 39.7%. And 97.9% of domestic travelers planned their own trips, while only 2.1% chose a package tour.
 
 **Domestic tourism is large and still growing.** The PSA's tourism accounts, [reported by Manila Bulletin](https://mb.com.ph/2026/05/28/tourism-contributed-81-to-philippine-economy-in-2025psa), put domestic tourism spending at ₱3.26 trillion in 2025. That was up 3% from ₱3.16 trillion in 2024.
@@ -67,11 +71,15 @@ Public data shows that domestic travel is large, that Tagaytay is one of its bus
 
 **Tagaytay is mostly a day trip.** Tagaytay had more than 6.5 million same-day visitors from October to December 2023, according to [the Inquirer's report on Cavite's tourism figures](https://newsinfo.inquirer.net/1936826/tagaytay-is-most-visited-tourist-spot-in-cavite-in-q4-2023). Around 268,000 stayed overnight in the same period. The data came from the Cavite provincial tourism office, and it made Tagaytay the most visited place in Cavite that quarter.
 
+### Why group trip planning is hard
+
 **Group planning is hard to keep in one place.** In a [Samsung-commissioned UK survey](https://news.samsung.com/uk/unsung-holiday-heroes-new-research-spotlights-the-person-who-turns-group-holiday-ideas-into-reality) released in July 2026, 46% struggle to keep track of the group chat, bookings and everyone's preferences. Finding dates that work for everyone was the top challenge, at 42%. And 64% said a group getaway would never get off the ground without one organizer. The survey covers people in the UK and does not publish its sample size, so it shows the pattern, not Philippine numbers.
+
+### Government checks on tourism businesses
 
 **Tourism businesses already need a government check.** Under the Tourism Act of 2009 rules, local governments may permit primary tourism enterprises to operate only after DOT accreditation. The [DILG reminded local governments of this rule](https://calabarzon.dilg.gov.ph/dilg-to-lgus-issue-permit-to-operate-to-tourism-enterprises-with-dot-accreditation-only/) in January 2024. Those enterprises include hotels, resorts, homestays and tour operators. DILG Secretary Benjamin Abalos Jr. said accreditation protects tourists from "unreliable transactions from sketchy service providers." The [DOT's accreditation page](https://tourism.gov.ph/accreditations/online) describes accreditation as official recognition that an enterprise meets minimum standards.
 
-## Why we chose this solution
+## Why we built TravelEase as one shared portal
 
 Each part of TravelEase lines up with one of those findings. The table maps what a group needs to the tool it usually uses, and to the part of TravelEase that covers it.
 
@@ -82,19 +90,25 @@ Each part of TravelEase lines up with one of those findings. The table maps what
 | Know what to expect | A few review sites | Reviews and travel blogs for each place |
 | Trust a listing | Not covered by the usual three | Local government approval of business registrations |
 
+### Shared trip plans in one place
+
 **One shared plan, with roles.** Nearly all domestic travelers plan their own trips, so the planning sits with the group, not a tour operator. The UK survey shows where that work breaks down: keeping the chat, bookings and preferences together. A shared plan puts the trip in one place. The admin role fits the single organizer that 64% of UK respondents said a group trip depends on. Editors help shape the plan, and viewers follow along.
 
 **One place instead of three.** Travelers in other markets show the same pull toward one platform. [Expedia Group's 2026 research with Harris Poll](https://www.businesswire.com/news/home/20260602270896/en/) surveyed more than 2,500 travelers. Of them, 77% were at least somewhat likely to book more than one part of their next trip on the same platform. The survey covered ten countries, and the Philippines was not one of them.
+
+### The TravelEase map, reviews and blogs
 
 **A map built for the road.** Travelers need to know what to expect on the road, so the map carries routing, traffic and weather, not just pins. The Tagaytay numbers support that focus. Same-day visitors outnumbered overnight guests by about 24 to one in late 2023 (estimate: 6.5 million ÷ 268,000). On a day trip, time on the road shapes the whole plan.
 
 **Reviews and blogs beside each place.** Pleasure or vacation was the top reason for domestic trips in 2022. A leisure trip depends on knowing what a place is like before going. Putting reviews and travel blogs on each place's page means the group reads them where it plans.
 
+### Local government approval and serving both sides
+
 **Local government approval for listings.** Local governments already decide which tourism businesses may operate. For primary tourism enterprises, their permits depend on DOT accreditation. Making a registration wait for local government approval puts that existing role in front of travelers. It also gives the local government the say over listings that the problem called for.
 
 **Both sides, not one.** A directory alone would help businesses but leave the group in its chat thread. A planner alone would leave travelers without trusted listings. The problem had both sides, so TravelEase covers both, across five user roles for travelers, businesses and administrators.
 
-## What we built
+## What we built: the TravelEase features
 
 - **Collaborative travel plans** with admin, editor and viewer roles, so a group can plan one trip together.
 - **A business directory** in 8 categories, with local government approval of business registrations.
@@ -110,7 +124,7 @@ The screenshots below come from the app running on localhost in November 2026, f
 
 ![TravelEase blog Featured Stories section with three Tagaytay travel articles showing category tags, authors, dates, reading times and Read More links](../../assets/images/content/travelease-blog-featured-stories.png)
 
-## How it works
+## How TravelEase works
 
 TravelEase connects three kinds of users, travelers, businesses and administrators, across five user roles.
 
@@ -120,7 +134,7 @@ TravelEase connects three kinds of users, travelers, businesses and administrato
 - **Deciding:** each place has its own reviews and travel blogs.
 - **Staying fast:** Redis caches busy pages and rate-limits requests.
 
-## How we built and tested it
+## How we built and tested TravelEase
 
 TravelEase was our capstone thesis, built from October 2025 to April 2026. I was the development lead. The project has 316 commits, and about two-thirds of them are mine. It has 411 automated tests in Vitest.
 
@@ -134,14 +148,14 @@ React with TypeScript and Vite kept the front end quick to build and safe to cha
 
 The stack still needs care after the defense. The [Prisma ORM 8 release candidate](/news/prisma-orm-8-release-candidate) touches this project. The [October 2026 Railway security incident](/news/railway-security-incident-environment-variables) was close to home, since TravelEase is hosted on Railway. TravelEase is also built on React 19, the line covered in my post on [React 19.3 View Transitions](/news/react-19-3-view-transitions).
 
-## Results
+## Results: what TravelEase shipped
 
 - Live at [travelease.app](https://travelease.app).
 - 411 automated tests in Vitest.
 - 316 commits in the project, about two-thirds of them mine.
 - A business directory in 8 categories and five user roles.
 
-## Limitations
+## Limitations of TravelEase
 
 - **Usage is not recorded here.** This page does not record how many travelers signed up, how many trips groups planned, or how many businesses registered. It shows what TravelEase does, not how many people used it.
 - **The approval flow is described, not measured.** This page does not record which local government office reviews registrations, or how long approval takes.

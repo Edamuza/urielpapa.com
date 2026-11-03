@@ -1,5 +1,7 @@
 ---
 title: VITE SEO Digital Advertising ERP
+seoTitle: "VITE SEO ERP: HR, CRM, Projects and Accounting"
+updated: 2026-11-03
 description: An internal ERP that put HR and payroll, CRM, project management and accounting behind one login, built on Laravel and Next.js in under 3 months.
 summary: >-
   VITE SEO Digital Advertising, the agency I founded and have since closed, ran its people, leads, projects and books in separate places, paid per-seat fees for HR, CRM and project tools, and computed payroll by hand. With the in-house team, I led and co-developed one ERP that put HRIS, CRM, project management and accounting behind a single login with role-based access. The first MVP shipped in under 2 weeks, and the full platform reached 115 pages, 144 data models and 5,241 automated tests in under 3 months.
@@ -29,11 +31,11 @@ cover: ../../assets/images/content/vite-seo-erp-zerem-nearby-clients.png
 coverAlt: "Zerem Nearby Clients map of the Philippines with clusters of discovered businesses, filters for radius, priority, niche and lead status, and Accept into CRM, Plan visit and Directions buttons, with business names blurred"
 ---
 
-## Abstract
+## Abstract: the VITE SEO ERP in brief
 
 VITE SEO Digital Advertising grew to a team of up to 22, with its people, leads, projects and books in separate places. We paid per-seat fees for HR, CRM and project tools, and computed payroll by hand every cutoff. At list prices as of November 2026, entry plans for three comparable tools would cost an estimated US$550 plus ₱2,178 monthly for 22 seats. Philippine payroll must also apply five separate rules, from SSS to 13th-month pay. With the in-house team, I led and co-developed one ERP with four modules behind one login. The first MVP shipped in under 2 weeks. The full platform reached 115 pages, 144 data models and 5,241 automated tests in under 3 months.
 
-## The problem we saw
+## The problem we saw: scattered tools and manual payroll
 
 VITE SEO Digital Advertising, [the agency I founded and have since closed](/blog/closing-my-agency), grew to a team of up to 22. The team spanned sales, development, project management, marketing and SEO. HR, sales, project work and accounting each needed their own records. Some of them had to connect, such as payroll posting into the accounting books.
 
@@ -41,9 +43,9 @@ Before the ERP, the team ran on spreadsheets, a separate project tool, shared in
 
 Cost was the other problem. We paid per-seat fees for HR, CRM and project tools, and per-seat pricing means the bill rises with every hire. We built the ERP to stop paying those fees and to fix the payroll work above.
 
-## What the data says
+## What the data says about seat fees and Philippine payroll
 
-Public data backs up both sides of the problem. Typical HR, CRM and project tools charge for each user. The table uses list prices as of November 2026 from [Tropa's pricing](https://go-tropa.com/pricing), [Pipedrive's pricing](https://www.pipedrive.com/en/pricing) and [Asana's pricing](https://asana.com/pricing).
+Public data backs up both sides of the agency's problem. Typical HR, CRM and project tools charge for each user. The table uses list prices as of November 2026 from [Tropa's pricing](https://go-tropa.com/pricing), [Pipedrive's pricing](https://www.pipedrive.com/en/pricing) and [Asana's pricing](https://asana.com/pricing).
 
 | Need               | Tool      | Entry plan, per seat a month    | Next plan up       | 22 seats, entry plan (estimate) |
 | ------------------ | --------- | ------------------------------- | ------------------ | ------------------------------- |
@@ -53,9 +55,13 @@ Public data backs up both sides of the problem. Typical HR, CRM and project tool
 
 At these list prices, the entry plans for 22 seats would cost about US$550 plus ₱2,178 a month (estimate: price × 22). That is about US$6,597 plus ₱26,136 a year. On the next plan up, the same estimate is about US$1,408 plus ₱3,278 a month. It assumes a seat for everyone in every tool, which overstates the CRM. Asana's page shows "$" with no currency code, so I assumed US dollars.
 
+### Accounting pricing and unused SaaS seats
+
 Accounting software can be priced differently. [Xero's US pricing page](https://www.xero.com/us/pricing-plans/) lists "No per-user license fees."
 
 Paying for a seat is also not the same as using it. [Zylo's post on SaaS waste](https://zylo.com/blog/how-much-wasted-on-saas-spend), updated March 2026, says the average organization uses only 54% of its SaaS licenses. It names no source for that figure, and Zylo, a SaaS management company, has a stake in it.
+
+### Philippine payroll deduction rules
 
 Philippine payroll is hard to do by hand, because each deduction has its own rate, base and limit:
 
@@ -69,15 +75,21 @@ Philippine payroll is hard to do by hand, because each deduction has its own rat
 
 These rules also move. SSS raised its rate from 14% to 15% in January 2025. Pag-IBIG doubled its maximum fund salary from ₱5,000 to ₱10,000 in February 2024.
 
+### How common payroll errors are
+
 Payroll errors are common and costly. In a [2022 Ernst & Young survey announced by the payroll vendor Paycom](https://www.paycom.com/about/press-room/ey-survey-payroll-errors-average-291-each-impacting-the-economy/), one in five US payrolls had errors, averaging $291 each. It covered 508 people at US companies with 250 to 10,000 employees. For a small Philippine team, it is a signal, not a benchmark.
 
-## Why we chose this solution
+## Why we built one ERP instead of buying more tools
 
-We had three realistic options: keep the spreadsheets and separate tools, buy a full set of per-seat tools, or build one system. The evidence above shows the weak spot in each of the first two.
+Before building the ERP, we had three realistic options: keep the spreadsheets and separate tools, buy a full set of per-seat tools, or build one system. The evidence above shows the weak spot in each of the first two.
+
+### Keeping manual payroll or buying more seats
 
 Keeping payroll by hand meant applying five rules with different rates, bases and limits every cutoff, then typing the totals into the books again. Two of those rules changed within a year. In a manual process, a missed update becomes a wrong payslip.
 
 Buying more per-seat tools would have kept the fees we wanted to stop. Entry plans alone come to an estimated US$550 plus ₱2,178 a month, rising with each hire. Separate tools also mean separate logins and records, and payroll totals still have to reach the books.
+
+### What building one ERP gave us
 
 Building one system meant we had to build, test and maintain it ourselves. In return, we could design around the problems the data points to:
 
@@ -87,11 +99,13 @@ Building one system meant we had to build, test and maintain it ourselves. In re
 - **No seat fee per tool.** Adding a person adds a user, not a seat in three subscriptions, though hosting and paid integrations still cost money.
 - **One daily problem per module.** The 144 data models only made sense to the team once each module fixed one daily problem, such as payroll or CRM follow-ups.
 
+### Why the ERP uses Laravel and Next.js
+
 The stack followed the same logic, as I explain in [Laravel vs Next.js](/blog/laravel-vs-nextjs). Laravel handled the business rules, queues and real-time events, and it's strong for data-heavy systems with many models. Next.js gave all 115 pages one consistent interface. MySQL fit transactional records like payroll and journals, and keeping the API separate let back-end and front-end work move in parallel.
 
-## What we built
+## What we built: the four ERP modules
 
-One system with role-based access and four modules.
+The ERP is one system with role-based access and four modules.
 
 - **HRIS (TeamOra):** attendance with geofenced clock-in and remote check-in, leave and overtime requests, recruitment, employee self-service, and payroll that computes SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay and issues payslips.
 - **CRM (Zerem):** lead management with scoring and follow-ups, email outreach from connected Gmail inboxes, in-browser calling, an inbox for Facebook Page and Instagram messages, AI-drafted replies, and a map-based lead-discovery tool.
@@ -110,9 +124,9 @@ The screenshots below are from the system itself. I blurred staff and client nam
 
 ![Sprintly overview with totals for projects, active tasks, completed tasks and team members, and project cards showing done, in-progress and to-do shares, with client project names blurred](../../assets/images/content/vite-seo-erp-sprintly-overview.png)
 
-## How it works
+## How the ERP works: Laravel API and Next.js front end
 
-The system keeps the rules and the screens apart:
+The ERP keeps the rules and the screens apart:
 
 - **Back end:** a Laravel 13 API.
 - **Front end:** Next.js 16 with React 19.
@@ -123,9 +137,9 @@ The Laravel API holds the data, the business rules and the permissions. Next.js 
 
 Attendance, leave, overtime and payroll all sit in the HRIS. At each cutoff, payroll computes the contributions, tax and 13th-month pay, issues payslips and posts to the accounting books. Those books feed the financial and BIR VAT reports. A queue worker and a scheduler run background jobs, and Laravel Reverb carries the real-time events behind the project module's live updates.
 
-## How we built and tested it
+## How we built and tested the ERP
 
-The first MVP shipped in under 2 weeks. The team then grew it into the full platform in under 3 months, from July to October 2026.
+The first MVP of the ERP shipped in under 2 weeks. The team then grew it into the full platform in under 3 months, from July to October 2026.
 
 Splitting the API from the interface let back-end and front-end work move at the same time, which helped us ship in under 3 months. Once our conventions were set, adding a new model with its migration, validation and tests felt routine, which mattered with 144 models.
 
@@ -133,7 +147,7 @@ Work was slower where the logic was unusual, like payroll edge cases and the acc
 
 The suite grew to 5,241 automated tests, and we ran all of them before every deploy. Upkeep was mostly keeping dependencies updated on both sides and checking that the queue worker and scheduler were still running.
 
-## Results
+## Results: what the ERP delivered
 
 - 4 modules (HRIS, CRM, PMS and accounting) behind one login.
 - 115 pages and 144 data models.
@@ -142,7 +156,7 @@ The suite grew to 5,241 automated tests, and we ran all of them before every dep
 
 Staff clocked in through the HRIS, sales worked leads and messages in the CRM, and projects ran in the PMS. At each payroll cutoff, payroll posted straight into the accounting books instead of being typed in again.
 
-## Limitations
+## Limitations of the ERP and this study
 
 - **The cost comparison is an estimate.** It uses list prices for 22 seats as of November 2026, not what we actually paid before the ERP. It also leaves out the build cost in team time, so it cannot show a payback period.
 - **Payroll accuracy was not measured.** This page records how payroll worked, not how many corrections it saved. The error and license figures do not come from Philippine small businesses.

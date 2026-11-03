@@ -1,5 +1,7 @@
 ---
 title: InboxPilot
+seoTitle: "InboxPilot: AI Inbox Agent with Human Approval"
+updated: 2026-11-03
 description: A customer-inbox AI agent for a small café that classifies messages, drafts grounded replies and proposes bookings, with a person approving every action.
 summary: >-
   Small businesses answer bookings, quotes, complaints and spam across email, Facebook and website forms. A rushed reply can promise a refund, discount or table the business can't honor. I built InboxPilot, an AI agent that checks real data with tool calls and drafts replies and bookings for a person to approve. In browser testing on fictional sample data, it triaged 12 messages in about 40 seconds with no invented prices, refunds or availability.
@@ -30,11 +32,11 @@ coverAlt: "InboxPilot inbox for the fictional Kape Kultura Café & Catering, wit
 repo: Edamuza/inboxpilot-uriel
 ---
 
-## Abstract
+## Abstract: InboxPilot in brief
 
 A small café or caterer answers bookings, quotes, complaints and spam across email, Facebook and website forms. In late 2025, Meta's ads on Messenger reached 65.8 million people in the Philippines. In 2024, a Canadian tribunal held Air Canada liable for its chatbot's wrong refund advice. I built InboxPilot, an AI agent that classifies messages, checks real data with tool calls, drafts a grounded reply and proposes bookings or tickets. Nothing happens until a person approves it. In browser testing on fictional sample data, it triaged 12 messages in about 40 seconds, with no invented prices, refunds or availability.
 
-## The problem I saw
+## The problem I saw: a busy café inbox and risky replies
 
 A café or caterer gets messages all day: catering quotes, table bookings, late deliveries, refund requests and spam. Someone has to read each one, work out what it is, look up the hours, prices or open slots, and write a reply. That's staff time every day.
 
@@ -44,7 +46,7 @@ At VITE SEO Digital Advertising, I led and co-developed an [AI chatbot for Messe
 
 InboxPilot explores the other design: the agent prepares the reply and the actions, and a person decides. For anything that changes a booking or money, that's the safer default.
 
-## What the data says
+## What the data says about customer messages and bot liability
 
 **The channel is large.** DataReportal's [Digital 2026 report on the Philippines](https://datareportal.com/reports/digital-2026-philippines) counts 95.8 million Facebook users in late 2025. Meta's ads on Messenger reached 65.8 million, or 56.2% of the population. Both are ad reach, not active users.
 
@@ -56,7 +58,7 @@ InboxPilot explores the other design: the agent prepares the reply and the actio
 
 **Philippine law treats false promises as deceptive.** Article 50 of the [Consumer Act, RA 7394](https://bps.dti.gov.ph/index.php/component/edocman/7-laws-and-issuances/8-republic-acts/225-republic-act-no-7394-consumer-act-of-the-philippines), makes a deceptive sales act a violation "whether it occurs before, during or after the transaction." Its examples include a false price advantage and false statements about "rights, remedies or obligations". The [Internet Transactions Act, RA 11967](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/96902), adds a ₱20,000 to ₱100,000 fine for an online merchant or e-retailer's first deceptive sales act online.
 
-## Why I chose this solution
+## Why I built InboxPilot with a person approving every action
 
 Replying by hand is slow at busy times and after hours. A fully automatic chatbot is instant, but no one checks its promises before they go out. InboxPilot sits between them: fast triage, with tool calls, code rules and a person checking every reply.
 
@@ -70,7 +72,7 @@ Speed comes from triage, not from skipping the review. The agent triages three m
 
 Each draft also shows the agent's intent, confidence and reasoning, so a reviewer can catch a guessed intent before it becomes a reply. The audit log then traces any disputed reply to what the agent proposed and what the reviewer decided.
 
-## What I built
+## What I built: the InboxPilot features
 
 ![InboxPilot inbox for the fictional Kape Kultura Café & Catering, with status tabs, a "Triage all new (12)" button and new messages from email, Facebook and the website form](../../assets/images/content/inboxpilot-inbox.png)
 
@@ -86,7 +88,7 @@ The demo business is Kape Kultura Café & Catering, a fictional café in Makati.
 
 The app runs on TanStack Start with React 19 and TypeScript, built in Lovable. The database is Postgres on Lovable Cloud (Supabase), with row-level security and no direct browser access to any table. AI calls go through the Lovable AI gateway and the Vercel AI SDK, with tool calling. Vitest covers the metrics math and routing.
 
-## How it works
+## How InboxPilot works
 
 InboxPilot is a tool-calling agent with a person in the middle. For each message, the model can look things up freely:
 
@@ -103,9 +105,11 @@ Guardrails live in two places. The agent's instructions forbid refunds, discount
 
 When a person approves, the server checks the slot again, creates the booking, marks the slot as taken and writes the audit entries. Only then does the reply count as sent.
 
-## How I built and tested it
+## How I built and tested InboxPilot
 
 I built InboxPilot by directing a small team of AI agents. One agent turned my brief into a spec with eight acceptance checks and built the app in Lovable, an AI app builder. One detailed message built the app, and one follow-up fixed what the agent's code review found, including a database reset function. The agent also made the demo refresh itself. After 24 hours with no activity, it resets on the next visit. Otherwise, it extends the 14-day slot window, so booking dates never go stale.
+
+### Browser QA of InboxPilot triage
 
 A separate QA agent then tested the published app in a real browser and read every drafted reply against the knowledge base.
 
@@ -122,11 +126,15 @@ QA started from a fresh demo with 12 new messages and pressed "Triage all new". 
 
 QA read all 12 drafts against the knowledge base and found no invented prices, refunds or availability. Catering quotes were computed correctly, for example 50 Premium guests at ₱550 a head came to ₱27,500.
 
+### Testing InboxPilot approvals, rejections and the webhook
+
 QA also tested the human side. Editing a draft before approving raised the edit rate on the Metrics page, and rejecting a message required a reason and logged it. The webhook returned 201 for a valid message and a clear 400 error for bad input. QA tried a missing field, a bad email, an unknown channel, a body over 5,000 characters and invalid JSON.
+
+### Fixing the InboxPilot booking confirmation wording
 
 One wording problem came up after QA. The booking draft said the table was "pending team approval", but the reply is only sent after a person approves, and approval creates the booking. The agent now confirms the booking plainly with the exact date and time: "Your table for 4 under Paolo Garcia on Thursday, Nov 5 at 1:00 PM is confirmed." A server check also blocks that confirmation from going out unchanged if the reviewer unticks the booking.
 
-## Results
+## Results: what InboxPilot did in testing
 
 - 12 messages triaged in about 40 seconds, each with intent, priority and confidence.
 - No invented prices, refunds or availability across all 12 drafts.
@@ -134,7 +142,7 @@ One wording problem came up after QA. The booking draft said the table was "pend
 - The acceptance checks passing in browser testing, plus the webhook tested with direct requests. The phone-width layout wasn't part of the browser test.
 - Live at [inboxpilot-uriel.lovable.app](https://inboxpilot-uriel.lovable.app), with fictional sample data.
 
-## Limitations
+## Limitations of InboxPilot
 
 InboxPilot is a demo, not a deployment. The café, messages and knowledge base are fictional, and no real customer has used it. One QA run of 12 messages shows the design works; it is not an accuracy rate.
 

@@ -1,5 +1,7 @@
 ---
 title: WordPress SEO Plugin Suite
+seoTitle: "WordPress SEO Plugin Suite: 5 In-House Tools"
+updated: 2026-11-03
 description: Five in-house WordPress plugins, about 11,700 lines of code, for auditing and publishing SEO content, from a diagnostic scanner to a publish guard.
 summary: >-
   Auditing and publishing SEO content across WordPress sites by hand is slow and easy to get wrong, and the same misses kept going live on client sites. Public data shows how common they are: a 2023 Ahrefs study of 1,002,165 domains found a missing or empty meta description on 72.9% of them. At VITE SEO Digital Advertising, the agency I founded and have since closed, I led and co-developed 5 in-house plugins, about 11,700 lines of code. They cover an SEO diagnostic scanner, an internal-link content graph, a publish guard that requires an SEO title, meta description and schema, and bulk importers for DOCX drafts and schema CSV files.
@@ -20,11 +22,11 @@ draft: false
 repo: Edamuza/Wordpress-Plugins
 ---
 
-## Abstract
+## Abstract: the WordPress SEO plugin suite in brief
 
 SEO work on WordPress repeats the same checks on every site, and at my agency a missed step kept going live. Public data shows these misses are common. A 2023 Ahrefs study of 1,002,165 domains found a missing or empty meta description on 72.9% of them. The same study found a page with only one followed internal link pointing to it on 66.2% of domains. At VITE SEO Digital Advertising, I led and co-developed 5 in-house WordPress plugins, about 11,700 lines of code, that built those checks into WordPress. The scanner ran before each client report, and the publish guard stopped posts missing an SEO title or schema.
 
-## The problem we saw
+## The problem we saw: repeat SEO mistakes on WordPress sites
 
 SEO work on WordPress repeats the same checks and the same publishing steps on every site. They cover headings, indexability, images, broken links, internal links, titles, descriptions and schema. Doing it by hand takes time, and a missed step goes live.
 
@@ -34,9 +36,11 @@ The problem became clear when we were publishing across several client sites at 
 
 These mistakes share one trait: none of them is visible on the published page. A meta description and a noindex rule sit in the page's code, and a missing internal link is an absence. In a review by eye, they are easy to miss.
 
-## What the data says
+## What the data says about WordPress and common SEO mistakes
 
 Public data shows that WordPress is where much of this work happens, and that these mistakes are common across the web.
+
+### WordPress share and common technical SEO issues
 
 **WordPress runs a large share of the web.** As of November 2, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 39.5% of all websites. That is a 58.2% share among sites that use a content management system W3Techs tracks.
 
@@ -49,6 +53,8 @@ Public data shows that WordPress is where much of this work happens, and that th
 | Page has only one dofollow incoming internal link | 66.2% | Content graph |
 | H1 tag missing or empty | 59.5% | Scanner: heading checks |
 
+### Broken links and Google's guidance on each miss
+
 **Links break after a page goes live.** Pew Research Center's 2024 report [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/) found that 23% of the news webpages it sampled contained at least one broken link. For government webpages, the figure was 21%. The same report found that a quarter of webpages that existed between 2013 and 2023 were no longer accessible by October 2023.
 
 **Google spells out what each miss costs.** Google Search Central documents the effect of each item the suite checks:
@@ -59,15 +65,21 @@ Public data shows that WordPress is where much of this work happens, and that th
 - **Internal links:** "Every page you care about should have a link from at least one other page on your site" ([Google's link best practices](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)).
 - **Structured data:** Google reports that Rotten Tomatoes added structured data to 100,000 pages and measured a 25% higher click-through rate. Nestlé measured an 82% higher click-through rate on pages shown as rich results ([Google's structured data intro](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)).
 
+### Yoast SEO and Rank Math adoption
+
 **The standard SEO plugins are already everywhere.** As of November 2026, the WordPress.org directory shows 10+ million active installations for [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) and 4+ million for [Rank Math SEO](https://wordpress.org/plugins/seo-by-rank-math/). Yoast lists SEO analysis, readability analysis and Schema.org structured data. Rank Math lists content analysis, schema markup and a built-in 404 monitor.
 
-## Why we chose this solution
+## Why we built the SEO checks into WordPress plugins
 
-Each design choice in the suite answers one part of that evidence.
+Each design choice in the WordPress SEO plugin suite answers one part of that evidence.
+
+### Building inside WordPress, next to Yoast and Rank Math
 
 **Build inside WordPress, in plain PHP.** Our client sites ran on WordPress, so the tools had to live where the team already worked. The [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/intro/) says plugins "extend the functionality of WordPress without touching WordPress core itself." It adds that "the simplest plugin is a single PHP file." Plain PHP plugins meant no extra service to host.
 
 **Work alongside Yoast SEO and Rank Math.** The plugins worked alongside Yoast SEO and Rank Math instead of replacing them. With millions of active installations between them, both are standard tools. The suite added checks around tools that were already in place.
+
+### The publish guard, scanner, content graph and importers
 
 **Turn the checklist into a rule.** Checklists didn't stop the repeat mistakes. The Ahrefs figures count a domain if an issue shows up on even one page. That matches what we saw: one missed page on one site, then another.
 
@@ -81,6 +93,8 @@ The guard required an SEO title, a meta description and schema. Those are the th
 
 **Import in bulk.** Drafts arrived as DOCX files, and schema came in CSV files. Bulk importers cut out copying each draft and each schema file into WordPress by hand.
 
+### Alternatives to an in-house plugin suite
+
 The realistic alternatives each cover part of the job:
 
 | Option | What it does | When it catches a miss | Cost, as of November 2026 |
@@ -92,7 +106,7 @@ The realistic alternatives each cover part of the job:
 
 Site audit tools are strong at finding problems across a live site. The suite had a narrower job: stop known mistakes before they shipped, inside the tool the team already used.
 
-## What we built
+## What we built: the five WordPress SEO plugins
 
 With the agency's in-house team, I led and co-developed five plugins, about 11,700 lines of code in total:
 
@@ -106,9 +120,9 @@ The stack:
 - **Platform:** WordPress.
 - **Language:** PHP.
 
-## How it works
+## How the WordPress SEO plugin suite works
 
-Each plugin sits at a different point in the publishing cycle:
+Each plugin in the suite sits at a different point in the publishing cycle:
 
 | Stage | Plugin | What it does |
 | --- | --- | --- |
@@ -119,14 +133,14 @@ Each plugin sits at a different point in the publishing cycle:
 
 The guard handles the mistakes that can be blocked at the door. The scanner and the graph handle the ones that only appear across the whole site, such as broken links and pages nothing points to.
 
-## Results
+## Results: what the plugin suite handled
 
 - 5 plugins and about 11,700 lines of code.
 - Audits, internal linking, publishing rules and imports handled inside WordPress.
 
 Writers dropped DOCX drafts into the importer, and the scanner ran before each client report. The publish guard stopped posts that were missing an SEO title or schema. The content graph helped us find pages with no internal links pointing to them.
 
-## Limitations
+## Limitations of the plugin suite and this study
 
 **No before-and-after numbers.** This study has no count of posts the guard stopped, issues the scanner found per site, or time saved against a manual audit. Without those, the suite's effect is described, not measured.
 

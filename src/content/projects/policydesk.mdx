@@ -1,5 +1,7 @@
 ---
 title: PolicyDesk
+seoTitle: "PolicyDesk: HR Policy Assistant With Citations"
+updated: 2026-11-03
 description: An HR and payroll policy assistant that answers only from company documents, cites every passage it uses and scored 100% on a 15-question test set.
 summary: >-
   Employees ask HR the same policy questions every week, and a general chatbot can't be trusted to answer them because it may invent a rule that sounds right. I built PolicyDesk, a live demo with fictional sample data. It answers only from a company's own documents, cites the exact passage behind every answer and refuses when the documents don't cover a question. On its 15-question test set, it scored 100% on correctness, citation accuracy and refusals.
@@ -31,11 +33,11 @@ coverAlt: "PolicyDesk answering \"How many sick leave days do I get?\" with 10 d
 repo: Edamuza/policydesk-uriel
 ---
 
-## Abstract
+## Abstract: PolicyDesk in brief
 
 HR teams answer the same policy questions again and again, and a general AI chatbot is a risky shortcut. In a 2026 Eagle Hill Consulting survey, 51% of HR respondents spent at least half their week on routine administrative work. A 2024 study found general chatbots hallucinated on 58% to 88% of verifiable questions about US federal court cases. I built PolicyDesk, a live demo with fictional sample data. It answers only from company documents, cites the passage behind every answer and refuses when the documents are silent. On its 15-question test set, it scored 100% on correctness, citation accuracy and refusals.
 
-## The problem I saw
+## The problem I saw: repeat HR policy questions
 
 HR teams answer the same questions over and over: how many leave days are left, when payroll lands, whether overtime needs approval. Every answer takes staff time, and the answers already sit in the handbook and policy documents.
 
@@ -43,11 +45,13 @@ A general AI chatbot is the obvious shortcut, and it's the wrong one. A model th
 
 HR and payroll rules are familiar ground for me. The HRIS module of the [VITE SEO ERP](/projects/vite-seo-erp) computes SSS, PhilHealth, Pag-IBIG, withholding tax and 13th-month pay. PolicyDesk covers the other half of HR: the questions employees ask about those rules.
 
-## What the data says
+## What the data says about HR work and AI chatbots
 
 **HR time goes to routine work.** In March 2026, Ipsos surveyed 200 US HR professionals for [Eagle Hill Consulting](https://www.eaglehillconsulting.com/insights/hr-transformation-work-design-ai-automation/). Of them, 51% spend at least half the week on routine, repetitive or low-value admin work. The same survey found 36% are often or always unclear about how AI output was generated.
 
 **Employees ask often and wait.** In late 2025, Censuswide surveyed 1,000 UK employees for HR software company [Applaud](https://www.applaudhr.com/blog/trends/the-2026-state-of-hr-service-report-five-shifts-and-the-statistics-behind-them). It found 79% seek HR help at least once a month, and 36% wait at least a full day. Applaud sells HR software, so its research is not independent.
+
+### How often general chatbots invent answers
 
 **General chatbots invent answers, and grounding only reduces it.** In [Large Legal Fictions](https://arxiv.org/abs/2401.01301v2) ([Journal of Legal Analysis, 2024](https://impact.stanford.edu/article/large-legal-fictions-profiling-legal-hallucinations-large-language-models)), Matthew Dahl and colleagues asked models verifiable questions about US federal court cases. A 2025 follow-up, [Hallucination-Free?](https://law.stanford.edu/publications/hallucination-free-assessing-the-reliability-of-leading-ai-legal-research-tools), tested legal tools whose vendors said retrieval-augmented generation (RAG) eliminates hallucinations. It found those claims overstated.
 
@@ -56,11 +60,13 @@ HR and payroll rules are familiar ground for me. The HRIS module of the [VITE SE
 | Dahl et al., 2024 | General chatbots on US federal court questions | 58% (ChatGPT 4) to 88% (Llama 2) |
 | Magesh et al., 2025 | Legal research AI tools from LexisNexis and Thomson Reuters | More than 17% each, lower than GPT-4 |
 
+### Chatbot liability and Philippine labor rules
+
 **The company owns what its bot says.** In [Moffatt v. Air Canada](https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do), decided February 14, 2024, the airline's chatbot said a bereavement fare could be claimed after travel. Air Canada's own policy page ruled that out. Air Canada argued the chatbot was responsible for its own actions. The tribunal called that "a remarkable submission" and ordered the airline to pay CAD 812.02.
 
 **Philippine rules change with the day and the case.** Under [Book Three of the Labor Code](https://chanrobles.com/legal4labor3.htm), regular-day overtime earns at least 25% more. Work on a regular holiday is paid double, and holiday overtime earns at least 30% more. DOLE's Labor Advisory No. 18, Series of 2026, applied those rates to Bonifacio Day, [according to the Daily Tribune](https://tribune.net.ph/2026/10/14/dole-reminds-employers-of-holiday-pay-rules). The [rules implementing Republic Act 11210](https://www.lawphil.net/statutes/repacts/ra2019/irr_11210_2019.html) grant 105 days of maternity leave with full pay.
 
-## Why I chose this solution
+## Why I built PolicyDesk to cite its sources or refuse
 
 **Answer only from the company's documents.** A model that hallucinates on most verifiable case-law questions will likely guess at an unseen leave rule too. So the answer model only sees passages found in the company's own documents.
 
@@ -74,7 +80,7 @@ The holiday overtime test shows why the second stop matters. For a worker paid â
 
 The alternatives each fail one test. Answering by hand is the slow status quo the surveys describe. A general chatbot is fast but invents rules. A shared folder or FAQ page is accurate but leaves the reading to the employee.
 
-## What I built
+## What I built: the PolicyDesk features
 
 ![PolicyDesk answering "How many sick leave days do I get?" with 10 days and an open citation to the Leave Policy's Sick Leave section](../../assets/images/content/policydesk-ask-answer-with-citation.png)
 
@@ -84,7 +90,7 @@ The alternatives each fail one test. Answering by hand is the slow status quo th
 - **Evaluations:** a 15-question test set that runs through the same answer pipeline as the Ask screen. It shows scores for correctness, citation accuracy and refusals, a per-question table and a history of past runs.
 - **Demo data:** three fictional policy documents for a made-up company, Bayanihan Digital Inc., and a Reset button that restores them.
 
-## How it works
+## How PolicyDesk works
 
 PolicyDesk uses retrieval-augmented generation with a refusal threshold.
 
@@ -107,17 +113,21 @@ The stack:
 
 Keeping the documents in Postgres with pgvector puts the policies and their embeddings in one database, with row-level security on every table.
 
-## How I built and tested it
+## How I built and tested PolicyDesk
 
 I built PolicyDesk by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks and built the app in Lovable, an AI app builder. The first build took one detailed message, and one follow-up closed the gaps a code review found. Lovable let me spend my time on the spec, the test set and the checks, not the scaffolding.
 
 A separate QA agent then tested the published app in a real browser, check by check, without trusting the build report. Failures went back to Lovable as exact bug reports, and the fixed app was published and tested again.
+
+### PolicyDesk test set and knowledge-base results
 
 ![PolicyDesk Evaluations screen showing 100% overall, correctness, citation accuracy and abstention, with per-question results](../../assets/images/content/policydesk-evaluations-dashboard.png)
 
 The evaluation set has 15 questions: 12 the documents answer and 3 they don't. Two of those three are "Can I bring my dog to the office?" and "What is the CEO's salary?" On the published app, the run scored 100% on correctness, citation accuracy and refusals.
 
 QA also tested the full knowledge-base loop. "How many sick leave days do I get?" returned 10 days with a citation to the Leave Policy. A newly pasted travel policy was cited for a per diem of PHP 1,500 a day. After the document was deleted, the same question was refused.
+
+### Rephrased questions and the Chrome bug in PolicyDesk
 
 Five extra questions from the QA agent, worded differently from the test set, all came back right:
 
@@ -128,14 +138,14 @@ The holiday overtime question shows the prompt doing its job. The overtime passa
 
 QA also caught a real bug. In current Chrome, `scrollIntoView()` returns a Promise, and one React effect on the Ask page returned that Promise as its cleanup function. Every answer crashed the page. The server answered correctly throughout, so only a browser test could find it. The fix shipped with a regression test that fails against the old code.
 
-## Results
+## Results: what PolicyDesk shipped
 
 - 100% on correctness, citation accuracy and refusals across the 15-question test set.
 - The acceptance checks passing in browser testing after one round of fixes. The phone-width layout wasn't part of the browser test.
 - Every answer traceable to a passage, and a fixed refusal for anything the documents don't cover.
 - Live at [policydesk-uriel.lovable.app](https://policydesk-uriel.lovable.app), with fictional sample data.
 
-## Limitations
+## Limitations of PolicyDesk
 
 As a demo on fictional data, PolicyDesk shows the design works, not that it would work at a real company.
 
