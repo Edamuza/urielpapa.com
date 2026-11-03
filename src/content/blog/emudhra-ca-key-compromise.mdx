@@ -67,6 +67,10 @@ This take is part of my [Tech and Business](/topics/tech-and-business) writing. 
 
 A certificate authority (CA) is a company that browsers and operating systems trust to confirm who runs a website or who signed a file. The padlock in your browser means a CA vouched for that site, usually through an intermediate certificate signed by the CA's root. Whoever holds an intermediate's private key can vouch for any website. The key must stay secret and be impossible to guess.
 
+![A padlock with its keys](../../assets/images/content/emudhra-ca-key-compromise-1.jpg "A padlock with its keys")
+
+*Browsers fixed the problem within hours, but servers and apps need their owners to act. Photo: [Trougnouf](https://commons.wikimedia.org/wiki/File:Solex_99_30_padlock_with_keys_%28DSCF2659%29.jpg "Trougnouf's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
+
 According to [Mozilla's incident report, bug 2083449](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449), eMudhra generated a batch of 24 intermediates on April 30, 2025. Eight used private keys that were tiny numbers. [BleepingComputer reports](https://www.bleepingcomputer.com/news/security/mozilla-google-apple-block-compromised-emudhra-ca-certificates/) that some key values were under 256, and the key for "EM OV TLS CA - G3C" was the number 4. Six of the eight could issue website (TLS) certificates, and two could sign software. Sectigo had also cross-signed the affected intermediates in May 2025, which spread their trust to more devices.
 
 A researcher named Wayne found the weak keys on October 17, 2026 and reported them to the root programs. In its [October 21 filing to the BSE and NSE](https://www.bseindia.com/xml-data/corpfiling/AttachLive/6be0c423-b335-494b-86f3-54c561c3a5f9.pdf), eMudhra blamed a flaw in its key generation ceremony. A wrap and unwrap step created a second set of weak keys, and those weak keys were the ones published.
@@ -78,6 +82,10 @@ IBM Technology's explainer covers how public key infrastructure and HTTPS work, 
 ## Who is affected?
 
 Three groups need to pay attention, and one group can relax.
+
+![A keychain with a tag that reads Encryption is key](../../assets/images/content/emudhra-ca-key-compromise-2.jpg "A keychain with a tag that reads Encryption is key")
+
+*A certificate authority's private keys are what browsers trust, and eMudhra generated keys that anyone could guess. Photo: [Rohini](https://commons.wikimedia.org/wiki/File:Keychain_with_text_%22Encryption_is_key%22.jpg "Rohini's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 * **Websites with eMudhra certificates under the G3 ECC root.** eMudhra estimated about 30,000 certificates need migration ([bug comment 19](https://bugzilla.mozilla.org/show_bug.cgi?id=2083449)). About 97 percent came through ACME, the automated issuance protocol. eMudhra's [own statement](https://emudhra.com/en/post/certificate-security-incident) says the affected certificates sit in one customer ecosystem in the United States.
 * **Software that keeps its own trust list.** Linux servers, containers, runtimes and command-line tools may not check revocation. [Red Hat's bulletin RHSB-2026-012](https://access.redhat.com/security/vulnerabilities/RHSB-2026-012) lists RHEL 6 through 10 and containers built on RHEL or UBI images.
@@ -106,6 +114,10 @@ No source I read reports exploitation in the wild. eMudhra says its infrastructu
 | October 21, 2026 | eMudhra files a press release with the BSE and NSE; Red Hat publishes RHSB-2026-012 |
 | October 22, 2026 | eMudhra offers Sectigo-issued certificates as an alternative |
 | October 27, 2026 (PDT) | Chrome Root Store version 43, removing emSign ECC Root CA - G3, expected in Chrome Stable |
+
+![Bangalore skyline seen from Lal Bagh Botanical Garden](../../assets/images/content/emudhra-ca-key-compromise-3.jpg "Bangalore skyline seen from Lal Bagh Botanical Garden")
+
+*eMudhra is based in Bengaluru, India. Photo: [Innocentbunny](https://commons.wikimedia.org/wiki/File:Bangalore_Skyline_from_Lal_Bagh.jpg "Innocentbunny's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
 
 ## What does it mean for small businesses and founders?
 

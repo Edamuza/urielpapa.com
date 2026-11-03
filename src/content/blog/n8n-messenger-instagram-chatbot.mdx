@@ -81,6 +81,10 @@ I led and co-developed a chatbot like this at VITE SEO Digital Advertising, the 
 * **A booking link**, such as a calendar scheduling page.
 * **A written list of what the bot should know**: services, prices, hours, FAQs and when to hand over to a person.
 
+![A person browsing Instagram on a smartphone](../../assets/images/content/n8n-messenger-instagram-chatbot-1.jpg "A person browsing Instagram on a smartphone")
+
+*Most customers send their first question as a direct message on Messenger or Instagram. Photo: [Jaelynn Castillo](https://commons.wikimedia.org/wiki/File:Browsing_Instagram_%28Unsplash%29.jpg "Jaelynn Castillo's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
+
 ## How do you build it, step by step?
 
 1. **Create a Meta app.** In [Meta for Developers](https://developers.facebook.com/apps/), create a business app, add the **Messenger** product, and connect your Facebook Page. Then open Messenger's Instagram settings and connect the Instagram professional account linked to that Page. Meta renames menus from time to time, so follow the current [Messenger Platform docs](https://developers.facebook.com/docs/messenger-platform) if a label differs.
@@ -118,6 +122,10 @@ n8n's own beginner course explains APIs and webhooks, the two pieces that carry 
 
 The table below is a rough example budget for a small self-hosted setup, not a record of a real bill.
 
+![Hands typing a message in a chat app on a smartphone](../../assets/images/content/n8n-messenger-instagram-chatbot-2.jpg "Hands typing a message in a chat app on a smartphone")
+
+*Each reply the bot sends uses tokens, so short answers keep the monthly bill low. Photo: [Helar Lukats](https://commons.wikimedia.org/wiki/File:Whatsapp_texting.jpg "Helar Lukats's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 
 | Item                         | Monthly cost       | Notes                                                                                  |
 | ---------------------------- | ------------------ | -------------------------------------------------------------------------------------- |
@@ -142,6 +150,10 @@ Our chatbot did best with the simple, repeated questions: what services we offer
 ## When should a person take over?
 
 Build the handover in from the start. Have the model return a clear flag when it should not answer, then have n8n stop replying in that conversation and notify a person, for example by email or a chat message. Tell the customer that someone will follow up, and keep the logged conversation so the person does not have to ask everything again.
+
+![Illustration of letters, words and text](../../assets/images/content/n8n-messenger-instagram-chatbot-3.jpg "Illustration of letters, words and text")
+
+*A good system prompt keeps the bot on topic and hands hard questions to a person. Image: [Teresa Berndtsson](https://commons.wikimedia.org/wiki/File:Letter_Word_Text_Taxonomy_by_Teresa_Berndtsson.jpg "Teresa Berndtsson's image on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
 
 ## What should you check before going live?
 

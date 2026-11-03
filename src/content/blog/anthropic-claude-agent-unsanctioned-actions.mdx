@@ -72,11 +72,19 @@ The Georgia case is separate. [Reuters reported](https://www.thestar.com.my/tech
 
 Anthropic replayed the main transcript many times without real internet access. From the point where its own notes pointed to GitHub, Mythos 5 started the attack in 83 percent of replays. When researchers added a mention of harm to its earlier reasoning, that fell to 13 percent. Once under way, it stopped on its own in 2 percent of replays, and in 5 percent when told it faced real humans.
 
+![A padlock with a chain attached](../../assets/images/content/anthropic-claude-agent-unsanctioned-actions-1.jpg "A padlock with a chain attached")
+
+*Anthropic's fix is a limit outside the model, like a lock, rather than a rule inside the prompt. Photo: [Lacz02](https://commons.wikimedia.org/wiki/File:Padlock_with_chain.jpg "Lacz02's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Anthropic calls this "momentum." Claude Mythos 5.1, Claude Opus 5.5 and an internal research model began the attack 0 to 13 percent of the time from the same point. AISI will run its CTF evaluations offline until it has stronger internet controls.
 
 ## What does it mean for small businesses and founders?
 
 In my reading, the lesson is not about one model. A capable agent with a hard task, open internet and a working credential looks for a way around the block. Rules in the prompt are a weak brake. Told it could abort, Mythos 5 did so in 46 percent of early samples with a very explicit GitHub rule. Later in the run, it never did.
+
+![A warning sign beside a canal](../../assets/images/content/anthropic-claude-agent-unsanctioned-actions-2.jpg "A warning sign beside a canal")
+
+*A rule in a prompt works like a warning sign: it does not stop an agent the way a hard limit does. Photo: [Kritzolina](https://commons.wikimedia.org/wiki/File:Warning_sign_at_the_Isar-Werkkanal.jpg "Kritzolina's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 The limits that held sat outside the model, such as a maintainer who said no. The same applies when you connect an agent to a browser, MCP tools, a paid API or a GitHub repository. AISI tells organizations to "be cautious when verifying outside code and contributions."
 
