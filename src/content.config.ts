@@ -126,9 +126,14 @@ const projects = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      // The <title> for search results, when the name alone says too little.
+      // 47 characters or fewer keeps " | Uriel Papa" within 60.
+      seoTitle: z.string().max(60).optional(),
       description: z.string().min(80).max(170),
       summary: z.string(),
       outcome: z.string(),
+      // Last meaningful change to the case study (sitemap lastmod, dateModified).
+      updated: optionalDate,
       period: z.string(),
       year: z.number(),
       role: z.string(),

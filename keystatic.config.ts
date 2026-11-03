@@ -286,6 +286,8 @@ export default config({
       entryLayout: "content",
       schema: {
         title: fields.slug({ name: { label: "Project name" } }),
+        seoTitle: fields.text({ label: "SEO title", description: "Name plus what it is, e.g. 'TravelEase: Tagaytay Trip Planning Portal'. 47 characters or fewer keeps ' | Uriel Papa'.", validation: { length: { max: 60 } } }),
+        updated: fields.date({ label: "Updated", description: "Only for material changes to the case study." }),
         description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 80, max: 170 } } }),
         summary: fields.text({ label: "Summary", description: "Problem, what was built, result.", multiline: true }),
         outcome: fields.text({ label: "One-line outcome", description: "Shown in the projects list." }),
