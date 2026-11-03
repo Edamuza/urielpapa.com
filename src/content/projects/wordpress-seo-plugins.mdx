@@ -2,7 +2,7 @@
 title: WordPress SEO Plugin Suite
 description: Five in-house WordPress plugins, about 11,700 lines of code, for auditing and publishing SEO content, from a diagnostic scanner to a publish guard.
 summary: >-
-  Auditing and publishing SEO content across WordPress sites by hand is slow and easy to get wrong. At VITE SEO Digital Advertising, the agency I founded and have since closed, I led and co-developed 5 in-house plugins, about 11,700 lines of code, covering an SEO diagnostic scanner, an internal-link content graph, a publish guard that requires an SEO title, meta description and schema, and bulk importers for DOCX drafts and schema CSV files.
+  Auditing and publishing SEO content across WordPress sites by hand is slow and easy to get wrong, and the same misses kept going live on client sites. Public data shows how common they are: a 2023 Ahrefs study of 1,002,165 domains found a missing or empty meta description on 72.9% of them. At VITE SEO Digital Advertising, the agency I founded and have since closed, I led and co-developed 5 in-house plugins, about 11,700 lines of code. They cover an SEO diagnostic scanner, an internal-link content graph, a publish guard that requires an SEO title, meta description and schema, and bulk importers for DOCX drafts and schema CSV files.
 outcome: Five in-house WordPress plugins, about 11,700 lines of code, for SEO audits and publishing.
 period: "2026"
 year: 2026
@@ -19,31 +19,144 @@ order: 6
 draft: false
 ---
 
-## The problem
+## Abstract
 
-SEO work on WordPress repeats the same checks and the same publishing steps on every site: headings, indexability, images, broken links, internal links, titles, descriptions and schema. Doing it by hand takes time, and a missed step goes live.
+SEO work on WordPress repeats the same checks on every site, and at my agency a missed step kept going live. Public data shows these misses are common. A 2023 Ahrefs study of 1,002,165 domains found a missing or empty meta description on 72.9% of them. The same study found a page with only one followed internal link pointing to it on 66.2% of domains. At VITE SEO Digital Advertising, I led and co-developed 5 in-house WordPress plugins, about 11,700 lines of code, that built those checks into WordPress. The scanner ran before each client report, and the publish guard stopped posts missing an SEO title or schema.
 
-It became clear when we were publishing across several client sites at once and the same mistakes kept coming back: a missing meta description on one site, a page left on noindex on another. Checklists didn't stop it, so we built the checks into WordPress itself.
+## The problem I saw
 
-## What we built
+SEO work on WordPress repeats the same checks and the same publishing steps on every site. They cover headings, indexability, images, broken links, internal links, titles, descriptions and schema. Doing it by hand takes time, and a missed step goes live.
 
-Five plugins, about 11,700 lines of code in total:
+I have built WordPress sites for clients since 2023, and I set up Yoast SEO and Rank Math on client sites from that year. I founded [VITE SEO Digital Advertising](/blog/closing-my-agency) at 21. It grew to a team of up to 22 across sales, development, project management, marketing and SEO. I write more about this field under [SEO, GEO and AEO](/topics/seo-geo-aeo).
+
+The problem became clear when we were publishing across several client sites at once. The same mistakes kept coming back: a missing meta description on one site, a page left on noindex on another. Checklists didn't stop it, so we built the checks into WordPress itself.
+
+These mistakes share one trait: none of them is visible on the published page. A meta description and a noindex rule sit in the page's code, and a missing internal link is an absence. In a review by eye, they are easy to miss.
+
+## What the data says
+
+Public data shows that WordPress is where much of this work happens, and that these mistakes are common across the web.
+
+**WordPress runs a large share of the web.** As of November 2, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 39.5% of all websites. That is a 58.2% share among sites that use a content management system W3Techs tracks.
+
+**The everyday mistakes are widespread.** In 2023, [Ahrefs studied 1,002,165 domains to find the most common technical SEO issues](https://ahrefs.com/blog/site-audit-study/). Each figure is the share of domains where the issue appeared on at least one page. These are the ones closest to the suite's checks:
+
+| Issue (Ahrefs label) | Share of domains | Related check in the suite |
+| --- | --- | --- |
+| Missing alt attributes | 80.4% | Scanner: image checks |
+| Meta description tag missing or empty | 72.9% | Publish guard |
+| Page has only one dofollow incoming internal link | 66.2% | Content graph |
+| H1 tag missing or empty | 59.5% | Scanner: heading checks |
+
+**Links break after a page goes live.** Pew Research Center's 2024 report [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/) found that 23% of the news webpages it sampled contained at least one broken link. For government webpages, the figure was 21%. The same report found that a quarter of webpages that existed between 2013 and 2023 were no longer accessible by October 2023.
+
+**Google spells out what each miss costs.** Google Search Central documents the effect of each item the suite checks:
+
+- **Noindex:** "Google will drop that page entirely from Google Search results, regardless of whether other sites link to it" ([Google's noindex guide](https://developers.google.com/search/docs/crawling-indexing/block-indexing)).
+- **Titles:** "Make sure every page on your site has a title specified in the `<title>` element" ([Google's title link guide](https://developers.google.com/search/docs/appearance/title-link)).
+- **Meta descriptions:** Google "sometimes uses the meta description HTML element if it might give users a more accurate description of the page." Identical descriptions on every page "aren't helpful" ([Google's meta description guide](https://developers.google.com/search/docs/appearance/snippet)).
+- **Internal links:** "Every page you care about should have a link from at least one other page on your site" ([Google's link best practices](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)).
+- **Structured data:** Google reports that Rotten Tomatoes added structured data to 100,000 pages and measured a 25% higher click-through rate. Nestlé measured an 82% higher click-through rate on pages shown as rich results ([Google's structured data intro](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data)).
+
+**The standard SEO plugins are already everywhere.** As of November 2026, the WordPress.org directory shows 10+ million active installations for [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) and 4+ million for [Rank Math SEO](https://wordpress.org/plugins/seo-by-rank-math/). Yoast lists SEO analysis, readability analysis and Schema.org structured data. Rank Math lists content analysis, schema markup and a built-in 404 monitor.
+
+## Why I chose this solution
+
+Each design choice in the suite answers one part of that evidence.
+
+**Build inside WordPress, in plain PHP.** Our client sites ran on WordPress, so the tools had to live where the team already worked. The [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/intro/) says plugins "extend the functionality of WordPress without touching WordPress core itself." It adds that "the simplest plugin is a single PHP file." Plain PHP plugins meant no extra service to host.
+
+**Work alongside Yoast SEO and Rank Math.** The plugins worked alongside Yoast SEO and Rank Math instead of replacing them. With millions of active installations between them, both are standard tools, and I had set them up on client sites since 2023. The suite added checks around tools that were already in place.
+
+**Turn the checklist into a rule.** Checklists didn't stop the repeat mistakes. The Ahrefs figures count a domain if an issue shows up on even one page. That matches what I saw: one missed page on one site, then another.
+
+A publish guard checks every post at the moment it goes out, so it doesn't depend on someone remembering. WordPress is designed for checks like this. Its handbook describes [hooks](https://developer.wordpress.org/plugins/hooks/) as "a way for one piece of code to interact/modify another piece of code at specific, pre-defined spots."
+
+The guard required an SEO title, a meta description and schema. Those are the three items Google's documentation ties to title links, snippets and rich results.
+
+**Scan before every client report.** Pew's data shows that pages disappear over time, so a link that worked at launch can break later. One check at publish time is not enough for links. The diagnostic scanner ran before each client report, covering content, headings, indexability, images and broken links, plus spreadsheet exports.
+
+**Map internal links as a graph.** Google asks for a link to every page you care about from at least one other page. Finding the pages that nothing links to means looking at every link on a site at once, which is what a graph shows. The content graph showed how pages link to each other.
+
+**Import in bulk.** Drafts arrived as DOCX files, and schema came in CSV files. Bulk importers cut out copying each draft and each schema file into WordPress by hand.
+
+The realistic alternatives each cover part of the job:
+
+| Option | What it does | When it catches a miss | Cost, as of November 2026 |
+| --- | --- | --- | --- |
+| Manual checklist | A person checks each step | Only if someone remembers | Staff time |
+| Yoast SEO or Rank Math alone | Analysis, schema and, in Rank Math, a 404 monitor | While a writer reads the analysis | Free, with paid upgrades |
+| Ahrefs or Semrush site audit | Crawls the site and lists issues | On the next crawl | [Ahrefs Lite](https://ahrefs.com/pricing) $129 a month; [Semrush SEO plan](https://www.semrush.com/prices/) $139 a month |
+| In-house suite | Scanner, content graph, publish guard, importers | At publish time, and before each report | Team build time, no subscription |
+
+Site audit tools are strong at finding problems across a live site. The suite had a narrower job: stop known mistakes before they shipped, inside the tool the team already used.
+
+## What I built
+
+With the agency's in-house team, I led and co-developed five plugins, about 11,700 lines of code in total:
 
 - **An SEO diagnostic scanner** with content, heading, indexability, image and broken-link checks, plus spreadsheet exports.
 - **An internal-link content graph** that shows how pages link to each other.
 - **A publish guard** that requires an SEO title, a meta description and schema before a post can go out.
 - **Bulk importers** for DOCX drafts and for schema CSV files.
 
-## Stack and why
+The stack:
 
 - **Platform:** WordPress.
 - **Language:** PHP.
 
-Our client sites ran on WordPress, so the tools had to live where the team already worked. Plain PHP plugins meant no extra service to host, and they worked alongside Yoast SEO and Rank Math instead of replacing them.
+## How it works
+
+Each plugin sits at a different point in the publishing cycle:
+
+| Stage | Plugin | What it does |
+| --- | --- | --- |
+| Drafting | Bulk importers | Bring DOCX drafts and schema CSV files into WordPress |
+| Publishing | Publish guard | Stops a post that lacks an SEO title, a meta description or schema |
+| Site structure | Content graph | Shows how pages link to each other, including pages with no internal links |
+| Reporting | Diagnostic scanner | Checks content, headings, indexability, images and broken links, with spreadsheet exports |
+
+The guard handles the mistakes that can be blocked at the door. The scanner and the graph handle the ones that only appear across the whole site, such as broken links and pages nothing points to.
 
 ## Results
 
 - 5 plugins and about 11,700 lines of code.
 - Audits, internal linking, publishing rules and imports handled inside WordPress.
 
-Writers dropped DOCX drafts into the importer, the scanner ran before each client report, and the publish guard stopped posts that were missing an SEO title or schema. The content graph helped us find pages with no internal links pointing to them.
+Writers dropped DOCX drafts into the importer, and the scanner ran before each client report. The publish guard stopped posts that were missing an SEO title or schema. The content graph helped us find pages with no internal links pointing to them.
+
+## Limitations
+
+**No before-and-after numbers.** This study has no count of posts the guard stopped, issues the scanner found per site, or time saved against a manual audit. Without those, the suite's effect is described, not measured.
+
+**A check proves a field exists, not that it is good.** The publish guard confirmed that schema existed. Only reading the page proves the markup is true.
+
+The same goes for meta descriptions. A 2020 Ahrefs analysis found that [Google rewrites meta descriptions 62.78% of the time](https://ahrefs.com/blog/meta-description-study/). A description that passes the guard may still not be the snippet people see.
+
+**The public data is general.** The Ahrefs and Pew figures describe the web at large, not the client sites we worked on. None of them is specific to the Philippines. Google's structured data results are company case studies, not controlled tests.
+
+**In-house only.** The suite was built for the agency's own team, and the agency has since closed.
+
+**What would make this stronger:**
+
+- a count of posts the guard blocked,
+- scanner issue counts per site before and after fixes,
+- Search Console indexing data for the same sites over the same period.
+
+## Sources
+
+1. [Usage Statistics and Market Share of Content Management Systems, November 2026](https://w3techs.com/technologies/overview/content_management), W3Techs, November 2, 2026.
+2. [We Studied Over 1 Million Domains to Find the Most Common Technical SEO Issues](https://ahrefs.com/blog/site-audit-study/), Ahrefs (Patrick Stox), August 31, 2023.
+3. [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/), Pew Research Center, May 17, 2024.
+4. [Block Search Indexing with noindex](https://developers.google.com/search/docs/crawling-indexing/block-indexing), Google Search Central, accessed November 2026.
+5. [Influencing Title Links in Google Search](https://developers.google.com/search/docs/appearance/title-link), Google Search Central, accessed November 2026.
+6. [How to Write Meta Descriptions](https://developers.google.com/search/docs/appearance/snippet), Google Search Central, accessed November 2026.
+7. [SEO Link Best Practices for Google](https://developers.google.com/search/docs/crawling-indexing/links-crawlable), Google Search Central, accessed November 2026.
+8. [Intro to How Structured Data Markup Works](https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data), Google Search Central, accessed November 2026.
+9. [Yoast SEO – Advanced SEO with real-time guidance and built-in AI](https://wordpress.org/plugins/wordpress-seo/), WordPress.org, accessed November 2026.
+10. [Rank Math SEO – AI SEO Tools to Dominate SEO Rankings](https://wordpress.org/plugins/seo-by-rank-math/), WordPress.org, accessed November 2026.
+11. [Introduction to Plugin Development](https://developer.wordpress.org/plugins/intro/), WordPress Plugin Handbook, accessed November 2026.
+12. [Hooks](https://developer.wordpress.org/plugins/hooks/), WordPress Plugin Handbook, accessed November 2026.
+13. [Plans & Pricing](https://ahrefs.com/pricing), Ahrefs, accessed November 2026.
+14. [SEO & AI Search Plans and Pricing](https://www.semrush.com/prices/), Semrush, accessed November 2026.
+15. [How Often Does Google Rewrite Meta Descriptions? (New Data Study)](https://ahrefs.com/blog/meta-description-study/), Ahrefs (Michal Pecánek), March 25, 2020, updated October 9, 2020.
