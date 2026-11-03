@@ -50,6 +50,10 @@ This site is built on Astro 7, so this take comes from a working build. It is pa
 
 The Astro team released Astro 7.0 on June 22, 2026, and announced it in the post [Astro 7.0](https://astro.build/blog/astro-7/) on the official Astro blog.
 
+![An astronaut floating in space during a spacewalk on the Gemini XI mission](../../assets/images/content/astro-7-content-sites-1.jpg "An astronaut floating in space during a spacewalk on the Gemini XI mission")
+
+*Astro's space theme starts with its name. Photo: [NASA Glenn Research Center](https://commons.wikimedia.org/wiki/File:GEMINI-TITAN_GT-XI_-_EXTRA-VEHICULAR_ACTIVITY_EVA_-_ASTRONAUT_WILLIAM_A._ANDERS_-_TRAINING_-_PATRICK_DVIDS705073.jpg "NASA Glenn Research Center's photo on Wikimedia Commons"), public domain.*
+
 ## What changed, in plain words?
 
 Astro 7 is mostly a speed and tooling release. These are the main changes from the [official announcement](https://astro.build/blog/astro-7/) and the [Astro 7 upgrade guide](https://docs.astro.build/en/guides/upgrade-to/v7/):
@@ -59,6 +63,10 @@ Astro 7 is mostly a speed and tooling release. These are the main changes from t
 * **Caching and routing become stable.** Route caching is stable, with experimental cache providers for Netlify, Vercel and Cloudflare. A new `src/fetch.ts` entry point gives control over the request pipeline.
 * **Breaking changes.** The new compiler reports unclosed tags and invalid HTML nesting as errors instead of fixing them silently. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
 
+![A text editor window full of code on a computer screen](../../assets/images/content/astro-7-content-sites-2.jpg "A text editor window full of code on a computer screen")
+
+*Astro 7 brings faster builds, a Rust-based Markdown processor and a stricter compiler. Photo: [MikeRun](https://commons.wikimedia.org/wiki/File:Screen-python-code-matplotlib-physics-simulation.jpg "MikeRun's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 Chris Pennington of Coding in Public walks through these changes, including build benchmarks and the whitespace gotcha, in under nine minutes:
 
 <YouTube id="KBOgV7kuSm8" title="What Astro’s new compiler means for you" channel="Coding in Public" />
@@ -66,6 +74,10 @@ Chris Pennington of Coding in Public walks through these changes, including buil
 ## Why does it matter for content sites?
 
 Astro's core idea is that most pages on a content site do not need JavaScript in the browser. Pages are built as static HTML, and interactive parts are added as small islands only where they are needed. That keeps pages light, which helps both readers on slow connections and search engines, including the AI search systems I cover in [GEO and AEO fundamentals](/blog/geo-and-aeo-fundamentals).
+
+![A student reading from a laptop](../../assets/images/content/astro-7-content-sites-3.jpg "A student reading from a laptop")
+
+*Content sites depend on pages that load fast for readers. Photo: [Jaokov](https://commons.wikimedia.org/wiki/File:A_student_reading_from_a_laptop.jpg "Jaokov's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
 

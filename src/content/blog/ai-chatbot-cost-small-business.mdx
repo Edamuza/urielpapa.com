@@ -73,6 +73,10 @@ The cost of an AI chatbot comes from five parts, and only two of them show up as
 - **Setup time.** Creating the Meta app, connecting the webhook, writing the system prompt and testing.
 - **Upkeep.** Updating the prompt when prices or services change, reading handed-over chats and keeping the server patched.
 
+![The front of a small independent shop](../../assets/images/content/ai-chatbot-cost-small-business-1.jpg "The front of a small independent shop")
+
+*For a small shop, the AI model is usually the cheapest part of running a chatbot. Photo: [Ewan-M](https://commons.wikimedia.org/wiki/File:Vx,_Pentonville,_N1.jpg "Ewan-M's photo on Wikimedia Commons"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
+
 Setup and upkeep never appear on an invoice, but they are real costs, and they are usually the largest ones.
 
 ## How does AI token pricing work?
@@ -97,6 +101,10 @@ A worked example makes chatbot token costs concrete. Here are the assumptions:
 2. A 1,200-token system prompt goes with every call.
 3. Each customer message is 50 tokens, and each reply is 150 tokens.
 4. Every call also carries the conversation so far, which grows by 200 tokens per turn.
+
+![A person holding a cup of coffee beside a laptop and a doughnut](../../assets/images/content/ai-chatbot-cost-small-business-2.jpg "A person holding a cup of coffee beside a laptop and a doughnut")
+
+*Every customer conversation uses tokens, both for the question and for the answer. Photo: [Nenad Stojkovic](https://commons.wikimedia.org/wiki/File:Close-up_of_a_woman_using_her_smartphone_while_having_coffee.jpg "Nenad Stojkovic's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
 
 The first call sends 1,250 input tokens (1,200 + 50). The next calls send 1,450, 1,650, 1,850 and 2,050. That adds up to 8,250 input tokens and 750 output tokens (5 × 150), or 9,000 tokens per conversation.
 
@@ -137,6 +145,10 @@ Hidden chatbot costs usually come from tokens you did not plan for and rules you
 - **Human handover.** Someone has to read and answer the chats the bot passes on.
 - **Meta platform rules.** Messenger replies are open for 24 hours after a person's message. Meta's [Messenger policy](https://developers.facebook.com/docs/messenger-platform/policy/policy-overview/) says automated chats must disclose they are automated where the law requires it.
 - **WhatsApp fees.** [WhatsApp charges per delivered template message](https://developers.facebook.com/docs/whatsapp/pricing/). From October 1, 2026, each business number gets 1,000 free service messages a month, then Meta charges.
+
+![Three stacks of Canadian quarter coins](../../assets/images/content/ai-chatbot-cost-small-business-3.jpg "Three stacks of Canadian quarter coins")
+
+*Platform fees, messaging charges and setup time push the bill up more than the model does. Photo: [KMR Photography](https://commons.wikimedia.org/wiki/File:Stacks_of_Canadian_Coins_%2816269886909%29.jpg "KMR Photography's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
 
 Price changes are the last hidden cost. Gemini 3.8 Flash doubles on January 1, 2027, and Claude Haiku 5.5 costs five times more for prompts over 100,000 tokens.
 

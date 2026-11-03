@@ -46,6 +46,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing.
 
 The AWS Open Source Blog published [Introducing Infinity: a runtime for extreme agent concurrency](https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/). Infinity is part of Hydro, which AWS describes as "a collaborative effort between AWS and UC Berkeley." The code is on [GitHub](https://github.com/hydro-project/infinity) under the Apache 2.0 licence.
 
+![Amazon Web Services data center buildings in the us-west-2 region in Oregon](../../assets/images/content/aws-infinity-agent-runtime-1.jpg "Amazon Web Services data center buildings in the us-west-2 region in Oregon")
+
+*AWS data centers in its us-west-2 region in Oregon. Infinity is an open-source research runtime, not an AWS product. Photo: [Tedder](https://commons.wikimedia.org/wiki/File:Amazon_AWS_us-west-2_beach_AZ.jpg "Tedder's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 ## What changed?
 
 These points come from [AWS's post](https://aws.amazon.com/blogs/opensource/introducing-infinity-a-runtime-for-extreme-agent-concurrency/):
@@ -54,6 +58,10 @@ These points come from [AWS's post](https://aws.amazon.com/blogs/opensource/intr
 * **Serverless friendly.** A step mode lets it run on platforms like AWS Lambda, where the function can end while a tool call runs.
 * **Events as tool calls.** Outside events reach the model as injected tool calls.
 * **Agents that start agents.** A built-in spawn_thread tool creates child agents that report back to the parent.
+
+![A server room with racks of computers](../../assets/images/content/aws-infinity-agent-runtime-2.jpg "A server room with racks of computers")
+
+*AWS says Infinity fit 75,000 concurrent agents in the 8 GB of memory on a Raspberry Pi 5. Photo: [Esquilo](https://commons.wikimedia.org/wiki/File:PDC_server_room.jpg "Esquilo's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
 
 AWS's benchmark ran 80,000 agents and 3.2 million completions on one CPU thread, with in-memory stores and a simulated model. It measured about 100 KB per idle agent.
 

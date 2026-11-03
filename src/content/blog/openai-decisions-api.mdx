@@ -49,6 +49,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing.
 
 OpenAI announced the [Decisions API](https://openai.com/index/decisions-api/) with the tagline "Fast, focused, low-cost decisions for any application." The [developer guide](https://developers.openai.com/api/docs/guides/decisions) says it is generally available and returns answers "about 10x faster than the Responses API."
 
+![Road signs at a crossroads](../../assets/images/content/openai-decisions-api-1.jpg "Road signs at a crossroads")
+
+*The Decisions API is built for yes-or-no answers: classifying, routing and scoring. Photo: [Smallbones](https://commons.wikimedia.org/wiki/File:Why_they_call_it_Crossroads,_PA.jpg "Smallbones's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
+
 When the public beta opened in early October, OpenAI's developer account showed the three answer types on X:
 
 <SocialPost platform="x" url="https://x.com/OpenAIDevs/status/2107573384770879759" author="OpenAI Developers" handle="OpenAIDevs" date="2026-10-06" text={"Powered by GPT-6 Luna, it accepts text and image inputs and supports 3 kinds of outputs:\n\nPredicates: Estimate the probability that a statement is true.\n\nChoices: Select from predefined options, with confidence scores.\n\nScores: Evaluate an input against a numeric range."} media={[{ type: "video", src: "https://pbs.twimg.com/media/HT-bLEnWYAAi-US.jpg", alt: "Three panels labeled Predicates, Choices and Scores: a 94% True gauge, a list of options with Search at 97%, and a relevance score of 8.7 out of 10.", width: 3840, height: 2160 }]} />
@@ -62,6 +66,10 @@ These points come from [OpenAI's announcement](https://openai.com/index/decision
 * **Input-only pricing.** Uncached input costs US$0.10 per million tokens, cached input is cheaper, and output tokens are not charged.
 * **Bigger batches.** One request can carry up to 400 questions, up from 200 during the public beta.
 * **Text, images and JSON.** Context can be text, images or native JSON.
+
+![A red Road Ahead Closed sign half hidden in ferns](../../assets/images/content/openai-decisions-api-2.jpg "A red Road Ahead Closed sign half hidden in ferns")
+
+*A closed road is a clear no. OpenAI says the endpoint returns answers like that about 10 times faster than GPT-6 Luna in the Responses API. Photo: [Russel Wills](https://commons.wikimedia.org/wiki/File:Yes_-_it_is_a_road_sign_-_geograph.org.uk_-_7239042.jpg "Russel Wills's photo on Wikimedia Commons"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
 
 OpenAI also lists early users. Sierra reported under 280 ms p95 latency, and Ramp reported being 4 times faster and 30% cheaper than GPT-6 Luna for attributing AI costs. Those are the companies' own numbers, published by OpenAI.
 

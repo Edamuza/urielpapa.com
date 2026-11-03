@@ -47,6 +47,10 @@ This take is part of my [SEO, GEO and AEO](/topics/seo-geo-aeo) writing.
 
 On October 30, 2026, Microsoft Bing published [Your content, your choice: clearer preferences for training and grounding](https://blogs.bing.com/search/2026/10/your-content-your-choice-clearer-preferences-for-training-and-grounding/). It splits AI use into two preferences: **AI training**, a shared industry signal set in robots.txt, and **AI grounding**, Bing's term for using a page to inform AI answers, set page by page.
 
+![Dew drops on a spider's web in the morning](../../assets/images/content/ai-training-opt-out-robots-txt-1.jpg "Dew drops on a spider's web in the morning")
+
+*Search engines and AI companies send crawlers, often called spiders, to read the web. Photo: [Luc Viatour](https://commons.wikimedia.org/wiki/File:Spider_web_Luc_Viatour.jpg "Luc Viatour's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
+
 The same day, Kevin Kelley of Anthropic posted [the training preference signal draft](https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal/) to the IETF. His [message to the AI Preferences working group](https://mailarchive.ietf.org/arch/msg/ai-control/mddjatOxSR0h6GmLRBWlc839c7w/) says Anthropic has started implementing it, with rollout across its services taking time. It is an individual draft, not yet an IETF standard.
 
 Google's [common crawlers documentation](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) now says Google "intends to support the AIPREF shared machine-readable training preference signal" in early 2027. According to [Search Engine Roundtable](https://www.seroundtable.com/google-ai-training-control-42430.html), Google's John Mueller said a site that opts out with the token, without naming Google-Extended, will be treated as disallowing Google-Extended. The same report says OpenAI made a similar move.
@@ -59,6 +63,10 @@ The opt-out is an ordinary robots.txt group:
 User-Agent: __usage_ai-training
 Disallow: /
 ```
+
+![A one-way traffic sign](../../assets/images/content/ai-training-opt-out-robots-txt-2.jpg "A one-way traffic sign")
+
+*The rule works in one direction: it covers training only, so your pages can still show up in AI answers. Photo: [LandAndTree](https://commons.wikimedia.org/wiki/File:One-way_Traffic_Road_Sign_in_Ansan_20240719.jpg "LandAndTree's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 - **Existing files say nothing.** The draft says `User-Agent: *` groups never match the token, so a robots.txt without this group expresses no preference.
 - **Paths work.** You can disallow one folder, or allow one back, using normal robots.txt path rules.
@@ -77,6 +85,10 @@ Bing's timeline:
 ## What does it mean for businesses and site owners?
 
 Training and AI answers are now separate choices, so a small business can say no to training and still be cited. Bing says Disallow or DisallowExtended on grounding will reduce brand visibility in AI experiences, and Google says [Google-Extended](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) does not affect inclusion in Google Search.
+
+![Rows of server racks in a data center](../../assets/images/content/ai-training-opt-out-robots-txt-3.jpg "Rows of server racks in a data center")
+
+*AI models are trained in large data centers; the opt-out keeps your pages out of that training data. Photo: [Christopher Bowns](https://commons.wikimedia.org/wiki/File:Virginia_Tech_-_data_center.jpg "Christopher Bowns's photo on Wikimedia Commons"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
 
 One catch, as I read Google's docs: Google-Extended also covers grounding in Gemini, and Mueller said sites that explicitly allow Google-Extended stay eligible there. If you block training with the shared token but still want Gemini to cite you, allow Google-Extended explicitly. Google's separate opt-out for AI Overviews and AI Mode is the [Search Console control I covered earlier](/news/google-search-generative-ai-control).
 

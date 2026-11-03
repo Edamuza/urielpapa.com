@@ -46,6 +46,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing. My post on [what tok
 
 On October 7, 2026, Anthropic published the [Claude Haiku 5.5 announcement](https://www.anthropic.com/claude-haiku-5-5). The model ID is `claude-haiku-5-5`. It is available on the Claude Platform API and, according to Anthropic, on all platforms, including Amazon Web Services, Google Cloud and Microsoft Azure.
 
+![A hand writing Japanese characters with a calligraphy brush](../../assets/images/content/claude-haiku-5-5-1.jpg "A hand writing Japanese characters with a calligraphy brush")
+
+*A haiku is a short Japanese poem, which is where Anthropic's smallest Claude model gets its name. Photo: [Douglas Perkins](https://commons.wikimedia.org/wiki/File:Japanese_calligraphy_in_action_01.jpg "Douglas Perkins's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
+
 Claude's official account announced the model on X with a short launch video:
 
 <SocialPost platform="x" url="https://x.com/claudeai/status/2107894039626277339" author="Claude" handle="claudeai" date="2026-10-07" text={"Introducing Claude Haiku 5.5: the cheapest, fastest, and most capable small model we’ve ever released.\n\nOn average, it costs around 75% less to run than Claude Haiku 4.5."} media={[{ type: "video", src: "https://pbs.twimg.com/media/HUC-jfVW8AAz_Ic.jpg", alt: "Poster image for the Claude Haiku 5.5 launch video, with the words 'There’s more to discover.' set across three paper-collage tiles.", width: 1920, height: 1080 }]} />
@@ -61,6 +65,10 @@ These are the prices per million tokens from the announcement, as of October 202
 | Haiku 4.5 | US$1.00 | US$5.00 | US$0.10 |
 | Sonnet 5.5 | US$2.00 | US$10.00 | US$0.10 |
 
+![Illustration of a neural network with connected nodes on a dark background](../../assets/images/content/claude-haiku-5-5-2.jpg "Illustration of a neural network with connected nodes on a dark background")
+
+*Haiku 5.5 is still a small neural network model, so Anthropic keeps Sonnet 5.5 and Opus 5.5 for complex agentic coding. Image: [DancingPhilosopher](https://commons.wikimedia.org/wiki/File:Neural_network_with_dark_background.png "DancingPhilosopher's image on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 * **Lower cost, new tokenizer.** Anthropic says Haiku 5.5 costs around 75 percent less to run on average. A footnote explains that its updated tokenizer uses slightly more tokens per task, and the 75 percent figure accounts for that.
 * **An effort setting.** Haiku 5.5 is the first Haiku-class model with adjustable effort, from Low to Max.
 * **Better scores, still a small model.** On Anthropic's OSWorld 2.1 offline subset, Haiku 5.5 scores 72.4 percent against 15.7 percent for Haiku 4.5. Anthropic still recommends Sonnet 5.5 and Opus 5.5 for complex agentic coding.
@@ -74,6 +82,10 @@ Claude's account added the Sonnet 5.5 price cut at the end of its launch thread 
 ## What does it mean for small businesses and founders?
 
 Haiku 5.5 makes high-volume tasks close to free at small-business scale. Anthropic names summaries, classification, database queries and live customer support as target uses.
+
+![Stacks of coins on a table](../../assets/images/content/claude-haiku-5-5-3.jpg "Stacks of coins on a table")
+
+*At US$0.10 per million input tokens, high-volume tasks like tagging and summaries cost cents a month. Photo: [Dori](https://commons.wikimedia.org/wiki/File:Stack_of_coins_0214%28cropped%29.jpg "Dori's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 Take the example chatbot from my tokenization post, which sends about 2 million input tokens and gets 150,000 output tokens back each month. On Haiku 4.5, that is 2 × US$1 plus 0.15 × US$5, or about US$2.75. On Haiku 5.5, it is 2 × US$0.10 plus 0.15 × US$0.50, or about US$0.28, before the new tokenizer adds a few tokens. These are rough estimates.
 

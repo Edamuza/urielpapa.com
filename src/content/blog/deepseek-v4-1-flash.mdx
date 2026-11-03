@@ -43,6 +43,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing. My post on [what tok
 
 On September 10, 2026, DeepSeek published the [DeepSeek-V4.1-Flash release notes](https://api-docs.deepseek.com/news/news260910). The model is live in the DeepSeek API under the name `deepseek-flash`, and its weights are on Hugging Face under the deepseek-ai organization. The older V4-Flash and V4-Flash-Vision-Exp models were retired, and their names now route to the new model.
 
+![Downtown Hangzhou skyline seen across West Lake](../../assets/images/content/deepseek-v4-1-flash-1.jpg "Downtown Hangzhou skyline seen across West Lake")
+
+*DeepSeek is based in Hangzhou, China, so its peak hours follow China time, the same as Philippine time. Photo: [Yinweichen](https://commons.wikimedia.org/wiki/File:Hangzhou_Skyline_on_West_Lake.jpg "Yinweichen's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
 DeepSeek announced the model on X, with a chart of its own benchmark results:
 
 <SocialPost platform="x" url="https://x.com/deepseek_ai/status/2097930608790167907" author="DeepSeek" handle="deepseek_ai" date="2026-09-10" text={"🚀 Introducing DeepSeek-V4.1-Flash: smarter, faster, more efficient.\n\n🔹 Introducing the smallest model in our new architecture family, with native visual understanding.\n🔹 Designed for greater capability, faster inference, higher throughput, and scaling to larger models.\n\n1/6"} media={[{ src: "https://pbs.twimg.com/media/HR1UyHiaAAAtpqw.jpg", alt: "Bar chart comparing DeepSeek-V4.1-Flash with Kimi-K3, GLM-5.3, Opus5 and GPT5.6-Sol on Terminal-Bench 3.0, DeepSWE v1.1, CyberGym and Automation-Bench.", width: 4096, height: 2101 }]} />
@@ -65,6 +69,10 @@ These are the prices per million tokens for `deepseek-flash`, as of October 2026
 | Input, cache miss | US$0.30 | US$0.15 |
 | Output | US$1.20 | US$0.60 |
 
+![Photographic lenses on a wooden table](../../assets/images/content/deepseek-v4-1-flash-2.jpg "Photographic lenses on a wooden table")
+
+*DeepSeek-V4.1-Flash now reads images as well as text. Photo: [Carlos Valenzuela Montuy](https://commons.wikimedia.org/wiki/File:Photographic_lenses_and_tubes_2025.jpg "Carlos Valenzuela Montuy's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
+
 IBM's explainer on mixture-of-experts models shows how a model this large runs only a small part of itself for each token:
 
 <YouTube id="sYDlVVyJYn4" title="What is Mixture of Experts?" channel="IBM Technology" />
@@ -72,6 +80,10 @@ IBM's explainer on mixture-of-experts models shows how a model this large runs o
 ## What does it mean for small businesses and founders?
 
 DeepSeek-V4.1-Flash is cheap, but it is not the lowest list price. OpenAI lists [GPT-6 Luna](https://developers.openai.com/api/docs/pricing) at US$0.10 input and US$0.50 output per million tokens, below DeepSeek's rates at any hour. DeepSeek's case rests on very cheap cache hits, image input, long outputs and open weights. Take the example chatbot from my tokenization post, which sends about 2 million input tokens and gets 150,000 output tokens back each month. At peak rates, that is 2 × US$0.30 plus 0.15 × US$1.20, or about US$0.78. Off-peak, it is about US$0.39. These are rough estimates.
+
+![An AMD GPU package with HBM memory chips](../../assets/images/content/deepseek-v4-1-flash-3.jpg "An AMD GPU package with HBM memory chips")
+
+*Open weights mean you can run the model on your own GPUs instead of paying per token. Photo: [C. Spille/pcgameshardware.de](https://commons.wikimedia.org/wiki/File:AMD_Fiji_GPU_package_with_GPU,_HBM_memory_and_interposer.jpg "C. Spille/pcgameshardware.de's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
 The timing matters more here than with other providers. DeepSeek's peak hours are 01:00 to 04:00 and 06:00 to 10:00 UTC, Monday to Friday, excluding Chinese public holidays. In Manila, at UTC+8, that is 9 a.m. to noon and 2 p.m. to 6 p.m. A customer chatbot answering during office hours pays the peak rate. A nightly batch job, such as tagging the day's inquiries or summarizing reports, can run off-peak at half the price.
 
