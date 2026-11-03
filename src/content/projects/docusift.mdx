@@ -43,20 +43,20 @@ Invoice data is getting more structured, not less. [BIR RMC 98-2026](/news/bir-r
 
 ## What the data says
 
-**The invoice is now the main sales document.** Revenue Regulations No. 7-2024 changed the BIR's invoicing rules from April 27, 2024. Since then, official receipts are no longer valid as evidence of sales, as [KPMG's summary of the rules](https://kpmg.com/us/en/taxnewsflash/news/2024/07/tnf-philippines-updated-invoicing-requirements.html) notes. Leftover ORs can still be used as supplementary documents, stamped as not valid for input tax claims, per [P&A Grant Thornton's note on RR 7-2024](https://www.grantthornton.com.ph/insights/articles-and-updates1/tax-notes/clarification-on-the-invoicing-requirements-per-rr-no-7-2024-as-amended-by-rr-no-11-2024/).
+**The invoice is now the main sales document.** The BIR's Revenue Regulations No. 7-2024 changed the invoicing rules from April 27, 2024. Since then, official receipts are no longer valid as evidence of sales, as [KPMG's summary of the rules](https://kpmg.com/us/en/taxnewsflash/news/2024/07/tnf-philippines-updated-invoicing-requirements.html) notes. Leftover ORs can still be used as supplementary documents, stamped as not valid for input tax claims, per [P&A Grant Thornton's note on RR 7-2024](https://www.grantthornton.com.ph/insights/articles-and-updates1/tax-notes/clarification-on-the-invoicing-requirements-per-rr-no-7-2024-as-amended-by-rr-no-11-2024/).
 
-**A few fields decide the VAT claim.** The same note says input VAT may be claimed when the invoice properly shows the sales amount and the VAT amount. It must also show the registered names and TINs of buyer and seller. [PwC's Philippines tax summary](https://taxsummaries.pwc.com/philippines/corporate/other-taxes) gives the same list.
+**A few fields decide the VAT claim.** The same note says input VAT may be claimed when the invoice properly shows the sales amount and the VAT amount. It must also show both parties' registered names and TINs, what was sold and the date. [PwC's Philippines tax summary](https://taxsummaries.pwc.com/philippines/corporate/other-taxes) gives the same list.
 
-**VAT is a flat 12%.** The PwC summary, last reviewed August 1, 2026, gives a uniform VAT rate of 12%.
+**VAT is a flat 12%.** PwC's summary, last reviewed August 1, 2026, gives a uniform rate of 12%.
 
-**E-invoicing is coming, but not for everyone.** The BIR issued [RMC No. 98-2026](https://bir-cdn.bir.gov.ph/BIR/pdf/RMC%20No.%2098-2026%20redacted.pdf) on September 22, 2026. It requires covered taxpayers, except Micro taxpayers, to issue electronic invoices on or before December 31, 2026. The circular also prescribes JSON for sending sales data to the BIR.
+**E-invoicing is coming, but not for everyone.** The BIR issued [RMC No. 98-2026](https://bir-cdn.bir.gov.ph/BIR/pdf/RMC%20No.%2098-2026%20redacted.pdf) on September 22, 2026. It requires covered taxpayers, except Micro taxpayers, to issue electronic invoices on or before December 31, 2026. It adds that the BIR's system takes sales data in JSON.
 
 **The best AP teams spend far less.** Two benchmarks show the gap in accounts payable (AP):
 
 | Benchmark | Finding |
 | --- | --- |
-| [APQC's AP benchmarks](https://www.apqc.org/blog/4-kpis-set-good-accounts-payable-organizations-apart) (2018) | Top performers' AP costs are one-fifth of the bottom quartile's, and they are five times more productive at processing invoices |
-| [Ardent Partners' State of ePayables 2025](https://tradeshift.com/state-of-epayables-2025-report/) (200+ AP leaders) | Only 46% of organizations have deployed comprehensive ePayables solutions. Best-in-Class teams have 79% lower processing costs and 79% faster cycle times |
+| [APQC's Blueprint for Success: Accounts Payable](https://www.apqc.org/blog/4-kpis-set-good-accounts-payable-organizations-apart) (2018) | Top performers' AP costs are one-fifth of the bottom quartile's, and they are five times more productive at processing invoices |
+| [Ardent Partners' State of ePayables 2025](https://tradeshift.com/state-of-epayables-2025-report/) (200+ AP leaders, sponsored by Tradeshift) | Only 46% of organizations have deployed comprehensive ePayables solutions. Best-in-Class teams have 79% lower processing costs and 79% faster cycle times than peers |
 
 ## Why I chose this solution
 
@@ -68,7 +68,7 @@ Invoice data is getting more structured, not less. [BIR RMC 98-2026](/news/bir-r
 
 **Keep the output structured.** The BIR is moving to structured data, with JSON for sales reporting. DocuSift already returns a fixed set of fields and exports approved documents as CSV.
 
-The realistic alternatives compare like this:
+The alternatives compare like this:
 
 | Option | What it does well | Where it falls short |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ The realistic alternatives compare like this:
 ![DocuSift review screen for the fictional Mabilis Hardware invoice, marked Needs review, with the document on the left and extracted fields, confidence badges and a failed "Totals reconcile" rule on the right](../../assets/images/content/docusift-review-needs-review.png)
 
 - **Documents:** upload a PNG, JPG or PDF up to 10 MB, or try one of three bundled fictional invoices. Every document shows its vendor, total, date and status: Processing, Needs review, Approved or Failed.
-- **Extraction:** a vision model reads a fixed set of fields (document type, vendor, TIN, address, buyer, invoice number, date, VATable, VAT and VAT-exempt amounts, total and line items), each with a confidence score.
+- **Extraction:** a vision model reads document type, vendor, TIN, address, buyer, invoice number, date, VATable, VAT and VAT-exempt amounts, total and line items. Each field gets a confidence score.
 - **Validation:** five rules in code check the arithmetic, the 12% VAT, the TIN format and the date.
 - **Review:** the document image beside editable fields with green, amber and red confidence badges, an editable line-item table and a panel listing every rule result. Approving records which fields the reviewer changed.
 - **Export:** approved documents as a CSV with one row per document, or one row per line item.
@@ -108,7 +108,7 @@ Structured output makes the extraction predictable. Every response has the same 
 
 ## How I built and tested it
 
-I built DocuSift by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks. It included three fictional samples: a clean sales invoice, a VAT-exempt official receipt, and a hardware invoice whose printed total is deliberately PHP 100.00 too high. The agent built the app in Lovable, an AI app builder. One follow-up added timeouts, a "stuck in processing" state and clear Failed messages.
+I built DocuSift by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks. It included three fictional samples: a clean sales invoice, a VAT-exempt official receipt and a hardware invoice. That invoice's printed total is deliberately PHP 100.00 too high. The agent built the app in Lovable, an AI app builder. One follow-up added timeouts, a "stuck in processing" state and clear Failed messages.
 
 The stack:
 
@@ -159,6 +159,6 @@ One bug came up in QA. When the browser tab was in the background, the image-loa
 2. [Clarification on the invoicing requirements per RR No.7-2024, as amended by RR No.11 -2024](https://www.grantthornton.com.ph/insights/articles-and-updates1/tax-notes/clarification-on-the-invoicing-requirements-per-rr-no-7-2024-as-amended-by-rr-no-11-2024/), P&A Grant Thornton, July 24, 2024.
 3. [Philippines - Corporate - Other taxes](https://taxsummaries.pwc.com/philippines/corporate/other-taxes), PwC Worldwide Tax Summaries, last reviewed August 1, 2026.
 4. [RMC No. 98-2026: Prescribing Policies and Guidelines on the Issuance of Electronic Invoice](https://bir-cdn.bir.gov.ph/BIR/pdf/RMC%20No.%2098-2026%20redacted.pdf), Bureau of Internal Revenue, September 22, 2026.
-5. [4 KPIs Set Good Accounts Payable Organizations Apart](https://www.apqc.org/blog/4-kpis-set-good-accounts-payable-organizations-apart), APQC, May 22, 2018.
-6. [The state of ePayables 2025: AP's unfinished journey](https://tradeshift.com/state-of-epayables-2025-report/), Ardent Partners, sponsored by Tradeshift, June 16, 2025.
+5. [4 KPIs Set Good Accounts Payable Organizations Apart](https://www.apqc.org/blog/4-kpis-set-good-accounts-payable-organizations-apart), APQC blog post summarizing APQC's Blueprint for Success: Accounts Payable (second edition), May 22, 2018.
+6. [The state of ePayables 2025: AP's unfinished journey](https://tradeshift.com/state-of-epayables-2025-report/), report by Ardent Partners, on the download page of its sponsor, Tradeshift, June 16, 2025.
 7. [Faith and Fate: Limits of Transformers on Compositionality](https://arxiv.org/pdf/2305.18654), Dziri et al., NeurIPS 2023.
