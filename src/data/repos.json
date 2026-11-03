@@ -2,85 +2,85 @@
   {
     "repo": "Edamuza/viteseo-enterpriserp",
     "description": null,
-    "language": null,
+    "language": "PHP",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/viteseo-nfc",
     "description": null,
-    "language": null,
+    "language": "PHP",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/Travel_Ease",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 1
   },
   {
     "repo": "Edamuza/viteseo-client-portal",
-    "description": null,
-    "language": null,
+    "description": "Secure client quotation portal with OTP authentication",
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/Wordpress-Plugins",
     "description": null,
     "language": null,
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/archive-downloader",
-    "description": null,
-    "language": null,
+    "description": "Scrape pages from web archives using URLs. Useful for restoring expired domain pages as a child theme.",
+    "language": "CSS",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "joshfermano/liora-local",
-    "description": null,
-    "language": null,
+    "description": "Offline AI companion for Filipino mothers. Gemma 4 runs on the iPhone; WHO-based rules say when to go to the hospital. Expo + llama.rn, works in airplane mode.",
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 1
   },
   {
     "repo": "Edamuza/policydesk-uriel",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/processlens-uriel",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/inboxpilot-uriel",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/docusift-uriel",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   },
   {
     "repo": "Edamuza/modelbench-uriel",
     "description": null,
-    "language": null,
+    "language": "TypeScript",
     "license": null,
-    "stars": null
+    "stars": 0
   }
 ]
