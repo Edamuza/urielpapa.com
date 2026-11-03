@@ -65,16 +65,16 @@ const isActive = (href: string) =>
           }
           <li>
             <a
-              href="/contact"
+              href="/about"
               class:list={[
                 "lg:border-foreground ms-1 block rounded-lg px-2 py-2 font-medium lg:border lg:px-3 lg:py-1.5",
-                isActive("/contact")
+                isActive("/about")
                   ? "underline decoration-2 underline-offset-8 lg:no-underline"
                   : "no-underline hover:underline",
               ]}
-              aria-current={isActive("/contact") ? "page" : undefined}
+              aria-current={isActive("/about") ? "page" : undefined}
             >
-              Contact
+              About
             </a>
           </li>
         </ul>
@@ -116,7 +116,7 @@ const isActive = (href: string) =>
             <!-- Same pages as the desktop menu, then the smaller sections below. -->
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
-                [...NAV, { href: "/contact", label: "Contact" }].map(item => (
+                [...NAV, { href: "/about", label: "About" }].map(item => (
                   <li>
                     <a
                       href={item.href}
