@@ -9,6 +9,7 @@ import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import PostCard from "@/components/PostCard.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
+import RepoCard from "@/components/RepoCard.astro";
 import { mdxComponents } from "@/components/mdx";
 import { SHOW_DRAFTS } from "@/config";
 import {
@@ -121,6 +122,8 @@ const schema = [
         )
       }
     </dl>
+
+    {data.repo && <RepoCard repo={data.repo} />}
 
     <div class="app-prose mt-8"><Content components={mdxComponents} /></div>
 

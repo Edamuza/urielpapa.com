@@ -140,6 +140,16 @@ const projects = defineCollection({
       hubs: z.array(z.enum(HUB_IDS)).default([]),
       order: z.number().default(100),
       draft: z.boolean().default(false),
+      // GitHub repository shown as a card on the project page, as "owner/name".
+      repo: z
+        .string()
+        .regex(
+          /^[\w.-]+\/[\w.-]+$/,
+          'Use "owner/name", e.g. Edamuza/Travel_Ease'
+        )
+        .or(z.literal(""))
+        .nullish()
+        .transform(v => (v ? v : undefined)),
       // Featured image for project cards, with its alt text.
       cover: image().optional(),
       coverAlt: z.string().optional(),
