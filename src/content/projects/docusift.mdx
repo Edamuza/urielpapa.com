@@ -1,0 +1,112 @@
+---
+title: DocuSift
+description: Invoice and receipt extraction for Philippine documents. A vision model reads the fields, rules in code check the math, and a person reviews anything unsure.
+summary: >-
+  Bookkeepers in the Philippines still key invoices and official receipts into spreadsheets by hand, and a mistyped TIN or VAT amount surfaces months later during reconciliation. I built DocuSift, which reads an invoice with a vision model, checks the arithmetic, VAT and TIN format with rules in code, and sends anything the model was unsure about, or the rules rejected, to a person for review.
+outcome: Invoice extraction that read every field of three test invoices correctly and caught a deliberate PHP 100.00 total error.
+period: November 2026
+year: 2026
+role: Directed the AI agents that specified, built and tested it in Lovable
+team: Solo, with AI agents
+status: Live demo (fictional sample data)
+kind: SoftwareApplication
+liveUrl: https://docusift-uriel.lovable.app
+stack:
+  - lovable
+  - tanstack-start
+  - react
+  - typescript
+  - supabase
+  - postgresql
+  - gpt
+  - vitest
+hubs:
+  - ai
+  - automation
+order: 11
+draft: false
+---
+
+## The problem
+
+Accounting staff and small finance teams in the Philippines still type sales invoices and official receipts into spreadsheets. The work is slow. A single mistyped digit in a TIN, a VAT amount or a total shows up later as a mismatch during reconciliation or tax filing.
+
+Fully automatic extraction doesn't solve it either. Nobody signs off on a number without knowing how sure the system was and whether the math adds up. A useful tool has to read the document, check its own work and hand the doubtful cases to a person.
+
+Invoice data is getting more structured, not less. [BIR RMC 98-2026](/news/bir-rmc-98-2026-e-invoicing) sets e-invoicing rules for covered taxpayers before the end of 2026. Until every supplier issues e-invoices, paper and PDF invoices still need reading.
+
+## What I built
+
+![DocuSift review screen for the fictional Mabilis Hardware invoice, marked Needs review, with the document on the left and extracted fields, confidence badges and a failed "Totals reconcile" rule on the right](../../assets/images/content/docusift-review-needs-review.png)
+
+- **Documents:** upload a PNG, JPG or PDF up to 10 MB, or try one of three bundled fictional invoices. Every document shows its vendor, total, date and status: Processing, Needs review, Approved or Failed.
+- **Extraction:** a vision model reads a fixed set of fields (document type, vendor, TIN, address, buyer, invoice number, date, VATable, VAT and VAT-exempt amounts, total and line items), each with a confidence score.
+- **Validation:** five rules in code check the arithmetic, the 12% VAT, the TIN format and the date.
+- **Review:** the document image beside editable fields with green, amber and red confidence badges, an editable line-item table and a panel listing every rule result. Approving records which fields the reviewer changed.
+- **Export:** approved documents as a CSV with one row per document, or one row per line item.
+- **Accuracy:** field-by-field accuracy, based on how often reviewers had to correct each field.
+
+## How it works
+
+DocuSift follows one pattern: extract, verify in code, then route to a person. The model only reads. Rules decide whether the numbers hold up. Anything the rules reject, or the model wasn't sure about, waits for a human.
+
+1. The browser turns the file into an image. A PDF's first page is rendered with pdf.js.
+2. The server stores the image in a private storage bucket and creates the document record.
+3. A vision model, called through the Lovable AI gateway, returns the fields as structured output checked against a schema.
+4. Rules in code check the result, with a tolerance of ±₱1.00:
+   - Line items add up to the VATable plus VAT-exempt sales.
+   - VATable plus VAT plus VAT-exempt equals the total.
+   - VAT is 12% of the VATable sales.
+   - The TIN matches the ###-###-###-### format, with 3 to 5 digits in the last group.
+   - The invoice date is valid and not in the future.
+5. Any field below 0.75 confidence, or any failed rule, sends the document to Needs review. Clean documents are approved automatically only if that setting is switched on, and it's off by default.
+
+Keeping the rules out of the model was the main design choice. A model can read "11,199.20" correctly and still not notice that the total is wrong. A subtraction in code always notices.
+
+## How I built it
+
+I built DocuSift by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks, including three fictional sample invoices: a clean sales invoice, a VAT-exempt official receipt, and a hardware invoice whose printed total is deliberately PHP 100.00 too high. The agent built the app in Lovable, an AI app builder. One follow-up added timeouts, a "stuck in processing" state and clear Failed messages.
+
+A separate QA agent then tested the published app in a real browser, comparing every extracted field against the sample images.
+
+## How I tested it
+
+![DocuSift Accuracy screen showing overall field accuracy, approved documents, auto-approvable share, average processing time and a bar chart of accuracy by field](../../assets/images/content/docusift-accuracy-report.png)
+
+QA ran all three samples through the real model and compared every field with the images.
+
+| Sample | What the model read | What the rules said |
+| --- | --- | --- |
+| Sari-Sari Supplies Trading sales invoice | TIN 123-456-789-00000, SI 0001245, VATable ₱4,520, VAT ₱542.40, total ₱5,062.40 and all 4 line items | All 5 rules pass |
+| Kusina ni Lola Catering official receipt | OR 004512, VAT-exempt sales ₱5,300 and 2 line items | All 5 rules pass |
+| Mabilis Hardware sales invoice | The printed total of ₱11,199.20, exactly as shown | Totals rule fails: PHP 100.00 higher than ₱9,910 + ₱1,189.20 |
+
+The third row is the point of the whole design. The model read the wrong total faithfully, as it should, and the rule caught it and sent the invoice to review.
+
+QA also edited one vendor name and approved the document. On the Accuracy page, vendor name accuracy dropped from 100% to 75%, and the export showed the corrected name. An unreadable noise image ended as Failed, with "The image could not be read as an invoice or receipt" and a Retry button.
+
+One bug came up in QA. When the browser tab was in the background, the image-loading step never finished, so uploads sat on "Extracting…" for over two minutes. Lovable changed how images load and added a 20-second timeout with a clear error. A retest on the published app confirmed that samples and re-extraction still complete with the new loader. The test browser couldn't fully recreate a background tab, so the timeout itself hasn't been seen firing.
+
+## Stack and why
+
+- **App:** TanStack Start with React 19 and TypeScript, built in Lovable, with pdf.js for PDFs.
+- **Database and storage:** Postgres and a private storage bucket on Lovable Cloud (Supabase).
+- **AI:** a vision model through the Lovable AI gateway, using the Vercel AI SDK with structured output.
+- **Tests:** Vitest, covering all five rules on the three samples, the review routing and the accuracy math.
+
+Structured output makes the extraction predictable: every response has the same fields, so the rules and the review screen never have to guess. Storing which fields reviewers changed turns everyday corrections into an accuracy report without any extra work.
+
+## Results
+
+- Every field of all three sample invoices read correctly.
+- A deliberate PHP 100.00 total error caught by the rules and sent to review.
+- Field-level accuracy that updates from real reviewer corrections.
+- The acceptance checks passing in browser testing after one round of fixes. The phone-width layout and the file picker weren't part of the browser test, though a PNG passed straight to the upload input went through correctly.
+- Live at [docusift-uriel.lovable.app](https://docusift-uriel.lovable.app), with fictional sample data.
+
+## What I'd do next for a real finance team
+
+- Test on a few hundred real invoices from the team's suppliers and set the confidence threshold from that data.
+- Read every page of multi-page PDFs, not only the first.
+- Push approved documents straight into the accounting system, with duplicate-invoice checks.
+- Add logins and roles, so only finance staff can approve and export.

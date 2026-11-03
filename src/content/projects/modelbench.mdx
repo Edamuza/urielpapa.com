@@ -1,0 +1,109 @@
+---
+title: ModelBench
+description: A model comparison tool that runs one business task on several LLMs, grades every answer against a rubric and names the cheapest model that meets the bar.
+summary: >-
+  Every team that adds an AI model to a business process asks the same question: which model, and what will it cost? The answer is usually a guess based on the biggest model or a public leaderboard. I built ModelBench, which runs the same task and test inputs on several models, measures speed, tokens and cost, grades each answer against a rubric, and recommends the cheapest model that meets the quality bar.
+outcome: Model recommendations backed by graded test runs, where a model about 23 times cheaper met the quality bar on email classification.
+period: November 2026
+year: 2026
+role: Directed the AI agents that specified, built and tested it in Lovable
+team: Solo, with AI agents
+status: Live demo (fictional sample data, example prices)
+kind: SoftwareApplication
+liveUrl: https://modelbench-uriel.lovable.app
+stack:
+  - lovable
+  - tanstack-start
+  - react
+  - typescript
+  - gemini
+  - gpt
+  - supabase
+  - postgresql
+  - vitest
+hubs:
+  - ai
+  - tech-stacks
+order: 12
+draft: false
+---
+
+## The problem
+
+Choosing a model is a cost decision that teams often make by feel. Pick a model that's too large, and every single request costs more than it needs to. Pick one that's too small, and it gives wrong answers in production, where they're expensive to find.
+
+Public leaderboards don't settle it, because they test general skills, not your task with your inputs. The only reliable answer comes from running your own examples on several models and grading the results.
+
+The [VITE SEO ERP](/projects/vite-seo-erp) drafted replies through OpenAI and OpenRouter, and any system like that faces the same choice. ModelBench answers the question with data: same task, same inputs, several models, one graded result.
+
+## What I built
+
+![ModelBench results for "Classify customer emails": recommendation cards for the cheapest model meeting the 80% pass rate, the highest quality and the fastest, above a per-model summary table](../../assets/images/content/modelbench-run-results-recommendation.png)
+
+- **Tasks:** each task is one business job, such as classifying customer emails, with its test inputs, the latest prompt version and the recommended model.
+- **Versioned prompts:** a system prompt and a user template, saved as v1, v2, v3 with a change note, so every run records exactly which prompt it used.
+- **Test inputs and rubric:** 5 to 20 inputs with optional reference answers, and a grading rubric with a pass threshold on a 1 to 5 scale.
+- **Runs:** pick a task, a prompt version and 2 to 4 models. Every input runs on every model, with live progress, and then a grader scores each answer.
+- **Results:** a per-model summary (average score, pass rate, average and p95 latency, tokens, run cost and projected cost per 1,000 runs), a quality-versus-cost chart, recommendation cards and a side-by-side view of every answer.
+- **Prices:** an editable table of input and output prices per million tokens, with a peso exchange rate. Every cost in the app recomputes from it.
+
+## How it works
+
+ModelBench runs the same task on several models, then uses an LLM as a judge. The browser drives each run, keeping up to 4 calls in flight. Each call is a short server request that sends the prompt to one model through the Lovable AI gateway. It stores the answer, the latency, the token counts and the status.
+
+1. **Run:** every test input goes to every selected model. If a response doesn't report its token usage, the app estimates tokens as characters divided by 4 and marks the figure as estimated.
+2. **Grade:** a fixed grader model, Gemini 3 Flash, scores each answer from 1 to 5 against the rubric and the reference answer, with a one-line reason. An answer passes when its score meets the task's threshold.
+3. **Cost:** costs are never stored. They're computed from the stored token counts and the current Prices table. The formula is input tokens times the input price, plus output tokens times the output price, divided by 1,000,000.
+4. **Recommend:** the app names the cheapest model whose pass rate meets the target, 80% by default, plus the highest-quality and the fastest models.
+
+Running one call per request keeps every request short, so none of them hits a server time limit. A reloaded results page also picks the run back up. A call that times out after 60 seconds is stored as failed, so a run can't hang.
+
+## How I built it
+
+I built ModelBench by directing a small team of AI agents. One agent turned my brief into a spec with seven acceptance checks and three seeded tasks: classifying customer emails, extracting invoice fields to JSON and summarizing an HR policy. It built the app in Lovable, an AI app builder, and one follow-up message fixed the gaps it found in a code review.
+
+A separate QA agent then tested the published app in a real browser and checked the cost math by hand.
+
+## How I tested it
+
+![ModelBench side-by-side view of three models' answers to the same test email, each with a grade and reason, above a table of every call with latency, tokens and cost](../../assets/images/content/modelbench-side-by-side-outputs.png)
+
+QA started a new run on "Extract invoice fields to JSON" with 3 models. All 18 calls succeeded and were graded in about 35 seconds, with progress counting up live.
+
+QA then checked one call by hand: 108 input tokens at $1.50 per million plus 104 output tokens at $10 per million comes to $0.00120, the same as the page. Changing a model's output price moved the run's cost to the exact value of a new hand calculation, and the price was set back afterward.
+
+The seeded sample run shows why the tool exists. On "Classify customer emails", using the example prices:
+
+| Model | Passed | Cost per 1,000 runs |
+| --- | --- | --- |
+| Gemini 3.1 Flash Lite | 5 of 6 (83%) | $0.096 |
+| Gemini 3 Flash | 6 of 6 (100%) | $0.62 |
+| GPT-6 Sol | 6 of 6 (100%) | $2.23 |
+
+With an 80% target, ModelBench recommends Gemini 3.1 Flash Lite. It costs about 23 times less than GPT-6 Sol on this task and still clears the bar. If the business needs every email right, the table shows the price of that last 17%. That trade-off is the real decision, and it's visible in one screen.
+
+QA also saved a prompt edit as v3 and ran it, and tested the reset, the prices page and the about page. Three issues were fixed in one round: chart labels were clipped to one word, grading progress stayed at zero until the end, and broken links showed a raw error instead of "not found".
+
+## Stack and why
+
+- **App:** TanStack Start with React 19 and TypeScript, built in Lovable.
+- **Database:** Postgres on Lovable Cloud (Supabase), with every read and write going through server functions.
+- **AI:** Gemini and GPT models through the Lovable AI gateway, with Gemini 3 Flash as the fixed grader.
+- **Charts and tests:** Recharts, plus Vitest for the cost formula and the recommendation logic.
+
+Computing costs from stored tokens, instead of storing the costs, means a price change updates every past run at once. That matters because model prices change often, and a recommendation is only as good as the prices behind it.
+
+## Results
+
+- A recommendation for the cheapest model that meets the quality bar, backed by graded runs.
+- A model about 23 times cheaper meeting the 80% target on email classification, at the example prices.
+- Cost math that matched a hand calculation, and updated correctly when a price changed.
+- The acceptance checks passing in browser testing after one round of fixes. The phone-width layout wasn't part of the browser test, and none of the 48 live calls failed, so the failed-call display hasn't been seen on screen.
+- Live at [modelbench-uriel.lovable.app](https://modelbench-uriel.lovable.app), with fictional sample data and example prices.
+
+## What I'd do next for a real team
+
+- Load the provider's real prices and keep them updated, instead of example prices.
+- Check the grader against human ratings on a sample, so the scores can be trusted.
+- Run the benchmark on a schedule, and again whenever a prompt changes, to catch regressions.
+- Add more test inputs per task, since 6 inputs is enough for a demo but not for a production decision.
