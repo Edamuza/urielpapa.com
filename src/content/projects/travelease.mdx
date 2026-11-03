@@ -60,13 +60,13 @@ Public data shows that domestic travel is large, that Tagaytay is one of its bus
 
 **Domestic tourism is large and still growing.** The PSA's tourism accounts, [reported by Manila Bulletin](https://mb.com.ph/2026/05/28/tourism-contributed-81-to-philippine-economy-in-2025psa), put domestic tourism spending at ₱3.26 trillion in 2025. That was up 3% from ₱3.16 trillion in 2024.
 
-**CALABARZON is the most visited region.** The Department of Tourism counted 10,863,098 overnight travelers in CALABARZON in 2024, [Manila Bulletin reported](https://mb.com.ph/2026/02/28/calabarzon-continues-reign-as-most-visited-region-since-2008). Of those, 10,680,294 were local tourists. It was the country's most visited region for 16 straight years. Tagaytay is in Cavite, one of the region's provinces.
+**CALABARZON is the most visited region.** The Department of Tourism reported 10,863,098 overnight travelers in CALABARZON in 2024, according to [Manila Bulletin's report on the region](https://mb.com.ph/2026/02/28/calabarzon-continues-reign-as-most-visited-region-since-2008). Of those, 10,680,294 were local tourists. It was the country's most visited region for 16 straight years. Tagaytay is in Cavite, one of the region's provinces.
 
 **Tagaytay is mostly a day trip.** Tagaytay had more than 6.5 million same-day visitors from October to December 2023, according to [the Inquirer's report on Cavite's tourism figures](https://newsinfo.inquirer.net/1936826/tagaytay-is-most-visited-tourist-spot-in-cavite-in-q4-2023). Around 268,000 stayed overnight in the same period. The data came from the Cavite provincial tourism office, and it made Tagaytay the most visited place in Cavite that quarter.
 
-**Group planning is hard to keep in one place.** In a [Samsung-commissioned survey of UK travelers](https://news.samsung.com/uk/unsung-holiday-heroes-new-research-spotlights-the-person-who-turns-group-holiday-ideas-into-reality) from July 2026, 46% struggle to keep track of the group chat, bookings and everyone's preferences. Finding dates that work for everyone was the top challenge, at 42%. And 64% said a group getaway would never get off the ground without one organizer. The survey covers UK travelers and does not publish its sample size, so it shows the pattern, not Philippine numbers.
+**Group planning is hard to keep in one place.** In a [Samsung-commissioned UK survey](https://news.samsung.com/uk/unsung-holiday-heroes-new-research-spotlights-the-person-who-turns-group-holiday-ideas-into-reality) released in July 2026, 46% struggle to keep track of the group chat, bookings and everyone's preferences. Finding dates that work for everyone was the top challenge, at 42%. And 64% said a group getaway would never get off the ground without one organizer. The survey covers people in the UK and does not publish its sample size, so it shows the pattern, not Philippine numbers.
 
-**Tourism listings already need a local check.** Under the Tourism Act of 2009 rules, local governments may permit primary tourism enterprises to operate only after DOT accreditation. The [DILG reminded local governments of this rule](https://calabarzon.dilg.gov.ph/dilg-to-lgus-issue-permit-to-operate-to-tourism-enterprises-with-dot-accreditation-only/) in January 2024. Those enterprises include hotels, resorts, homestays and tour operators. DILG Secretary Benjamin Abalos Jr. said accreditation protects tourists from "unreliable transactions from sketchy service providers." The [DOT's accreditation page](https://tourism.gov.ph/accreditations/online) describes accreditation as official recognition that an enterprise meets minimum standards.
+**Tourism businesses already need a government check.** Under the Tourism Act of 2009 rules, local governments may permit primary tourism enterprises to operate only after DOT accreditation. The [DILG reminded local governments of this rule](https://calabarzon.dilg.gov.ph/dilg-to-lgus-issue-permit-to-operate-to-tourism-enterprises-with-dot-accreditation-only/) in January 2024. Those enterprises include hotels, resorts, homestays and tour operators. DILG Secretary Benjamin Abalos Jr. said accreditation protects tourists from "unreliable transactions from sketchy service providers." The [DOT's accreditation page](https://tourism.gov.ph/accreditations/online) describes accreditation as official recognition that an enterprise meets minimum standards.
 
 ## Why I chose this solution
 
@@ -85,7 +85,7 @@ Each part of TravelEase lines up with one of those findings. The table maps what
 
 **A map built for the road.** Travelers need to know what to expect on the road, so the map carries routing, traffic and weather, not just pins. The Tagaytay numbers support that focus. Same-day visitors outnumbered overnight guests by about 24 to one in late 2023 (estimate: 6.5 million ÷ 268,000). On a day trip, time on the road shapes the whole plan.
 
-**Reviews and blogs beside each place.** Pleasure or vacation was the top reason Filipinos traveled in 2022. A leisure trip depends on knowing what a place is like before going. Putting reviews and travel blogs on each place's page means the group reads them where it plans.
+**Reviews and blogs beside each place.** Pleasure or vacation was the top reason for domestic trips in 2022. A leisure trip depends on knowing what a place is like before going. Putting reviews and travel blogs on each place's page means the group reads them where it plans.
 
 **Local government approval for listings.** Local governments already decide which tourism businesses may operate. For primary tourism enterprises, their permits depend on DOT accreditation. Making a registration wait for local government approval puts that existing role in front of travelers. It also gives the local government the say over listings that the problem called for.
 
@@ -103,7 +103,7 @@ Each part of TravelEase lines up with one of those findings. The table maps what
 
 TravelEase connects three kinds of users, travelers, businesses and administrators, across five user roles.
 
-- **Planning:** a travel plan belongs to a group. Admin, editor and viewer roles decide who manages the plan, who changes it and who only reads it, so everyone works from the same plan.
+- **Planning:** a travel plan belongs to a group. Admin, editor and viewer roles decide who manages the plan, who changes it and who only reads it. Everyone works from the same plan.
 - **Listing:** a business registers in one of 8 categories. The registration waits for local government approval, and only approved businesses go live in the directory.
 - **Finding:** travelers find local businesses on the interactive map, built with Leaflet, and get routing plus traffic and weather information.
 - **Deciding:** each place has its own reviews and travel blogs.
@@ -121,7 +121,7 @@ TravelEase was our capstone thesis, built from October 2025 to April 2026. I was
 
 React with TypeScript and Vite kept the front end quick to build and safe to change as a team. Express with Prisma on PostgreSQL fit the many links between trips, businesses, reviews and roles. Supabase Auth saved us from building sign-in. Redis kept busy pages responsive, and Vercel with Railway kept the site live after the defense.
 
-The stack still needs care after the defense. The [Prisma ORM 8 release candidate](/blog/prisma-orm-8-release-candidate) touches this project, and so did the [October 2026 Railway security incident](/blog/railway-security-incident-environment-variables), since TravelEase is hosted on Railway. TravelEase is also built on React 19, the line covered in my post on [React 19.3 View Transitions](/blog/react-19-3-view-transitions).
+The stack still needs care after the defense. The [Prisma ORM 8 release candidate](/blog/prisma-orm-8-release-candidate) touches this project. The [October 2026 Railway security incident](/blog/railway-security-incident-environment-variables) was close to home, since TravelEase is hosted on Railway. TravelEase is also built on React 19, the line covered in my post on [React 19.3 View Transitions](/blog/react-19-3-view-transitions).
 
 ## Results
 
