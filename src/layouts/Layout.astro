@@ -8,6 +8,7 @@ import {
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Analytics from "@/components/Analytics.astro";
+import Plerdy from "@/components/Plerdy.astro";
 import { SITE, X_HANDLE } from "@/config";
 import { isoDateTime } from "@/utils/content";
 import {
@@ -248,6 +249,8 @@ const robots =
     />
 
     <slot name="head" />
+
+    {import.meta.env.PROD && <Plerdy />}
 
     <!-- Set the theme before first paint to avoid a flash of the wrong theme. -->
     <script is:inline>
