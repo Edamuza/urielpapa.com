@@ -2,7 +2,7 @@
 title: ModelBench
 description: A model comparison tool that runs one business task on several LLMs, grades every answer against a rubric and names the cheapest model that meets the bar.
 summary: >-
-  Every team that adds an AI model to a business process has to pick one, and as of November 2026, list prices per token differ up to 100-fold within one provider. I built ModelBench, which runs the same test inputs on several models and grades each answer against a rubric. It computes cost from stored tokens and current prices, then recommends the cheapest model that meets the quality bar. On a seeded email-classification run with example prices, a model about 23 times cheaper than GPT-6 Sol met the 80% target.
+  Every team that adds an AI model to a business process has to pick one, and as of November 2026, OpenAI's flagship list prices per token differ 100-fold. I built ModelBench, which runs the same test inputs on several models and grades each answer against a rubric. It computes cost from stored tokens and current prices, then recommends the cheapest model that meets the quality bar. On a seeded email-classification run with example prices, a model about 23 times cheaper than GPT-6 Sol met the 80% target.
 outcome: Model recommendations backed by graded test runs, where a model about 23 times cheaper met the quality bar on email classification.
 period: November 2026
 year: 2026
@@ -30,7 +30,7 @@ draft: false
 
 ## Abstract
 
-Picking an AI model for a business task is a cost decision. As of November 2026, OpenAI's list prices run from US$0.50 per million output tokens on GPT-6 Luna to US$50 on GPT-6 Astra. Public leaderboards don't settle the choice, and a 2025 study found that private testing on Chatbot Arena favors a few providers. I built ModelBench, which runs one task's inputs on several models, grades every answer against a rubric and prices each run from its tokens. On a seeded email-classification run at example prices, a model about 23 times cheaper than GPT-6 Sol still met the 80% pass target.
+Picking an AI model for a business task is a cost decision. As of November 2026, OpenAI's flagship list prices run from US$0.50 per million output tokens on GPT-6 Luna to US$50 on GPT-6 Astra. Public leaderboards don't settle the choice, and a 2025 study found that private testing on Chatbot Arena favors a few providers. I built ModelBench, which runs one task's inputs on several models, grades every answer against a rubric and prices each run from its tokens. On a seeded email-classification run at example prices, a model about 23 times cheaper than GPT-6 Sol still met the 80% pass target.
 
 ## The problem I saw
 
@@ -55,7 +55,7 @@ The choice also keeps coming back. In my [take on GPT-6 Sol and Luna](/news/gpt-
 | Claude Opus 5.5 | US$4.00 | US$20.00 |
 | GPT-6 Astra | US$10.00 | US$50.00 |
 
-Within OpenAI's lineup alone, GPT-6 Astra costs 100 times as much per token as GPT-6 Luna.
+Within OpenAI's lineup, GPT-6 Astra costs 100 times as much per token as GPT-6 Luna. The demo below uses example prices and its own model names, such as GPT-6 Sol instead of GPT-6.1 Sol.
 
 **Prices move fast.** [Epoch AI found](https://epoch.ai/data-insights/llm-inference-price-trends) in March 2025 that the price of a given performance level fell 9 to 900 times per year, by milestone. Some changes are scheduled: Google's page lists Gemini 4 Argon at US$2 input and US$10 output through November 30, 2026, then US$4 and US$20.
 
@@ -63,7 +63,7 @@ Within OpenAI's lineup alone, GPT-6 Astra costs 100 times as much per token as G
 
 **Leaderboards have blind spots.** [The Leaderboard Illusion](https://arxiv.org/abs/2504.20879), a 2025 study of Chatbot Arena, found that undisclosed private testing benefits a handful of providers. The authors counted 27 private variants Meta tested before the Llama 4 release. The result, they wrote, is "overfitting to Arena-specific dynamics rather than general model quality."
 
-**LLM judges work, with known biases.** [Zheng et al. (2023)](https://arxiv.org/html/2306.05685v4) found that GPT-4 as a judge reached over 80% agreement with human preferences, matching how often humans agree with each other. They also found position, verbosity and self-enhancement biases, where a judge may favor its own answers. Giving the judge a reference answer cut its failure rate on math questions from 70% to 15%.
+**LLM judges work, with known biases.** [Zheng et al. (2023)](https://arxiv.org/html/2306.05685v4) found GPT-4 as a judge reached over 80% agreement with human preferences, the same level as between humans. They also found position, verbosity and self-enhancement biases, where a judge may favor its own answers. Giving the judge a reference answer cut its failure rate on 10 math questions from 70% to 15%.
 
 ## Why I chose this solution
 

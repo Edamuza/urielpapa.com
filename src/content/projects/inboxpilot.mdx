@@ -29,7 +29,7 @@ draft: false
 
 ## Abstract
 
-A small café or caterer answers bookings, quotes, complaints and spam across email, Facebook and website forms. In late 2025, Meta's ads on Messenger reached 65.8 million people in the Philippines. In 2024, a Canadian tribunal held Air Canada liable for its chatbot's wrong refund advice. I built InboxPilot, an AI agent that classifies each message, checks real data with tool calls, drafts a grounded reply and proposes bookings or tickets. Nothing happens until a person approves it. In browser testing on fictional sample data, it triaged 12 messages in about 40 seconds, with no invented prices, refunds or availability.
+A small café or caterer answers bookings, quotes, complaints and spam across email, Facebook and website forms. In late 2025, Meta's ads on Messenger reached 65.8 million people in the Philippines. In 2024, a Canadian tribunal held Air Canada liable for its chatbot's wrong refund advice. I built InboxPilot, an AI agent that classifies messages, checks real data with tool calls, drafts a grounded reply and proposes bookings or tickets. Nothing happens until a person approves it. In browser testing on fictional sample data, it triaged 12 messages in about 40 seconds, with no invented prices, refunds or availability.
 
 ## The problem I saw
 
@@ -47,17 +47,17 @@ InboxPilot explores the other design: the agent prepares the reply and the actio
 
 **Customers expect a reply within a day.** In the [2025 Sprout Social Index](https://sproutsocial.com/insights/social-media-customer-service-statistics/), about three quarters of consumers expect a brand to respond on social within 24 hours or sooner. In the same study, [73% said they'll buy from a competitor](https://www.globenewswire.com/news-release/2025/01/07/3005527/0/en/index.html) if a brand doesn't respond. Glimpse surveyed 4,044 consumers in the US, UK, Canada and Australia in September 2024.
 
-**Messenger has a clock.** Meta's [Send API documentation](https://developers.facebook.com/docs/messenger-platform/send-messages) gives a business a 24-hour standard messaging window after a person messages its Page. After that, it can only send tagged messages, which can't carry deals or discounts.
+**Messenger has a clock.** Meta's [Send API documentation](https://developers.facebook.com/docs/messenger-platform/send-messages) gives a business a 24-hour standard messaging window after a person messages its Page. After that, it needs a message tag or another permitted message type, and tags can't carry deals or discounts.
 
 **A business owns what its bot says.** In [Moffatt v. Air Canada](https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do), decided February 14, 2024, the airline's chatbot said a bereavement fare could be claimed after travel. Its own policy page said otherwise. Air Canada argued it wasn't liable for its chatbot. The tribunal replied: "It should be obvious to Air Canada that it is responsible for all the information on its website." It ordered the airline to pay $812.02 (Canadian).
 
-**Philippine law treats false promises as deceptive.** Article 50 of the [Consumer Act, RA 7394](https://bps.dti.gov.ph/index.php/component/edocman/7-laws-and-issuances/8-republic-acts/225-republic-act-no-7394-consumer-act-of-the-philippines), makes a deceptive sales act a violation "whether it occurs before, during or after the transaction." Its examples include a false price advantage and false statements about "rights, remedies or obligations". The [Internet Transactions Act of 2023, RA 11967](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/96902), adds a ₱20,000 to ₱100,000 fine for an online merchant or e-retailer's first deceptive sales act online.
+**Philippine law treats false promises as deceptive.** Article 50 of the [Consumer Act, RA 7394](https://bps.dti.gov.ph/index.php/component/edocman/7-laws-and-issuances/8-republic-acts/225-republic-act-no-7394-consumer-act-of-the-philippines), makes a deceptive sales act a violation "whether it occurs before, during or after the transaction." Its examples include a false price advantage and false statements about "rights, remedies or obligations". The [Internet Transactions Act, RA 11967](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/96902), adds a ₱20,000 to ₱100,000 fine for an online merchant or e-retailer's first deceptive sales act online.
 
 ## Why I chose this solution
 
 Replying by hand is slow at busy times and after hours. A fully automatic chatbot is instant, but no one checks its promises before they go out. InboxPilot sits between them: fast triage, with tool calls, code rules and a person checking every reply.
 
-The Moffatt decision shows why a person approves every action. A business answers for what its bot tells customers, and Philippine law treats a false price or refund promise as deceptive. So nothing goes out without a human decision.
+The Moffatt decision shows why a person approves every action. A business answers for what its bot tells customers, and Philippine law can treat a false price or refund promise as deceptive. So nothing goes out without a human decision.
 
 Grounding is the second choice. My n8n chatbot needed a prompt update every time our packages changed. InboxPilot keeps those facts in a knowledge base a person can edit. The agent must look them up with a tool, and each draft lists the entries it used.
 
@@ -65,7 +65,7 @@ Rules that cost money live in code, not in the prompt. The agent doesn't guess w
 
 Speed comes from triage, not from skipping the review. The agent triages three messages at a time, and the approval queue puts the oldest first, nearest the end of Messenger's 24-hour window.
 
-Each draft also shows the agent's intent, confidence and reasoning, so a reviewer can catch a guessed intent before it becomes a reply. The audit log then traces any disputed reply to what the agent proposed and who approved it.
+Each draft also shows the agent's intent, confidence and reasoning, so a reviewer can catch a guessed intent before it becomes a reply. The audit log then traces any disputed reply to what the agent proposed and what the reviewer decided.
 
 ## What I built
 
