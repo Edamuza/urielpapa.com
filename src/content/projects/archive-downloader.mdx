@@ -21,7 +21,7 @@ draft: false
 
 ## Abstract
 
-Rebuilding an old website often starts with pages that only survive as Wayback Machine snapshots. Public data shows how often the original disappears. Pew Research Center found in 2024 that 38% of webpages that existed in 2013 were no longer accessible a decade later. The Wayback Machine passed one trillion archived web pages in October 2025. I led and co-developed Archive Downloader, a multi-threaded Python command-line tool that saves web pages and Wayback snapshots with their images and fonts. It writes them in a WordPress theme layout with a block child theme base, and we used it on the agency's own site rebuilds.
+Rebuilding an old website often starts with pages that only survive as Wayback Machine snapshots. Public data shows how often the original disappears. Pew Research Center found in 2024 that 38% of webpages that existed in 2013 were no longer accessible a decade later. The Wayback Machine passed one trillion archived web pages in October 2025. I led and co-developed Archive Downloader, a multi-threaded Python command-line tool that saves web pages and Wayback snapshots with their images and fonts. It writes them in a WordPress theme layout and ships with a block child theme base. We used it on the agency's own site rebuilds.
 
 ## The problem I saw
 
@@ -37,7 +37,7 @@ A page is more than its HTML. Each one loads its images and fonts as separate fi
 
 Public data shows three things. Old pages disappear often, the Wayback Machine keeps copies at a very large scale, and WordPress is the usual place to rebuild.
 
-**Web pages disappear.** Pew Research Center's 2024 report [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/) followed a random sample of just under 1 million webpages from Common Crawl. It counted a page as inaccessible only if it returned one of nine error codes. As of October 2023, the results by year were stark:
+**Web pages disappear.** Pew Research Center's 2024 report [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/) followed a random sample of just under 1 million webpages from Common Crawl. That is about 90,000 pages for each year from 2013 to 2023. It counted a page as inaccessible only if it returned one of nine error codes. Pew calls this "the most conservative estimate possible." Pages that still exist but whose content has changed were left out. As of October 2023, the results by year were stark:
 
 | Webpages that existed in | Share no longer accessible by October 2023 |
 | --- | --- |
@@ -61,11 +61,11 @@ Each part of the tool answers one part of that evidence.
 
 **Save from the archive.** When the live site is gone, a snapshot may be the only source for the rebuild. That was the case on the client rebuild that started this tool. Pew's numbers show it is not rare: by October 2023, 38% of pages from 2013 were gone.
 
-**Automate instead of saving by hand.** Saving every page and image by hand took far too long on that first client rebuild. A tool repeats the same steps the same way on every page, and it doesn't skip a file because someone got tired.
+**Automate instead of saving by hand.** Saving every page and image by hand took far too long on that client rebuild. A tool repeats the same steps the same way on every page, and it doesn't skip a file because someone got tired.
 
 **Python, with threads.** Python is quick to write for scraping and file handling, and threads made it practical to save many pages at once. Downloading pages is mostly waiting on the network. The [Python threading documentation](https://docs.python.org/3/library/threading.html) notes that "threading is still an appropriate model if you want to run multiple I/O-bound tasks simultaneously."
 
-**Keep images and fonts with each page.** A saved page is only useful if it still looks like the original. The [GNU Wget manual](https://www.gnu.org/software/wget/manual/wget.html) describes the same need: its page requisites option downloads "all the files that are necessary to properly display a given HTML page." So each page comes down with its images and fonts.
+**Keep images and fonts with each page.** A saved page is only useful if it still looks like the original. The [GNU Wget manual](https://www.gnu.org/software/wget/manual/wget.html) describes the same need. Its page requisites option downloads "all the files that are necessary to properly display a given HTML page." So each page comes down with its images and fonts.
 
 **Shape the output for WordPress.** The output targets WordPress because that's where most of our client rebuilds landed. A ready block child theme saved setup time on every project. The WordPress Theme Handbook supports both parts of that choice:
 
@@ -76,7 +76,7 @@ The realistic alternatives each solve part of the job:
 
 | Option | What you get | Fit for a WordPress rebuild |
 | --- | --- | --- |
-| Saving each page by hand | One page and its files at a time | Took far too long on our first rebuild |
+| Saving each page by hand | One page and its files at a time | Took far too long on the rebuild that started the tool |
 | A general mirroring tool, such as GNU Wget | A local copy with page requisites, with links converted "for local viewing" | A copy to browse, not a theme layout |
 | Archive Downloader | Pages and snapshots with images and fonts, in a WordPress theme layout | Ships with a block child theme base |
 
@@ -130,7 +130,7 @@ Like the [WordPress SEO Plugin Suite](/projects/wordpress-seo-plugins), it was a
 3. [Wayback Machine APIs](https://archive.org/help/wayback_api.php), Internet Archive, accessed November 2026.
 4. [Wayback CDX Server API - BETA](https://github.com/internetarchive/wayback/blob/master/wayback-cdx-server/README.md), Internet Archive on GitHub, accessed November 2026.
 5. [Usage Statistics and Market Share of Content Management Systems, November 2026](https://w3techs.com/technologies/overview/content_management), W3Techs, November 2, 2026.
-6. [threading — Thread-based parallelism](https://docs.python.org/3/library/threading.html), Python documentation, accessed November 2026.
+6. [threading: Thread-based parallelism](https://docs.python.org/3/library/threading.html), Python documentation, accessed November 2026.
 7. [GNU Wget manual](https://www.gnu.org/software/wget/manual/wget.html), Free Software Foundation, accessed November 2026.
 8. [What Is a Theme?](https://developer.wordpress.org/themes/getting-started/what-is-a-theme/), WordPress Theme Handbook, accessed November 2026.
 9. [Child Themes](https://developer.wordpress.org/themes/advanced-topics/child-themes/), WordPress Theme Handbook, accessed November 2026.
