@@ -8,6 +8,7 @@ import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import SiteStats from "@/components/SiteStats.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import ProjectCover from "@/components/ProjectCover.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
@@ -164,6 +165,8 @@ const [city, country] = SITE.location.split(", ");
                     title={p.data.title}
                     summary={p.data.description}
                     liveUrl={p.data.liveUrl}
+                    cover={p.data.cover}
+                    coverAlt={p.data.coverAlt}
                   />
                 ))}
                 <li class="bg-muted flex flex-col rounded-lg p-4">
@@ -189,12 +192,22 @@ const [city, country] = SITE.location.split(", ");
               </p>
               <ul class="grid gap-x-8 sm:grid-cols-2">
                 {otherProjects.map(p => (
-                  <li class="border-border border-b py-3">
-                    <a href={projectUrl(p)} class="font-semibold">
-                      {p.data.title}
-                    </a>{" "}
-                    <span class="meta">{p.data.year}</span>
-                    <p class="mt-0.5 text-[0.95rem]">{p.data.outcome}</p>
+                  <li class="border-border flex gap-4 border-b py-4">
+                    <ProjectCover
+                      title={p.data.title}
+                      src={p.data.cover}
+                      alt={p.data.coverAlt}
+                      widths={[160, 320]}
+                      sizes="8rem"
+                      class="border-border w-28 shrink-0 self-start rounded-md border text-xl sm:w-32"
+                    />
+                    <div class="min-w-0">
+                      <a href={projectUrl(p)} class="font-semibold">
+                        {p.data.title}
+                      </a>{" "}
+                      <span class="meta">{p.data.year}</span>
+                      <p class="mt-0.5 text-[0.95rem]">{p.data.outcome}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

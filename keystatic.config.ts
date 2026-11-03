@@ -307,6 +307,8 @@ export default config({
         hubs: fields.multiselect({ label: "Related topic hubs", options: hubOptions }),
         order: fields.integer({ label: "Order in list", defaultValue: 100 }),
         draft: fields.checkbox({ label: "Draft", defaultValue: false }),
+        cover: fields.image({ label: "Featured image", description: "Shown on the project cards.", directory: "src/assets/images/content", publicPath: "../../assets/images/content/" }),
+        coverAlt: fields.text({ label: "Featured image alt text", description: "Required when there is a featured image." }),
         body: body("Case study"),
       },
     }),
