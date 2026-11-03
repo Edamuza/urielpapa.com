@@ -37,8 +37,7 @@ export const GET: APIRoute = async () => {
     "## Projects",
     "",
     ...projects.map(
-      p =>
-        `- [${p.data.title}](${url(projectUrl(p))}): ${p.data.description}`
+      p => `- [${p.data.title}](${url(projectUrl(p))}): ${p.data.description}`
     ),
     "",
     "## Topics",
