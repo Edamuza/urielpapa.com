@@ -1,0 +1,82 @@
+---
+title: "Claude Message Threads: Smaller Requests and Faster Replies in Beta"
+seoTitle: "Claude Message Threads: Faster Long Chats"
+description: >-
+  Anthropic's message threads let the Claude API keep a conversation on the server,
+  so each turn sends only new messages. What changed, what it costs and who it helps.
+dek: >-
+  Anthropic says median time to first token drops about 35% on very long
+  requests. Token use and prices stay the same.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    On November 2, 2026, Anthropic put message threads into public beta on the
+    Claude API, so later requests send only the new messages.
+  - >-
+    Anthropic says requests with 500k to 1M tokens see median time to first
+    token drop by about 35%, and that token usage and rates do not change.
+  - >-
+    A thread expires 5 minutes after its last request and is deleted within 1
+    hour of its last use.
+businessImpact:
+  - >-
+    Teams building coding or document agents on Claude can get faster replies
+    in long sessions without paying more per token.
+  - >-
+    Because threads expire after 5 minutes, an agent that pauses longer has to
+    send the full conversation again.
+sourceUrl: https://claude.com/resources/articles/message-threads
+published: 2026-11-04
+related:
+  - what-is-tokenization
+projects: []
+stack:
+  - claude
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+Anthropic has made message threads available in public beta on the Claude API, which lets a long conversation live on the server so each new turn sends only what is new, and Anthropic says that cuts the wait for the first word of a reply.
+
+This take is part of my [AI, in Depth](/topics/ai) writing. If token counts are unfamiliar, my post on [what tokenization is](/blog/what-is-tokenization) explains why they decide what AI costs.
+
+## What happened?
+
+On November 2, 2026, Anthropic announced [message threads](https://claude.com/resources/articles/message-threads) and listed them in its [Claude Platform release notes](https://platform.claude.com/docs/en/release-notes/overview). Until now, an agent had to resend the whole conversation on every turn. With a thread, the first request carries the full conversation, and later requests send only the new messages plus a reference to the previous response.
+
+According to the release notes, threads are in beta with the `message-threads-2026-08-12` beta header. They are available on the Claude API, Claude Platform on AWS, Claude Models on Google Cloud (Anthropic managed) and Claude in Microsoft Foundry.
+
+## What changed?
+
+The request gets smaller. The work Claude does does not.
+
+- **Speed:** Anthropic says "requests with 500k to 1M tokens see median TTFT drop by about 35%," and that threads are on by default for most Claude Code users.
+- **Cost:** "Standard Claude token rates and existing rate limits apply," and Claude still reads the full conversation every turn, so token usage stays the same.
+- **Lifetime:** a thread expires 5 minutes after its last request, and the release notes say it is deleted no more than 1 hour after its last use.
+- **Storage:** Anthropic's article says threads are held in memory and not written to disk.
+
+The release notes name the beta header, while Anthropic's article says to add the `thread` parameter to Messages API requests. I would follow the [documentation](https://platform.claude.com/docs/en/build-with-claude/message-threads) for the exact call.
+
+## What does it mean for businesses and founders?
+
+My read is that this is a speed change, not a price change. Anthropic did not say it lowers the bill, so I would not plan around savings.
+
+It matters most for agents that carry a lot of context, such as coding assistants, computer-use agents and tools that work through many documents or images. The more context an agent carries, the more a thread can trim the wait, per Anthropic's article. A support chatbot with short chats will barely notice.
+
+The 5-minute expiry is the catch. If your agent waits on a person or a slow tool for longer than that, it has to start a new thread and send everything again.
+
+## What should you do now?
+
+1. **Check your context size.** If your agent carries very long conversations, test threads. If it does not, you can skip them.
+2. **Read the docs before you build.** It is a beta, and the header or parameter may change.
+3. **Handle expiry.** Make your code resend the full conversation when a thread has expired.
+4. **Keep watching your bill.** Token use does not fall, so costs should stay flat.
+
+## Where can you learn more?
+
+- [Anthropic's message threads article](https://claude.com/resources/articles/message-threads) - How threads work and who they suit.
+- [Claude Platform release notes](https://platform.claude.com/docs/en/release-notes/overview) - The beta header, platforms and expiry rules.
+- [Message threads documentation](https://platform.claude.com/docs/en/build-with-claude/message-threads) - How to call it.
