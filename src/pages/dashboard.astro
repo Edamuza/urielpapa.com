@@ -5,8 +5,8 @@
  * demand behind a password (DASHBOARD_PASSWORD) and is never indexed. Data
  * sources are described in src/lib/dashboard.ts.
  */
-import { createHash, timingSafeEqual } from "node:crypto";
-import { DASHBOARD_PASSWORD } from "astro:env/server";
+import { dashboardGate } from "@/lib/dashboard-auth";
+import { refreshSetup } from "@/lib/search-refresh";
 import Layout from "@/layouts/Layout.astro";
 import { hubName } from "@/data/hubs";
 import { countSources, daysSinceLaunch, listPages } from "@/lib/site-stats";
@@ -33,31 +33,8 @@ Astro.response.headers.set("Cache-Control", "private, no-store");
 Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
 
 // Open on localhost; in production (and preview deployments) it needs the password.
-if (import.meta.env.PROD) {
-  if (!DASHBOARD_PASSWORD) return new Response(null, { status: 404 });
-  const [scheme, encoded] = (
-    Astro.request.headers.get("authorization") ?? ""
-  ).split(" ");
-  let given = "";
-  try {
-    if (scheme === "Basic" && encoded)
-      given = atob(encoded).split(":").slice(1).join(":");
-  } catch {
-    given = "";
-  }
-  const digest = (s: string) => createHash("sha256").update(s).digest();
-  if (!timingSafeEqual(digest(given), digest(DASHBOARD_PASSWORD))) {
-    return new Response("The dashboard needs the password.", {
-      status: 401,
-      headers: {
-        "WWW-Authenticate": 'Basic realm="urielpapa.com dashboard"',
-        "Cache-Control": "no-store",
-        "X-Robots-Tag": "noindex, nofollow",
-        "Content-Type": "text/plain; charset=utf-8",
-      },
-    });
-  }
-}
+const blocked = dashboardGate(Astro.request);
+if (blocked) return blocked;
 
 const today = todayManila();
 const totals = await contentTotals();
@@ -124,6 +101,9 @@ const requestToday = toIndex.filter(i => !i.requestedOn).slice(0, 10);
 const indexLater = toIndex.filter(i => !i.requestedOn).slice(10);
 const requested = toIndex.filter(i => i.requestedOn);
 const snapshotAge = ageDays(g.checkedOn);
+const setup = refreshSetup();
+const refreshResult = Astro.url.searchParams.get("refresh");
+const refreshNote = Astro.url.searchParams.get("note") ?? "";
 const failures = issues.filter(
   i => i.kind === "failed" || i.kind === "no-run"
 ).length;
@@ -158,6 +138,35 @@ const sections = [
         are a snapshot from {day(g.checkedOn, "D MMM YYYY")}
         {snapshotAge > 7 ? `, ${snapshotAge} days old` : ""}.
       </p>
+      <form
+        method="post"
+        action="/dashboard/refresh"
+        class="refresh mt-4"
+        aria-describedby="refresh-help"
+      >
+        <button type="submit" disabled={!setup.ready}>
+          Refresh search data
+        </button>
+        <p id="refresh-help" class="meta">
+          {
+            setup.ready
+              ? "Reads Search Console and Bing now, checks every page's index status, then saves it. Takes up to a minute; the new numbers show after the site redeploys, about 2 minutes later."
+              : `Not set up yet. Add ${setup.missing.join(", ")} in Vercel (see the README).`
+          }
+        </p>
+        {
+          refreshResult && (
+            <p class="refresh-note" data-status={refreshResult} role="status">
+              <strong>
+                {refreshResult === "ok"
+                  ? "Saved. Reload in about 2 minutes to see it."
+                  : "Refresh failed."}
+              </strong>{" "}
+              {refreshNote}
+            </p>
+          )
+        }
+      </form>
       <nav aria-label="Dashboard sections" class="mt-4">
         <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           {
@@ -760,6 +769,38 @@ const sections = [
     border-top: 1px solid var(--border);
     padding-block: 2rem;
     scroll-margin-top: 1rem;
+  }
+  .refresh {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .refresh p {
+    flex: 1 1 18rem;
+    margin: 0;
+  }
+  .refresh button {
+    border: 1px solid var(--foreground);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    background: var(--foreground);
+    color: var(--background);
+    cursor: pointer;
+  }
+  .refresh button:disabled {
+    background: transparent;
+    color: var(--muted-foreground);
+    border-color: var(--border);
+    cursor: not-allowed;
+  }
+  .refresh-note {
+    flex-basis: 100% !important;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
   }
   .tile {
     border: 1px solid var(--border);

@@ -24,12 +24,24 @@ const key = keyFile.replace(/\.txt$/, "");
 const [from, to = "HEAD"] = process.argv.slice(2);
 // --no-renames: a moved or renamed post shows up as a delete plus an add,
 // so its old URL is submitted too.
+// Files that never change a public page: notes, the publish log, CI, and the
+// private dashboard with its search snapshot. Commits that touch only these
+// (a skipped daily run's log line, a dashboard refresh) submit nothing.
+const NO_PUBLIC_PAGE = [
+  /^docs\//,
+  /^\.github\//,
+  /^[^/]+\.md$/,
+  /^src\/data\/search-console\.json$/,
+  /^src\/pages\/dashboard(\.astro|\/)/,
+  /^src\/lib\/(dashboard|dashboard-auth|search-refresh)\.ts$/,
+];
 const changed = from
   ? execFileSync("git", ["diff", "--name-only", "--no-renames", from, to], {
       encoding: "utf8",
     })
       .split("\n")
       .filter(Boolean)
+      .filter(f => !NO_PUBLIC_PAGE.some(re => re.test(f)))
   : [];
 
 /** A file's text at a git revision, or undefined if it did not exist there. */
@@ -75,7 +87,7 @@ async function sitemapUrls() {
 
 let urls;
 if (changed.length === 0) {
-  console.log("No changed files given; nothing to submit.");
+  console.log("No changed files that affect public pages; nothing to submit.");
   process.exit(0);
 } else if (changed.every(f => f.startsWith("src/content/"))) {
   const paths = changed.flatMap(affectedPaths);
