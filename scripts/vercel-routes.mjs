@@ -43,6 +43,15 @@ const extra = [
     status: 404,
   },
   {
+    // Build stamp the dashboard polls to know when a redeploy is live.
+    src: "^/deploy-version\\.json$",
+    headers: {
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+    continue: true,
+  },
+  {
     // Admin, API and preview routes are for people and forms, never for search.
     src: "^/(keystatic|api|preview)(/.*)?$",
     headers: { "X-Robots-Tag": "noindex, nofollow" },
@@ -55,7 +64,7 @@ const extra = [
       "Referrer-Policy": "strict-origin-when-cross-origin",
       "X-Frame-Options": "SAMEORIGIN",
       "Permissions-Policy":
-        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
     },
     continue: true,
   },
@@ -67,6 +76,14 @@ const extra = [
     continue: true,
   },
 ];
+
+// A stamp that changes on every build, even a redeploy of the same commit.
+writeFileSync(
+  ".vercel/output/static/deploy-version.json",
+  JSON.stringify({
+    build: `${process.env.VERCEL_GIT_COMMIT_SHA ?? "local"}-${Date.now()}`,
+  }) + "\n",
+);
 
 const marker = JSON.stringify(extra[1].src);
 if (!config.routes.some(r => JSON.stringify(r.src) === marker)) {

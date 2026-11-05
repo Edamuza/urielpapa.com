@@ -384,28 +384,111 @@ async function bingCall<T>(method: string): Promise<T[]> {
   });
   if (!res.ok)
     throw new Error(
-      `Bing ${method} failed (${res.status}): ${await res.text()}`
+      `Bing ${method} failed (${res.status}): ${(await res.text()).slice(0, 200)}`
     );
   const body = (await res.json()) as { d?: T[] };
   return body.d ?? [];
 }
 
+/** A Bing POST call, e.g. SubmitFeed. */
+async function bingPost(method: string, body: Record<string, unknown>) {
+  const res = await fetch(
+    `https://ssl.bing.com/webmaster/api.svc/json/${method}?apikey=${BING_WEBMASTER_API_KEY}`,
+    {
+      method: "POST",
+      signal: timeout(),
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify(body),
+    }
+  );
+  if (!res.ok)
+    throw new Error(
+      `Bing ${method} failed (${res.status}): ${(await res.text()).slice(0, 200)}`
+    );
+}
+
+type BingCrawlRow = {
+  Date: string;
+  CrawledPages?: number;
+  InIndex?: number;
+  CrawlErrors?: number;
+  BlockedByRobotsTxt?: number;
+  Code2xx?: number;
+  Code301?: number;
+  Code302?: number;
+  Code4xx?: number;
+  Code5xx?: number;
+  ConnectionTimeout?: number;
+  DnsFailures?: number;
+  InLinks?: number;
+};
+
+type BingFeed = {
+  Url: string;
+  Status?: string;
+  Submitted?: string;
+  LastCrawled?: string;
+  UrlCount?: number;
+};
+
+type BingIssue = { Url: string; HttpCode?: number; Issues?: number | string };
+
+/** Bing's UrlIssues flags, in plain words. */
+const BING_ISSUES: [number, string][] = [
+  [1, "HTTP code 301"],
+  [2, "HTTP code 302"],
+  [4, "HTTP 4xx error"],
+  [8, "HTTP 5xx error"],
+  [16, "blocked by robots.txt"],
+  [32, "contains malware"],
+  [64, "important URL blocked by robots.txt"],
+  [128, "DNS error"],
+  [256, "timed out"],
+];
+const issueWords = (v: number | string | undefined) => {
+  if (typeof v === "string") return v;
+  const words = BING_ISSUES.filter(([bit]) => (v ?? 0) & bit).map(([, w]) => w);
+  return words.join(", ") || "unknown issue";
+};
+
+const SITEMAP = `${SITE.url}/sitemap-index.xml`;
+
 async function readBing(): Promise<SearchConsole["bing"]> {
   const from = manilaDay(-28);
   const to = manilaDay(-1);
-  const [traffic, crawl] = await Promise.all([
+  const [traffic, crawl, feeds, issues] = await Promise.all([
     bingCall<{ Date: string; Clicks: number; Impressions: number }>(
       "GetRankAndTrafficStats"
     ),
-    bingCall<{ Date: string; InIndex?: number }>("GetCrawlStats"),
+    bingCall<BingCrawlRow>("GetCrawlStats"),
+    bingCall<BingFeed>("GetFeeds").catch(() => [] as BingFeed[]),
+    bingCall<BingIssue>("GetCrawlIssues").catch(() => [] as BingIssue[]),
   ]);
   const inWindow = traffic.filter(r => {
     const d = bingDate(r.Date);
     return d >= from && d <= to;
   });
-  const latest = [...crawl]
-    .filter(r => typeof r.InIndex === "number")
-    .sort((a, b) => bingDate(b.Date).localeCompare(bingDate(a.Date)))[0];
+  const days = [...crawl]
+    .filter(r => bingDate(r.Date))
+    .sort((a, b) => bingDate(a.Date).localeCompare(bingDate(b.Date)));
+  const latest = [...days].reverse().find(r => typeof r.InIndex === "number");
+  const n = (v: number | undefined) => v ?? 0;
+
+  // A sitemap Bing has never been given is the most common reason it
+  // finds few pages, so submit it once when it is missing.
+  const actions: string[] = [];
+  const hasSitemap = feeds.some(f => /sitemap/i.test(f.Url));
+  if (!hasSitemap) {
+    try {
+      await bingPost("SubmitFeed", { siteUrl: PROPERTY, feedUrl: SITEMAP });
+      actions.push(`Submitted ${SITEMAP} to Bing (it had no sitemap).`);
+    } catch (e) {
+      actions.push(
+        `Bing has no sitemap, and submitting it failed: ${String(e instanceof Error ? e.message : e).slice(0, 160)}`
+      );
+    }
+  }
+
   return {
     checkedOn: manilaDay(),
     from,
@@ -416,6 +499,40 @@ async function readBing(): Promise<SearchConsole["bing"]> {
     notes: latest
       ? `Pages in Bing's index as of ${bingDate(latest.Date)}.`
       : "Bing reported no crawl data yet.",
+    crawl: latest
+      ? {
+          date: bingDate(latest.Date),
+          crawledPages: n(latest.CrawledPages),
+          inIndex: n(latest.InIndex),
+          crawlErrors: n(latest.CrawlErrors),
+          blockedByRobots: n(latest.BlockedByRobotsTxt),
+          code2xx: n(latest.Code2xx),
+          code3xx: n(latest.Code301) + n(latest.Code302),
+          code4xx: n(latest.Code4xx),
+          code5xx: n(latest.Code5xx),
+          timeouts: n(latest.ConnectionTimeout),
+          dnsFailures: n(latest.DnsFailures),
+          inLinks: n(latest.InLinks),
+        }
+      : null,
+    history: days.slice(-30).map(r => ({
+      date: bingDate(r.Date),
+      inIndex: n(r.InIndex),
+      crawled: n(r.CrawledPages),
+    })),
+    sitemaps: feeds.map(f => ({
+      url: f.Url,
+      status: f.Status ?? "",
+      submitted: f.Submitted ? bingDate(f.Submitted) : "",
+      lastCrawled: f.LastCrawled ? bingDate(f.LastCrawled) : "",
+      urlCount: f.UrlCount ?? null,
+    })),
+    issues: issues.slice(0, 25).map(i => ({
+      url: i.Url,
+      httpCode: i.HttpCode ?? null,
+      issues: issueWords(i.Issues),
+    })),
+    actions,
   };
 }
 
@@ -607,7 +724,8 @@ export async function refreshSearchData(
   else if (b.value) {
     next.bing = b.value;
     notes.push(
-      `Bing: ${b.value.clicks} clicks, ${b.value.indexed ?? "–"} indexed.`
+      `Bing: ${b.value.clicks} clicks, ${b.value.indexed ?? "–"} indexed.`,
+      ...(b.value.actions ?? [])
     );
   }
   if (!clarity) notes.push("Clarity skipped: no CLARITY_API_TOKEN.");
