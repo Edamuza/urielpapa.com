@@ -2,10 +2,11 @@
 /**
  * Private site dashboard: posts published, scheduled-task runs and problems,
  * what is queued next, what still needs indexing, and search numbers. Runs on
- * demand behind a password (DASHBOARD_PASSWORD) and is never indexed. Data
+ * demand behind Google sign-in (or DASHBOARD_PASSWORD; see
+ * src/lib/dashboard-auth.ts) and is never indexed. Data
  * sources are described in src/lib/dashboard.ts.
  */
-import { dashboardGate } from "@/lib/dashboard-auth";
+import { dashboardGate, dashboardSession } from "@/lib/dashboard-auth";
 import { refreshSetup } from "@/lib/search-refresh";
 import Layout from "@/layouts/Layout.astro";
 import { hubName } from "@/data/hubs";
@@ -33,9 +34,10 @@ export const prerender = false;
 Astro.response.headers.set("Cache-Control", "private, no-store");
 Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
 
-// Open on localhost; in production (and preview deployments) it needs the password.
-const blocked = dashboardGate(Astro.request);
+// Open on localhost; in production (and preview deployments) it needs sign-in.
+const blocked = dashboardGate(Astro.request, "page");
 if (blocked) return blocked;
+const signedInAs = dashboardSession(Astro.request);
 
 const today = todayManila();
 const totals = await contentTotals();
@@ -154,6 +156,14 @@ const sections = [
         what the daily task did, what goes out next, what still needs indexing
         and how the site shows up in search.
       </p>
+      {
+        signedInAs && (
+          <form method="post" action="/dashboard/logout" class="account mt-3">
+            <span class="meta">Signed in as {signedInAs}</span>
+            <button type="submit">Sign out</button>
+          </form>
+        )
+      }
       <p class="meta mt-3">
         Built {day(today, "D MMMM YYYY")} (Manila) from the repository. Search numbers
         are a snapshot from {day(g.checkedOn, "D MMM YYYY")}
@@ -1222,7 +1232,7 @@ const sections = [
         });
         if (res.status === 401)
           throw new Error(
-            "The dashboard password was not sent. Reload the page, sign in again and retry."
+            "You're signed out (sign-ins last 12 hours). Reload the page, sign in again and retry."
           );
         if (!res.ok || !res.body)
           throw new Error(
@@ -1278,6 +1288,20 @@ const sections = [
     border-top: 1px solid var(--border);
     padding-block: 2rem;
     scroll-margin-top: 1rem;
+  }
+  .account {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .account button {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
   }
   .refresh {
     display: flex;

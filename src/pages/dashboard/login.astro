@@ -1,0 +1,111 @@
+---
+/**
+ * Sign-in page for the private dashboard (Google sign-in). Signed-out visitors
+ * to /dashboard land here; see src/lib/dashboard-auth.ts.
+ */
+import Layout from "@/layouts/Layout.astro";
+import {
+  LOCK_MINUTES,
+  SESSION_HOURS,
+  clientAddress,
+  dashboardSession,
+  googleSignIn,
+  lockedFor,
+} from "@/lib/dashboard-auth";
+
+export const prerender = false;
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+
+// Without Google sign-in (localhost, or the password fallback) there is
+// nothing to do here: the dashboard handles it.
+if (!import.meta.env.PROD || !googleSignIn() || dashboardSession(Astro.request))
+  return Astro.redirect("/dashboard", 303);
+
+const locked = lockedFor(clientAddress(Astro.request));
+const params = Astro.url.searchParams;
+const error = locked ? "locked" : params.get("error");
+const messages: Record<string, string> = {
+  denied:
+    "That Google account isn't allowed to open this dashboard. Pick the site owner's account.",
+  cancelled: "Sign-in was cancelled.",
+  expired:
+    "That sign-in took too long or started in another tab. Please try again.",
+  failed: "Google didn't confirm the sign-in. Please try again.",
+  locked: `Too many failed sign-ins from this network. Try again in ${locked || LOCK_MINUTES} minutes.`,
+};
+const note = error
+  ? (messages[error] ?? messages.failed)
+  : params.has("signed-out")
+    ? "You're signed out."
+    : "";
+---
+
+<Layout
+  title="Dashboard sign-in"
+  description="Sign in to the private urielpapa.com dashboard."
+  noindex
+>
+  <div class="app-layout max-w-read pt-12 pb-16">
+    <h1 class="h1">Dashboard sign-in</h1>
+    <p class="mt-4 text-lg">
+      This dashboard is private. Sign in with the site owner's Google account to
+      open it.
+    </p>
+    {
+      note && (
+        <p
+          class:list={["note mt-6", { error: error && error !== "cancelled" }]}
+          role={error ? "alert" : "status"}
+        >
+          {note}
+        </p>
+      )
+    }
+    {
+      locked ? null : (
+        <a
+          class="signin mt-6"
+          href="/dashboard/auth/google"
+          title="Sign in to the dashboard with your Google account"
+        >
+          Sign in with Google
+        </a>
+      )
+    }
+    <p class="meta mt-6">
+      You stay signed in for {SESSION_HOURS} hours on this browser, or until you sign
+      out.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .signin {
+    display: inline-block;
+    border: 1px solid var(--foreground);
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+    background: var(--foreground);
+    color: var(--background);
+    text-decoration: none;
+  }
+  .signin:hover,
+  .signin:focus-visible {
+    opacity: 0.9;
+  }
+  .note {
+    --bad: #b91c1c;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+  :global([data-theme="dark"]) .note {
+    --bad: #f87171;
+  }
+  .note.error {
+    border-color: var(--bad);
+  }
+</style>
