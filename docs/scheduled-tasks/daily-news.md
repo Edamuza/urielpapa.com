@@ -38,5 +38,5 @@ You publish one short tech news take a day on urielpapa.com, Uriel Papa's person
 
 ## 5. Log
 
-- Append one line to docs/publish-log.md: `- YYYY-MM-DD news: <title> (https://urielpapa.com/news/<slug>), source: <sourceUrl>` or `- YYYY-MM-DD news: skipped (<reason>)`, in the same commit as the post.
+- Append one line to the "Runs" list in docs/publish-log.md, in the format that file describes: `- YYYY-MM-DD | news | published | <slug> |` after a clean publish, `- YYYY-MM-DD | news | warning | <slug> | <what went wrong>` when the post went out with a problem (a failed build that was fixed, no photos, a relaxed rule), `- YYYY-MM-DD | news | skipped | - | <reason>` or `- YYYY-MM-DD | news | failed | - | <the error>`. Commit it with the post; on a skip or failure, commit and push the log line on its own so the dashboard at /dashboard shows it.
 - End with a 2-3 line run summary: the title and URL, or why you skipped.

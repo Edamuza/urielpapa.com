@@ -37,5 +37,5 @@ You publish the next long-form post on urielpapa.com, Uriel Papa's personal site
 
 ## 5. Log
 
-- Append to docs/publish-log.md: `- YYYY-MM-DD long-form: <title> (https://urielpapa.com/blog/<slug>)`, in the same commit.
+- Append to the "Runs" list in docs/publish-log.md, in the format that file describes: `- YYYY-MM-DD | long-form | published | <slug> |`, in the same commit. When nothing was due or the post still needs Uriel's input, log `- YYYY-MM-DD | long-form | skipped | - | <reason>`; when something broke, `failed` with the error.
 - End with a 2-3 line run summary: what was published and the URL, or why nothing was.

@@ -22,9 +22,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return response;
   }
   const html = addLinkTitles(await response.text());
+  const headers = new Headers(response.headers);
+  // The private dashboard never belongs in search results or shared caches.
+  if (path.startsWith("/dashboard")) {
+    headers.set("X-Robots-Tag", "noindex, nofollow");
+    headers.set("Cache-Control", "private, no-store");
+  }
   return new Response(html, {
     status: response.status,
     statusText: response.statusText,
-    headers: response.headers,
+    headers,
   });
 });

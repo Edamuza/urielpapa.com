@@ -1,0 +1,908 @@
+---
+/**
+ * Private site dashboard: posts published, scheduled-task runs and problems,
+ * what is queued next, what still needs indexing, and search numbers. Runs on
+ * demand behind a password (DASHBOARD_PASSWORD) and is never indexed. Data
+ * sources are described in src/lib/dashboard.ts.
+ */
+import { createHash, timingSafeEqual } from "node:crypto";
+import { DASHBOARD_PASSWORD } from "astro:env/server";
+import Layout from "@/layouts/Layout.astro";
+import { hubName } from "@/data/hubs";
+import { countSources, daysSinceLaunch, listPages } from "@/lib/site-stats";
+import {
+  SEARCH,
+  contentTotals,
+  hubCoverage,
+  indexingQueue,
+  keywordStats,
+  longFormQueue,
+  newsRuns,
+  postsPerDay,
+  problems,
+  gscInspectUrl,
+  refreshQueue,
+  todayManila,
+  type RunStatus,
+} from "@/lib/dashboard";
+import { formatDate } from "@/utils/content";
+
+export const prerender = false;
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+
+// Open on localhost; in production (and preview deployments) it needs the password.
+if (import.meta.env.PROD) {
+  if (!DASHBOARD_PASSWORD) return new Response(null, { status: 404 });
+  const [scheme, encoded] = (
+    Astro.request.headers.get("authorization") ?? ""
+  ).split(" ");
+  let given = "";
+  try {
+    if (scheme === "Basic" && encoded)
+      given = atob(encoded).split(":").slice(1).join(":");
+  } catch {
+    given = "";
+  }
+  const digest = (s: string) => createHash("sha256").update(s).digest();
+  if (!timingSafeEqual(digest(given), digest(DASHBOARD_PASSWORD))) {
+    return new Response("The dashboard needs the password.", {
+      status: 401,
+      headers: {
+        "WWW-Authenticate": 'Basic realm="urielpapa.com dashboard"',
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow",
+        "Content-Type": "text/plain; charset=utf-8",
+      },
+    });
+  }
+}
+
+const today = todayManila();
+const totals = await contentTotals();
+const pages = await listPages();
+const sources = await countSources();
+const days = daysSinceLaunch();
+const perDay = await postsPerDay(30);
+const maxDay = Math.max(1, ...perDay.map(d => d.total));
+const runs = await newsRuns(21);
+const issues = await problems(21);
+const queue = await longFormQueue();
+const upcoming = queue.filter(q => !q.live);
+const coverage = await hubCoverage();
+const refresh = await refreshQueue();
+const toIndex = await indexingQueue(pages);
+const kw = keywordStats();
+const g = SEARCH.google;
+const perf = g.performance;
+const bing = SEARCH.bing;
+
+const fmt = (n: number | null | undefined, digits = 0) =>
+  n === null || n === undefined
+    ? "–"
+    : n.toLocaleString("en-US", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      });
+const pct = (n: number | null | undefined) =>
+  n === null || n === undefined ? "–" : `${(n * 100).toFixed(1)}%`;
+const day = (iso: string | null | undefined, format = "D MMM") =>
+  iso ? formatDate(new Date(`${iso}T12:00:00+08:00`), format) : "–";
+const range = (from: string | null, to: string | null) =>
+  from && to
+    ? `${day(from)} to ${day(to, "D MMM YYYY")}`
+    : "date range unknown";
+const ageDays = (iso: string) =>
+  Math.round(
+    (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${iso}T00:00:00Z`)) /
+      86_400_000
+  );
+
+const STATUS: Record<RunStatus, { mark: string; label: string }> = {
+  published: { mark: "✓", label: "Published" },
+  warning: { mark: "!", label: "Published, with issues" },
+  skipped: { mark: "–", label: "Skipped" },
+  failed: { mark: "✕", label: "Failed" },
+  "no-run": { mark: "?", label: "No run recorded" },
+  unlogged: { mark: "·", label: "Not logged" },
+  attention: { mark: "→", label: "Needs attention" },
+};
+
+const lastRun = runs.find(r => r.status !== "no-run" || r.date !== today);
+const streak = (() => {
+  let n = 0;
+  for (const r of runs) {
+    if (r.date === today && r.status === "no-run") continue;
+    if (["published", "warning", "unlogged"].includes(r.status) && r.slug) n++;
+    else break;
+  }
+  return n;
+})();
+const nextLongForm = upcoming[0];
+const requestToday = toIndex.filter(i => !i.requestedOn).slice(0, 10);
+const indexLater = toIndex.filter(i => !i.requestedOn).slice(10);
+const requested = toIndex.filter(i => i.requestedOn);
+const snapshotAge = ageDays(g.checkedOn);
+const failures = issues.filter(
+  i => i.kind === "failed" || i.kind === "no-run"
+).length;
+
+const sections = [
+  ["overview", "Overview"],
+  ["publishing", "Publishing"],
+  ["runs", "Daily task log"],
+  ["errors", "Errors and warnings"],
+  ["next", "Up next"],
+  ["indexing", "Indexing"],
+  ["search", "Search and keywords"],
+  ["coverage", "Topic coverage"],
+] as const;
+---
+
+<Layout
+  title="Dashboard"
+  description="Private dashboard for urielpapa.com: posts, scheduled task logs, the publishing queue, indexing and search numbers."
+  noindex
+>
+  <div class="app-layout pt-8 pb-16">
+    <header class="mb-8">
+      <h1 class="h1">Site dashboard</h1>
+      <p class="max-w-read mt-3 text-lg">
+        Everything about urielpapa.com in one place: what has been published,
+        what the daily task did, what goes out next, what still needs indexing
+        and how the site shows up in search.
+      </p>
+      <p class="meta mt-3">
+        Built {day(today, "D MMMM YYYY")} (Manila) from the repository. Search numbers
+        are a snapshot from {day(g.checkedOn, "D MMM YYYY")}
+        {snapshotAge > 7 ? `, ${snapshotAge} days old` : ""}.
+      </p>
+      <nav aria-label="Dashboard sections" class="mt-4">
+        <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {
+            sections.map(([id, label]) => (
+              <li>
+                <a href={`#${id}`} title={`Jump to ${label}`}>
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <section id="overview" aria-labelledby="overview-h" class="dash-section">
+      <h2 id="overview-h" class="h2 mb-4">Overview</h2>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>Posts published</dt>
+          <dd class="num">{fmt(totals.posts)}</dd>
+          <dd class="meta">
+            {fmt(totals.news)} news, {fmt(totals.longForm)} long-form, {
+              fmt(totals.events)
+            } event
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>This week</dt>
+          <dd class="num">{fmt(totals.last7)}</dd>
+          <dd class="meta">Posts in the last 7 days</dd>
+        </div>
+        <div class="tile">
+          <dt>Pages on the site</dt>
+          <dd class="num">{fmt(pages.size)}</dd>
+          <dd class="meta">As the sitemap lists them</dd>
+        </div>
+        <div class="tile">
+          <dt>Indexed in Google</dt>
+          <dd class="num">{fmt(g.indexing.indexed)}</dd>
+          <dd class="meta">
+            {fmt(g.indexing.notIndexed)} not indexed, as of {
+              day(g.indexing.lastUpdated ?? g.checkedOn)
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Drafts waiting</dt>
+          <dd class="num">{fmt(totals.drafts)}</dd>
+          <dd class="meta">
+            {
+              nextLongForm
+                ? `Next due ${day(nextLongForm.publishOn)}${nextLongForm.overdue ? " (overdue)" : ""}`
+                : "Queue is empty"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Daily news streak</dt>
+          <dd class="num">{fmt(streak)}</dd>
+          <dd class="meta">
+            {
+              lastRun
+                ? `Last run ${day(lastRun.date)}: ${STATUS[lastRun.status].label.toLowerCase()}`
+                : "No runs yet"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Search keywords</dt>
+          <dd class="num">{fmt(kw.total)}</dd>
+          <dd class="meta">{fmt(kw.top10)} in the top 10 on Google</dd>
+        </div>
+        <div class="tile">
+          <dt>Google clicks</dt>
+          <dd class="num">{fmt(perf.clicks)}</dd>
+          <dd class="meta">
+            {fmt(perf.impressions)} impressions, {range(perf.from, perf.to)}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Words published</dt>
+          <dd class="num">{fmt(totals.words)}</dd>
+          <dd class="meta">Posts and notes</dd>
+        </div>
+        <div class="tile">
+          <dt>Sources cited</dt>
+          <dd class="num">{fmt(sources)}</dd>
+          <dd class="meta">Outside pages linked</dd>
+        </div>
+        <div class="tile">
+          <dt>Days live</dt>
+          <dd class="num">{fmt(days)}</dd>
+          <dd class="meta">
+            Notes {fmt(totals.notes)}, projects {fmt(totals.projects)}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Problems, 21 days</dt>
+          <dd class="num">{fmt(issues.length)}</dd>
+          <dd class="meta">
+            {fmt(failures)} failed or silent runs
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <section
+      id="publishing"
+      aria-labelledby="publishing-h"
+      class="dash-section"
+    >
+      <h2 id="publishing-h" class="h2 mb-1">Posts per day</h2>
+      <p class="meta mb-4">
+        Last 30 days, Manila dates. Most days the daily task adds one news take;
+        the tall bars are days when batches of posts went live.
+      </p>
+      <div
+        class="chart"
+        role="img"
+        aria-label={`Posts per day for the last 30 days. Highest: ${maxDay} in a day.`}
+      >
+        <span class="chart-max meta" aria-hidden="true">{maxDay}</span>
+        <ol class="bars">
+          {
+            perDay.map(d => (
+              <li
+                tabindex="0"
+                data-tip={`${day(d.day)}: ${d.total} ${d.total === 1 ? "post" : "posts"}${d.total ? ` (${d.news} news, ${d.other} other)` : ""}`}
+                style={`--h:${(d.total / maxDay) * 100}%`}
+                class={d.total ? "" : "empty"}
+              >
+                <span class="sr-only">
+                  {day(d.day)}: {d.total}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="chart-axis meta" aria-hidden="true">
+          <span>{day(perDay[0].day)}</span>
+          <span>{day(perDay[14].day)}</span>
+          <span>{day(perDay.at(-1)?.day)}</span>
+        </div>
+      </div>
+      <details class="mt-3">
+        <summary class="meta cursor-pointer">Show as a table</summary>
+        <div class="table-wrap mt-2">
+          <table>
+            <thead>
+              <tr><th>Day</th><th>News</th><th>Other</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              {
+                [...perDay].reverse().map(d => (
+                  <tr>
+                    <td>{day(d.day, "ddd D MMM")}</td>
+                    <td>{d.news}</td>
+                    <td>{d.other}</td>
+                    <td>{d.total}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section id="runs" aria-labelledby="runs-h" class="dash-section">
+      <h2 id="runs-h" class="h2 mb-1">Daily news task log</h2>
+      <p class="meta mb-4">
+        One row per run, newest first, from <code>docs/publish-log.md</code>.
+        Days before the log started are filled in from the posts' publish dates.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Status</th><th>Post</th><th>Note</th></tr>
+          </thead>
+          <tbody>
+            {
+              runs.map(r => (
+                <tr data-status={r.status}>
+                  <td class="whitespace-nowrap">{day(r.date, "ddd D MMM")}</td>
+                  <td class="whitespace-nowrap">
+                    <span class="status" aria-hidden="true">
+                      {STATUS[r.status].mark}
+                    </span>{" "}
+                    {STATUS[r.status].label}
+                  </td>
+                  <td>
+                    {r.url ? (
+                      <a href={r.url} title={`Read the news take: ${r.title}`}>
+                        {r.title}
+                      </a>
+                    ) : r.slug ? (
+                      r.title
+                    ) : (
+                      "–"
+                    )}
+                  </td>
+                  <td class="meta">{r.note}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="errors" aria-labelledby="errors-h" class="dash-section">
+      <h2 id="errors-h" class="h2 mb-1">Errors and warnings</h2>
+      <p class="meta mb-4">
+        Failed, skipped or warned runs from the log, days with no run, news
+        takes without photos, overdue long-form posts and drafts outside the
+        queue.
+      </p>
+      {
+        issues.length ? (
+          <ul class="issues">
+            {issues.map(i => (
+              <li data-status={i.kind}>
+                <span class="whitespace-nowrap">
+                  <span class="status" aria-hidden="true">
+                    {STATUS[i.kind].mark}
+                  </span>{" "}
+                  <strong>{STATUS[i.kind].label}</strong>
+                </span>
+                <span class="meta whitespace-nowrap">{day(i.date)}</span>
+                <span>{i.text}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Nothing went wrong in the last 21 days.</p>
+        )
+      }
+    </section>
+
+    <section id="next" aria-labelledby="next-h" class="dash-section">
+      <h2 id="next-h" class="h2 mb-1">Up next</h2>
+      <p class="meta mb-4">
+        The daily news take publishes every morning on its own. Long-form posts
+        follow the queue in <code>docs/content-plan.md</code>, Tuesdays and
+        Fridays, once their <code>[Uriel: …]</code> spots are filled.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Publish on</th><th>Post</th><th>Topic</th><th>Format</th><th
+                >Ready?</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            {
+              upcoming.map(q => (
+                <tr>
+                  <td class="whitespace-nowrap">
+                    {day(q.publishOn, "ddd D MMM")}
+                    {q.overdue && <span class="meta"> (overdue)</span>}
+                  </td>
+                  <td>
+                    {q.title}
+                    <div class="meta">{q.question}</div>
+                  </td>
+                  <td>{hubName(q.hub)}</td>
+                  <td>{q.frame}</td>
+                  <td>
+                    {q.missing
+                      ? "Not written yet"
+                      : q.markers
+                        ? `Needs your input (${q.markers} ${q.markers === 1 ? "spot" : "spots"})`
+                        : "Written, waiting for your go-ahead"}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      {upcoming.length === 0 && <p>The long-form queue is empty.</p>}
+    </section>
+
+    <section id="indexing" aria-labelledby="indexing-h" class="dash-section">
+      <h2 id="indexing-h" class="h2 mb-1">Next to index in Search Console</h2>
+      <p class="meta mb-4">
+        Pages Search Console's Page indexing report lists as not indexed (report
+        last updated {day(g.indexing.lastUpdated ?? g.checkedOn, "D MMM YYYY")},
+        read {day(g.checkedOn)}), then pages published or updated after that.
+        Hub and listing pages come first, because they link everything else.
+        Search Console allows about 10 indexing requests a day.
+      </p>
+      <h3 class="h3 mb-2">Request today ({requestToday.length})</h3>
+      {
+        requestToday.length ? (
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <>
+                    <th>Page</th>
+                    <th>Why</th>
+                    <th>Since</th>
+                    <th>Inspect</th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {requestToday.map(i => (
+                  <tr>
+                    <td>
+                      <a href={i.path} title={`Open ${i.path} on the site`}>
+                        {i.path}
+                      </a>
+                    </td>
+                    <td>{i.why}</td>
+                    <td class="whitespace-nowrap">{day(i.since)}</td>
+                    <td>
+                      <a
+                        href={gscInspectUrl(i.path)}
+                        rel="noopener"
+                        target="_blank"
+                        title={`Inspect ${i.path} in Google Search Console`}
+                      >
+                        Inspect
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>Nothing waiting: every page was indexed or requested.</p>
+        )
+      }
+      {
+        indexLater.length > 0 && (
+          <details class="mt-3">
+            <summary class="meta cursor-pointer">
+              {indexLater.length} more for the following days
+            </summary>
+            <ul class="mt-2 text-sm">
+              {indexLater.map(i => (
+                <li>
+                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                    {i.path}
+                  </a>{" "}
+                  <span class="meta">
+                    {i.why}, {day(i.since)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      {
+        requested.length > 0 && (
+          <details class="mt-3">
+            <summary class="meta cursor-pointer">
+              {requested.length} already requested, waiting for Google
+            </summary>
+            <ul class="mt-2 text-sm">
+              {requested.map(i => (
+                <li>
+                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                    {i.path}
+                  </a>{" "}
+                  <span class="meta">requested {day(i.requestedOn)}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      {
+        g.indexing.reasons.length > 0 && (
+          <>
+            <h3 class="h3 mt-6 mb-2">Why pages aren't indexed</h3>
+            <ul class="text-sm">
+              {g.indexing.reasons.map(r => (
+                <li>
+                  <strong>{r.reason}</strong>: {r.urls.length}{" "}
+                  {r.urls.length === 1 ? "page" : "pages"}
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      <p class="meta mt-4">
+        Bing: {
+          bing.indexed !== null
+            ? `${fmt(bing.indexed)} ${bing.indexed === 1 ? "page" : "pages"} indexed. `
+            : ""
+        }{fmt(bing.clicks)} clicks and {fmt(bing.impressions)} impressions{
+          bing.from ? ` (${range(bing.from, bing.to)})` : ""
+        }. {bing.notes} New posts reach Bing through IndexNow on every deploy.
+      </p>
+    </section>
+
+    <section id="search" aria-labelledby="search-h" class="dash-section">
+      <h2 id="search-h" class="h2 mb-1">Search and keywords</h2>
+      <p class="meta mb-4">
+        Google Search Console, {range(perf.from, perf.to)}. Position is the
+        average; small numbers move a lot while the site is new.
+      </p>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>Clicks</dt><dd class="num">{fmt(perf.clicks)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Impressions</dt><dd class="num">{fmt(perf.impressions)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Click rate</dt><dd class="num">{pct(perf.ctr)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Average position</dt><dd class="num">{fmt(perf.position, 1)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Keywords with impressions</dt><dd class="num">{fmt(kw.total)}</dd>
+        </div>
+        <div class="tile">
+          <dt>In the top 3</dt><dd class="num">{fmt(kw.top3)}</dd>
+        </div>
+        <div class="tile">
+          <dt>In the top 10</dt><dd class="num">{fmt(kw.top10)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Question keywords</dt><dd class="num">{fmt(kw.questions)}</dd>
+        </div>
+      </dl>
+
+      <h3 class="h3 mt-6 mb-2">Top keywords</h3>
+      {
+        kw.listed < kw.total && (
+          <p class="meta mb-2">
+            The snapshot holds the top {kw.listed} of {kw.total} keywords, so
+            the top 3, top 10 and question counts cover those rows.
+          </p>
+        )
+      }
+      {
+        kw.top.length ? (
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <>
+                    <th>Keyword</th>
+                    <th class="r">Clicks</th>
+                    <th class="r">Impressions</th>
+                    <th class="r">CTR</th>
+                    <th class="r">Position</th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {kw.top.map(q => (
+                  <tr>
+                    <td>{q.query}</td>
+                    <td class="r">{fmt(q.clicks)}</td>
+                    <td class="r">{fmt(q.impressions)}</td>
+                    <td class="r">{pct(q.ctr)}</td>
+                    <td class="r">{fmt(q.position, 1)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>No keyword rows in the snapshot yet.</p>
+        )
+      }
+      {
+        kw.striking.length > 0 && (
+          <>
+            <h3 class="h3 mt-6 mb-2">Close to page one</h3>
+            <p class="meta mb-2">
+              Keywords at positions 8 to 20: a better title, a direct answer
+              near the top or one more internal link can move these.
+            </p>
+            <ul class="text-sm">
+              {kw.striking.slice(0, 10).map(q => (
+                <li>
+                  <strong>{q.query}</strong>{" "}
+                  <span class="meta">
+                    position {fmt(q.position, 1)}, {fmt(q.impressions)}{" "}
+                    impressions
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+
+      <h3 class="h3 mt-6 mb-2">Top pages</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Page</th><th class="r">Clicks</th><th class="r"
+                >Impressions</th
+              ><th class="r">Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              [...perf.pages]
+                .sort((a, b) => b.impressions - a.impressions)
+                .slice(0, 15)
+                .map(p => (
+                  <tr>
+                    <td>
+                      <a href={p.path} title={`Open ${p.path} on the site`}>
+                        {p.path}
+                      </a>
+                    </td>
+                    <td class="r">{fmt(p.clicks)}</td>
+                    <td class="r">{fmt(p.impressions)}</td>
+                    <td class="r">{fmt(p.position, 1)}</td>
+                  </tr>
+                ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="coverage" aria-labelledby="coverage-h" class="dash-section">
+      <h2 id="coverage-h" class="h2 mb-1">Topic coverage</h2>
+      <p class="meta mb-4">
+        Long-form posts per topic hub against the target in
+        <code>docs/content-plan.md</code>. News takes support a hub but don't
+        count toward it.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Topic</th><th class="r">Long-form</th><th class="r">Drafts</th
+              ><th class="r">News</th><th class="r">Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              coverage.map(h => (
+                <tr>
+                  <td>
+                    <a
+                      href={`/topics/${h.id}`}
+                      title={`Open the ${h.name} topic page`}
+                    >
+                      {h.name}
+                    </a>
+                  </td>
+                  <td class="r">{h.longForm}</td>
+                  <td class="r">{h.drafts}</td>
+                  <td class="r">{h.news}</td>
+                  <td class="r">{h.target || "–"}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="h3 mt-6 mb-2">Refresh next</h3>
+      <p class="meta mb-2">
+        Long-form posts with the oldest last update. Each is due a refresh (a
+        current example, a checked fact, a new internal link) every 3 months.
+      </p>
+      <ul class="text-sm">
+        {
+          refresh.map(r => (
+            <li>
+              <a href={r.url} title={`Read ${r.title}`}>
+                {r.title}
+              </a>{" "}
+              <span class="meta">
+                updated {day(r.last)}, refresh by {day(r.due, "D MMM YYYY")}
+                {r.overdue && " (due now)"}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .dash-section {
+    border-top: 1px solid var(--border);
+    padding-block: 2rem;
+    scroll-margin-top: 1rem;
+  }
+  .tile {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    min-width: 0;
+  }
+  .tile dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .num {
+    font-family: var(--ff-display);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .table-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+  .r {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .status {
+    display: inline-block;
+    width: 1.1em;
+    text-align: center;
+    font-weight: 700;
+  }
+  tr[data-status="failed"] td,
+  tr[data-status="no-run"] td {
+    font-weight: 600;
+  }
+  .issues {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+  .issues li {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  @media (max-width: 640px) {
+    .issues li {
+      grid-template-columns: 1fr auto;
+    }
+    .issues li > :last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  .chart {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+  .chart-max {
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+  }
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 10rem;
+    border-bottom: 1px solid var(--muted-foreground);
+  }
+  .bars li {
+    position: relative;
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    outline-offset: 2px;
+  }
+  .bars li::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: max(var(--h), 0px);
+    background: var(--foreground);
+    border-radius: 4px 4px 0 0;
+  }
+  .bars li.empty::before {
+    height: 0;
+  }
+  .bars li:hover::before,
+  .bars li:focus-visible::before {
+    opacity: 0.7;
+  }
+  .bars li:hover::after,
+  .bars li:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--foreground);
+    color: var(--background);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .bars li:first-child:hover::after,
+  .bars li:first-child:focus-visible::after {
+    left: 0;
+    transform: none;
+  }
+  .bars li:last-child:hover::after,
+  .bars li:last-child:focus-visible::after {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+  .chart-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+  }
+</style>
