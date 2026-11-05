@@ -4,38 +4,34 @@
     "indexing": {
       "lastUpdated": "2026-11-05",
       "indexed": 97,
-      "notIndexed": 6,
+      "notIndexed": 5,
       "reasons": [
         {
-          "reason": "URL is unknown to Google",
+          "reason": "Discovered - currently not indexed",
           "urls": [
-            {
-              "path": "/dashboard/login",
-              "lastCrawled": null
-            },
             {
               "path": "/privacy",
               "lastCrawled": null
             },
-            {
-              "path": "/news/apple-siri-ai-developer-preview",
-              "lastCrawled": null
-            },
-            {
-              "path": "/news/claude-message-threads-beta",
-              "lastCrawled": null
-            }
-          ]
-        },
-        {
-          "reason": "Discovered - currently not indexed",
-          "urls": [
             {
               "path": "/news/page/4",
               "lastCrawled": null
             },
             {
               "path": "/news/page/5",
+              "lastCrawled": null
+            }
+          ]
+        },
+        {
+          "reason": "URL is unknown to Google",
+          "urls": [
+            {
+              "path": "/news/apple-siri-ai-developer-preview",
+              "lastCrawled": null
+            },
+            {
+              "path": "/news/claude-message-threads-beta",
               "lastCrawled": null
             }
           ]
@@ -1212,11 +1208,509 @@
     "actions": []
   },
   "inspections": {
-    "/dashboard/login": {
+    "/about": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=CdrGtCMGniTI0qr2ubbVxQ&utm_medium=link&utm_source=api"
+    },
+    "/blog": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=wj0ywKmAJVdlyy0LTdW7OQ&utm_medium=link&utm_source=api"
+    },
+    "/colophon": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=lJAYdnrv6aGB-EOlWlxmsA&utm_medium=link&utm_source=api"
+    },
+    "/contact": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=YacT5Hxuul8o9JlqPtiRLg&utm_medium=link&utm_source=api"
+    },
+    "/events": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Pv4fSyjxR7JA_2l4YVp4Fw&utm_medium=link&utm_source=api"
+    },
+    "/": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-04",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=damvW5Iut6mFe10BHcuXSQ&utm_medium=link&utm_source=api"
+    },
+    "/news": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Atst3lXNg8dlF9cByyKLBA&utm_medium=link&utm_source=api"
+    },
+    "/newsletter": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Vz2zJjdbKTrpQJlEqKwwcA&utm_medium=link&utm_source=api"
+    },
+    "/notes": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=E5aH6IiZBFIuY7JDgIek3Q&utm_medium=link&utm_source=api"
+    },
+    "/now": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=fJSF3YosxJ27ca2nhMjcNw&utm_medium=link&utm_source=api"
+    },
+    "/privacy": {
+      "indexed": false,
+      "state": "Discovered - currently not indexed",
+      "lastCrawled": null,
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=GdZMnUx_RGc5O6zL9Bbw5w&utm_medium=link&utm_source=api"
+    },
+    "/projects": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=5U7quif72qokzrxC3oeTVA&utm_medium=link&utm_source=api"
+    },
+    "/stack": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=yPqSaNgcdYHdzi2dI932ng&utm_medium=link&utm_source=api"
+    },
+    "/topics": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=0Iow9OO2IZET8drzf8nGKg&utm_medium=link&utm_source=api"
+    },
+    "/news/apple-siri-ai-developer-preview": {
       "indexed": false,
       "state": "URL is unknown to Google",
       "lastCrawled": null,
-      "checked": "2026-11-05"
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=1VgTQ8m_9iOPSY74yztwcg&utm_medium=link&utm_source=api"
+    },
+    "/news/claude-message-threads-beta": {
+      "indexed": false,
+      "state": "URL is unknown to Google",
+      "lastCrawled": null,
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Keyhd-fasH6pp1A_TxXH8A&utm_medium=link&utm_source=api"
+    },
+    "/news/apple-q4-2026-results": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=QvhOJfOiQI_GLI2MTzqxXQ&utm_medium=link&utm_source=api"
+    },
+    "/news/cma-meta-commercial-terms-probe": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=_lf5hvKTsvm677Gq0HjQ3A&utm_medium=link&utm_source=api"
+    },
+    "/news/ai-training-opt-out-robots-txt": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=RUg7qweCUyXUWzjHytoo4A&utm_medium=link&utm_source=api"
+    },
+    "/news/openai-api-credits-chatgpt-pro-business": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=wxmcQffYWQoQJMHcUuO2HA&utm_medium=link&utm_source=api"
+    },
+    "/news/google-ads-in-ai-mode-philippines": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=-nnsbHKfbbAkbpM8KzZi8g&utm_medium=link&utm_source=api"
+    },
+    "/blog/ai-agent-tools-shared-on-threads-october-2026": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=ZElwZ9OgvhKTwetKl2wWLA&utm_medium=link&utm_source=api"
+    },
+    "/news/anthropic-claude-agent-unsanctioned-actions": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=JHnWK3wL3nyJJq7BYX4gyw&utm_medium=link&utm_source=api"
+    },
+    "/news/apple-iwork-mcp-ai-agents": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=4Ks4gJV6IwEz5nyy64qQ8g&utm_medium=link&utm_source=api"
+    },
+    "/blog/free-github-repos-to-learn-ai-agents": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=MSXtzZj3oWBPQnce9Tswnw&utm_medium=link&utm_source=api"
+    },
+    "/blog/free-n8n-workflow-templates-github": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Wfm1lQuHeuqw48XN6KxXeA&utm_medium=link&utm_source=api"
+    },
+    "/news/iphone-duo-philippines-price": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=1CdZHP2geGwv3-YEKzRUPg&utm_medium=link&utm_source=api"
+    },
+    "/news/kimi-k3-1-pro-open-weights": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=HVAG43pXaQbrbDKQWDBzpA&utm_medium=link&utm_source=api"
+    },
+    "/news/musk-spacex-gpu-debt-ai-credit": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Vzcv5mPQlgCPZIihYhd4YQ&utm_medium=link&utm_source=api"
+    },
+    "/blog/open-source-seo-geo-tools-github": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=xTHjykeZreWSmhO8yQ_7fA&utm_medium=link&utm_source=api"
+    },
+    "/news/anthropic-s1-ipo-filing": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=PGTNi60e5bQ3Kwj49BE5OA&utm_medium=link&utm_source=api"
+    },
+    "/news/aws-infinity-agent-runtime": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=mI0r6uEq0D8hcENK14GxSw&utm_medium=link&utm_source=api"
+    },
+    "/news/google-agent-compute-engine": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=1zcKu5iHcnYxFnX-qtJk_A&utm_medium=link&utm_source=api"
+    },
+    "/news/openai-decisions-api": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Ix4lBhH0jn7OGsNUwxgS_Q&utm_medium=link&utm_source=api"
+    },
+    "/news/openai-offline-frontier-training": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=eSqTyMl42kxk3lc3MK5xCg&utm_medium=link&utm_source=api"
+    },
+    "/news/openai-older-models-shutdown": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=D6ljNGNDv6hcokF5OOrpGQ&utm_medium=link&utm_source=api"
+    },
+    "/news/agent-skills-agentic-ai-foundation": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=T1eW4suxrFkAuZnAzDSdrA&utm_medium=link&utm_source=api"
+    },
+    "/news/openai-models-google-cloud": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Wr5UJVLLBBN8D5Jshd8_4A&utm_medium=link&utm_source=api"
+    },
+    "/news/emudhra-ca-key-compromise": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=13iVKCauPqKf1euzkjTcJw&utm_medium=link&utm_source=api"
+    },
+    "/news/google-poisoned-serps-rank-trackers": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=_I59UJe1eiThhPw1J23qRA&utm_medium=link&utm_source=api"
+    },
+    "/news/keyv-npm-worm-supply-chain-attack": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=HgS_Tv8n2jlrLMm_mLlYjA&utm_medium=link&utm_source=api"
+    },
+    "/news/php2shell-critical-php-vulnerabilities": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=VFd20ZAImdlnDJ76F_i6Dw&utm_medium=link&utm_source=api"
+    },
+    "/news/railway-security-incident-environment-variables": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=offnpN74FPuPYdAfSWyWdA&utm_medium=link&utm_source=api"
+    },
+    "/blog/how-to-check-if-chatgpt-cites-your-site": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=s2POfTVDkUEbthYn501qOQ&utm_medium=link&utm_source=api"
+    },
+    "/news/opencode-mcp-oauth-rce": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=m87fiV-oHKbL-nEUfUQoYg&utm_medium=link&utm_source=api"
+    },
+    "/news/deepseek-v4-1-flash": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=bZBI1C-Tv2WGLPwQXL2HEA&utm_medium=link&utm_source=api"
+    },
+    "/news/google-search-poisoning-fake-claude-ads": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=4ChfozYIBraWgEMpPwi0Gw&utm_medium=link&utm_source=api"
+    },
+    "/news/cloudflare-openai-chatgpt-discovery-pilot": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=QbeSrxc13lGziW4jrn50kQ&utm_medium=link&utm_source=api"
+    },
+    "/news/expo-sdk-58": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=4yz0nas3t0kAJExHi9yvLg&utm_medium=link&utm_source=api"
+    },
+    "/news/google-ai-mode-ai-overviews-more-links": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=bh9Op8YX35laknrkpKmuzg&utm_medium=link&utm_source=api"
+    },
+    "/news/bing-topics-portfolio-ai-performance": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=WqiLZtW2z_aAvE_U1SN9XA&utm_medium=link&utm_source=api"
+    },
+    "/events/philippine-sme-business-expo-technology-adoption": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=Ab2nXuAds769YbopGSkpzg&utm_medium=link&utm_source=api"
+    },
+    "/news/gemini-4-argon": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=ja4caGPMDucT21REGP7COg&utm_medium=link&utm_source=api"
+    },
+    "/news/astro-7-content-sites": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=f1TcE4rQZMbxSyjngb-emg&utm_medium=link&utm_source=api"
+    },
+    "/news/prisma-orm-8-release-candidate": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=3xicXa02tJ67-OjPIjdawA&utm_medium=link&utm_source=api"
+    },
+    "/news/claude-haiku-5-5": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=ilmb6fhk0OdOMl8X3WHVFg&utm_medium=link&utm_source=api"
+    },
+    "/news/google-september-2026-spam-update": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=lqeWSjkGh8rAZEFKB0v1yw&utm_medium=link&utm_source=api"
+    },
+    "/blog/closing-my-agency": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=VYqAwPd3LZAAvossyGUXJA&utm_medium=link&utm_source=api"
+    },
+    "/news/mistral-large-4": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=tcNOC4J7zATmsPJ-nzNJCg&utm_medium=link&utm_source=api"
+    },
+    "/news/nextjs-16-4-cache-components": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=PPmyL3AbMiP7E--h4CKm_Q&utm_medium=link&utm_source=api"
+    },
+    "/news/react-19-3-view-transitions": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=_iYwHKf6CCkeuZ0nliC2Ww&utm_medium=link&utm_source=api"
+    },
+    "/news/gpt-6-sol-luna": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=DDgijYCEGEZABconWIoNKw&utm_medium=link&utm_source=api"
+    },
+    "/blog/organic-content-vs-paid-ads": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=vNIfyq5EEEFFxo18OPEzJQ&utm_medium=link&utm_source=api"
+    },
+    "/news/whatsapp-service-message-charges": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-25",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=o8lU_pGQyXMV3rnWX16iOQ&utm_medium=link&utm_source=api"
+    },
+    "/news/search-console-multimodal-search-report": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=eUrPwkLbKoSVHOs9Z58Ehw&utm_medium=link&utm_source=api"
+    },
+    "/blog/geo-and-aeo-fundamentals": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=BNxYZWYn-Sc3qgnK0CSMOA&utm_medium=link&utm_source=api"
+    },
+    "/news/zapier-next-gen-zaps": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=9orR902iWx0yFKoDTXi3dw&utm_medium=link&utm_source=api"
+    },
+    "/news/bir-rmc-98-2026-e-invoicing": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=_4EOx44C60AGEix7oV7L2g&utm_medium=link&utm_source=api"
+    },
+    "/blog/n8n-messenger-instagram-chatbot": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=td82zi0quku29khC05T8mg&utm_medium=link&utm_source=api"
+    },
+    "/news/tailwind-joins-shopify": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=3zEYcQesAepdiyWzdu2vug&utm_medium=link&utm_source=api"
+    },
+    "/news/vercel-flat-rate-cdn": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=V9m3g8PeHyveyIZkO63l8g&utm_medium=link&utm_source=api"
+    },
+    "/news/anthropic-enterprise-frontier-safeguards": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05",
+      "link": "https://search.google.com/search-console/inspect?resource_id=https://urielpapa.com/&id=PEcTBZSsKyzPKYy7yOLU2w&utm_medium=link&utm_source=api"
     },
     "/news/tiktok-shop-ph-order-processing-fee": {
       "indexed": true,
@@ -1397,438 +1891,6 @@
       "state": "Discovered - currently not indexed",
       "lastCrawled": null,
       "checked": "2026-11-05"
-    },
-    "/about": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-28",
-      "checked": "2026-11-05"
-    },
-    "/blog": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/colophon": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-26",
-      "checked": "2026-11-05"
-    },
-    "/contact": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/events": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-04",
-      "checked": "2026-11-05"
-    },
-    "/news": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-01",
-      "checked": "2026-11-05"
-    },
-    "/newsletter": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/notes": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-26",
-      "checked": "2026-11-05"
-    },
-    "/now": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/privacy": {
-      "indexed": false,
-      "state": "URL is unknown to Google",
-      "lastCrawled": null,
-      "checked": "2026-11-05"
-    },
-    "/projects": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/stack": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-26",
-      "checked": "2026-11-05"
-    },
-    "/topics": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/apple-siri-ai-developer-preview": {
-      "indexed": false,
-      "state": "URL is unknown to Google",
-      "lastCrawled": null,
-      "checked": "2026-11-05"
-    },
-    "/news/claude-message-threads-beta": {
-      "indexed": false,
-      "state": "URL is unknown to Google",
-      "lastCrawled": null,
-      "checked": "2026-11-05"
-    },
-    "/news/apple-q4-2026-results": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/cma-meta-commercial-terms-probe": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-01",
-      "checked": "2026-11-05"
-    },
-    "/news/ai-training-opt-out-robots-txt": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-01",
-      "checked": "2026-11-05"
-    },
-    "/news/openai-api-credits-chatgpt-pro-business": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/google-ads-in-ai-mode-philippines": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/blog/ai-agent-tools-shared-on-threads-october-2026": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-01",
-      "checked": "2026-11-05"
-    },
-    "/news/anthropic-claude-agent-unsanctioned-actions": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/apple-iwork-mcp-ai-agents": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/blog/free-github-repos-to-learn-ai-agents": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/blog/free-n8n-workflow-templates-github": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/iphone-duo-philippines-price": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/kimi-k3-1-pro-open-weights": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/musk-spacex-gpu-debt-ai-credit": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/blog/open-source-seo-geo-tools-github": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-28",
-      "checked": "2026-11-05"
-    },
-    "/news/anthropic-s1-ipo-filing": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-28",
-      "checked": "2026-11-05"
-    },
-    "/news/aws-infinity-agent-runtime": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/google-agent-compute-engine": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-01",
-      "checked": "2026-11-05"
-    },
-    "/news/openai-decisions-api": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/openai-offline-frontier-training": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/openai-older-models-shutdown": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/agent-skills-agentic-ai-foundation": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/openai-models-google-cloud": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/emudhra-ca-key-compromise": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/google-poisoned-serps-rank-trackers": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/keyv-npm-worm-supply-chain-attack": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/php2shell-critical-php-vulnerabilities": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/railway-security-incident-environment-variables": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/blog/how-to-check-if-chatgpt-cites-your-site": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/opencode-mcp-oauth-rce": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/deepseek-v4-1-flash": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/google-search-poisoning-fake-claude-ads": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/cloudflare-openai-chatgpt-discovery-pilot": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/expo-sdk-58": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/google-ai-mode-ai-overviews-more-links": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/bing-topics-portfolio-ai-performance": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/events/philippine-sme-business-expo-technology-adoption": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/gemini-4-argon": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/news/astro-7-content-sites": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/prisma-orm-8-release-candidate": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/claude-haiku-5-5": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/google-september-2026-spam-update": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/blog/closing-my-agency": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/mistral-large-4": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/nextjs-16-4-cache-components": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/react-19-3-view-transitions": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/gpt-6-sol-luna": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/blog/organic-content-vs-paid-ads": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/whatsapp-service-message-charges": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-25",
-      "checked": "2026-11-05"
-    },
-    "/news/search-console-multimodal-search-report": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-11-03",
-      "checked": "2026-11-05"
-    },
-    "/blog/geo-and-aeo-fundamentals": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/zapier-next-gen-zaps": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-30",
-      "checked": "2026-11-05"
-    },
-    "/news/bir-rmc-98-2026-e-invoicing": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/blog/n8n-messenger-instagram-chatbot": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-21",
-      "checked": "2026-11-05"
-    },
-    "/news/tailwind-joins-shopify": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-23",
-      "checked": "2026-11-05"
-    },
-    "/news/vercel-flat-rate-cdn": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
-    },
-    "/news/anthropic-enterprise-frontier-safeguards": {
-      "indexed": true,
-      "state": "Submitted and indexed",
-      "lastCrawled": "2026-10-24",
-      "checked": "2026-11-05"
     }
   },
   "clarity": {
@@ -1838,7 +1900,7 @@
       {
         "name": "DeadClickCount",
         "values": {
-          "sessionsCount": 2,
+          "sessionsCount": 17,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1848,7 +1910,7 @@
       {
         "name": "ExcessiveScroll",
         "values": {
-          "sessionsCount": 2,
+          "sessionsCount": 17,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1858,7 +1920,7 @@
       {
         "name": "RageClickCount",
         "values": {
-          "sessionsCount": 2,
+          "sessionsCount": 17,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1868,17 +1930,17 @@
       {
         "name": "QuickbackClick",
         "values": {
-          "sessionsCount": 2,
-          "sessionsWithMetricPercentage": 0,
-          "sessionsWithoutMetricPercentage": 100,
-          "pagesViews": 0,
-          "subTotal": 0
+          "sessionsCount": 17,
+          "sessionsWithMetricPercentage": 29.41,
+          "sessionsWithoutMetricPercentage": 70.59,
+          "pagesViews": 5,
+          "subTotal": 5
         }
       },
       {
         "name": "ScriptErrorCount",
         "values": {
-          "sessionsCount": 2,
+          "sessionsCount": 17,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1888,7 +1950,7 @@
       {
         "name": "ErrorClickCount",
         "values": {
-          "sessionsCount": 2,
+          "sessionsCount": 17,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1898,77 +1960,138 @@
       {
         "name": "ScrollDepth",
         "values": {
-          "averageScrollDepth": 14.25
+          "averageScrollDepth": 38.03
         }
       },
       {
         "name": "Traffic",
         "values": {
-          "totalSessionCount": 2,
-          "totalBotSessionCount": 0,
-          "distinctUserCount": 2,
-          "pagesPerSessionPercentage": 2
+          "totalSessionCount": 17,
+          "totalBotSessionCount": 8,
+          "distinctUserCount": 13,
+          "pagesPerSessionPercentage": 1.8823529411764706
         }
       },
       {
         "name": "EngagementTime",
         "values": {
-          "totalTime": 478,
-          "activeTime": 15
+          "totalTime": 419,
+          "activeTime": 20
         }
       },
       {
         "name": "Browser",
         "values": {
-          "sessionsCount": 2
+          "sessionsCount": 9
         }
       },
       {
         "name": "Device",
         "values": {
-          "sessionsCount": 2
+          "sessionsCount": 11
         }
       },
       {
         "name": "OS",
         "values": {
-          "sessionsCount": 1
+          "sessionsCount": 6
         }
       },
       {
         "name": "Country",
         "values": {
-          "sessionsCount": 1
+          "sessionsCount": 12
         }
       },
       {
         "name": "PageTitle",
         "values": {
-          "sessionsCount": 2
+          "sessionsCount": 16
         }
       },
       {
         "name": "ReferrerUrl",
-        "values": {}
+        "values": {
+          "sessionsCount": 6
+        }
       },
       {
         "name": "PopularPages",
         "values": {
-          "visitsCount": 2
+          "visitsCount": 16
         }
       }
     ],
     "pages": [
       {
         "url": "https://urielpapa.com/",
-        "sessions": 2,
+        "sessions": 15,
+        "users": 12
+      },
+      {
+        "url": "https://urielpapa.com/projects",
+        "sessions": 3,
         "users": 2
+      },
+      {
+        "url": "https://urielpapa.com/projects/vite-seo-erp",
+        "sessions": 2,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/blog/ai-agent-tools-shared-on-threads-october-2026",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/blog",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgNzcnRjBmFwcF9pZA8yNzUyNTQ2OTI1OTgyNzkAAR-yEj-VqENmuvn2mb-CQM_koFSLTR131LkagUmlj9Drbx9Kwt-XJtEDYxt60g_aem_cNnIelGzxVle6Zf6RDUCpQ",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/about",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/projects/travelease",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/topics/tech-stacks",
+        "sessions": 1,
+        "users": 1
+      },
+      {
+        "url": "https://urielpapa.com/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgRzcnRjBmFwcF9pZAwyNTYyODEwNDA1NTgAAR9_pQAeDleWTpr1J_rE8fV-1-E3aTF1ZjpWvWDnXG83WeHI5Gx8qCf9TSmOrQ_aem_fAEJGHzuTsb9va_iv7Fniw",
+        "sessions": 0,
+        "users": 0
+      },
+      {
+        "url": "https://urielpapa.com/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgRzcnRjBmFwcF9pZAwyNTYyODEwNDA1NTgAAR9WtGGz6dl2WxJN9MZoX_l7O4jDan5vALuKV2Cn2WWEw50loaxfDkWcbvBV7w_aem_A3J82Q_kCwrWWvzNhPcbNw",
+        "sessions": 0,
+        "users": 0
+      },
+      {
+        "url": "https://urielpapa.com/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgRzcnRjBmFwcF9pZAwyNTYyODEwNDA1NTgAAR_a133a5YMdstAZnAINoSr6K7mHDa4wn4gyrnfedCC4JVIfZNCkEXuAKrHJVg_aem_74QVrdPgnfVG1fRtMa96Ag",
+        "sessions": 0,
+        "users": 0
       }
     ],
     "devices": [
       {
         "device": "PC",
-        "sessions": 2
+        "sessions": 11
+      },
+      {
+        "device": "Mobile",
+        "sessions": 6
       }
     ]
   }
