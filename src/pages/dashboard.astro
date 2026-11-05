@@ -403,7 +403,7 @@ const sections = [
         Days before the log started are filled in from the posts' publish dates.
       </p>
       <div class="table-wrap">
-        <table>
+        <table class="stack">
           <thead>
             <tr><th>Date</th><th>Status</th><th>Post</th><th>Note</th></tr>
           </thead>
@@ -418,7 +418,7 @@ const sections = [
                     </span>{" "}
                     {STATUS[r.status].label}
                   </td>
-                  <td>
+                  <td class="wide">
                     {r.url ? (
                       <a href={r.url} title={`Read the news take: ${r.title}`}>
                         {r.title}
@@ -429,7 +429,7 @@ const sections = [
                       "–"
                     )}
                   </td>
-                  <td class="meta">{r.note}</td>
+                  <td class="meta wide">{r.note}</td>
                 </tr>
               ))
             }
@@ -475,7 +475,7 @@ const sections = [
         Fridays, once their <code>[Uriel: …]</code> spots are filled.
       </p>
       <div class="table-wrap">
-        <table>
+        <table class="stack">
           <thead>
             <tr>
               <th>Publish on</th><th>Post</th><th>Topic</th><th>Format</th><th
@@ -487,17 +487,17 @@ const sections = [
             {
               upcoming.map(q => (
                 <tr>
-                  <td class="whitespace-nowrap">
+                  <td class="wide whitespace-nowrap">
                     {day(q.publishOn, "ddd D MMM")}
                     {q.overdue && <span class="meta"> (overdue)</span>}
                   </td>
-                  <td>
+                  <td class="wide">
                     {q.title}
                     <div class="meta">{q.question}</div>
                   </td>
                   <td>{hubName(q.hub)}</td>
                   <td>{q.frame}</td>
-                  <td>
+                  <td class="wide">
                     {q.missing
                       ? "Not written yet"
                       : q.markers
@@ -1433,6 +1433,38 @@ const sections = [
   th {
     font-weight: 600;
     color: var(--muted-foreground);
+  }
+  /* On phones, wide text tables (run log, queue) become one card per row:
+     the short cells share a line and the long ones get the full width. */
+  @media (max-width: 40rem) {
+    table.stack thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    table.stack,
+    table.stack tbody {
+      display: block;
+    }
+    table.stack tr {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 1rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    table.stack td {
+      border: 0;
+      padding: 0.125rem 0;
+    }
+    table.stack td.wide {
+      grid-column: 1 / -1;
+    }
+    table.stack td:empty {
+      display: none;
+    }
   }
   .r {
     text-align: right;
