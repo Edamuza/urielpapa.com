@@ -9,7 +9,8 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Analytics from "@/components/Analytics.astro";
 import Plerdy from "@/components/Plerdy.astro";
-import { SITE, X_HANDLE } from "@/config";
+import Clarity from "@/components/Clarity.astro";
+import { CLARITY_PROJECT_ID, SITE, X_HANDLE } from "@/config";
 import { isoDateTime } from "@/utils/content";
 import {
   WEBSITE_ID,
@@ -311,6 +312,13 @@ const robots =
       import "@/scripts/theme";
     </script>
     {PUBLIC_GA4_ID && <Analytics id={PUBLIC_GA4_ID} />}
+    {
+      import.meta.env.PROD &&
+        CLARITY_PROJECT_ID &&
+        !Astro.url.pathname.startsWith("/dashboard") && (
+          <Clarity id={CLARITY_PROJECT_ID} />
+        )
+    }
     <script>
       import "@/scripts/events";
     </script>

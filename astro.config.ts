@@ -250,6 +250,12 @@ export default defineConfig({
         context: "server",
         optional: true,
       }),
+      /** Dashboard "Refresh search data": Microsoft Clarity Data Export API token (Clarity, Settings, Data export). */
+      CLARITY_API_TOKEN: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
       BUTTONDOWN_API_KEY: envField.string({
         access: "secret",
         context: "server",

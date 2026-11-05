@@ -4,36 +4,57 @@
  * their APIs, then commits src/data/search-console.json to GitHub. Vercel
  * redeploys on that commit and the dashboard shows the new numbers.
  *
- * Needs three secrets in Vercel (README, "The private dashboard"):
- * GSC_SERVICE_ACCOUNT_JSON, BING_WEBMASTER_API_KEY and GITHUB_DATA_TOKEN.
- * A source without its key keeps its previous numbers.
+ * Also reads Microsoft Clarity's Data Export API when CLARITY_API_TOKEN is
+ * set.
+ *
+ * Secrets in Vercel (README, "The private dashboard"): GITHUB_DATA_TOKEN to
+ * save, plus any of GSC_SERVICE_ACCOUNT_JSON, BING_WEBMASTER_API_KEY and
+ * CLARITY_API_TOKEN. A source without its key, or one that fails, keeps its
+ * previous numbers.
+ *
+ * Vercel stops the function after 60 seconds, so URL Inspections run until
+ * INSPECT_BUDGET_MS and the rest wait for the next refresh.
  */
 import { createSign } from "node:crypto";
 import {
   BING_WEBMASTER_API_KEY,
+  CLARITY_API_TOKEN,
   GITHUB_DATA_TOKEN,
   GSC_SERVICE_ACCOUNT_JSON,
 } from "astro:env/server";
 import { SITE } from "@/config";
-import type { SearchConsole } from "@/lib/dashboard";
+import type {
+  ClarityMetric,
+  ClaritySnapshot,
+  PageInspection,
+  SearchConsole,
+} from "@/lib/dashboard";
 
 const PROPERTY = `${SITE.url}/`;
 const REPO = "Edamuza/urielpapa.com";
 const DATA_FILE = "src/data/search-console.json";
 const BRANCH = "main";
+/** URL Inspections stop starting new pages after this long. */
+const INSPECT_BUDGET_MS = 36_000;
+/** No single API call may hang the refresh past Vercel's limit. */
+const TIMEOUT_MS = 12_000;
+const timeout = () => AbortSignal.timeout(TIMEOUT_MS);
 
 /** Which keys are set, for the button's setup note. */
 export function refreshSetup() {
   const missing = [
     !GSC_SERVICE_ACCOUNT_JSON && "GSC_SERVICE_ACCOUNT_JSON",
     !BING_WEBMASTER_API_KEY && "BING_WEBMASTER_API_KEY",
+    !CLARITY_API_TOKEN && "CLARITY_API_TOKEN",
     !GITHUB_DATA_TOKEN && "GITHUB_DATA_TOKEN",
   ].filter(Boolean) as string[];
   return {
     missing,
     ready:
       Boolean(GITHUB_DATA_TOKEN) &&
-      Boolean(GSC_SERVICE_ACCOUNT_JSON || BING_WEBMASTER_API_KEY),
+      Boolean(
+        GSC_SERVICE_ACCOUNT_JSON || BING_WEBMASTER_API_KEY || CLARITY_API_TOKEN
+      ),
   };
 }
 
@@ -44,13 +65,21 @@ const manilaDay = (offsetDays = 0) =>
 
 const b64url = (s: string | Buffer) => Buffer.from(s).toString("base64url");
 
-/** Runs `fn` over `items`, `limit` at a time. */
-async function pool<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R>) {
-  const out: R[] = new Array(items.length);
+/**
+ * Runs `fn` over `items`, `limit` at a time, starting no new item after
+ * `until` (a Date.now() time). Items never started stay undefined.
+ */
+async function pool<T, R>(
+  items: T[],
+  limit: number,
+  fn: (t: T) => Promise<R>,
+  until = Infinity
+) {
+  const out: (R | undefined)[] = new Array(items.length);
   let next = 0;
   await Promise.all(
     Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (next < items.length) {
+      while (next < items.length && Date.now() < until) {
         const i = next++;
         out[i] = await fn(items[i]);
       }
@@ -113,6 +142,7 @@ async function googleToken() {
     .toString("base64url");
   const res = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
+    signal: timeout(),
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
@@ -144,6 +174,7 @@ async function searchAnalytics(
     `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(PROPERTY)}/searchAnalytics/query`,
     {
       method: "POST",
+      signal: timeout(),
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -168,11 +199,16 @@ type Inspection = {
   };
 };
 
-async function inspect(token: string, path: string) {
+/** One page's index status, or null when the inspection failed. */
+async function inspect(
+  token: string,
+  path: string
+): Promise<PageInspection | null> {
   const res = await fetch(
     "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
     {
       method: "POST",
+      signal: timeout(),
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -183,22 +219,28 @@ async function inspect(token: string, path: string) {
       }),
     }
   );
-  if (!res.ok) return { path, state: `Inspection failed (${res.status})` };
+  if (!res.ok) return null;
   const r = ((await res.json()) as Inspection).inspectionResult
     ?.indexStatusResult;
   return {
-    path,
     indexed: r?.verdict === "PASS",
     state: r?.coverageState ?? "Unknown",
     lastCrawled: r?.lastCrawlTime?.slice(0, 10) ?? null,
+    checked: manilaDay(),
   };
 }
 
 async function readGoogle(
   pages: string[],
   previous: SearchConsole["google"],
-  step: (s: RefreshStep) => void
-): Promise<SearchConsole["google"]> {
+  previousInspections: Record<string, PageInspection>,
+  step: (s: RefreshStep) => void,
+  until: number
+): Promise<{
+  google: SearchConsole["google"];
+  inspections: Record<string, PageInspection>;
+  checkedNow: number;
+}> {
   step({ label: "Signing in to Google", percent: 3 });
   const token = await googleToken();
   step({
@@ -221,36 +263,73 @@ async function readGoogle(
     ctr: round(r.ctr, 4),
     position: round(r.position, 1),
   });
-  // The URL Inspections are most of the wait: 8% to 85% of the bar.
+  // The URL Inspections are most of the wait (12% to 85% of the bar). Pages
+  // never checked come first, then the ones checked longest ago.
+  const order = [...pages].sort((a, b) =>
+    (previousInspections[a]?.checked ?? "").localeCompare(
+      previousInspections[b]?.checked ?? ""
+    )
+  );
+  const started = Date.now();
   let checked = 0;
-  const inspectLabel = () =>
-    `Checking index status in Google: ${checked} of ${pages.length} pages`;
-  step({ label: inspectLabel(), percent: 12 });
-  const inspected = await pool(pages, 8, async p => {
-    const result = await inspect(token, p);
-    checked++;
+  const report = () =>
     step({
-      label: inspectLabel(),
-      percent: 12 + Math.round((checked / pages.length) * 73),
+      label: `Checking index status in Google: ${checked} of ${pages.length} pages`,
+      percent:
+        12 +
+        Math.round(
+          73 *
+            Math.max(
+              checked / pages.length,
+              Math.min(1, (Date.now() - started) / (until - started))
+            )
+        ),
     });
-    return result;
+  report();
+  const results = await pool(
+    order,
+    12,
+    async p => {
+      const result = await inspect(token, p).catch(() => null);
+      checked++;
+      report();
+      return result;
+    },
+    until
+  );
+  // Keep earlier results for pages not checked (or failed) this time; drop
+  // pages no longer in the sitemap.
+  const inspections: Record<string, PageInspection> = {};
+  let checkedNow = 0;
+  order.forEach((p, i) => {
+    const fresh = results[i];
+    if (fresh) checkedNow++;
+    const kept = fresh ?? previousInspections[p];
+    if (kept) inspections[p] = kept;
   });
+  const known = Object.entries(inspections);
   const reasons = new Map<
     string,
     { path: string; lastCrawled: string | null }[]
   >();
-  for (const i of inspected) {
+  for (const [path, i] of known) {
     if (i.indexed) continue;
     const list = reasons.get(i.state) ?? [];
-    list.push({ path: i.path, lastCrawled: i.lastCrawled ?? null });
+    list.push({ path, lastCrawled: i.lastCrawled });
     reasons.set(i.state, list);
   }
-  return {
+  // The indexing queue lists pages published after lastUpdated, so use the
+  // oldest check: nothing newer than it is missed.
+  const oldest =
+    known.map(([, i]) => i.checked).sort()[0] ??
+    previous.indexing.lastUpdated ??
+    manilaDay();
+  const google: SearchConsole["google"] = {
     checkedOn: manilaDay(),
     indexing: {
-      lastUpdated: manilaDay(),
-      indexed: inspected.filter(i => i.indexed).length,
-      notIndexed: inspected.filter(i => !i.indexed).length,
+      lastUpdated: oldest,
+      indexed: known.filter(([, i]) => i.indexed).length,
+      notIndexed: known.filter(([, i]) => !i.indexed).length,
       reasons: [...reasons].map(([reason, urls]) => ({ reason, urls })),
     },
     performance: {
@@ -280,6 +359,7 @@ async function readGoogle(
     // Search Console's API doesn't list past indexing requests; keep what was recorded.
     requested: previous.requested,
   };
+  return { google, inspections, checkedNow };
 }
 
 /* ------------------------------------------------------------------ */
@@ -299,6 +379,7 @@ const bingDate = (d: string) => {
 async function bingCall<T>(method: string): Promise<T[]> {
   const url = `https://ssl.bing.com/webmaster/api.svc/json/${method}?siteUrl=${encodeURIComponent(PROPERTY)}&apikey=${BING_WEBMASTER_API_KEY}`;
   const res = await fetch(url, {
+    signal: timeout(),
     headers: { "Content-Type": "application/json; charset=utf-8" },
   });
   if (!res.ok)
@@ -339,6 +420,101 @@ async function readBing(): Promise<SearchConsole["bing"]> {
 }
 
 /* ------------------------------------------------------------------ */
+/* Microsoft Clarity                                                  */
+/* ------------------------------------------------------------------ */
+
+/** Clarity allows 1 to 3 days back; take the most. */
+const CLARITY_DAYS = 3;
+
+type ClarityRow = Record<string, string | number | null>;
+
+/**
+ * One Data Export call. Clarity allows 10 calls a day per project, and a
+ * refresh makes 3 (site-wide, by page, by device), so about 3 refreshes a
+ * day can include Clarity.
+ */
+async function clarityCall(dimension?: string) {
+  const params = new URLSearchParams({ numOfDays: String(CLARITY_DAYS) });
+  if (dimension) params.set("dimension1", dimension);
+  const res = await fetch(
+    `https://www.clarity.ms/export-data/api/v1/project-live-insights?${params}`,
+    {
+      signal: timeout(),
+      headers: {
+        Authorization: `Bearer ${CLARITY_API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (res.status === 429)
+    throw new Error(
+      "Clarity's limit of 10 calls a day is used up; its numbers refresh again tomorrow."
+    );
+  if (!res.ok)
+    throw new Error(
+      `Clarity failed (${res.status}): ${(await res.text()).slice(0, 200)}`
+    );
+  return (await res.json()) as {
+    metricName: string;
+    information?: ClarityRow[];
+  }[];
+}
+
+const num = (v: unknown) => {
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : null;
+};
+
+/** The numeric fields of a row, e.g. { totalSessionCount: 120 }. */
+const numbers = (row: ClarityRow | undefined) =>
+  Object.fromEntries(
+    Object.entries(row ?? {})
+      .map(([k, v]) => [k, num(v)] as const)
+      .filter((e): e is readonly [string, number] => e[1] !== null)
+  );
+
+const traffic = (data: Awaited<ReturnType<typeof clarityCall>>): ClarityRow[] =>
+  data.find(m => m.metricName.replace(/\s/g, "").toLowerCase() === "traffic")
+    ?.information ?? [];
+
+/** Distinct users: Clarity's sample spells it distantUserCount. */
+const users = (r: ClarityRow) => num(r.distinctUserCount ?? r.distantUserCount);
+
+async function readClarity(): Promise<ClaritySnapshot> {
+  const [site, byUrl, byDevice] = await Promise.all([
+    clarityCall(),
+    clarityCall("URL"),
+    clarityCall("Device"),
+  ]);
+  const metrics: ClarityMetric[] = site.map(m => ({
+    name: m.metricName,
+    values: numbers(m.information?.[0]),
+  }));
+  const pages = traffic(byUrl)
+    .map(r => ({
+      url: String(r.URL ?? r.Url ?? ""),
+      sessions: num(r.totalSessionCount) ?? 0,
+      users: users(r),
+    }))
+    .filter(r => r.url)
+    .sort((a, b) => b.sessions - a.sessions)
+    .slice(0, 25);
+  const devices = traffic(byDevice)
+    .map(r => ({
+      device: String(r.Device ?? "Other"),
+      sessions: num(r.totalSessionCount) ?? 0,
+    }))
+    .sort((a, b) => b.sessions - a.sessions);
+  return {
+    checkedOn: manilaDay(),
+    days: CLARITY_DAYS,
+    metrics,
+    pages,
+    devices,
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* Save                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -349,7 +525,10 @@ async function commitSnapshot(data: SearchConsole) {
     Accept: "application/vnd.github+json",
     "User-Agent": "urielpapa.com-dashboard",
   };
-  const current = await fetch(`${api}?ref=${BRANCH}`, { headers });
+  const current = await fetch(`${api}?ref=${BRANCH}`, {
+    headers,
+    signal: timeout(),
+  });
   if (!current.ok)
     throw new Error(
       `Reading ${DATA_FILE} on GitHub failed (${current.status}): ${await current.text()}`
@@ -358,8 +537,9 @@ async function commitSnapshot(data: SearchConsole) {
   const res = await fetch(api, {
     method: "PUT",
     headers,
+    signal: timeout(),
     body: JSON.stringify({
-      message: "Dashboard: refresh Search Console and Bing numbers",
+      message: "Dashboard: refresh search and Clarity numbers",
       content: Buffer.from(JSON.stringify(data, null, 2) + "\n").toString(
         "base64"
       ),
@@ -374,30 +554,77 @@ async function commitSnapshot(data: SearchConsole) {
   return ((await res.json()) as { commit?: { sha?: string } }).commit?.sha;
 }
 
+/** A source's error message, cut short for the result note. */
+const why = (e: unknown) =>
+  String(e instanceof Error ? e.message : e).slice(0, 220);
+
 /**
- * Reads both sources, commits the snapshot, and says what changed. `step`
- * hears about each stage, for the dashboard's progress bar.
+ * Reads every source that has a key, at the same time, commits the snapshot,
+ * and says what changed. A source that fails keeps its previous numbers and
+ * is listed in `failed`. `step` hears about each stage, for the dashboard's
+ * progress bar.
  */
 export async function refreshSearchData(
   pages: string[],
   previous: SearchConsole,
   step: (s: RefreshStep) => void = () => {}
 ) {
+  const until = Date.now() + INSPECT_BUDGET_MS;
   const notes: string[] = [];
-  let google = previous.google;
-  let bing = previous.bing;
-  if (GSC_SERVICE_ACCOUNT_JSON) {
-    google = await readGoogle(pages, previous.google, step);
-    notes.push(
-      `Google: ${google.indexing.indexed} of ${pages.length} pages indexed, ${google.performance.clicks} clicks.`
-    );
-  } else notes.push("Google skipped: GSC_SERVICE_ACCOUNT_JSON is not set.");
-  if (BING_WEBMASTER_API_KEY) {
-    step({ label: "Reading Bing Webmaster Tools", percent: 88 });
-    bing = await readBing();
-    notes.push(`Bing: ${bing.clicks} clicks, ${bing.indexed ?? "–"} indexed.`);
-  } else notes.push("Bing skipped: BING_WEBMASTER_API_KEY is not set.");
+  const failed: string[] = [];
+  const next: SearchConsole = { ...previous };
+
+  const google = GSC_SERVICE_ACCOUNT_JSON
+    ? readGoogle(
+        pages,
+        previous.google,
+        previous.inspections ?? {},
+        step,
+        until
+      )
+    : undefined;
+  const bing = BING_WEBMASTER_API_KEY ? readBing() : undefined;
+  const clarity = CLARITY_API_TOKEN ? readClarity() : undefined;
+
+  const [g, b, c] = await Promise.allSettled([google, bing, clarity]);
   step({ label: "Saving the new numbers to GitHub", percent: 94 });
-  const commit = await commitSnapshot({ google, bing });
-  return { notes, commit };
+
+  if (!google) notes.push("Google skipped: no key.");
+  else if (g.status === "rejected") failed.push(`Google: ${why(g.reason)}`);
+  else if (g.value) {
+    next.google = g.value.google;
+    next.inspections = g.value.inspections;
+    const known = Object.keys(g.value.inspections).length;
+    notes.push(
+      `Google: checked ${g.value.checkedNow} pages this time; ${g.value.google.indexing.indexed} of ${pages.length} indexed` +
+        (known < pages.length
+          ? `, ${pages.length - known} not checked yet (the next refresh continues).`
+          : ".")
+    );
+  }
+  if (!bing) notes.push("Bing skipped: no key.");
+  else if (b.status === "rejected") failed.push(`Bing: ${why(b.reason)}`);
+  else if (b.value) {
+    next.bing = b.value;
+    notes.push(
+      `Bing: ${b.value.clicks} clicks, ${b.value.indexed ?? "–"} indexed.`
+    );
+  }
+  if (!clarity) notes.push("Clarity skipped: no CLARITY_API_TOKEN.");
+  else if (c.status === "rejected") failed.push(`Clarity: ${why(c.reason)}`);
+  else if (c.value) {
+    next.clarity = c.value;
+    const sessions =
+      c.value.metrics.find(m => /traffic/i.test(m.name))?.values
+        .totalSessionCount ?? 0;
+    notes.push(`Clarity: ${sessions} sessions in the last 3 days.`);
+  }
+
+  const read = [google && g, bing && b, clarity && c].filter(
+    r => r && r.status === "fulfilled"
+  ).length;
+  if (!read)
+    throw new Error(failed.join(" ") || "No source has a key in Vercel.");
+  const commit = await commitSnapshot(next);
+  return { notes, failed, commit };
 }

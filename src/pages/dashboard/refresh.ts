@@ -24,7 +24,13 @@ const back = (params: Record<string, string>) =>
 /** One line of the progress stream the dashboard's script reads. */
 type StreamLine =
   | ({ type: "step" } & RefreshStep)
-  | { type: "done"; status: "ok" | "error"; note: string; commit?: string };
+  | {
+      type: "done";
+      /** partial: saved, but at least one source failed and kept old numbers. */
+      status: "ok" | "partial" | "error";
+      note: string;
+      commit?: string;
+    };
 
 const errorNote = (error: unknown) =>
   String(error instanceof Error ? error.message : error).slice(0, 300);
@@ -41,10 +47,17 @@ function stream(pages: string[]) {
       const send = (line: StreamLine) =>
         controller.enqueue(encoder.encode(JSON.stringify(line) + "\n"));
       try {
-        const { notes, commit } = await refreshSearchData(pages, SEARCH, s =>
-          send({ type: "step", ...s })
+        const { notes, failed, commit } = await refreshSearchData(
+          pages,
+          SEARCH,
+          s => send({ type: "step", ...s })
         );
-        send({ type: "done", status: "ok", note: notes.join(" "), commit });
+        send({
+          type: "done",
+          status: failed.length ? "partial" : "ok",
+          note: [...failed, ...notes].join(" "),
+          commit,
+        });
       } catch (error) {
         send({ type: "done", status: "error", note: errorNote(error) });
       }
@@ -100,8 +113,11 @@ export const POST: APIRoute = async ({ request }) => {
   const pages = [...(await listPages())];
   if (wantsStream) return stream(pages);
   try {
-    const { notes } = await refreshSearchData(pages, SEARCH);
-    return back({ refresh: "ok", note: notes.join(" ") });
+    const { notes, failed } = await refreshSearchData(pages, SEARCH);
+    return back({
+      refresh: failed.length ? "partial" : "ok",
+      note: [...failed, ...notes].join(" "),
+    });
   } catch (error) {
     return back({ refresh: "error", note: errorNote(error) });
   }
