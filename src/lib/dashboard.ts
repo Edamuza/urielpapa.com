@@ -437,6 +437,8 @@ export type PageInspection = {
   lastCrawled: string | null;
   /** Manila day of the inspection. */
   checked: string;
+  /** Search Console's own link to this inspection, from the API. */
+  link?: string;
 };
 
 /** One Clarity metric with its numeric fields, e.g. Traffic: totalSessionCount. */
@@ -533,6 +535,10 @@ export async function indexingQueue(pages: Set<string>) {
 
 /** Search Console's URL Inspection page for a path on this site. */
 export function gscInspectUrl(path: string) {
+  // Prefer the link the URL Inspection API returned for this page: it names
+  // the property exactly as Search Console does.
+  const saved = SEARCH.inspections?.[path]?.link;
+  if (saved) return saved;
   const url = new URL("https://search.google.com/search-console/inspect");
   url.searchParams.set("resource_id", SITE.url + "/");
   url.searchParams.set("id", SITE.url + path);

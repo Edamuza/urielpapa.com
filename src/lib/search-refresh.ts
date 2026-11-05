@@ -191,6 +191,8 @@ async function searchAnalytics(
 
 type Inspection = {
   inspectionResult?: {
+    /** Google's own link to this URL's inspection in Search Console. */
+    inspectionResultLink?: string;
     indexStatusResult?: {
       verdict?: string;
       coverageState?: string;
@@ -220,13 +222,15 @@ async function inspect(
     }
   );
   if (!res.ok) return null;
-  const r = ((await res.json()) as Inspection).inspectionResult
-    ?.indexStatusResult;
+  const result = ((await res.json()) as Inspection).inspectionResult;
+  const r = result?.indexStatusResult;
+  const link = result?.inspectionResultLink;
   return {
     indexed: r?.verdict === "PASS",
     state: r?.coverageState ?? "Unknown",
     lastCrawled: r?.lastCrawlTime?.slice(0, 10) ?? null,
     checked: manilaDay(),
+    ...(link?.startsWith("https://search.google.com/") ? { link } : {}),
   };
 }
 
