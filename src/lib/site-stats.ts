@@ -39,7 +39,9 @@ export async function listPages(): Promise<Set<string>> {
         .replace(/^\/src\/pages/, "")
         .replace(/\.astro$/, "")
         .replace(/\/index$/, "") || "/";
-    if (!NOT_IN_SITEMAP.includes(path)) paths.add(path);
+    // The private dashboard (and its sign-in page) is never a public page.
+    if (!NOT_IN_SITEMAP.includes(path) && !path.startsWith("/dashboard"))
+      paths.add(path);
   }
   for (const p of await getAllBlogEntries()) paths.add(postUrl(p));
   for (const n of await getNotes()) paths.add(noteUrl(n));
