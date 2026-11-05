@@ -21,7 +21,8 @@ import {
   newsRuns,
   postsPerDay,
   problems,
-  gscInspectUrl,
+  gscPropertyUrl,
+  siteUrl,
   refreshQueue,
   todayManila,
   type RunStatus,
@@ -522,6 +523,11 @@ const sections = [
         Hub and listing pages come first, because they link everything else.
         Search Console allows about 10 indexing requests a day.
       </p>
+      <p class="meta mb-4">
+        <strong>Inspect</strong> copies the page's full URL and opens Search Console:
+        paste it into the "Inspect any URL" bar at the top (Ctrl+V or ⌘V, then Enter)
+        and click <em>Request indexing</em>.
+      </p>
       <h3 class="h3 mb-2">Request today ({requestToday.length})</h3>
       {
         requestToday.length ? (
@@ -549,10 +555,11 @@ const sections = [
                     <td class="whitespace-nowrap">{day(i.since)}</td>
                     <td>
                       <a
-                        href={gscInspectUrl(i.path)}
+                        href={gscPropertyUrl()}
                         rel="noopener"
                         target="_blank"
-                        title={`Inspect ${i.path} in Google Search Console`}
+                        data-copy={siteUrl(i.path)}
+                        title={`Copy ${siteUrl(i.path)} and open Google Search Console to inspect it`}
                       >
                         Inspect
                       </a>
@@ -1073,6 +1080,23 @@ const sections = [
     </section>
   </div>
 </Layout>
+
+<script>
+  // "Inspect" links copy the page URL so it can be pasted into Search
+  // Console's inspect bar; the link itself still opens Search Console.
+  document.addEventListener("click", event => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
+      "a[data-copy]"
+    );
+    if (!link?.dataset.copy) return;
+    navigator.clipboard?.writeText(link.dataset.copy).then(
+      () => {
+        link.textContent = "Inspect (URL copied)";
+      },
+      () => undefined
+    );
+  });
+</script>
 
 <script>
   /*
