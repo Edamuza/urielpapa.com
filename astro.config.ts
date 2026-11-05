@@ -104,7 +104,8 @@ export default defineConfig({
   // The stylesheet is about 10 KB compressed, so inlining it saves a
   // render-blocking request on every first visit.
   build: { inlineStylesheets: "always" },
-  adapter: vercel(),
+  // The dashboard's search refresh inspects every page in Search Console, which takes a while.
+  adapter: vercel({ maxDuration: 60 }),
   integrations: [
     mdx(),
     react(),
@@ -227,6 +228,24 @@ export default defineConfig({
       }),
       /** Password for the private /dashboard page; without it the page is a 404 in production. */
       DASHBOARD_PASSWORD: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": a Google service account key (JSON) with read access to the Search Console property. */
+      GSC_SERVICE_ACCOUNT_JSON: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": Bing Webmaster Tools API key. */
+      BING_WEBMASTER_API_KEY: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": GitHub token that can write this repo's contents, to save the snapshot. */
+      GITHUB_DATA_TOKEN: envField.string({
         access: "secret",
         context: "server",
         optional: true,
