@@ -381,6 +381,12 @@ export type SearchConsole = {
     } & Partial<Row>;
     requested: { path: string; on: string }[];
   };
+  /**
+   * Each page's last URL Inspection. A refresh checks the pages checked
+   * longest ago first, as many as fit in Vercel's time limit, and keeps the
+   * rest from earlier refreshes.
+   */
+  inspections?: Record<string, PageInspection>;
   bing: {
     checkedOn: string;
     from: string | null;
@@ -390,6 +396,31 @@ export type SearchConsole = {
     indexed: number | null;
     notes: string;
   };
+  /** Microsoft Clarity, from its Data Export API (last 3 days at most). */
+  clarity?: ClaritySnapshot;
+};
+
+export type PageInspection = {
+  indexed: boolean;
+  state: string;
+  lastCrawled: string | null;
+  /** Manila day of the inspection. */
+  checked: string;
+};
+
+/** One Clarity metric with its numeric fields, e.g. Traffic: totalSessionCount. */
+export type ClarityMetric = { name: string; values: Record<string, number> };
+
+export type ClaritySnapshot = {
+  checkedOn: string;
+  /** How many days back the numbers cover (Clarity allows 1 to 3). */
+  days: number;
+  /** Site-wide numbers per metric (no breakdown). */
+  metrics: ClarityMetric[];
+  /** Pages with the most sessions. */
+  pages: { url: string; sessions: number; users: number | null }[];
+  /** Sessions by device type. */
+  devices: { device: string; sessions: number }[];
 };
 
 export const SEARCH = searchConsole as SearchConsole;

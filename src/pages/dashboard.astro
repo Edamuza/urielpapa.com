@@ -26,6 +26,7 @@ import {
   type RunStatus,
 } from "@/lib/dashboard";
 import { formatDate } from "@/utils/content";
+import { CLARITY_PROJECT_ID } from "@/config";
 
 export const prerender = false;
 
@@ -54,6 +55,25 @@ const kw = keywordStats();
 const g = SEARCH.google;
 const perf = g.performance;
 const bing = SEARCH.bing;
+const checkedPages = SEARCH.inspections
+  ? [...pages].filter(p => SEARCH.inspections?.[p]).length
+  : null;
+const clarity = SEARCH.clarity;
+const isTraffic = (name: string) => /^traffic$/i.test(name.replace(/\s/g, ""));
+const clarityTraffic =
+  clarity?.metrics.find(m => isTraffic(m.name))?.values ?? {};
+const claritySignals = clarity?.metrics.filter(m => !isTraffic(m.name)) ?? [];
+const claritySessions = clarityTraffic.totalSessionCount ?? null;
+/** "sessionsWithMetricPercentage" → "Sessions with metric %". */
+const fieldLabel = (key: string) =>
+  key
+    .replace(/Percentage$/, " %")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .replace(/^./, c => c.toUpperCase());
+const clarityUrl = CLARITY_PROJECT_ID
+  ? `https://clarity.microsoft.com/projects/view/${CLARITY_PROJECT_ID}/dashboard`
+  : null;
 
 const fmt = (n: number | null | undefined, digits = 0) =>
   n === null || n === undefined
@@ -120,6 +140,7 @@ const sections = [
   ["next", "Up next"],
   ["indexing", "Indexing"],
   ["search", "Search and keywords"],
+  ["behavior", "Visitor behavior"],
   ["coverage", "Topic coverage"],
 ] as const;
 ---
@@ -155,8 +176,13 @@ const sections = [
         <p id="refresh-help" class="meta">
           {
             setup.ready
-              ? "Reads Search Console and Bing now, checks every page's index status, then saves it. Takes up to a minute; the new numbers show after the site redeploys, about 2 minutes later."
-              : `Not set up yet. Add ${setup.missing.join(", ")} in Vercel (see the README).`
+              ? "Reads Search Console, Bing and Clarity now, checks the index status of as many pages as fit in a minute (the rest on the next refresh), then saves it. The new numbers show after the site redeploys, about 2 minutes later." +
+                (setup.missing.length
+                  ? " Not connected yet: " + setup.missing.join(", ") + "."
+                  : "")
+              : "Not set up yet. Add " +
+                setup.missing.join(", ") +
+                " in Vercel (see the README)."
           }
         </p>
         <div class="refresh-progress" data-state="running" hidden>
@@ -185,7 +211,9 @@ const sections = [
               <strong>
                 {refreshResult === "ok"
                   ? "Saved. Reload in about 2 minutes to see it."
-                  : "Refresh failed."}
+                  : refreshResult === "partial"
+                    ? "Saved, but a source failed and kept its old numbers."
+                    : "Refresh failed."}
               </strong>{" "}
               {refreshNote}
             </p>
@@ -233,9 +261,11 @@ const sections = [
           <dt>Indexed in Google</dt>
           <dd class="num">{fmt(g.indexing.indexed)}</dd>
           <dd class="meta">
-            {fmt(g.indexing.notIndexed)} not indexed, as of {
-              day(g.indexing.lastUpdated ?? g.checkedOn)
-            }
+            {fmt(g.indexing.notIndexed)} not indexed{
+              checkedPages !== null && checkedPages < pages.size
+                ? `, ${fmt(pages.size - checkedPages)} not checked yet`
+                : ""
+            }, as of {day(g.indexing.lastUpdated ?? g.checkedOn)}
           </dd>
         </div>
         <div class="tile">
@@ -727,6 +757,159 @@ const sections = [
       </div>
     </section>
 
+    <section id="behavior" aria-labelledby="behavior-h" class="dash-section">
+      <h2 id="behavior-h" class="h2 mb-1">Visitor behavior</h2>
+      {
+        clarity ? (
+          <>
+            <p class="meta mb-4">
+              Microsoft Clarity, the last {clarity.days} days to{" "}
+              {day(clarity.checkedOn, "D MMM YYYY")}. Clarity only gives out the
+              last 3 days and 10 reads a day, so each refresh replaces these
+              numbers.
+              {clarityUrl && (
+                <>
+                  {" "}
+                  <a
+                    href={clarityUrl}
+                    title="Open the urielpapa.com project in Microsoft Clarity for heatmaps and session recordings"
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    Heatmaps and recordings in Clarity
+                  </a>
+                  .
+                </>
+              )}
+            </p>
+            <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div class="tile">
+                <dt>Sessions</dt>
+                <dd class="num">{fmt(claritySessions)}</dd>
+                <dd class="meta">
+                  plus {fmt(clarityTraffic.totalBotSessionCount)} bot sessions
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Visitors</dt>
+                <dd class="num">
+                  {fmt(
+                    clarityTraffic.distinctUserCount ??
+                      clarityTraffic.distantUserCount
+                  )}
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Pages per session</dt>
+                <dd class="num">
+                  {fmt(clarityTraffic.PagesPerSessionPercentage, 2)}
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Devices</dt>
+                <dd class="num">{fmt(clarity.devices.length)}</dd>
+                <dd class="meta">
+                  {clarity.devices
+                    .slice(0, 3)
+                    .map(d => d.device + " " + fmt(d.sessions))
+                    .join(", ") || "–"}
+                </dd>
+              </div>
+            </dl>
+
+            <h3 class="h3 mt-6 mb-2">Behavior signals</h3>
+            <p class="meta mb-2">
+              Rage clicks, dead clicks, quick backs and errors point at pages
+              where visitors got stuck. Open those pages in Clarity's heatmaps.
+            </p>
+            {claritySignals.length ? (
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Numbers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {claritySignals.map(m => (
+                      <tr>
+                        <td>{fieldLabel(m.name)}</td>
+                        <td class="meta">
+                          {Object.entries(m.values)
+                            .map(
+                              ([k, v]) =>
+                                fieldLabel(k) +
+                                " " +
+                                fmt(v, Number.isInteger(v) ? 0 : 1)
+                            )
+                            .join(" · ") || "–"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No behavior signals in this snapshot.</p>
+            )}
+
+            <h3 class="h3 mt-6 mb-2">Most visited pages</h3>
+            {clarity.pages.length ? (
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Page</th>
+                      <th class="r">Sessions</th>
+                      <th class="r">Visitors</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clarity.pages.map(p => (
+                      <tr>
+                        <td>
+                          {p.url.replace(
+                            /^https?:\/\/(www\.)?urielpapa\.com/i,
+                            ""
+                          ) || "/"}
+                        </td>
+                        <td class="r">{fmt(p.sessions)}</td>
+                        <td class="r">{fmt(p.users)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No page visits recorded in the last 3 days.</p>
+            )}
+          </>
+        ) : (
+          <p class="max-w-read">
+            Microsoft Clarity is installed on the site
+            {CLARITY_PROJECT_ID ? ` (project ${CLARITY_PROJECT_ID})` : ""}. Its
+            numbers show here after a refresh, once CLARITY_API_TOKEN is set in
+            Vercel (Clarity, Settings, Data export).
+            {clarityUrl && (
+              <>
+                {" "}
+                <a
+                  href={clarityUrl}
+                  title="Open the urielpapa.com project in Microsoft Clarity for heatmaps and session recordings"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  Open Clarity
+                </a>
+                .
+              </>
+            )}
+          </p>
+        )
+      }
+    </section>
+
     <section id="coverage" aria-labelledby="coverage-h" class="dash-section">
       <h2 id="coverage-h" class="h2 mb-1">Topic coverage</h2>
       <p class="meta mb-4">
@@ -799,7 +982,12 @@ const sections = [
    */
   type Line =
     | { type: "step"; label: string; percent: number }
-    | { type: "done"; status: "ok" | "error"; note: string; commit?: string };
+    | {
+        type: "done";
+        status: "ok" | "partial" | "error";
+        note: string;
+        commit?: string;
+      };
 
   const form = document.querySelector<HTMLFormElement>("form.refresh");
   const box = form?.querySelector<HTMLElement>(".refresh-progress");
@@ -832,13 +1020,19 @@ const sections = [
       timer = window.setInterval(tick, 1000);
       return () => Math.round((Date.now() - from) / 1000);
     };
-    const finish = (ok: boolean, text: string, note = "") => {
+    /** state: ok (green), warn (amber: saved, a source failed), error (red). */
+    const finish = (
+      state: "ok" | "warn" | "error",
+      text: string,
+      note = ""
+    ) => {
       window.clearInterval(timer);
       elapsed.textContent = (elapsed.textContent ?? "").replace(/ \(.*\)$/, "");
-      set(100, text, ok ? "ok" : "error");
+      set(100, text, state);
       detail.textContent = note;
       button.disabled = false;
-      button.textContent = ok ? "Refresh search data" : "Try again";
+      button.textContent =
+        state === "error" ? "Try again" : "Refresh search data";
     };
 
     reload.addEventListener("click", () => {
@@ -846,14 +1040,14 @@ const sections = [
     });
 
     /* Step 2: wait for the redeploy that the GitHub commit starts. */
-    const waitForDeploy = async (note: string) => {
+    const waitForDeploy = async (note: string, partial: boolean) => {
       const seconds = clock(Date.now());
       detail.textContent = note;
       if (!startDeploy) {
         set(
           100,
           "Saved. The site is redeploying; reload in about 2 minutes.",
-          "ok"
+          partial ? "warn" : "ok"
         );
         reload.hidden = false;
         window.clearInterval(timer);
@@ -871,7 +1065,13 @@ const sections = [
           const html = res.ok ? await res.text() : "";
           const id = /data-deploy="([^"]*)"/.exec(html)?.[1];
           if (id && id !== startDeploy) {
-            finish(true, "Done. The new numbers are live.", note);
+            finish(
+              partial ? "warn" : "ok",
+              partial
+                ? "Done, but a source failed and kept its old numbers."
+                : "Done. The new numbers are live.",
+              note
+            );
             reload.hidden = false;
             return;
           }
@@ -880,7 +1080,7 @@ const sections = [
         }
       }
       finish(
-        false,
+        "warn",
         "Saved, but the redeploy is taking longer than 6 minutes.",
         "The numbers are saved on GitHub. Check the latest deployment in Vercel, then reload this page."
       );
@@ -905,7 +1105,7 @@ const sections = [
         if (!real)
           set(
             Math.min(85, (seconds() / 60) * 85),
-            "Step 1 of 2: reading Google and Bing"
+            "Step 1 of 2: reading Google, Bing and Clarity"
           );
       }, 1000);
 
@@ -946,7 +1146,7 @@ const sections = [
       } catch (error) {
         window.clearInterval(creep);
         finish(
-          false,
+          "error",
           "Refresh failed.",
           error instanceof Error ? error.message : String(error)
         );
@@ -955,15 +1155,15 @@ const sections = [
       window.clearInterval(creep);
       if (!result)
         finish(
-          false,
+          "error",
           "Refresh stopped without an answer.",
           `It ran for ${seconds()} s. Vercel stops it at 60 s, so it probably ran out of time. Try again; if it keeps happening, tell Claude.`
         );
       else if (result.status === "error")
-        finish(false, "Refresh failed.", result.note);
+        finish("error", "Refresh failed.", result.note);
       else {
         button.textContent = "Saved";
-        await waitForDeploy(result.note);
+        await waitForDeploy(result.note, result.status === "partial");
       }
     });
   }
@@ -1002,6 +1202,7 @@ const sections = [
   }
   .refresh-progress {
     --ok: #15803d;
+    --warn: #b45309;
     --bad: #b91c1c;
     flex-basis: 100%;
     display: grid;
@@ -1009,6 +1210,7 @@ const sections = [
   }
   :global([data-theme="dark"]) .refresh-progress {
     --ok: #4ade80;
+    --warn: #fbbf24;
     --bad: #f87171;
   }
   .refresh-progress[hidden] {
@@ -1033,6 +1235,12 @@ const sections = [
   }
   .refresh-progress[data-state="error"] .refresh-bar span {
     background: var(--bad);
+  }
+  .refresh-progress[data-state="warn"] .refresh-bar span {
+    background: var(--warn);
+  }
+  .refresh-progress[data-state="warn"] [data-label] {
+    color: var(--warn);
   }
   .refresh-progress[data-state="ok"] [data-label] {
     color: var(--ok);
