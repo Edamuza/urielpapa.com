@@ -104,6 +104,10 @@ const snapshotAge = ageDays(g.checkedOn);
 const setup = refreshSetup();
 const refreshResult = Astro.url.searchParams.get("refresh");
 const refreshNote = Astro.url.searchParams.get("note") ?? "";
+// Which Vercel deployment served this page. The refresh progress bar polls
+// for a different one to know when the new numbers are live.
+const deployId =
+  process.env.VERCEL_DEPLOYMENT_ID ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "";
 const failures = issues.filter(
   i => i.kind === "failed" || i.kind === "no-run"
 ).length;
@@ -143,6 +147,7 @@ const sections = [
         action="/dashboard/refresh"
         class="refresh mt-4"
         aria-describedby="refresh-help"
+        data-deploy={deployId}
       >
         <button type="submit" disabled={!setup.ready}>
           Refresh search data
@@ -154,6 +159,26 @@ const sections = [
               : `Not set up yet. Add ${setup.missing.join(", ")} in Vercel (see the README).`
           }
         </p>
+        <div class="refresh-progress" data-state="running" hidden>
+          <div
+            class="refresh-bar"
+            role="progressbar"
+            aria-label="Refresh progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <span></span>
+          </div>
+          <p class="refresh-status" role="status" aria-live="polite">
+            <strong data-label>Starting</strong>
+            <span class="meta" data-elapsed></span>
+          </p>
+          <p class="refresh-detail meta" data-detail></p>
+          <button type="button" class="refresh-reload" data-reload hidden>
+            Reload the dashboard
+          </button>
+        </div>
         {
           refreshResult && (
             <p class="refresh-note" data-status={refreshResult} role="status">
@@ -764,6 +789,186 @@ const sections = [
   </div>
 </Layout>
 
+<script>
+  /*
+   * Progress bar for "Refresh search data". Step 1 streams the server's
+   * progress (Google sign-in, ~100 URL Inspections, Bing, saving to GitHub).
+   * Step 2 waits for Vercel to finish the redeploy that the save starts, by
+   * polling the dashboard until a different deployment answers. Without
+   * JavaScript the form still posts and the page comes back with a note.
+   */
+  type Line =
+    | { type: "step"; label: string; percent: number }
+    | { type: "done"; status: "ok" | "error"; note: string; commit?: string };
+
+  const form = document.querySelector<HTMLFormElement>("form.refresh");
+  const box = form?.querySelector<HTMLElement>(".refresh-progress");
+  if (form && box) {
+    const button = form.querySelector<HTMLButtonElement>(
+      "button[type=submit]"
+    )!;
+    const bar = box.querySelector<HTMLElement>(".refresh-bar")!;
+    const label = box.querySelector<HTMLElement>("[data-label]")!;
+    const elapsed = box.querySelector<HTMLElement>("[data-elapsed]")!;
+    const detail = box.querySelector<HTMLElement>("[data-detail]")!;
+    const reload = box.querySelector<HTMLButtonElement>("[data-reload]")!;
+    const startDeploy = form.dataset.deploy ?? "";
+    let timer = 0;
+
+    const set = (pct: number, text: string, state = "running") => {
+      const p = Math.max(0, Math.min(100, Math.round(pct)));
+      bar.style.setProperty("--pct", `${p}%`);
+      bar.setAttribute("aria-valuenow", String(p));
+      label.textContent = text;
+      box.dataset.state = state;
+    };
+    const clock = (from: number, suffix = "") => {
+      window.clearInterval(timer);
+      const tick = () => {
+        const s = Math.round((Date.now() - from) / 1000);
+        elapsed.textContent = `${s} s${suffix}`;
+      };
+      tick();
+      timer = window.setInterval(tick, 1000);
+      return () => Math.round((Date.now() - from) / 1000);
+    };
+    const finish = (ok: boolean, text: string, note = "") => {
+      window.clearInterval(timer);
+      elapsed.textContent = (elapsed.textContent ?? "").replace(/ \(.*\)$/, "");
+      set(100, text, ok ? "ok" : "error");
+      detail.textContent = note;
+      button.disabled = false;
+      button.textContent = ok ? "Refresh search data" : "Try again";
+    };
+
+    reload.addEventListener("click", () => {
+      window.location.assign("/dashboard#search");
+    });
+
+    /* Step 2: wait for the redeploy that the GitHub commit starts. */
+    const waitForDeploy = async (note: string) => {
+      const seconds = clock(Date.now());
+      detail.textContent = note;
+      if (!startDeploy) {
+        set(
+          100,
+          "Saved. The site is redeploying; reload in about 2 minutes.",
+          "ok"
+        );
+        reload.hidden = false;
+        window.clearInterval(timer);
+        return;
+      }
+      while (seconds() < 360) {
+        const s = seconds();
+        set(
+          5 + Math.min(90, (s / 120) * 90),
+          "Step 2 of 2: the site is redeploying with the new numbers (about 2 minutes)"
+        );
+        await new Promise(r => window.setTimeout(r, 10_000));
+        try {
+          const res = await fetch("/dashboard", { cache: "no-store" });
+          const html = res.ok ? await res.text() : "";
+          const id = /data-deploy="([^"]*)"/.exec(html)?.[1];
+          if (id && id !== startDeploy) {
+            finish(true, "Done. The new numbers are live.", note);
+            reload.hidden = false;
+            return;
+          }
+        } catch {
+          /* A failed poll is retried on the next round. */
+        }
+      }
+      finish(
+        false,
+        "Saved, but the redeploy is taking longer than 6 minutes.",
+        "The numbers are saved on GitHub. Check the latest deployment in Vercel, then reload this page."
+      );
+      reload.hidden = false;
+    };
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      form.querySelector(".refresh-note")?.remove();
+      box.hidden = false;
+      reload.hidden = true;
+      detail.textContent = "";
+      button.disabled = true;
+      button.textContent = "Refreshing";
+      set(2, "Step 1 of 2: starting");
+      const seconds = clock(Date.now(), " (usually 30 to 60 s)");
+
+      // Until the server reports a step, creep along by time so the bar is
+      // never frozen; real steps take over as soon as they arrive.
+      let real = false;
+      const creep = window.setInterval(() => {
+        if (!real)
+          set(
+            Math.min(85, (seconds() / 60) * 85),
+            "Step 1 of 2: reading Google and Bing"
+          );
+      }, 1000);
+
+      let result: Extract<Line, { type: "done" }> | undefined;
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/x-ndjson" },
+          cache: "no-store",
+        });
+        if (res.status === 401)
+          throw new Error(
+            "The dashboard password was not sent. Reload the page, sign in again and retry."
+          );
+        if (!res.ok || !res.body)
+          throw new Error(
+            `The server answered ${res.status} ${res.statusText}.`
+          );
+        const reader = res.body
+          .pipeThrough(new TextDecoderStream())
+          .getReader();
+        let buffer = "";
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (value) buffer += value;
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const raw of lines) {
+            if (!raw.trim()) continue;
+            const line = JSON.parse(raw) as Line;
+            if (line.type === "step") {
+              real = true;
+              set(line.percent, `Step 1 of 2: ${line.label}`);
+            } else result = line;
+          }
+          if (done) break;
+        }
+      } catch (error) {
+        window.clearInterval(creep);
+        finish(
+          false,
+          "Refresh failed.",
+          error instanceof Error ? error.message : String(error)
+        );
+        return;
+      }
+      window.clearInterval(creep);
+      if (!result)
+        finish(
+          false,
+          "Refresh stopped without an answer.",
+          `It ran for ${seconds()} s. Vercel stops it at 60 s, so it probably ran out of time. Try again; if it keeps happening, tell Claude.`
+        );
+      else if (result.status === "error")
+        finish(false, "Refresh failed.", result.note);
+      else {
+        button.textContent = "Saved";
+        await waitForDeploy(result.note);
+      }
+    });
+  }
+</script>
+
 <style>
   .dash-section {
     border-top: 1px solid var(--border);
@@ -794,6 +999,58 @@ const sections = [
     color: var(--muted-foreground);
     border-color: var(--border);
     cursor: not-allowed;
+  }
+  .refresh-progress {
+    --ok: #15803d;
+    --bad: #b91c1c;
+    flex-basis: 100%;
+    display: grid;
+    gap: 0.375rem;
+  }
+  :global([data-theme="dark"]) .refresh-progress {
+    --ok: #4ade80;
+    --bad: #f87171;
+  }
+  .refresh-progress[hidden] {
+    display: none;
+  }
+  .refresh-bar {
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .refresh-bar span {
+    display: block;
+    height: 100%;
+    width: var(--pct, 0%);
+    background: var(--foreground);
+    transition: width 0.4s ease;
+  }
+  .refresh-progress[data-state="ok"] .refresh-bar span {
+    background: var(--ok);
+  }
+  .refresh-progress[data-state="error"] .refresh-bar span {
+    background: var(--bad);
+  }
+  .refresh-progress[data-state="ok"] [data-label] {
+    color: var(--ok);
+  }
+  .refresh-progress[data-state="error"] [data-label] {
+    color: var(--bad);
+  }
+  .refresh-progress p {
+    margin: 0;
+  }
+  .refresh-status [data-elapsed] {
+    margin-left: 0.5rem;
+  }
+  .refresh-detail:empty {
+    display: none;
+  }
+  .refresh .refresh-reload {
+    justify-self: start;
   }
   .refresh-note {
     flex-basis: 100% !important;

@@ -63,12 +63,40 @@ async function pool<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R>) {
 /* Google Search Console                                              */
 /* ------------------------------------------------------------------ */
 
+/** One step of a refresh, for the dashboard's progress bar. */
+export type RefreshStep = {
+  /** What is happening now, in plain words. */
+  label: string;
+  /** Rough share of the whole refresh that is done, 0 to 100. */
+  percent: number;
+};
+
+/**
+ * The service account from GSC_SERVICE_ACCOUNT_JSON, with a plain-words error
+ * when the value is not the whole downloaded key file.
+ */
+function serviceAccount() {
+  const fix =
+    "GSC_SERVICE_ACCOUNT_JSON must be the whole downloaded .json key file, from the first { to the last }.";
+  let sa: unknown;
+  try {
+    sa = JSON.parse(GSC_SERVICE_ACCOUNT_JSON!.trim());
+  } catch {
+    throw new Error(`${fix} The value in Vercel is not valid JSON.`);
+  }
+  const { client_email, private_key } = (sa ?? {}) as Record<string, unknown>;
+  if (typeof sa === "string" && sa.includes("PRIVATE KEY"))
+    throw new Error(`${fix} The value in Vercel is only the private key.`);
+  if (typeof client_email !== "string" || typeof private_key !== "string")
+    throw new Error(
+      `${fix} The value in Vercel has no client_email or private_key.`
+    );
+  return { client_email, private_key };
+}
+
 /** OAuth access token for the service account (read-only Search Console scope). */
 async function googleToken() {
-  const sa = JSON.parse(GSC_SERVICE_ACCOUNT_JSON!) as {
-    client_email: string;
-    private_key: string;
-  };
+  const sa = serviceAccount();
   const now = Math.floor(Date.now() / 1000);
   const unsigned = `${b64url(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64url(
     JSON.stringify({
@@ -168,9 +196,15 @@ async function inspect(token: string, path: string) {
 
 async function readGoogle(
   pages: string[],
-  previous: SearchConsole["google"]
+  previous: SearchConsole["google"],
+  step: (s: RefreshStep) => void
 ): Promise<SearchConsole["google"]> {
+  step({ label: "Signing in to Google", percent: 3 });
   const token = await googleToken();
+  step({
+    label: "Reading clicks and keywords from Search Console",
+    percent: 8,
+  });
   // Search Console data lags a day or two; ask for the last 28 full days.
   const from = manilaDay(-28);
   const to = manilaDay(-1);
@@ -187,7 +221,20 @@ async function readGoogle(
     ctr: round(r.ctr, 4),
     position: round(r.position, 1),
   });
-  const inspected = await pool(pages, 8, p => inspect(token, p));
+  // The URL Inspections are most of the wait: 8% to 85% of the bar.
+  let checked = 0;
+  const inspectLabel = () =>
+    `Checking index status in Google: ${checked} of ${pages.length} pages`;
+  step({ label: inspectLabel(), percent: 12 });
+  const inspected = await pool(pages, 8, async p => {
+    const result = await inspect(token, p);
+    checked++;
+    step({
+      label: inspectLabel(),
+      percent: 12 + Math.round((checked / pages.length) * 73),
+    });
+    return result;
+  });
   const reasons = new Map<
     string,
     { path: string; lastCrawled: string | null }[]
@@ -324,26 +371,33 @@ async function commitSnapshot(data: SearchConsole) {
     throw new Error(
       `Saving ${DATA_FILE} to GitHub failed (${res.status}): ${await res.text()}`
     );
+  return ((await res.json()) as { commit?: { sha?: string } }).commit?.sha;
 }
 
-/** Reads both sources, commits the snapshot, and says what changed. */
+/**
+ * Reads both sources, commits the snapshot, and says what changed. `step`
+ * hears about each stage, for the dashboard's progress bar.
+ */
 export async function refreshSearchData(
   pages: string[],
-  previous: SearchConsole
+  previous: SearchConsole,
+  step: (s: RefreshStep) => void = () => {}
 ) {
   const notes: string[] = [];
   let google = previous.google;
   let bing = previous.bing;
   if (GSC_SERVICE_ACCOUNT_JSON) {
-    google = await readGoogle(pages, previous.google);
+    google = await readGoogle(pages, previous.google, step);
     notes.push(
       `Google: ${google.indexing.indexed} of ${pages.length} pages indexed, ${google.performance.clicks} clicks.`
     );
   } else notes.push("Google skipped: GSC_SERVICE_ACCOUNT_JSON is not set.");
   if (BING_WEBMASTER_API_KEY) {
+    step({ label: "Reading Bing Webmaster Tools", percent: 88 });
     bing = await readBing();
     notes.push(`Bing: ${bing.clicks} clicks, ${bing.indexed ?? "–"} indexed.`);
   } else notes.push("Bing skipped: BING_WEBMASTER_API_KEY is not set.");
-  await commitSnapshot({ google, bing });
-  return notes;
+  step({ label: "Saving the new numbers to GitHub", percent: 94 });
+  const commit = await commitSnapshot({ google, bing });
+  return { notes, commit };
 }
