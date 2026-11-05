@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { dashboardGate } from "@/lib/dashboard-auth";
+import { dashboardGate, sameOrigin } from "@/lib/dashboard-auth";
 import { SEARCH } from "@/lib/dashboard";
 import {
   refreshSearchData,
@@ -7,7 +7,6 @@ import {
   type RefreshStep,
 } from "@/lib/search-refresh";
 import { listPages } from "@/lib/site-stats";
-import { SITE } from "@/config";
 
 export const prerender = false;
 
@@ -84,14 +83,7 @@ export const POST: APIRoute = async ({ request }) => {
   const blocked = dashboardGate(request);
   if (blocked) return blocked;
   // Only the dashboard's own form may trigger a refresh.
-  const origin = request.headers.get("origin");
-  if (
-    import.meta.env.PROD &&
-    origin &&
-    origin !== SITE.url &&
-    origin !== new URL(request.url).origin
-  )
-    return new Response("Forbidden", { status: 403 });
+  if (!sameOrigin(request)) return new Response("Forbidden", { status: 403 });
   const setup = refreshSetup();
   const wantsStream = (request.headers.get("accept") ?? "").includes(
     "application/x-ndjson"

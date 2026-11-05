@@ -226,8 +226,26 @@ export default defineConfig({
         context: "server",
         default: "urielpapa.com <contact@urielpapa.com>",
       }),
-      /** Password for the private /dashboard page; without it the page is a 404 in production. */
+      /** Fallback password for the private /dashboard page, used only while Google sign-in (below) is not set up. With neither, the page is a 404 in production. */
       DASHBOARD_PASSWORD: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: OAuth client ID (Google Cloud, Google Auth Platform, Clients, Web application). */
+      DASHBOARD_GOOGLE_CLIENT_ID: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: that OAuth client's secret. Also signs the session cookie. */
+      DASHBOARD_GOOGLE_CLIENT_SECRET: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: the Google account email(s) allowed in, comma-separated. */
+      DASHBOARD_EMAILS: envField.string({
         access: "secret",
         context: "server",
         optional: true,
