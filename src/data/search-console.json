@@ -1,0 +1,1200 @@
+{
+  "google": {
+    "checkedOn": "2026-11-05",
+    "indexing": {
+      "lastUpdated": "2026-10-23",
+      "indexed": 42,
+      "notIndexed": 25,
+      "reasons": [
+        {
+          "reason": "Discovered - currently not indexed",
+          "urls": [
+            {
+              "path": "/blog",
+              "lastCrawled": null
+            },
+            {
+              "path": "/blog/how-to-check-if-chatgpt-cites-your-site",
+              "lastCrawled": null
+            },
+            {
+              "path": "/colophon",
+              "lastCrawled": null
+            },
+            {
+              "path": "/contact",
+              "lastCrawled": null
+            },
+            {
+              "path": "/events",
+              "lastCrawled": null
+            },
+            {
+              "path": "/news",
+              "lastCrawled": null
+            },
+            {
+              "path": "/notes",
+              "lastCrawled": null
+            },
+            {
+              "path": "/notes/this-site-ships-no-javascript-by-default",
+              "lastCrawled": null
+            },
+            {
+              "path": "/projects/archive-downloader",
+              "lastCrawled": null
+            },
+            {
+              "path": "/projects/quotation-portal",
+              "lastCrawled": null
+            },
+            {
+              "path": "/projects/travelease",
+              "lastCrawled": null
+            },
+            {
+              "path": "/stack",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics/automation",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics/founder-journey",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics/marketing",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics/seo-geo-aeo",
+              "lastCrawled": null
+            },
+            {
+              "path": "/topics/tech-and-business",
+              "lastCrawled": null
+            }
+          ]
+        },
+        {
+          "reason": "Crawled - currently not indexed",
+          "urls": [
+            {
+              "path": "/news/make-maia-ai-automation-builder",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/news/google-poisoned-serps-rank-trackers",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/news/zapier-next-gen-zaps",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/projects/tell-liora",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/news/google-september-2026-spam-update",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/news/google-ai-mode-ai-overviews-more-links",
+              "lastCrawled": "2026-10-24"
+            },
+            {
+              "path": "/news/prisma-orm-8-release-candidate",
+              "lastCrawled": "2026-10-24"
+            }
+          ]
+        },
+        {
+          "reason": "Blocked due to other 4xx issue",
+          "urls": []
+        }
+      ]
+    },
+    "performance": {
+      "from": "2026-10-16",
+      "to": "2026-11-02",
+      "clicks": 9,
+      "impressions": 1540,
+      "ctr": 0.0058,
+      "position": 24.8,
+      "queryCount": 116,
+      "pageCount": 56,
+      "queries": [
+        {
+          "query": "uriel papa",
+          "clicks": 4,
+          "impressions": 11,
+          "ctr": 0.3636,
+          "position": 3.4
+        },
+        {
+          "query": "open source seo software",
+          "clicks": 0,
+          "impressions": 113,
+          "ctr": 0.0,
+          "position": 68.7
+        },
+        {
+          "query": "open source seo tools",
+          "clicks": 0,
+          "impressions": 78,
+          "ctr": 0.0,
+          "position": 72.8
+        },
+        {
+          "query": "astro 7",
+          "clicks": 0,
+          "impressions": 27,
+          "ctr": 0.0,
+          "position": 46.0
+        },
+        {
+          "query": "chip sector perks up after anthropic becomes first ai lab to officially file for ipo (nvda:nasdaq) | seeking alpha -site:mobile.twitter.com -site:pic.twitter.com -site:pic.x.com -site:t.co -site:x.com after:2026-10-22",
+          "clicks": 0,
+          "impressions": 25,
+          "ctr": 0.0,
+          "position": 8.1
+        },
+        {
+          "query": "emudhra",
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0.0,
+          "position": 51.4
+        },
+        {
+          "query": "github for seo",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0.0,
+          "position": 64.3
+        },
+        {
+          "query": "geo github",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0.0,
+          "position": 37.0
+        },
+        {
+          "query": "e mudhra",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0.0,
+          "position": 63.3
+        },
+        {
+          "query": "open source seo tool",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0.0,
+          "position": 69.4
+        },
+        {
+          "query": "open source seo",
+          "clicks": 0,
+          "impressions": 9,
+          "ctr": 0.0,
+          "position": 70.8
+        },
+        {
+          "query": "github seo",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0.0,
+          "position": 71.1
+        },
+        {
+          "query": "tokenizer",
+          "clicks": 0,
+          "impressions": 7,
+          "ctr": 0.0,
+          "position": 80.1
+        },
+        {
+          "query": "site.security.googleblog.com emudhra october 2026",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "opensource seo tools",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 71.2
+        },
+        {
+          "query": "seo tools open source",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 66.0
+        },
+        {
+          "query": "whatsapp charging for service",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 72.8
+        },
+        {
+          "query": "geo seo tool",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 84.5
+        },
+        {
+          "query": "google spam update september 2026",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 94.0
+        },
+        {
+          "query": "emudhra issue",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 6.3
+        },
+        {
+          "query": "geo basics",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 24.3
+        },
+        {
+          "query": "14. emudhra brand & trust queries",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 39.7
+        },
+        {
+          "query": "google compute engine",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 57.0
+        },
+        {
+          "query": "next.js vs laravel",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 70.3
+        },
+        {
+          "query": "emudhra.we-have-a-problem.com",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "query": "aws infinity github",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 7.5
+        },
+        {
+          "query": "site.security.googleblog.com \"emudhra\" \"2026\"",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 9.5
+        },
+        {
+          "query": "does maya support apple pay",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 11.0
+        },
+        {
+          "query": "emudhra response",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 18.5
+        },
+        {
+          "query": "emudra",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 18.5
+        },
+        {
+          "query": "github geo",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 19.5
+        },
+        {
+          "query": "emudhra certificate compromise",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 44.5
+        },
+        {
+          "query": "emudhra reddit",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 51.0
+        },
+        {
+          "query": "google spam update forecaster",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 56.0
+        },
+        {
+          "query": "next js vs laravel performance",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 62.5
+        },
+        {
+          "query": "next js vs laravel",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 65.5
+        },
+        {
+          "query": "laravel vs nextjs",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 70.5
+        },
+        {
+          "query": "laravel vs next.js",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 73.0
+        },
+        {
+          "query": "mistral 4 large",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 80.0
+        },
+        {
+          "query": "what is tokenization in machine learning",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 82.0
+        },
+        {
+          "query": "tokenization ai",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 86.5
+        },
+        {
+          "query": "how much does organic content cost",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 87.0
+        },
+        {
+          "query": "geo-seo-claude",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 89.5
+        },
+        {
+          "query": "which php versions are affected by php2shell",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 92.5
+        },
+        {
+          "query": "rmc 98-2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 1.0
+        },
+        {
+          "query": "emudhra challenge code not received",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 4.0
+        },
+        {
+          "query": "emudhra debacle",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        {
+          "query": "emudrha test",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        {
+          "query": "mistral large 4 open weights license release date",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        {
+          "query": "site.blog.cloudflare.com emsign emudhra october 20 2026 cloudflared 2026.10.2",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 5.0
+        },
+        {
+          "query": "\"emudhra.we-have-a-problem.com\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        {
+          "query": "(ai cloud or neocloud or gpu cloud or gpu-as-a-service) (launch or announce or unveil or partnership or contract or capex or in-house or compute arm) -site:seekingalpha.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        {
+          "query": "iphone duo first price",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        {
+          "query": "site.blog.cloudflare.com october 20 2026 emsign emudhra cloudflared 2026.10.2",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 6.0
+        },
+        {
+          "query": "emudhra checker",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "query": "update ca bundles, drop compromised emudhra roots",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "query": "what about android",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "query": "answer it",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "emudhra summary",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "emudhra test url",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "emudhra windows 10",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "emudra certificate issue",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "site.blog.cloudflare.com emudhra certificate compromise",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "query": "emudhra ca leak",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "emudhra证书",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "https://emudhra.we-have-a-problem.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "prisma orm 8",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "site.blog.cloudflare.com emsign emudhra cloudflared october 2026 2026.10.2",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "site.blog.mozilla.org \"emudhra\" \"2026\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "query": "\"ai crawling\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "emudhra certificate compromise october 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "emudhra crypto key vulnerability apology",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "iphone foldable price philippines",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.cert-in.org.in \"emudhra\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.cloudflare.com \"emudhra\" \"october\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.render.com/docs/advisory-emudhra",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.security.googleblog.com \"emudhra\"",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.security.googleblog.com \"emudhra\" 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "site.security.googleblog.com emudhra 2026",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "we have a problem emudhra",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 10.0
+        },
+        {
+          "query": "\"we-have-a-problem.com\" emudhra",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 11.0
+        },
+        {
+          "query": "emudhra.com",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 11.0
+        },
+        {
+          "query": "anthropic s1",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 26.0
+        },
+        {
+          "query": "iphone duo price",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 26.0
+        },
+        {
+          "query": "geoseo",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 27.0
+        },
+        {
+          "query": "how much does organic content cost?",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 29.0
+        },
+        {
+          "query": "how to patch php vulnerabilities",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 40.0
+        },
+        {
+          "query": "anthropic release date",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 42.0
+        },
+        {
+          "query": "open source seo-tools github",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 42.0
+        },
+        {
+          "query": "seo tools github",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 44.0
+        },
+        {
+          "query": "google agent",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 50.0
+        },
+        {
+          "query": "emudhra login",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 51.0
+        },
+        {
+          "query": "central certificate authority",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 53.0
+        },
+        {
+          "query": "emudhra compromise",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 57.0
+        },
+        {
+          "query": "seo open source",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 58.0
+        },
+        {
+          "query": "expo 58 react native",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 64.0
+        },
+        {
+          "query": "nextjs vs php",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 64.0
+        },
+        {
+          "query": "seo tool open source",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 64.0
+        },
+        {
+          "query": "laravel vs next",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 68.0
+        },
+        {
+          "query": "what does a tokenizer do",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 71.0
+        }
+      ],
+      "pages": [
+        {
+          "path": "/",
+          "clicks": 4,
+          "impressions": 20,
+          "ctr": 0.2,
+          "position": 4.9
+        },
+        {
+          "path": "/about",
+          "clicks": 4,
+          "impressions": 13,
+          "ctr": 0.3077,
+          "position": 4.2
+        },
+        {
+          "path": "/news/emudhra-ca-key-compromise",
+          "clicks": 1,
+          "impressions": 797,
+          "ctr": 0.0013,
+          "position": 12.0
+        },
+        {
+          "path": "/news/expo-sdk-58",
+          "clicks": 1,
+          "impressions": 28,
+          "ctr": 0.0357,
+          "position": 9.9
+        },
+        {
+          "path": "/now",
+          "clicks": 1,
+          "impressions": 7,
+          "ctr": 0.1429,
+          "position": 6.6
+        },
+        {
+          "path": "/news/google-poisoned-serps-rank-trackers",
+          "clicks": 1,
+          "impressions": 1,
+          "ctr": 1.0,
+          "position": 29.0
+        },
+        {
+          "path": "/blog/open-source-seo-geo-tools-github",
+          "clicks": 0,
+          "impressions": 289,
+          "ctr": 0.0,
+          "position": 63.0
+        },
+        {
+          "path": "/news/anthropic-s1-ipo-filing",
+          "clicks": 0,
+          "impressions": 86,
+          "ctr": 0.0,
+          "position": 9.7
+        },
+        {
+          "path": "/news/astro-7-content-sites",
+          "clicks": 0,
+          "impressions": 33,
+          "ctr": 0.0,
+          "position": 40.7
+        },
+        {
+          "path": "/news/php2shell-critical-php-vulnerabilities",
+          "clicks": 0,
+          "impressions": 32,
+          "ctr": 0.0,
+          "position": 22.3
+        },
+        {
+          "path": "/news/google-agent-compute-engine",
+          "clicks": 0,
+          "impressions": 28,
+          "ctr": 0.0,
+          "position": 18.2
+        },
+        {
+          "path": "/blog/what-is-tokenization",
+          "clicks": 0,
+          "impressions": 20,
+          "ctr": 0.0,
+          "position": 72.7
+        },
+        {
+          "path": "/news/openai-api-credits-chatgpt-pro-business",
+          "clicks": 0,
+          "impressions": 19,
+          "ctr": 0.0,
+          "position": 32.9
+        },
+        {
+          "path": "/blog/laravel-vs-nextjs",
+          "clicks": 0,
+          "impressions": 18,
+          "ctr": 0.0,
+          "position": 57.2
+        },
+        {
+          "path": "/news/iphone-duo-philippines-price",
+          "clicks": 0,
+          "impressions": 12,
+          "ctr": 0.0,
+          "position": 8.6
+        },
+        {
+          "path": "/news/prisma-orm-8-release-candidate",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0.0,
+          "position": 9.2
+        },
+        {
+          "path": "/news/mistral-large-4",
+          "clicks": 0,
+          "impressions": 10,
+          "ctr": 0.0,
+          "position": 22.0
+        },
+        {
+          "path": "/news/aws-infinity-agent-runtime",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 6.8
+        },
+        {
+          "path": "/blog/free-github-repos-to-learn-ai-agents",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 8.4
+        },
+        {
+          "path": "/news/tiktok-shop-ph-order-processing-fee",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 8.5
+        },
+        {
+          "path": "/news/anthropic-enterprise-frontier-safeguards",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 17.8
+        },
+        {
+          "path": "/events/philippine-sme-business-expo-technology-adoption",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 45.0
+        },
+        {
+          "path": "/blog/n8n-messenger-instagram-chatbot",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 45.8
+        },
+        {
+          "path": "/news/whatsapp-service-message-charges",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 49.5
+        },
+        {
+          "path": "/news/google-september-2026-spam-update",
+          "clicks": 0,
+          "impressions": 8,
+          "ctr": 0.0,
+          "position": 72.5
+        },
+        {
+          "path": "/topics/ai",
+          "clicks": 0,
+          "impressions": 6,
+          "ctr": 0.0,
+          "position": 7.7
+        },
+        {
+          "path": "/news/tailwind-joins-shopify",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 6.6
+        },
+        {
+          "path": "/news/musk-spacex-gpu-debt-ai-credit",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 14.0
+        },
+        {
+          "path": "/blog/geo-and-aeo-fundamentals",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 15.8
+        },
+        {
+          "path": "/news/maya-apple-pay-terminal-checkout",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 25.8
+        },
+        {
+          "path": "/news/claude-haiku-5-5",
+          "clicks": 0,
+          "impressions": 5,
+          "ctr": 0.0,
+          "position": 26.0
+        },
+        {
+          "path": "/news",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 7.5
+        },
+        {
+          "path": "/blog/closing-my-agency",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 12.0
+        },
+        {
+          "path": "/blog/organic-content-vs-paid-ads",
+          "clicks": 0,
+          "impressions": 4,
+          "ctr": 0.0,
+          "position": 52.0
+        },
+        {
+          "path": "/news/vercel-flat-rate-cdn",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 3.0
+        },
+        {
+          "path": "/blog/free-n8n-workflow-templates-github",
+          "clicks": 0,
+          "impressions": 3,
+          "ctr": 0.0,
+          "position": 38.7
+        },
+        {
+          "path": "/news/google-search-poisoning-fake-claude-ads",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 3.5
+        },
+        {
+          "path": "/news/openai-models-google-cloud",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 4.5
+        },
+        {
+          "path": "/blog/ai-agent-tools-shared-on-threads-october-2026",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 5.5
+        },
+        {
+          "path": "/news/railway-security-incident-environment-variables",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 6.5
+        },
+        {
+          "path": "/news/ai-training-opt-out-robots-txt",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "path": "/news/make-maia-ai-automation-builder",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 7.0
+        },
+        {
+          "path": "/news/nextjs-16-4-cache-components",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 8.0
+        },
+        {
+          "path": "/projects",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 8.5
+        },
+        {
+          "path": "/topics/automation",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 9.0
+        },
+        {
+          "path": "/news/google-ads-in-ai-mode-philippines",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 10.5
+        },
+        {
+          "path": "/notes",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 12.0
+        },
+        {
+          "path": "/news/google-ai-mode-ai-overviews-more-links",
+          "clicks": 0,
+          "impressions": 2,
+          "ctr": 0.0,
+          "position": 27.5
+        },
+        {
+          "path": "/news/bir-rmc-98-2026-e-invoicing",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 1.0
+        },
+        {
+          "path": "/blog",
+          "clicks": 0,
+          "impressions": 1,
+          "ctr": 0.0,
+          "position": 5.0
+        }
+      ]
+    },
+    "requested": []
+  },
+  "bing": {
+    "checkedOn": "2026-11-05",
+    "from": "2026-10-18",
+    "to": "2026-11-02",
+    "clicks": 0,
+    "impressions": 0,
+    "indexed": 1,
+    "notes": "Only the homepage is indexed (last crawled 13 Oct). No clicks or impressions in Bing's daily data from 18 Oct to 2 Nov."
+  }
+}

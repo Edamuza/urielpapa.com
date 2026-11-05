@@ -25,10 +25,11 @@ const NOT_IN_SITEMAP = [
   "/search",
   "/contact/thanks",
   "/newsletter/thanks",
+  "/dashboard",
 ];
 
-/** Public pages, counted at build the way the sitemap lists them. */
-export async function countPages(): Promise<number> {
+/** Public pages, listed the way the sitemap lists them. */
+export async function listPages(): Promise<Set<string>> {
   const paths = new Set<string>();
   // Fixed pages: every .astro file in src/pages without a [param] in its path.
   for (const file of Object.keys(import.meta.glob("/src/pages/**/*.astro"))) {
@@ -53,7 +54,12 @@ export async function countPages(): Promise<number> {
   for (const [base, total] of listings)
     for (let page = 2; page <= pageCount(total); page++)
       paths.add(pageHref(base, page));
-  return paths.size;
+  return paths;
+}
+
+/** Public pages, counted at build the way the sitemap lists them. */
+export async function countPages(): Promise<number> {
+  return (await listPages()).size;
 }
 
 /** Whole days from launch to today in Manila, where the site is published. */

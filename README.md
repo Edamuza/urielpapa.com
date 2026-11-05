@@ -70,6 +70,14 @@ Until the Resend and Buttondown keys are set, the forms answer with a polite mes
 
 The homepage shows published posts, pages, days since launch and outside sources cited. All four are counted at build from the content, with no outside service, so they refresh on every deploy.
 
+### The private dashboard (`/dashboard`)
+
+One page for running the site: posts published (per day, per topic, words, sources), the daily news task's log and its errors and warnings, the long-form queue, the pages to request indexing for in Search Console next, and Search Console and Bing numbers (clicks, impressions, keywords, top pages).
+
+- It runs on demand and asks for a password. Set `DASHBOARD_PASSWORD` in Vercel (any user name works at the prompt). Without it the page is a 404 in production; on localhost it is open. It is never indexed or cached.
+- Content numbers are read live from `src/content/`. Task runs come from `docs/publish-log.md`, which the scheduled tasks append to (format at the top of that file). The queue comes from the "Long-form queue" table in `docs/content-plan.md`.
+- Search numbers come from `src/data/search-console.json`, a snapshot read from Search Console and Bing Webmaster Tools. To refresh it, ask Claude to read both in Chrome (read-only) and rewrite that file in the same shape, then commit it.
+
 ### Editing on the live site (Keystatic GitHub mode)
 
 Production builds use GitHub storage for `Edamuza/urielpapa.com`. After the first deploy, open `https://urielpapa.com/keystatic` and follow Keystatic's prompt to create its GitHub App; it gives you `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET` and `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` to add in Vercel. Saving in the editor then commits to the repository and Vercel redeploys.

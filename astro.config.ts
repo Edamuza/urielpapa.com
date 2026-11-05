@@ -31,6 +31,7 @@ const SITEMAP_EXCLUDE = [
   "/keystatic",
   "/preview",
   "/404",
+  "/dashboard",
 ];
 
 /** Last-changed date per content URL, for the sitemap's lastmod. */
@@ -223,6 +224,12 @@ export default defineConfig({
         access: "secret",
         context: "server",
         default: "urielpapa.com <contact@urielpapa.com>",
+      }),
+      /** Password for the private /dashboard page; without it the page is a 404 in production. */
+      DASHBOARD_PASSWORD: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
       }),
       BUTTONDOWN_API_KEY: envField.string({
         access: "secret",
