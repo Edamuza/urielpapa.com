@@ -395,9 +395,40 @@ export type SearchConsole = {
     impressions: number | null;
     indexed: number | null;
     notes: string;
+    /** Bing's latest daily crawl numbers (GetCrawlStats). */
+    crawl?: BingCrawlDay | null;
+    /** Pages in Bing's index per day, oldest first, for the trend. */
+    history?: { date: string; inIndex: number; crawled: number }[];
+    /** Sitemaps Bing knows about (GetFeeds). */
+    sitemaps?: {
+      url: string;
+      status: string;
+      submitted: string;
+      lastCrawled: string;
+      urlCount: number | null;
+    }[];
+    /** URLs Bing had trouble with (GetCrawlIssues), worst first. */
+    issues?: { url: string; httpCode: number | null; issues: string }[];
+    /** What the refresh did about Bing, e.g. submitted the sitemap. */
+    actions?: string[];
   };
   /** Microsoft Clarity, from its Data Export API (last 3 days at most). */
   clarity?: ClaritySnapshot;
+};
+
+export type BingCrawlDay = {
+  date: string;
+  crawledPages: number;
+  inIndex: number;
+  crawlErrors: number;
+  blockedByRobots: number;
+  code2xx: number;
+  code3xx: number;
+  code4xx: number;
+  code5xx: number;
+  timeouts: number;
+  dnsFailures: number;
+  inLinks: number;
 };
 
 export type PageInspection = {
@@ -423,7 +454,7 @@ export type ClaritySnapshot = {
   devices: { device: string; sessions: number }[];
 };
 
-export const SEARCH = searchConsole as SearchConsole;
+export const SEARCH = searchConsole as unknown as SearchConsole;
 
 const pathOf = (url: string) =>
   url.replace(/^https?:\/\/(www\.)?urielpapa\.com/i, "").replace(/\/$/, "") ||

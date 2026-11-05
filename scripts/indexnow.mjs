@@ -2,10 +2,14 @@
 // Run after a production deploy: node scripts/indexnow.mjs <from-sha> <to-sha>
 // Set DRY_RUN=1 to print the URLs without submitting them.
 /* eslint-disable no-console -- a CLI script; its output is the GitHub Actions log. */
-// Content-only changes submit the changed entries plus the list pages, including
+// Content changes submit the changed entries plus the list pages, including
 // URLs that went away (post deleted, turned back into a draft, or moved by a
-// `frame` change) so engines recrawl them and drop them from the index;
-// any other change (layouts, styles, config) submits every URL in the live sitemap.
+// `frame` change) so engines recrawl them and drop them from the index. A
+// changed static page (src/pages/about.astro) submits its own URL.
+// Site-wide changes (layouts, styles, config) submit nothing: re-sending every
+// unchanged URL on each deploy made Bing treat the submissions as noise and
+// crawl less. Engines recrawl those pages on their own. Pass --all (or ALL=1)
+// to submit the whole sitemap on purpose, e.g. after a redesign.
 import { execFileSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import { entryFor } from "./content-urls.mjs";
@@ -21,7 +25,7 @@ const keyFile = readdirSync(new URL("../public", import.meta.url)).find(f =>
 if (!keyFile) throw new Error("No IndexNow key file (public/<32 hex>.txt) found.");
 const key = keyFile.replace(/\.txt$/, "");
 
-const [from, to = "HEAD"] = process.argv.slice(2);
+const [from, to = "HEAD"] = process.argv.slice(2).filter(a => !a.startsWith("--"));
 // --no-renames: a moved or renamed post shows up as a delete plus an add,
 // so its old URL is submitted too.
 // Files that never change a public page: notes, the publish log, CI, and the
@@ -85,15 +89,38 @@ async function sitemapUrls() {
   return urls;
 }
 
+/** The URL of a static page file (no [param] in its path), or undefined. */
+function staticPagePath(file) {
+  const m = /^src\/pages\/(.+)\.(astro|md|mdx)$/.exec(file);
+  if (!m || m[1].includes("[")) return undefined;
+  const route = m[1].replace(/(^|\/)index$/, "");
+  return "/" + route;
+}
+
+const all = process.argv.includes("--all") || process.env.ALL === "1";
 let urls;
-if (changed.length === 0) {
-  console.log("No changed files that affect public pages; nothing to submit.");
-  process.exit(0);
-} else if (changed.every(f => f.startsWith("src/content/"))) {
-  const paths = changed.flatMap(affectedPaths);
-  urls = [...new Set([...paths, ...LIST_PAGES])].map(p => (p === "/" ? SITE : SITE + p));
-} else {
+if (all) {
   urls = await sitemapUrls();
+} else {
+  const content = changed.filter(f => f.startsWith("src/content/"));
+  const pages = changed.map(staticPagePath).filter(Boolean);
+  // A static page outside the sitemap (the dashboard, 404) is never sent;
+  // removed content URLs are, so engines drop them.
+  const bare = u => u.replace(/\/$/, "");
+  const live = pages.length ? new Set((await sitemapUrls()).map(bare)) : new Set();
+  const inSitemap = p => live.has(bare(SITE + p));
+  urls = [...new Set([...content.flatMap(affectedPaths), ...(content.length ? LIST_PAGES : []), ...pages.filter(inSitemap)])].map(p =>
+    p === "/" ? SITE : SITE + p,
+  );
+  const skipped = changed.length - content.length - pages.length;
+  if (skipped)
+    console.log(
+      `${skipped} site-wide file(s) changed (layouts, styles, config); not re-sending unchanged URLs.`,
+    );
+}
+if (urls.length === 0) {
+  console.log("No changed public pages; nothing to submit.");
+  process.exit(0);
 }
 
 if (process.env.DRY_RUN) {

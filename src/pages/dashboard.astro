@@ -124,10 +124,6 @@ const snapshotAge = ageDays(g.checkedOn);
 const setup = refreshSetup();
 const refreshResult = Astro.url.searchParams.get("refresh");
 const refreshNote = Astro.url.searchParams.get("note") ?? "";
-// Which Vercel deployment served this page. The refresh progress bar polls
-// for a different one to know when the new numbers are live.
-const deployId =
-  process.env.VERCEL_DEPLOYMENT_ID ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "";
 const failures = issues.filter(
   i => i.kind === "failed" || i.kind === "no-run"
 ).length;
@@ -168,7 +164,6 @@ const sections = [
         action="/dashboard/refresh"
         class="refresh mt-4"
         aria-describedby="refresh-help"
-        data-deploy={deployId}
       >
         <button type="submit" disabled={!setup.ready}>
           Refresh search data
@@ -616,15 +611,112 @@ const sections = [
           </>
         )
       }
-      <p class="meta mt-4">
-        Bing: {
-          bing.indexed !== null
-            ? `${fmt(bing.indexed)} ${bing.indexed === 1 ? "page" : "pages"} indexed. `
-            : ""
-        }{fmt(bing.clicks)} clicks and {fmt(bing.impressions)} impressions{
+      <h3 class="h3 mt-6 mb-2">Bing</h3>
+      <p class="meta mb-3">
+        {fmt(bing.clicks)} clicks and {fmt(bing.impressions)} impressions{
           bing.from ? ` (${range(bing.from, bing.to)})` : ""
-        }. {bing.notes} New posts reach Bing through IndexNow on every deploy.
+        }. {bing.notes} New and changed posts reach Bing through IndexNow on each
+        deploy; unchanged pages are not re-sent.
       </p>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>In Bing's index</dt>
+          <dd class="num">{fmt(bing.indexed)}</dd>
+          <dd class="meta">of {fmt(pages.size)} pages</dd>
+        </div>
+        <div class="tile">
+          <dt>Crawled by Bing</dt>
+          <dd class="num">{fmt(bing.crawl?.crawledPages)}</dd>
+          <dd class="meta">
+            {bing.crawl ? "on " + day(bing.crawl.date) : "no crawl data yet"}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Crawl errors</dt>
+          <dd class="num">{fmt(bing.crawl?.crawlErrors)}</dd>
+          <dd class="meta">
+            {
+              bing.crawl
+                ? "4xx " +
+                  fmt(bing.crawl.code4xx) +
+                  ", 5xx " +
+                  fmt(bing.crawl.code5xx) +
+                  ", timeouts " +
+                  fmt(bing.crawl.timeouts)
+                : "–"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Blocked by robots.txt</dt>
+          <dd class="num">{fmt(bing.crawl?.blockedByRobots)}</dd>
+          <dd class="meta">
+            {bing.crawl ? fmt(bing.crawl.inLinks) + " links in" : "–"}
+          </dd>
+        </div>
+      </dl>
+      {
+        bing.sitemaps && (
+          <>
+            <h4 class="mt-4 mb-1 font-semibold">Sitemaps Bing knows</h4>
+            {bing.sitemaps.length ? (
+              <ul class="text-sm">
+                {bing.sitemaps.map(f => (
+                  <li>
+                    <strong>{f.url}</strong>{" "}
+                    <span class="meta">
+                      {[
+                        f.status,
+                        f.urlCount !== null ? fmt(f.urlCount) + " URLs" : "",
+                        f.submitted ? "submitted " + day(f.submitted) : "",
+                        f.lastCrawled ? "read " + day(f.lastCrawled) : "",
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="text-sm">
+                {bing.actions?.length
+                  ? bing.actions.join(" ")
+                  : "None yet. The next refresh submits the sitemap to Bing."}
+              </p>
+            )}
+          </>
+        )
+      }
+      {
+        bing.issues && bing.issues.length > 0 && (
+          <>
+            <h4 class="mt-4 mb-1 font-semibold">Pages Bing had trouble with</h4>
+            <ul class="text-sm">
+              {bing.issues.map(i => (
+                <li>
+                  {i.url.replace(/^https?:\/\/(www\.)?urielpapa\.com/i, "") ||
+                    "/"}{" "}
+                  <span class="meta">
+                    {i.issues}
+                    {i.httpCode ? " (HTTP " + i.httpCode + ")" : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      {
+        bing.history && bing.history.length > 1 && (
+          <p class="meta mt-4">
+            Index trend:{" "}
+            {bing.history
+              .slice(-10)
+              .map(h => day(h.date) + " " + fmt(h.inIndex))
+              .join(" · ")}
+          </p>
+        )
+      }
     </section>
 
     <section id="search" aria-labelledby="search-h" class="dash-section">
@@ -977,7 +1069,9 @@ const sections = [
    * Progress bar for "Refresh search data". Step 1 streams the server's
    * progress (Google sign-in, ~100 URL Inspections, Bing, saving to GitHub).
    * Step 2 waits for Vercel to finish the redeploy that the save starts, by
-   * polling the dashboard until a different deployment answers. Without
+   * polling /deploy-version.json (a stamp written at every build, public and
+   * not behind the password, so the poll needs no credentials) until it
+   * changes. Without
    * JavaScript the form still posts and the page comes back with a note.
    */
   type Line =
@@ -1000,7 +1094,18 @@ const sections = [
     const elapsed = box.querySelector<HTMLElement>("[data-elapsed]")!;
     const detail = box.querySelector<HTMLElement>("[data-detail]")!;
     const reload = box.querySelector<HTMLButtonElement>("[data-reload]")!;
-    const startDeploy = form.dataset.deploy ?? "";
+    /** The live build's stamp, or "" when it can't be read. */
+    const buildStamp = async () => {
+      try {
+        const res = await fetch("/deploy-version.json", { cache: "no-store" });
+        return res.ok
+          ? (((await res.json()) as { build?: string }).build ?? "")
+          : "";
+      } catch {
+        return "";
+      }
+    };
+    let startDeploy = "";
     let timer = 0;
 
     const set = (pct: number, text: string, state = "running") => {
@@ -1061,9 +1166,7 @@ const sections = [
         );
         await new Promise(r => window.setTimeout(r, 10_000));
         try {
-          const res = await fetch("/dashboard", { cache: "no-store" });
-          const html = res.ok ? await res.text() : "";
-          const id = /data-deploy="([^"]*)"/.exec(html)?.[1];
+          const id = await buildStamp();
           if (id && id !== startDeploy) {
             finish(
               partial ? "warn" : "ok",
@@ -1096,6 +1199,7 @@ const sections = [
       button.disabled = true;
       button.textContent = "Refreshing";
       set(2, "Step 1 of 2: starting");
+      startDeploy = await buildStamp();
       const seconds = clock(Date.now(), " (usually 30 to 60 s)");
 
       // Until the server reports a step, creep along by time so the bar is
