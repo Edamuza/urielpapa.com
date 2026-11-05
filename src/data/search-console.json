@@ -3,27 +3,39 @@
     "checkedOn": "2026-11-05",
     "indexing": {
       "lastUpdated": "2026-11-05",
-      "indexed": 69,
-      "notIndexed": 3,
+      "indexed": 97,
+      "notIndexed": 6,
       "reasons": [
-        {
-          "reason": "Discovered - currently not indexed",
-          "urls": [
-            {
-              "path": "/privacy",
-              "lastCrawled": null
-            }
-          ]
-        },
         {
           "reason": "URL is unknown to Google",
           "urls": [
+            {
+              "path": "/dashboard/login",
+              "lastCrawled": null
+            },
+            {
+              "path": "/privacy",
+              "lastCrawled": null
+            },
             {
               "path": "/news/apple-siri-ai-developer-preview",
               "lastCrawled": null
             },
             {
               "path": "/news/claude-message-threads-beta",
+              "lastCrawled": null
+            }
+          ]
+        },
+        {
+          "reason": "Discovered - currently not indexed",
+          "urls": [
+            {
+              "path": "/news/page/4",
+              "lastCrawled": null
+            },
+            {
+              "path": "/news/page/5",
               "lastCrawled": null
             }
           ]
@@ -1103,9 +1115,289 @@
     "clicks": 0,
     "impressions": 0,
     "indexed": 8,
-    "notes": "Pages in Bing's index as of 2026-11-01."
+    "notes": "Pages in Bing's index as of 2026-11-01.",
+    "crawl": {
+      "date": "2026-11-01",
+      "crawledPages": 10,
+      "inIndex": 8,
+      "crawlErrors": 0,
+      "blockedByRobots": 2,
+      "code2xx": 7,
+      "code3xx": 0,
+      "code4xx": 0,
+      "code5xx": 0,
+      "timeouts": 0,
+      "dnsFailures": 0,
+      "inLinks": 0
+    },
+    "history": [
+      {
+        "date": "2026-10-19",
+        "inIndex": 1,
+        "crawled": 8
+      },
+      {
+        "date": "2026-10-20",
+        "inIndex": 1,
+        "crawled": 11
+      },
+      {
+        "date": "2026-10-21",
+        "inIndex": 1,
+        "crawled": 0
+      },
+      {
+        "date": "2026-10-22",
+        "inIndex": 1,
+        "crawled": 16
+      },
+      {
+        "date": "2026-10-23",
+        "inIndex": 1,
+        "crawled": 3
+      },
+      {
+        "date": "2026-10-24",
+        "inIndex": 1,
+        "crawled": 2
+      },
+      {
+        "date": "2026-10-25",
+        "inIndex": 1,
+        "crawled": 2
+      },
+      {
+        "date": "2026-10-28",
+        "inIndex": 1,
+        "crawled": 3
+      },
+      {
+        "date": "2026-10-29",
+        "inIndex": 1,
+        "crawled": 8
+      },
+      {
+        "date": "2026-10-30",
+        "inIndex": 4,
+        "crawled": 21
+      },
+      {
+        "date": "2026-10-31",
+        "inIndex": 7,
+        "crawled": 9
+      },
+      {
+        "date": "2026-11-01",
+        "inIndex": 8,
+        "crawled": 10
+      }
+    ],
+    "sitemaps": [
+      {
+        "url": "https://urielpapa.com/sitemap-0.xml",
+        "status": "Success",
+        "submitted": "2026-10-28",
+        "lastCrawled": "2026-10-31",
+        "urlCount": 92
+      },
+      {
+        "url": "https://urielpapa.com/sitemap-index.xml",
+        "status": "Success",
+        "submitted": "2026-10-18",
+        "lastCrawled": "2026-10-31",
+        "urlCount": 92
+      }
+    ],
+    "issues": [],
+    "actions": []
   },
   "inspections": {
+    "/dashboard/login": {
+      "indexed": false,
+      "state": "URL is unknown to Google",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
+    "/news/tiktok-shop-ph-order-processing-fee": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/google-search-generative-ai-control": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/blog/what-is-tokenization": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/blog/laravel-vs-nextjs": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/make-maia-ai-automation-builder": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/maya-apple-pay-terminal-checkout": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/notes/this-site-ships-no-javascript-by-default": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/vite-seo-erp": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-22",
+      "checked": "2026-11-05"
+    },
+    "/projects/nfc-card-platform": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-22",
+      "checked": "2026-11-05"
+    },
+    "/projects/travelease": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/quotation-portal": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/tell-liora": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/projects/wordpress-seo-plugins": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-22",
+      "checked": "2026-11-05"
+    },
+    "/projects/archive-downloader": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-02",
+      "checked": "2026-11-05"
+    },
+    "/projects/policydesk": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/processlens": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/inboxpilot": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/docusift": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/projects/modelbench": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/topics/ai": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05"
+    },
+    "/topics/automation": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05"
+    },
+    "/topics/tech-and-business": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/topics/seo-geo-aeo": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-31",
+      "checked": "2026-11-05"
+    },
+    "/topics/tech-stacks": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/topics/marketing": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/topics/founder-journey": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/page/2": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/page/3": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-25",
+      "checked": "2026-11-05"
+    },
+    "/news/page/4": {
+      "indexed": false,
+      "state": "Discovered - currently not indexed",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
+    "/news/page/5": {
+      "indexed": false,
+      "state": "Discovered - currently not indexed",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
     "/about": {
       "indexed": true,
       "state": "Submitted and indexed",
@@ -1168,7 +1460,7 @@
     },
     "/privacy": {
       "indexed": false,
-      "state": "Discovered - currently not indexed",
+      "state": "URL is unknown to Google",
       "lastCrawled": null,
       "checked": "2026-11-05"
     },
@@ -1546,7 +1838,7 @@
       {
         "name": "DeadClickCount",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1556,7 +1848,7 @@
       {
         "name": "ExcessiveScroll",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1566,7 +1858,7 @@
       {
         "name": "RageClickCount",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1576,7 +1868,7 @@
       {
         "name": "QuickbackClick",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1586,7 +1878,7 @@
       {
         "name": "ScriptErrorCount",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1596,7 +1888,7 @@
       {
         "name": "ErrorClickCount",
         "values": {
-          "sessionsCount": 0,
+          "sessionsCount": 2,
           "sessionsWithMetricPercentage": 0,
           "sessionsWithoutMetricPercentage": 100,
           "pagesViews": 0,
@@ -1606,44 +1898,54 @@
       {
         "name": "ScrollDepth",
         "values": {
-          "averageScrollDepth": 0
+          "averageScrollDepth": 14.25
         }
       },
       {
         "name": "Traffic",
         "values": {
-          "totalSessionCount": 0,
+          "totalSessionCount": 2,
           "totalBotSessionCount": 0,
-          "distinctUserCount": 0,
-          "pagesPerSessionPercentage": 0
+          "distinctUserCount": 2,
+          "pagesPerSessionPercentage": 2
         }
       },
       {
         "name": "EngagementTime",
         "values": {
-          "totalTime": 0,
-          "activeTime": 0
+          "totalTime": 478,
+          "activeTime": 15
         }
       },
       {
         "name": "Browser",
-        "values": {}
+        "values": {
+          "sessionsCount": 2
+        }
       },
       {
         "name": "Device",
-        "values": {}
+        "values": {
+          "sessionsCount": 2
+        }
       },
       {
         "name": "OS",
-        "values": {}
+        "values": {
+          "sessionsCount": 1
+        }
       },
       {
         "name": "Country",
-        "values": {}
+        "values": {
+          "sessionsCount": 1
+        }
       },
       {
         "name": "PageTitle",
-        "values": {}
+        "values": {
+          "sessionsCount": 2
+        }
       },
       {
         "name": "ReferrerUrl",
@@ -1651,10 +1953,23 @@
       },
       {
         "name": "PopularPages",
-        "values": {}
+        "values": {
+          "visitsCount": 2
+        }
       }
     ],
-    "pages": [],
-    "devices": []
+    "pages": [
+      {
+        "url": "https://urielpapa.com/",
+        "sessions": 2,
+        "users": 2
+      }
+    ],
+    "devices": [
+      {
+        "device": "PC",
+        "sessions": 2
+      }
+    ]
   }
 }
