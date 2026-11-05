@@ -3,22 +3,14 @@
     "checkedOn": "2026-11-05",
     "indexing": {
       "lastUpdated": "2026-11-05",
-      "indexed": 97,
-      "notIndexed": 5,
+      "indexed": 69,
+      "notIndexed": 3,
       "reasons": [
         {
           "reason": "Discovered - currently not indexed",
           "urls": [
             {
               "path": "/privacy",
-              "lastCrawled": null
-            },
-            {
-              "path": "/news/page/4",
-              "lastCrawled": null
-            },
-            {
-              "path": "/news/page/5",
               "lastCrawled": null
             }
           ]
@@ -1112,5 +1104,557 @@
     "impressions": 0,
     "indexed": 8,
     "notes": "Pages in Bing's index as of 2026-11-01."
+  },
+  "inspections": {
+    "/about": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05"
+    },
+    "/blog": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/colophon": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05"
+    },
+    "/contact": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/events": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-04",
+      "checked": "2026-11-05"
+    },
+    "/news": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05"
+    },
+    "/newsletter": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/notes": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05"
+    },
+    "/now": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/privacy": {
+      "indexed": false,
+      "state": "Discovered - currently not indexed",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
+    "/projects": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/stack": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-26",
+      "checked": "2026-11-05"
+    },
+    "/topics": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/apple-siri-ai-developer-preview": {
+      "indexed": false,
+      "state": "URL is unknown to Google",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
+    "/news/claude-message-threads-beta": {
+      "indexed": false,
+      "state": "URL is unknown to Google",
+      "lastCrawled": null,
+      "checked": "2026-11-05"
+    },
+    "/news/apple-q4-2026-results": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/cma-meta-commercial-terms-probe": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05"
+    },
+    "/news/ai-training-opt-out-robots-txt": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05"
+    },
+    "/news/openai-api-credits-chatgpt-pro-business": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/google-ads-in-ai-mode-philippines": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/blog/ai-agent-tools-shared-on-threads-october-2026": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05"
+    },
+    "/news/anthropic-claude-agent-unsanctioned-actions": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/apple-iwork-mcp-ai-agents": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/blog/free-github-repos-to-learn-ai-agents": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/blog/free-n8n-workflow-templates-github": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/iphone-duo-philippines-price": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/kimi-k3-1-pro-open-weights": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/musk-spacex-gpu-debt-ai-credit": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/blog/open-source-seo-geo-tools-github": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05"
+    },
+    "/news/anthropic-s1-ipo-filing": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-28",
+      "checked": "2026-11-05"
+    },
+    "/news/aws-infinity-agent-runtime": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/google-agent-compute-engine": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-01",
+      "checked": "2026-11-05"
+    },
+    "/news/openai-decisions-api": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/openai-offline-frontier-training": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/openai-older-models-shutdown": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/agent-skills-agentic-ai-foundation": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/openai-models-google-cloud": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/emudhra-ca-key-compromise": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/google-poisoned-serps-rank-trackers": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/keyv-npm-worm-supply-chain-attack": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/php2shell-critical-php-vulnerabilities": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/railway-security-incident-environment-variables": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/blog/how-to-check-if-chatgpt-cites-your-site": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/opencode-mcp-oauth-rce": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/deepseek-v4-1-flash": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/google-search-poisoning-fake-claude-ads": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/cloudflare-openai-chatgpt-discovery-pilot": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/expo-sdk-58": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/google-ai-mode-ai-overviews-more-links": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/bing-topics-portfolio-ai-performance": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/events/philippine-sme-business-expo-technology-adoption": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/gemini-4-argon": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/news/astro-7-content-sites": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/prisma-orm-8-release-candidate": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/claude-haiku-5-5": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/google-september-2026-spam-update": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/blog/closing-my-agency": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/mistral-large-4": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/nextjs-16-4-cache-components": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/react-19-3-view-transitions": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/gpt-6-sol-luna": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/blog/organic-content-vs-paid-ads": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/whatsapp-service-message-charges": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-25",
+      "checked": "2026-11-05"
+    },
+    "/news/search-console-multimodal-search-report": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-11-03",
+      "checked": "2026-11-05"
+    },
+    "/blog/geo-and-aeo-fundamentals": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/zapier-next-gen-zaps": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-30",
+      "checked": "2026-11-05"
+    },
+    "/news/bir-rmc-98-2026-e-invoicing": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/blog/n8n-messenger-instagram-chatbot": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-21",
+      "checked": "2026-11-05"
+    },
+    "/news/tailwind-joins-shopify": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-23",
+      "checked": "2026-11-05"
+    },
+    "/news/vercel-flat-rate-cdn": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    },
+    "/news/anthropic-enterprise-frontier-safeguards": {
+      "indexed": true,
+      "state": "Submitted and indexed",
+      "lastCrawled": "2026-10-24",
+      "checked": "2026-11-05"
+    }
+  },
+  "clarity": {
+    "checkedOn": "2026-11-05",
+    "days": 3,
+    "metrics": [
+      {
+        "name": "DeadClickCount",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "ExcessiveScroll",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "RageClickCount",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "QuickbackClick",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "ScriptErrorCount",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "ErrorClickCount",
+        "values": {
+          "sessionsCount": 0,
+          "sessionsWithMetricPercentage": 0,
+          "sessionsWithoutMetricPercentage": 100,
+          "pagesViews": 0,
+          "subTotal": 0
+        }
+      },
+      {
+        "name": "ScrollDepth",
+        "values": {
+          "averageScrollDepth": 0
+        }
+      },
+      {
+        "name": "Traffic",
+        "values": {
+          "totalSessionCount": 0,
+          "totalBotSessionCount": 0,
+          "distinctUserCount": 0,
+          "pagesPerSessionPercentage": 0
+        }
+      },
+      {
+        "name": "EngagementTime",
+        "values": {
+          "totalTime": 0,
+          "activeTime": 0
+        }
+      },
+      {
+        "name": "Browser",
+        "values": {}
+      },
+      {
+        "name": "Device",
+        "values": {}
+      },
+      {
+        "name": "OS",
+        "values": {}
+      },
+      {
+        "name": "Country",
+        "values": {}
+      },
+      {
+        "name": "PageTitle",
+        "values": {}
+      },
+      {
+        "name": "ReferrerUrl",
+        "values": {}
+      },
+      {
+        "name": "PopularPages",
+        "values": {}
+      }
+    ],
+    "pages": [],
+    "devices": []
   }
 }
