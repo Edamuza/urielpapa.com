@@ -22,3 +22,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-04 | news | skipped | - | First run: no story had an embeddable X or Threads post, which was required then. Wikimedia Commons could not be reached for photos.
 - 2026-11-04 | news | warning | claude-message-threads-beta | Second run, after the embed rule was relaxed. The build failed once and was fixed. No photos (Wikimedia Commons unreachable) and no embed.
 - 2026-11-05 | news | warning | apple-siri-ai-developer-preview | No photos (Wikimedia Commons unreachable) and no embed (no verifiable post found).
+- 2026-11-06 | news | warning | openai-gpt-image-2-6-gif-svg | No photos (Wikimedia Commons unreachable) and no embed (no verifiable post found).
