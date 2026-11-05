@@ -533,17 +533,20 @@ export async function indexingQueue(pages: Set<string>) {
   );
 }
 
-/** Search Console's URL Inspection page for a path on this site. */
-export function gscInspectUrl(path: string) {
-  // Prefer the link the URL Inspection API returned for this page: it names
-  // the property exactly as Search Console does.
-  const saved = SEARCH.inspections?.[path]?.link;
-  if (saved) return saved;
-  const url = new URL("https://search.google.com/search-console/inspect");
+/**
+ * Search Console's home for this site's property. Its "Inspect any URL" bar
+ * is at the top; the dashboard copies the page URL on click so it can be
+ * pasted there. (Deep links to /search-console/inspect?resource_id=…&id=…,
+ * the format Google's own API returns, answered 404 in Nov 2026.)
+ */
+export function gscPropertyUrl() {
+  const url = new URL("https://search.google.com/search-console");
   url.searchParams.set("resource_id", SITE.url + "/");
-  url.searchParams.set("id", SITE.url + path);
   return url.toString();
 }
+
+/** The full URL of a path on this site, as Search Console inspects it. */
+export const siteUrl = (path: string) => SITE.url + (path === "/" ? "/" : path);
 
 /** Keyword numbers from the Search Console snapshot. */
 export function keywordStats() {
