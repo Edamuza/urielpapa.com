@@ -7,6 +7,7 @@ import HubCard from "@/components/HubCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import SiteStats from "@/components/SiteStats.astro";
+import FeaturedProject from "@/components/FeaturedProject.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectCover from "@/components/ProjectCover.astro";
 import { SITE } from "@/config";
@@ -38,8 +39,14 @@ const allNotes = await getNotes();
 const projects = await getProjects();
 const builtWithLovable = (p: (typeof projects)[number]) =>
   p.data.stack.some(s => s.id === "lovable");
-const lovableProjects = projects.filter(builtWithLovable);
-const otherProjects = projects.filter(p => !builtWithLovable(p));
+// Featured projects get a large card at the top and leave the lists below.
+const featuredProjects = projects.filter(p => p.data.featured);
+const lovableProjects = projects.filter(
+  p => !p.data.featured && builtWithLovable(p)
+);
+const otherProjects = projects.filter(
+  p => !p.data.featured && !builtWithLovable(p)
+);
 
 const hubCount = (id: string) =>
   allBlog.filter(p => p.data.hub === id).length +
@@ -149,6 +156,13 @@ const [city, country] = SITE.location.split(", ");
           <h2 id="projects-h" class="h2 mb-2 scroll-mt-24">
             Projects
           </h2>
+          {featuredProjects.length > 0 && (
+            <div class="mb-10 grid gap-4">
+              {featuredProjects.map(p => (
+                <FeaturedProject project={p} />
+              ))}
+            </div>
+          )}
           {lovableProjects.length > 0 && (
             <>
               <p class="max-w-read mb-6">

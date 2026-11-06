@@ -308,6 +308,7 @@ export default config({
         stack: fields.array(fields.relationship({ label: "Tool", collection: "stack" }), { label: "Stack", itemLabel: p => p.value ?? "" }),
         hubs: fields.multiselect({ label: "Related topic hubs", options: hubOptions }),
         order: fields.integer({ label: "Order in list", defaultValue: 100 }),
+        featured: fields.checkbox({ label: "Featured", description: "Show it as a large card at the top of the Projects sections on the home and projects pages.", defaultValue: false }),
         draft: fields.checkbox({ label: "Draft", defaultValue: false }),
         repo: fields.text({ label: "GitHub repository", description: 'Shown as a card on the project page, as "owner/name", e.g. Edamuza/Travel_Ease.' }),
         cover: fields.image({ label: "Featured image", description: "Shown on the project cards.", directory: "src/assets/images/content", publicPath: "../../assets/images/content/" }),

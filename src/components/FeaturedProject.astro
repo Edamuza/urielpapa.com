@@ -1,0 +1,47 @@
+---
+// A large card for a project marked `featured`, shown at the top of the
+// Projects sections on the home and projects pages.
+import type { CollectionEntry } from "astro:content";
+import ProjectCover from "@/components/ProjectCover.astro";
+import { projectUrl } from "@/utils/content";
+
+type Props = { project: CollectionEntry<"projects">; headingLevel?: 2 | 3 };
+const { project, headingLevel = 3 } = Astro.props;
+const { data } = project;
+const href = projectUrl(project);
+const Heading = `h${headingLevel}` as "h2" | "h3";
+---
+
+<article
+  class="border-foreground/80 grid overflow-hidden rounded-lg border md:grid-cols-[3fr_2fr]"
+>
+  <a href={href} class="block" title={`${data.title} case study`}>
+    <ProjectCover
+      title={data.title}
+      src={data.cover}
+      alt={data.coverAlt}
+      widths={[560, 720, 960, 1280]}
+      sizes="(min-width: 1024px) 40rem, (min-width: 768px) 60vw, calc(100vw - 2rem)"
+      class="border-border h-full w-full border-b text-5xl md:border-r md:border-b-0"
+    />
+  </a>
+  <div class="flex flex-col p-5">
+    <p class="meta text-sm font-semibold tracking-wide uppercase">
+      Featured · {data.year}
+    </p>
+    <Heading class="mt-1 text-xl font-semibold">
+      <a href={href}>{data.title}</a>
+    </Heading>
+    <p class="mt-2 flex-1 text-[0.95rem]">{data.description}</p>
+    <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
+      <a href={href}>Read the case study →</a>
+      {
+        data.liveUrl && (
+          <a href={data.liveUrl} rel="noopener">
+            Live demo ↗
+          </a>
+        )
+      }
+    </p>
+  </div>
+</article>
