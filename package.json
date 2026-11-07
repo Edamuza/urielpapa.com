@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "pnpm lint && pnpm format:check && astro check && astro build && node scripts/vercel-routes.mjs && node scripts/check-html.mjs && pagefind --site .vercel/output/static",
+    "build": "pnpm lint && pnpm format:check && node scripts/check-posts.mjs && astro check && astro build && node scripts/vercel-routes.mjs && node scripts/check-html.mjs && pagefind --site .vercel/output/static",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",
