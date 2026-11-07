@@ -23,6 +23,7 @@
 //
 // Look at the saved file before using it, and write the alt text from what it shows.
 /* eslint-disable no-console -- a command-line helper; its output is the result. */
+import "./lib/use-proxy.mjs";
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
 import sharp from "sharp";
 

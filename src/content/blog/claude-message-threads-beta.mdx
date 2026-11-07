@@ -47,6 +47,10 @@ This take is part of my [AI, in Depth](/topics/ai) writing. If token counts are 
 
 On November 2, 2026, Anthropic announced [message threads](https://claude.com/resources/articles/message-threads) and listed them in its [Claude Platform release notes](https://platform.claude.com/docs/en/release-notes/overview). Until now, an agent had to resend the whole conversation on every turn. With a thread, the first request carries the full conversation, and later requests send only the new messages plus a reference to the previous response.
 
+Anthropic's developer account announced it on X:
+
+<SocialPost platform="x" url="https://x.com/ClaudeDevs/status/2117332449382510884" author="ClaudeDevs" handle="ClaudeDevs" date="2026-11-02" text={"Message threads are now in public beta on the Messages API.\n\nThe API caches your conversation on the server between turns, so instead of resending the full conversation, you send only new messages and the previous message ID, and Claude starts responding sooner."} media={[{"type":"video","src":"https://pbs.twimg.com/amplify_video_thumb/2117332353785704449/img/p7_rHqaEU7-HLGfG.jpg","alt":"Opening frame of Anthropic's message threads video: the words Turn 1. and a small white block on a black background","width":1920,"height":1080}]} />
+
 According to the release notes, threads are in beta with the `message-threads-2026-08-12` beta header. They are available on the Claude API, Claude Platform on AWS, Claude Models on Google Cloud (Anthropic managed) and Claude in Microsoft Foundry.
 
 ![Anthropic CEO Dario Amodei, right, in an on-stage interview at TechCrunch Disrupt 2023](../../assets/images/content/claude-message-threads-beta-1.jpg "Anthropic CEO Dario Amodei, right, in an on-stage interview at TechCrunch Disrupt 2023")

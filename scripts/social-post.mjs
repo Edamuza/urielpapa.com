@@ -9,9 +9,17 @@
 //   node scripts/social-post.mjs https://x.com/<handle>/status/<id>
 //   node scripts/social-post.mjs https://www.threads.com/@<handle>/post/<code>
 //
+// To find the post in the first place (web search rarely shows X post links):
+//
+//   node scripts/social-post.mjs recent <handle> [words…]
+//
+// lists the account's recent posts with their URLs, newest first, keeping only
+// those that contain all the words when you give some.
+//
 // Paste the tag after the paragraph it supports, with a one-line lead-in.
 // Check the printed text against the post if you can; never edit it.
 /* eslint-disable no-console -- a command-line helper; its output is the result. */
+import "./lib/use-proxy.mjs";
 
 const UA = "Mozilla/5.0 (compatible; urielpapa.com-embeds/1.0; +https://urielpapa.com)";
 
@@ -69,6 +77,11 @@ async function syndication(id) {
           image: b.thumbnail_image_large?.image_value?.url || b.summary_photo_image_large?.image_value?.url || "",
         }
       : undefined;
+  // A long post (over 280 characters) arrives cut short here; FxTwitter has the full text.
+  if (j.note_tweet) {
+    const full = await fxtwitter(j.user.screen_name, id);
+    return { ...full, media: media.length ? media : full.media, card, via: "X's embed server, with the full text from FxTwitter" };
+  }
   return { author: j.user.name, handle: j.user.screen_name, date: utcDate(j.created_at), text, media, card, via: "X's embed server" };
 }
 
@@ -119,7 +132,7 @@ async function threads(url) {
   const title = meta("og:title") ?? "";
   if (!text) throw new Error("the Threads page had no post text (it may need a login)");
   const handle = url.match(/@([\w.]+)/)[1];
-  const author = decode(title.replace(/\s*\(@[\w.]+\).*$/, "")) || handle;
+  const author = decode(title).replace(/\s*\(@[\w.]+\).*$/, "").trim() || handle;
   const iso = html.match(/"taken_at":(\d{10})/)?.[1] ?? html.match(/datetime="([^"]+)"/)?.[1];
   if (!iso) throw new Error("could not read the Threads post's date; copy it from the post");
   return { author, handle, date: utcDate(/^\d+$/.test(iso) ? Number(iso) : iso), text: decode(text), media: [], via: "the Threads page" };
@@ -144,10 +157,59 @@ async function read(url) {
   throw new Error(`No reader could open the post:\n  ${errors.join("\n  ")}`);
 }
 
+/** Lists an X account's recent posts through FxTwitter's profile API. */
+async function recent(handle, words) {
+  const want = words.map(w => w.toLowerCase());
+  let cursor = "";
+  let shown = 0;
+  for (let page = 0; page < 4 && shown < 15; page++) {
+    // The profile API often answers 404 or an empty page at random; ask again.
+    let j;
+    let lastError;
+    for (let attempt = 0; attempt < 5 && !j?.results?.length; attempt++) {
+      if (attempt) await new Promise(r => setTimeout(r, 2000 * attempt));
+      try {
+        j = await get(`https://api.fxtwitter.com/2/profile/${handle}/statuses?count=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    if (!j?.results?.length && page === 0 && lastError) throw lastError;
+    const posts = j?.results ?? [];
+    if (!posts.length) break;
+    for (const t of posts) {
+      const text = String(t.raw_text?.text ?? t.text ?? "");
+      if (want.length && !want.every(w => text.toLowerCase().includes(w))) continue;
+      const who = t.author?.screen_name ?? handle;
+      console.log(`${utcDate(t.created_timestamp ?? t.created_at)}  https://x.com/${who}/status/${t.id}\n  ${text.replace(/\s+/g, " ").slice(0, 160)}`);
+      if (++shown >= 15) break;
+    }
+    cursor = j.cursor?.bottom;
+    if (!cursor) break;
+  }
+  if (!shown) throw new Error(`No recent posts from @${handle}${want.length ? ` with "${words.join(" ")}"` : ""} (FxTwitter may not list this account; try another official account)`);
+}
+
+if (process.argv[2] === "recent") {
+  try {
+    if (!process.argv[3]) throw new Error("Usage: node scripts/social-post.mjs recent <handle> [words…]");
+    await recent(process.argv[3].replace(/^@/, ""), process.argv.slice(4));
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+  process.exit(0);
+}
+
 const url = process.argv[2];
 try {
   const p = await read(url ?? "");
-  const text = p.text.replace(/\n{3,}/g, "\n\n").trim();
+  const text = p.text
+    .split("\n")
+    .map(line => line.trim())
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
   const parts = [
     `<SocialPost platform="${p.platform}"`,
     `url="${p.url}"`,
