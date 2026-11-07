@@ -30,6 +30,12 @@ export const SITE = {
   photo: "/images/uriel-papa.jpg" as string | null,
 } as const;
 
+/**
+ * Microsoft Clarity project (heatmaps and session recordings). The ID is
+ * public; it is in Clarity's own tracking snippet. Set "" to switch it off.
+ */
+export const CLARITY_PROJECT_ID = "z8t4qrt0ds";
+
 /** The Macro statement from content-network.md §1, reused on Home, About and llms.txt. */
 export const MACRO =
   "urielpapa.com is where Uriel Papa, a builder and founder from the Philippines, shares the lessons from founding a company and building with technology: how AI and large language models really work, the automations behind real projects, how technology affects business, the economy and society, how search is evolving with SEO, GEO and AEO, what's new in tech stacks, the basics of marketing, and the journey of a founder. It also carries takes on the latest tech news and notes from seminars and trainings. It's written for anyone interested in the same things.";

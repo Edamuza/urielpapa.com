@@ -4,6 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import PageIntro from "@/components/PageIntro.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
+import FeaturedProject from "@/components/FeaturedProject.astro";
 import { getProjects, projectUrl } from "@/utils/content";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 
@@ -22,7 +23,10 @@ const stacks = new Map(
   )
 );
 
-// Apps built with Lovable come first, then the systems built with my teams.
+// Featured projects come first as large cards, then apps built with Lovable,
+// then the systems built with my teams.
+const featured = projects.filter(p => p.data.featured);
+const listed = projects.filter(p => !p.data.featured);
 const builtWithLovable = (p: (typeof projects)[number]) =>
   p.data.stack.some(s => s.id === "lovable");
 const groups = [
@@ -31,14 +35,14 @@ const groups = [
     heading: "AI apps built with Lovable",
     intro:
       "I built these by directing AI agents in Lovable. Each one is live with fictional sample data, and each case study shows how it was tested.",
-    items: projects.filter(builtWithLovable),
+    items: listed.filter(builtWithLovable),
   },
   {
     id: "systems",
     heading: "Systems and products",
     intro:
       "Work I built with my teams. Most were internal systems, so they're described rather than linked.",
-    items: projects.filter(p => !builtWithLovable(p)),
+    items: listed.filter(p => !builtWithLovable(p)),
   },
 ].filter(g => g.items.length > 0);
 
@@ -68,6 +72,20 @@ const schema = [
   <div class="app-layout pt-8">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro} />
+    {
+      featured.length > 0 && (
+        <section aria-labelledby="featured-h" class="mb-10">
+          <h2 id="featured-h" class="sr-only">
+            Featured
+          </h2>
+          <div class="grid gap-4">
+            {featured.map(p => (
+              <FeaturedProject project={p} />
+            ))}
+          </div>
+        </section>
+      )
+    }
     {
       groups.map(g => (
         <section aria-labelledby={`${g.id}-h`} class="mb-10">

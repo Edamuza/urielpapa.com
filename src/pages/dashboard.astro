@@ -1,0 +1,1598 @@
+---
+/**
+ * Private site dashboard: posts published, scheduled-task runs and problems,
+ * what is queued next, what still needs indexing, and search numbers. Runs on
+ * demand behind Google sign-in (or DASHBOARD_PASSWORD; see
+ * src/lib/dashboard-auth.ts) and is never indexed. Data
+ * sources are described in src/lib/dashboard.ts.
+ */
+import { dashboardGate, dashboardSession } from "@/lib/dashboard-auth";
+import { refreshSetup } from "@/lib/search-refresh";
+import Layout from "@/layouts/Layout.astro";
+import { hubName } from "@/data/hubs";
+import { countSources, daysSinceLaunch, listPages } from "@/lib/site-stats";
+import {
+  SEARCH,
+  contentTotals,
+  hubCoverage,
+  indexingQueue,
+  keywordStats,
+  longFormQueue,
+  newsRuns,
+  postsPerDay,
+  problems,
+  gscPropertyUrl,
+  siteUrl,
+  refreshQueue,
+  todayManila,
+  type RunStatus,
+} from "@/lib/dashboard";
+import { formatDate } from "@/utils/content";
+import { CLARITY_PROJECT_ID } from "@/config";
+
+export const prerender = false;
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+
+// Open on localhost; in production (and preview deployments) it needs sign-in.
+const blocked = dashboardGate(Astro.request, "page");
+if (blocked) return blocked;
+const signedInAs = dashboardSession(Astro.request);
+
+const today = todayManila();
+const totals = await contentTotals();
+const pages = await listPages();
+const sources = await countSources();
+const days = daysSinceLaunch();
+const perDay = await postsPerDay(30);
+const maxDay = Math.max(1, ...perDay.map(d => d.total));
+const runs = await newsRuns(21);
+const issues = await problems(21);
+const queue = await longFormQueue();
+const upcoming = queue.filter(q => !q.live);
+const coverage = await hubCoverage();
+const refresh = await refreshQueue();
+const toIndex = await indexingQueue(pages);
+const kw = keywordStats();
+const g = SEARCH.google;
+const perf = g.performance;
+const bing = SEARCH.bing;
+const checkedPages = SEARCH.inspections
+  ? [...pages].filter(p => SEARCH.inspections?.[p]).length
+  : null;
+const clarity = SEARCH.clarity;
+const isTraffic = (name: string) => /^traffic$/i.test(name.replace(/\s/g, ""));
+const clarityTraffic =
+  clarity?.metrics.find(m => isTraffic(m.name))?.values ?? {};
+const claritySignals = clarity?.metrics.filter(m => !isTraffic(m.name)) ?? [];
+const claritySessions = clarityTraffic.totalSessionCount ?? null;
+/** "sessionsWithMetricPercentage" → "Sessions with metric %". */
+const fieldLabel = (key: string) =>
+  key
+    .replace(/Percentage$/, " %")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .replace(/^./, c => c.toUpperCase());
+const clarityUrl = CLARITY_PROJECT_ID
+  ? `https://clarity.microsoft.com/projects/view/${CLARITY_PROJECT_ID}/dashboard`
+  : null;
+
+const fmt = (n: number | null | undefined, digits = 0) =>
+  n === null || n === undefined
+    ? "–"
+    : n.toLocaleString("en-US", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      });
+const pct = (n: number | null | undefined) =>
+  n === null || n === undefined ? "–" : `${(n * 100).toFixed(1)}%`;
+const day = (iso: string | null | undefined, format = "D MMM") =>
+  iso ? formatDate(new Date(`${iso}T12:00:00+08:00`), format) : "–";
+const range = (from: string | null, to: string | null) =>
+  from && to
+    ? `${day(from)} to ${day(to, "D MMM YYYY")}`
+    : "date range unknown";
+const ageDays = (iso: string) =>
+  Math.round(
+    (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${iso}T00:00:00Z`)) /
+      86_400_000
+  );
+
+const STATUS: Record<RunStatus, { mark: string; label: string }> = {
+  published: { mark: "✓", label: "Published" },
+  warning: { mark: "!", label: "Published, with issues" },
+  skipped: { mark: "–", label: "Skipped" },
+  failed: { mark: "✕", label: "Failed" },
+  "no-run": { mark: "?", label: "No run recorded" },
+  unlogged: { mark: "·", label: "Not logged" },
+  attention: { mark: "→", label: "Needs attention" },
+};
+
+const lastRun = runs.find(r => r.status !== "no-run" || r.date !== today);
+const streak = (() => {
+  let n = 0;
+  for (const r of runs) {
+    if (r.date === today && r.status === "no-run") continue;
+    if (["published", "warning", "unlogged"].includes(r.status) && r.slug) n++;
+    else break;
+  }
+  return n;
+})();
+const nextLongForm = upcoming[0];
+const requestToday = toIndex.filter(i => !i.requestedOn).slice(0, 10);
+const indexLater = toIndex.filter(i => !i.requestedOn).slice(10);
+const requested = toIndex.filter(i => i.requestedOn);
+const snapshotAge = ageDays(g.checkedOn);
+const setup = refreshSetup();
+const refreshResult = Astro.url.searchParams.get("refresh");
+const refreshNote = Astro.url.searchParams.get("note") ?? "";
+const failures = issues.filter(
+  i => i.kind === "failed" || i.kind === "no-run"
+).length;
+
+const sections = [
+  ["overview", "Overview"],
+  ["publishing", "Publishing"],
+  ["runs", "Daily task log"],
+  ["errors", "Errors and warnings"],
+  ["next", "Up next"],
+  ["indexing", "Indexing"],
+  ["search", "Search and keywords"],
+  ["behavior", "Visitor behavior"],
+  ["coverage", "Topic coverage"],
+] as const;
+---
+
+<Layout
+  title="Dashboard"
+  description="Private dashboard for urielpapa.com: posts, scheduled task logs, the publishing queue, indexing and search numbers."
+  noindex
+>
+  <div class="app-layout pt-8 pb-16">
+    <header class="mb-8">
+      <h1 class="h1">Site dashboard</h1>
+      <p class="max-w-read mt-3 text-lg">
+        Everything about urielpapa.com in one place: what has been published,
+        what the daily task did, what goes out next, what still needs indexing
+        and how the site shows up in search.
+      </p>
+      {
+        signedInAs && (
+          <form method="post" action="/dashboard/logout" class="account mt-3">
+            <span class="meta">Signed in as {signedInAs}</span>
+            <button type="submit">Sign out</button>
+          </form>
+        )
+      }
+      <p class="meta mt-3">
+        Built {day(today, "D MMMM YYYY")} (Manila) from the repository. Search numbers
+        are a snapshot from {day(g.checkedOn, "D MMM YYYY")}
+        {snapshotAge > 7 ? `, ${snapshotAge} days old` : ""}.
+      </p>
+      <form
+        method="post"
+        action="/dashboard/refresh"
+        class="refresh mt-4"
+        aria-describedby="refresh-help"
+      >
+        <button type="submit" disabled={!setup.ready}>
+          Refresh search data
+        </button>
+        <p id="refresh-help" class="meta">
+          {
+            setup.ready
+              ? "Reads Search Console, Bing and Clarity now, checks the index status of as many pages as fit in a minute (the rest on the next refresh), then saves it. The new numbers show after the site redeploys, about 2 minutes later." +
+                (setup.missing.length
+                  ? " Not connected yet: " + setup.missing.join(", ") + "."
+                  : "")
+              : "Not set up yet. Add " +
+                setup.missing.join(", ") +
+                " in Vercel (see the README)."
+          }
+        </p>
+        <div class="refresh-progress" data-state="running" hidden>
+          <div
+            class="refresh-bar"
+            role="progressbar"
+            aria-label="Refresh progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <span></span>
+          </div>
+          <p class="refresh-status" role="status" aria-live="polite">
+            <strong data-label>Starting</strong>
+            <span class="meta" data-elapsed></span>
+          </p>
+          <p class="refresh-detail meta" data-detail></p>
+          <button type="button" class="refresh-reload" data-reload hidden>
+            Reload the dashboard
+          </button>
+        </div>
+        {
+          refreshResult && (
+            <p class="refresh-note" data-status={refreshResult} role="status">
+              <strong>
+                {refreshResult === "ok"
+                  ? "Saved. Reload in about 2 minutes to see it."
+                  : refreshResult === "partial"
+                    ? "Saved, but a source failed and kept its old numbers."
+                    : "Refresh failed."}
+              </strong>{" "}
+              {refreshNote}
+            </p>
+          )
+        }
+      </form>
+      <nav aria-label="Dashboard sections" class="mt-4">
+        <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {
+            sections.map(([id, label]) => (
+              <li>
+                <a href={`#${id}`} title={`Jump to ${label}`}>
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <section id="overview" aria-labelledby="overview-h" class="dash-section">
+      <h2 id="overview-h" class="h2 mb-4">Overview</h2>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>Posts published</dt>
+          <dd class="num">{fmt(totals.posts)}</dd>
+          <dd class="meta">
+            {fmt(totals.news)} news, {fmt(totals.longForm)} long-form, {
+              fmt(totals.events)
+            } event
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>This week</dt>
+          <dd class="num">{fmt(totals.last7)}</dd>
+          <dd class="meta">Posts in the last 7 days</dd>
+        </div>
+        <div class="tile">
+          <dt>Pages on the site</dt>
+          <dd class="num">{fmt(pages.size)}</dd>
+          <dd class="meta">As the sitemap lists them</dd>
+        </div>
+        <div class="tile">
+          <dt>Indexed in Google</dt>
+          <dd class="num">{fmt(g.indexing.indexed)}</dd>
+          <dd class="meta">
+            {fmt(g.indexing.notIndexed)} not indexed{
+              checkedPages !== null && checkedPages < pages.size
+                ? `, ${fmt(pages.size - checkedPages)} not checked yet`
+                : ""
+            }, as of {day(g.indexing.lastUpdated ?? g.checkedOn)}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Drafts waiting</dt>
+          <dd class="num">{fmt(totals.drafts)}</dd>
+          <dd class="meta">
+            {
+              nextLongForm
+                ? `Next due ${day(nextLongForm.publishOn)}${nextLongForm.overdue ? " (overdue)" : ""}`
+                : "Queue is empty"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Daily news streak</dt>
+          <dd class="num">{fmt(streak)}</dd>
+          <dd class="meta">
+            {
+              lastRun
+                ? `Last run ${day(lastRun.date)}: ${STATUS[lastRun.status].label.toLowerCase()}`
+                : "No runs yet"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Search keywords</dt>
+          <dd class="num">{fmt(kw.total)}</dd>
+          <dd class="meta">{fmt(kw.top10)} in the top 10 on Google</dd>
+        </div>
+        <div class="tile">
+          <dt>Google clicks</dt>
+          <dd class="num">{fmt(perf.clicks)}</dd>
+          <dd class="meta">
+            {fmt(perf.impressions)} impressions, {range(perf.from, perf.to)}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Words published</dt>
+          <dd class="num">{fmt(totals.words)}</dd>
+          <dd class="meta">Posts and notes</dd>
+        </div>
+        <div class="tile">
+          <dt>Sources cited</dt>
+          <dd class="num">{fmt(sources)}</dd>
+          <dd class="meta">Outside pages linked</dd>
+        </div>
+        <div class="tile">
+          <dt>Days live</dt>
+          <dd class="num">{fmt(days)}</dd>
+          <dd class="meta">
+            Notes {fmt(totals.notes)}, projects {fmt(totals.projects)}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Problems, 21 days</dt>
+          <dd class="num">{fmt(issues.length)}</dd>
+          <dd class="meta">
+            {fmt(failures)} failed or silent runs
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <section
+      id="publishing"
+      aria-labelledby="publishing-h"
+      class="dash-section"
+    >
+      <h2 id="publishing-h" class="h2 mb-1">Posts per day</h2>
+      <p class="meta mb-4">
+        Last 30 days, Manila dates. Most days the daily task adds one news take;
+        the tall bars are days when batches of posts went live.
+      </p>
+      <div
+        class="chart"
+        role="img"
+        aria-label={`Posts per day for the last 30 days. Highest: ${maxDay} in a day.`}
+      >
+        <span class="chart-max meta" aria-hidden="true">{maxDay}</span>
+        <ol class="bars">
+          {
+            perDay.map(d => (
+              <li
+                tabindex="0"
+                data-tip={`${day(d.day)}: ${d.total} ${d.total === 1 ? "post" : "posts"}${d.total ? ` (${d.news} news, ${d.other} other)` : ""}`}
+                style={`--h:${(d.total / maxDay) * 100}%`}
+                class={d.total ? "" : "empty"}
+              >
+                <span class="sr-only">
+                  {day(d.day)}: {d.total}
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="chart-axis meta" aria-hidden="true">
+          <span>{day(perDay[0].day)}</span>
+          <span>{day(perDay[14].day)}</span>
+          <span>{day(perDay.at(-1)?.day)}</span>
+        </div>
+      </div>
+      <details class="mt-3">
+        <summary class="meta cursor-pointer">Show as a table</summary>
+        <div class="table-wrap mt-2">
+          <table>
+            <thead>
+              <tr><th>Day</th><th>News</th><th>Other</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              {
+                [...perDay].reverse().map(d => (
+                  <tr>
+                    <td>{day(d.day, "ddd D MMM")}</td>
+                    <td>{d.news}</td>
+                    <td>{d.other}</td>
+                    <td>{d.total}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section id="runs" aria-labelledby="runs-h" class="dash-section">
+      <h2 id="runs-h" class="h2 mb-1">Daily news task log</h2>
+      <p class="meta mb-4">
+        One row per run, newest first, from <code>docs/publish-log.md</code>.
+        Days before the log started are filled in from the posts' publish dates.
+      </p>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead>
+            <tr><th>Date</th><th>Status</th><th>Post</th><th>Note</th></tr>
+          </thead>
+          <tbody>
+            {
+              runs.map(r => (
+                <tr data-status={r.status}>
+                  <td class="whitespace-nowrap">{day(r.date, "ddd D MMM")}</td>
+                  <td class="whitespace-nowrap">
+                    <span class="status" aria-hidden="true">
+                      {STATUS[r.status].mark}
+                    </span>{" "}
+                    {STATUS[r.status].label}
+                  </td>
+                  <td class="wide">
+                    {r.url ? (
+                      <a href={r.url} title={`Read the news take: ${r.title}`}>
+                        {r.title}
+                      </a>
+                    ) : r.slug ? (
+                      r.title
+                    ) : (
+                      "–"
+                    )}
+                  </td>
+                  <td class="meta wide">{r.note}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="errors" aria-labelledby="errors-h" class="dash-section">
+      <h2 id="errors-h" class="h2 mb-1">Errors and warnings</h2>
+      <p class="meta mb-4">
+        Failed, skipped or warned runs from the log, days with no run, news
+        takes without photos, overdue long-form posts and drafts outside the
+        queue.
+      </p>
+      {
+        issues.length ? (
+          <ul class="issues">
+            {issues.map(i => (
+              <li data-status={i.kind}>
+                <span class="whitespace-nowrap">
+                  <span class="status" aria-hidden="true">
+                    {STATUS[i.kind].mark}
+                  </span>{" "}
+                  <strong>{STATUS[i.kind].label}</strong>
+                </span>
+                <span class="meta whitespace-nowrap">{day(i.date)}</span>
+                <span>{i.text}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Nothing went wrong in the last 21 days.</p>
+        )
+      }
+    </section>
+
+    <section id="next" aria-labelledby="next-h" class="dash-section">
+      <h2 id="next-h" class="h2 mb-1">Up next</h2>
+      <p class="meta mb-4">
+        The daily news take publishes every morning on its own. Long-form posts
+        follow the queue in <code>docs/content-plan.md</code>, Tuesdays and
+        Fridays, once their <code>[Uriel: …]</code> spots are filled.
+      </p>
+      <div class="table-wrap">
+        <table class="stack">
+          <thead>
+            <tr>
+              <th>Publish on</th><th>Post</th><th>Topic</th><th>Format</th><th
+                >Ready?</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            {
+              upcoming.map(q => (
+                <tr>
+                  <td class="wide whitespace-nowrap">
+                    {day(q.publishOn, "ddd D MMM")}
+                    {q.overdue && <span class="meta"> (overdue)</span>}
+                  </td>
+                  <td class="wide">
+                    {q.title}
+                    <div class="meta">{q.question}</div>
+                  </td>
+                  <td>{hubName(q.hub)}</td>
+                  <td>{q.frame}</td>
+                  <td class="wide">
+                    {q.missing
+                      ? "Not written yet"
+                      : q.markers
+                        ? `Needs your input (${q.markers} ${q.markers === 1 ? "spot" : "spots"})`
+                        : "Written, waiting for your go-ahead"}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      {upcoming.length === 0 && <p>The long-form queue is empty.</p>}
+    </section>
+
+    <section id="indexing" aria-labelledby="indexing-h" class="dash-section">
+      <h2 id="indexing-h" class="h2 mb-1">Next to index in Search Console</h2>
+      <p class="meta mb-4">
+        Pages Search Console's Page indexing report lists as not indexed (report
+        last updated {day(g.indexing.lastUpdated ?? g.checkedOn, "D MMM YYYY")},
+        read {day(g.checkedOn)}), then pages published or updated after that.
+        Hub and listing pages come first, because they link everything else.
+        Search Console allows about 10 indexing requests a day.
+      </p>
+      <p class="meta mb-4">
+        <strong>Inspect</strong> copies the page's full URL and opens Search Console:
+        paste it into the "Inspect any URL" bar at the top (Ctrl+V or ⌘V, then Enter)
+        and click <em>Request indexing</em>.
+      </p>
+      <h3 class="h3 mb-2">Request today ({requestToday.length})</h3>
+      {
+        requestToday.length ? (
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <>
+                    <th>Page</th>
+                    <th>Why</th>
+                    <th>Since</th>
+                    <th>Inspect</th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {requestToday.map(i => (
+                  <tr>
+                    <td>
+                      <a href={i.path} title={`Open ${i.path} on the site`}>
+                        {i.path}
+                      </a>
+                    </td>
+                    <td>{i.why}</td>
+                    <td class="whitespace-nowrap">{day(i.since)}</td>
+                    <td>
+                      <a
+                        href={gscPropertyUrl()}
+                        rel="noopener"
+                        target="_blank"
+                        data-copy={siteUrl(i.path)}
+                        title={`Copy ${siteUrl(i.path)} and open Google Search Console to inspect it`}
+                      >
+                        Inspect
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>Nothing waiting: every page was indexed or requested.</p>
+        )
+      }
+      {
+        indexLater.length > 0 && (
+          <details class="mt-3">
+            <summary class="meta cursor-pointer">
+              {indexLater.length} more for the following days
+            </summary>
+            <ul class="mt-2 text-sm">
+              {indexLater.map(i => (
+                <li>
+                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                    {i.path}
+                  </a>{" "}
+                  <span class="meta">
+                    {i.why}, {day(i.since)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      {
+        requested.length > 0 && (
+          <details class="mt-3">
+            <summary class="meta cursor-pointer">
+              {requested.length} already requested, waiting for Google
+            </summary>
+            <ul class="mt-2 text-sm">
+              {requested.map(i => (
+                <li>
+                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                    {i.path}
+                  </a>{" "}
+                  <span class="meta">requested {day(i.requestedOn)}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      {
+        g.indexing.reasons.length > 0 && (
+          <>
+            <h3 class="h3 mt-6 mb-2">Why pages aren't indexed</h3>
+            <ul class="text-sm">
+              {g.indexing.reasons.map(r => (
+                <li>
+                  <strong>{r.reason}</strong>: {r.urls.length}{" "}
+                  {r.urls.length === 1 ? "page" : "pages"}
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      <h3 class="h3 mt-6 mb-2">Bing</h3>
+      <p class="meta mb-3">
+        {fmt(bing.clicks)} clicks and {fmt(bing.impressions)} impressions{
+          bing.from ? ` (${range(bing.from, bing.to)})` : ""
+        }. {bing.notes} New and changed posts reach Bing through IndexNow on each
+        deploy; unchanged pages are not re-sent.
+      </p>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>In Bing's index</dt>
+          <dd class="num">{fmt(bing.indexed)}</dd>
+          <dd class="meta">of {fmt(pages.size)} pages</dd>
+        </div>
+        <div class="tile">
+          <dt>Crawled by Bing</dt>
+          <dd class="num">{fmt(bing.crawl?.crawledPages)}</dd>
+          <dd class="meta">
+            {bing.crawl ? "on " + day(bing.crawl.date) : "no crawl data yet"}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Crawl errors</dt>
+          <dd class="num">{fmt(bing.crawl?.crawlErrors)}</dd>
+          <dd class="meta">
+            {
+              bing.crawl
+                ? "4xx " +
+                  fmt(bing.crawl.code4xx) +
+                  ", 5xx " +
+                  fmt(bing.crawl.code5xx) +
+                  ", timeouts " +
+                  fmt(bing.crawl.timeouts)
+                : "–"
+            }
+          </dd>
+        </div>
+        <div class="tile">
+          <dt>Blocked by robots.txt</dt>
+          <dd class="num">{fmt(bing.crawl?.blockedByRobots)}</dd>
+          <dd class="meta">
+            {bing.crawl ? fmt(bing.crawl.inLinks) + " links in" : "–"}
+          </dd>
+        </div>
+      </dl>
+      {
+        bing.sitemaps && (
+          <>
+            <h4 class="mt-4 mb-1 font-semibold">Sitemaps Bing knows</h4>
+            {bing.sitemaps.length ? (
+              <ul class="text-sm">
+                {bing.sitemaps.map(f => (
+                  <li>
+                    <strong>{f.url}</strong>{" "}
+                    <span class="meta">
+                      {[
+                        f.status,
+                        f.urlCount !== null ? fmt(f.urlCount) + " URLs" : "",
+                        f.submitted ? "submitted " + day(f.submitted) : "",
+                        f.lastCrawled ? "read " + day(f.lastCrawled) : "",
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p class="text-sm">
+                {bing.actions?.length
+                  ? bing.actions.join(" ")
+                  : "None yet. The next refresh submits the sitemap to Bing."}
+              </p>
+            )}
+          </>
+        )
+      }
+      {
+        bing.issues && bing.issues.length > 0 && (
+          <>
+            <h4 class="mt-4 mb-1 font-semibold">Pages Bing had trouble with</h4>
+            <ul class="text-sm">
+              {bing.issues.map(i => (
+                <li>
+                  {i.url.replace(/^https?:\/\/(www\.)?urielpapa\.com/i, "") ||
+                    "/"}{" "}
+                  <span class="meta">
+                    {i.issues}
+                    {i.httpCode ? " (HTTP " + i.httpCode + ")" : ""}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+      {
+        bing.history && bing.history.length > 1 && (
+          <p class="meta mt-4">
+            Index trend:{" "}
+            {bing.history
+              .slice(-10)
+              .map(h => day(h.date) + " " + fmt(h.inIndex))
+              .join(" · ")}
+          </p>
+        )
+      }
+    </section>
+
+    <section id="search" aria-labelledby="search-h" class="dash-section">
+      <h2 id="search-h" class="h2 mb-1">Search and keywords</h2>
+      <p class="meta mb-4">
+        Google Search Console, {range(perf.from, perf.to)}. Position is the
+        average; small numbers move a lot while the site is new.
+      </p>
+      <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="tile">
+          <dt>Clicks</dt><dd class="num">{fmt(perf.clicks)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Impressions</dt><dd class="num">{fmt(perf.impressions)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Click rate</dt><dd class="num">{pct(perf.ctr)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Average position</dt><dd class="num">{fmt(perf.position, 1)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Keywords with impressions</dt><dd class="num">{fmt(kw.total)}</dd>
+        </div>
+        <div class="tile">
+          <dt>In the top 3</dt><dd class="num">{fmt(kw.top3)}</dd>
+        </div>
+        <div class="tile">
+          <dt>In the top 10</dt><dd class="num">{fmt(kw.top10)}</dd>
+        </div>
+        <div class="tile">
+          <dt>Question keywords</dt><dd class="num">{fmt(kw.questions)}</dd>
+        </div>
+      </dl>
+
+      <h3 class="h3 mt-6 mb-2">Top keywords</h3>
+      {
+        kw.listed < kw.total && (
+          <p class="meta mb-2">
+            The snapshot holds the top {kw.listed} of {kw.total} keywords, so
+            the top 3, top 10 and question counts cover those rows.
+          </p>
+        )
+      }
+      {
+        kw.top.length ? (
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <>
+                    <th>Keyword</th>
+                    <th class="r">Clicks</th>
+                    <th class="r">Impressions</th>
+                    <th class="r">CTR</th>
+                    <th class="r">Position</th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {kw.top.map(q => (
+                  <tr>
+                    <td>{q.query}</td>
+                    <td class="r">{fmt(q.clicks)}</td>
+                    <td class="r">{fmt(q.impressions)}</td>
+                    <td class="r">{pct(q.ctr)}</td>
+                    <td class="r">{fmt(q.position, 1)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>No keyword rows in the snapshot yet.</p>
+        )
+      }
+      {
+        kw.striking.length > 0 && (
+          <>
+            <h3 class="h3 mt-6 mb-2">Close to page one</h3>
+            <p class="meta mb-2">
+              Keywords at positions 8 to 20: a better title, a direct answer
+              near the top or one more internal link can move these.
+            </p>
+            <ul class="text-sm">
+              {kw.striking.slice(0, 10).map(q => (
+                <li>
+                  <strong>{q.query}</strong>{" "}
+                  <span class="meta">
+                    position {fmt(q.position, 1)}, {fmt(q.impressions)}{" "}
+                    impressions
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+
+      <h3 class="h3 mt-6 mb-2">Top pages</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Page</th><th class="r">Clicks</th><th class="r"
+                >Impressions</th
+              ><th class="r">Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              [...perf.pages]
+                .sort((a, b) => b.impressions - a.impressions)
+                .slice(0, 15)
+                .map(p => (
+                  <tr>
+                    <td>
+                      <a href={p.path} title={`Open ${p.path} on the site`}>
+                        {p.path}
+                      </a>
+                    </td>
+                    <td class="r">{fmt(p.clicks)}</td>
+                    <td class="r">{fmt(p.impressions)}</td>
+                    <td class="r">{fmt(p.position, 1)}</td>
+                  </tr>
+                ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="behavior" aria-labelledby="behavior-h" class="dash-section">
+      <h2 id="behavior-h" class="h2 mb-1">Visitor behavior</h2>
+      {
+        clarity ? (
+          <>
+            <p class="meta mb-4">
+              Microsoft Clarity, the last {clarity.days} days to{" "}
+              {day(clarity.checkedOn, "D MMM YYYY")}. Clarity only gives out the
+              last 3 days and 10 reads a day, so each refresh replaces these
+              numbers.
+              {clarityUrl && (
+                <>
+                  {" "}
+                  <a
+                    href={clarityUrl}
+                    title="Open the urielpapa.com project in Microsoft Clarity for heatmaps and session recordings"
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    Heatmaps and recordings in Clarity
+                  </a>
+                  .
+                </>
+              )}
+            </p>
+            <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div class="tile">
+                <dt>Sessions</dt>
+                <dd class="num">{fmt(claritySessions)}</dd>
+                <dd class="meta">
+                  plus {fmt(clarityTraffic.totalBotSessionCount)} bot sessions
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Visitors</dt>
+                <dd class="num">
+                  {fmt(
+                    clarityTraffic.distinctUserCount ??
+                      clarityTraffic.distantUserCount
+                  )}
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Pages per session</dt>
+                <dd class="num">
+                  {fmt(clarityTraffic.PagesPerSessionPercentage, 2)}
+                </dd>
+              </div>
+              <div class="tile">
+                <dt>Devices</dt>
+                <dd class="num">{fmt(clarity.devices.length)}</dd>
+                <dd class="meta">
+                  {clarity.devices
+                    .slice(0, 3)
+                    .map(d => d.device + " " + fmt(d.sessions))
+                    .join(", ") || "–"}
+                </dd>
+              </div>
+            </dl>
+
+            <h3 class="h3 mt-6 mb-2">Behavior signals</h3>
+            <p class="meta mb-2">
+              Rage clicks, dead clicks, quick backs and errors point at pages
+              where visitors got stuck. Open those pages in Clarity's heatmaps.
+            </p>
+            {claritySignals.length ? (
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Numbers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {claritySignals.map(m => (
+                      <tr>
+                        <td>{fieldLabel(m.name)}</td>
+                        <td class="meta">
+                          {Object.entries(m.values)
+                            .map(
+                              ([k, v]) =>
+                                fieldLabel(k) +
+                                " " +
+                                fmt(v, Number.isInteger(v) ? 0 : 1)
+                            )
+                            .join(" · ") || "–"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No behavior signals in this snapshot.</p>
+            )}
+
+            <h3 class="h3 mt-6 mb-2">Most visited pages</h3>
+            {clarity.pages.length ? (
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Page</th>
+                      <th class="r">Sessions</th>
+                      <th class="r">Visitors</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clarity.pages.map(p => (
+                      <tr>
+                        <td>
+                          {p.url.replace(
+                            /^https?:\/\/(www\.)?urielpapa\.com/i,
+                            ""
+                          ) || "/"}
+                        </td>
+                        <td class="r">{fmt(p.sessions)}</td>
+                        <td class="r">{fmt(p.users)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No page visits recorded in the last 3 days.</p>
+            )}
+          </>
+        ) : (
+          <p class="max-w-read">
+            Microsoft Clarity is installed on the site
+            {CLARITY_PROJECT_ID ? ` (project ${CLARITY_PROJECT_ID})` : ""}. Its
+            numbers show here after a refresh, once CLARITY_API_TOKEN is set in
+            Vercel (Clarity, Settings, Data export).
+            {clarityUrl && (
+              <>
+                {" "}
+                <a
+                  href={clarityUrl}
+                  title="Open the urielpapa.com project in Microsoft Clarity for heatmaps and session recordings"
+                  rel="noopener"
+                  target="_blank"
+                >
+                  Open Clarity
+                </a>
+                .
+              </>
+            )}
+          </p>
+        )
+      }
+    </section>
+
+    <section id="coverage" aria-labelledby="coverage-h" class="dash-section">
+      <h2 id="coverage-h" class="h2 mb-1">Topic coverage</h2>
+      <p class="meta mb-4">
+        Long-form posts per topic hub against the target in
+        <code>docs/content-plan.md</code>. News takes support a hub but don't
+        count toward it.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Topic</th><th class="r">Long-form</th><th class="r">Drafts</th
+              ><th class="r">News</th><th class="r">Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              coverage.map(h => (
+                <tr>
+                  <td>
+                    <a
+                      href={`/topics/${h.id}`}
+                      title={`Open the ${h.name} topic page`}
+                    >
+                      {h.name}
+                    </a>
+                  </td>
+                  <td class="r">{h.longForm}</td>
+                  <td class="r">{h.drafts}</td>
+                  <td class="r">{h.news}</td>
+                  <td class="r">{h.target || "–"}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="h3 mt-6 mb-2">Refresh next</h3>
+      <p class="meta mb-2">
+        Long-form posts with the oldest last update. Each is due a refresh (a
+        current example, a checked fact, a new internal link) every 3 months.
+      </p>
+      <ul class="text-sm">
+        {
+          refresh.map(r => (
+            <li>
+              <a href={r.url} title={`Read ${r.title}`}>
+                {r.title}
+              </a>{" "}
+              <span class="meta">
+                updated {day(r.last)}, refresh by {day(r.due, "D MMM YYYY")}
+                {r.overdue && " (due now)"}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  // "Inspect" links copy the page URL so it can be pasted into Search
+  // Console's inspect bar; the link itself still opens Search Console.
+  document.addEventListener("click", event => {
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>(
+      "a[data-copy]"
+    );
+    if (!link?.dataset.copy) return;
+    navigator.clipboard?.writeText(link.dataset.copy).then(
+      () => {
+        link.textContent = "Inspect (URL copied)";
+      },
+      () => undefined
+    );
+  });
+</script>
+
+<script>
+  /*
+   * Progress bar for "Refresh search data". Step 1 streams the server's
+   * progress (Google sign-in, ~100 URL Inspections, Bing, saving to GitHub).
+   * Step 2 waits for Vercel to finish the redeploy that the save starts, by
+   * polling /deploy-version.json (a stamp written at every build, public and
+   * not behind the password, so the poll needs no credentials) until it
+   * changes. Without
+   * JavaScript the form still posts and the page comes back with a note.
+   */
+  type Line =
+    | { type: "step"; label: string; percent: number }
+    | {
+        type: "done";
+        status: "ok" | "partial" | "error";
+        note: string;
+        commit?: string;
+      };
+
+  const form = document.querySelector<HTMLFormElement>("form.refresh");
+  const box = form?.querySelector<HTMLElement>(".refresh-progress");
+  if (form && box) {
+    const button = form.querySelector<HTMLButtonElement>(
+      "button[type=submit]"
+    )!;
+    const bar = box.querySelector<HTMLElement>(".refresh-bar")!;
+    const label = box.querySelector<HTMLElement>("[data-label]")!;
+    const elapsed = box.querySelector<HTMLElement>("[data-elapsed]")!;
+    const detail = box.querySelector<HTMLElement>("[data-detail]")!;
+    const reload = box.querySelector<HTMLButtonElement>("[data-reload]")!;
+    /** The live build's stamp, or "" when it can't be read. */
+    const buildStamp = async () => {
+      try {
+        const res = await fetch("/deploy-version.json", { cache: "no-store" });
+        return res.ok
+          ? (((await res.json()) as { build?: string }).build ?? "")
+          : "";
+      } catch {
+        return "";
+      }
+    };
+    let startDeploy = "";
+    let timer = 0;
+
+    const set = (pct: number, text: string, state = "running") => {
+      const p = Math.max(0, Math.min(100, Math.round(pct)));
+      bar.style.setProperty("--pct", `${p}%`);
+      bar.setAttribute("aria-valuenow", String(p));
+      label.textContent = text;
+      box.dataset.state = state;
+    };
+    const clock = (from: number, suffix = "") => {
+      window.clearInterval(timer);
+      const tick = () => {
+        const s = Math.round((Date.now() - from) / 1000);
+        elapsed.textContent = `${s} s${suffix}`;
+      };
+      tick();
+      timer = window.setInterval(tick, 1000);
+      return () => Math.round((Date.now() - from) / 1000);
+    };
+    /** state: ok (green), warn (amber: saved, a source failed), error (red). */
+    const finish = (
+      state: "ok" | "warn" | "error",
+      text: string,
+      note = ""
+    ) => {
+      window.clearInterval(timer);
+      elapsed.textContent = (elapsed.textContent ?? "").replace(/ \(.*\)$/, "");
+      set(100, text, state);
+      detail.textContent = note;
+      button.disabled = false;
+      button.textContent =
+        state === "error" ? "Try again" : "Refresh search data";
+    };
+
+    reload.addEventListener("click", () => {
+      window.location.assign("/dashboard#search");
+    });
+
+    /* Step 2: wait for the redeploy that the GitHub commit starts. */
+    const waitForDeploy = async (note: string, partial: boolean) => {
+      const seconds = clock(Date.now());
+      detail.textContent = note;
+      if (!startDeploy) {
+        set(
+          100,
+          "Saved. The site is redeploying; reload in about 2 minutes.",
+          partial ? "warn" : "ok"
+        );
+        reload.hidden = false;
+        window.clearInterval(timer);
+        return;
+      }
+      while (seconds() < 360) {
+        const s = seconds();
+        set(
+          5 + Math.min(90, (s / 120) * 90),
+          "Step 2 of 2: the site is redeploying with the new numbers (about 2 minutes)"
+        );
+        await new Promise(r => window.setTimeout(r, 10_000));
+        try {
+          const id = await buildStamp();
+          if (id && id !== startDeploy) {
+            finish(
+              partial ? "warn" : "ok",
+              partial
+                ? "Done, but a source failed and kept its old numbers."
+                : "Done. The new numbers are live.",
+              note
+            );
+            reload.hidden = false;
+            return;
+          }
+        } catch {
+          /* A failed poll is retried on the next round. */
+        }
+      }
+      finish(
+        "warn",
+        "Saved, but the redeploy is taking longer than 6 minutes.",
+        "The numbers are saved on GitHub. Check the latest deployment in Vercel, then reload this page."
+      );
+      reload.hidden = false;
+    };
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      form.querySelector(".refresh-note")?.remove();
+      box.hidden = false;
+      reload.hidden = true;
+      detail.textContent = "";
+      button.disabled = true;
+      button.textContent = "Refreshing";
+      set(2, "Step 1 of 2: starting");
+      startDeploy = await buildStamp();
+      const seconds = clock(Date.now(), " (usually 30 to 60 s)");
+
+      // Until the server reports a step, creep along by time so the bar is
+      // never frozen; real steps take over as soon as they arrive.
+      let real = false;
+      const creep = window.setInterval(() => {
+        if (!real)
+          set(
+            Math.min(85, (seconds() / 60) * 85),
+            "Step 1 of 2: reading Google, Bing and Clarity"
+          );
+      }, 1000);
+
+      let result: Extract<Line, { type: "done" }> | undefined;
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/x-ndjson" },
+          cache: "no-store",
+        });
+        if (res.status === 401)
+          throw new Error(
+            "You're signed out (sign-ins last 12 hours). Reload the page, sign in again and retry."
+          );
+        if (!res.ok || !res.body)
+          throw new Error(
+            `The server answered ${res.status} ${res.statusText}.`
+          );
+        const reader = res.body
+          .pipeThrough(new TextDecoderStream())
+          .getReader();
+        let buffer = "";
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (value) buffer += value;
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+          for (const raw of lines) {
+            if (!raw.trim()) continue;
+            const line = JSON.parse(raw) as Line;
+            if (line.type === "step") {
+              real = true;
+              set(line.percent, `Step 1 of 2: ${line.label}`);
+            } else result = line;
+          }
+          if (done) break;
+        }
+      } catch (error) {
+        window.clearInterval(creep);
+        finish(
+          "error",
+          "Refresh failed.",
+          error instanceof Error ? error.message : String(error)
+        );
+        return;
+      }
+      window.clearInterval(creep);
+      if (!result)
+        finish(
+          "error",
+          "Refresh stopped without an answer.",
+          `It ran for ${seconds()} s. Vercel stops it at 60 s, so it probably ran out of time. Try again; if it keeps happening, tell Claude.`
+        );
+      else if (result.status === "error")
+        finish("error", "Refresh failed.", result.note);
+      else {
+        button.textContent = "Saved";
+        await waitForDeploy(result.note, result.status === "partial");
+      }
+    });
+  }
+</script>
+
+<style>
+  .dash-section {
+    border-top: 1px solid var(--border);
+    padding-block: 2rem;
+    scroll-margin-top: 1rem;
+  }
+  .account {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .account button {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .refresh {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+  }
+  .refresh p {
+    flex: 1 1 18rem;
+    margin: 0;
+  }
+  .refresh button {
+    border: 1px solid var(--foreground);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    background: var(--foreground);
+    color: var(--background);
+    cursor: pointer;
+  }
+  .refresh button:disabled {
+    background: transparent;
+    color: var(--muted-foreground);
+    border-color: var(--border);
+    cursor: not-allowed;
+  }
+  .refresh-progress {
+    --ok: #15803d;
+    --warn: #b45309;
+    --bad: #b91c1c;
+    flex-basis: 100%;
+    display: grid;
+    gap: 0.375rem;
+  }
+  :global([data-theme="dark"]) .refresh-progress {
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+  }
+  .refresh-progress[hidden] {
+    display: none;
+  }
+  .refresh-bar {
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .refresh-bar span {
+    display: block;
+    height: 100%;
+    width: var(--pct, 0%);
+    background: var(--foreground);
+    transition: width 0.4s ease;
+  }
+  .refresh-progress[data-state="ok"] .refresh-bar span {
+    background: var(--ok);
+  }
+  .refresh-progress[data-state="error"] .refresh-bar span {
+    background: var(--bad);
+  }
+  .refresh-progress[data-state="warn"] .refresh-bar span {
+    background: var(--warn);
+  }
+  .refresh-progress[data-state="warn"] [data-label] {
+    color: var(--warn);
+  }
+  .refresh-progress[data-state="ok"] [data-label] {
+    color: var(--ok);
+  }
+  .refresh-progress[data-state="error"] [data-label] {
+    color: var(--bad);
+  }
+  .refresh-progress p {
+    margin: 0;
+  }
+  .refresh-status [data-elapsed] {
+    margin-left: 0.5rem;
+  }
+  .refresh-detail:empty {
+    display: none;
+  }
+  .refresh .refresh-reload {
+    justify-self: start;
+  }
+  .refresh-note {
+    flex-basis: 100% !important;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  .tile {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.875rem 1rem;
+    min-width: 0;
+  }
+  .tile dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+  .num {
+    font-family: var(--ff-display);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.25rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .table-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+  /* On phones, wide text tables (run log, queue) become one card per row:
+     the short cells share a line and the long ones get the full width. */
+  @media (max-width: 40rem) {
+    table.stack thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    table.stack,
+    table.stack tbody {
+      display: block;
+    }
+    table.stack tr {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 1rem;
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    table.stack td {
+      border: 0;
+      padding: 0.125rem 0;
+    }
+    table.stack td.wide {
+      grid-column: 1 / -1;
+    }
+    table.stack td:empty {
+      display: none;
+    }
+  }
+  .r {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .status {
+    display: inline-block;
+    width: 1.1em;
+    text-align: center;
+    font-weight: 700;
+  }
+  tr[data-status="failed"] td,
+  tr[data-status="no-run"] td {
+    font-weight: 600;
+  }
+  .issues {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+  .issues li {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) 4.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  @media (max-width: 640px) {
+    .issues li {
+      grid-template-columns: 1fr auto;
+    }
+    .issues li > :last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  .chart {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+  .chart-max {
+    position: absolute;
+    left: 0;
+    top: -0.4rem;
+  }
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 10rem;
+    border-bottom: 1px solid var(--muted-foreground);
+  }
+  .bars li {
+    position: relative;
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    outline-offset: 2px;
+  }
+  .bars li::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: max(var(--h), 0px);
+    background: var(--foreground);
+    border-radius: 4px 4px 0 0;
+  }
+  .bars li.empty::before {
+    height: 0;
+  }
+  .bars li:hover::before,
+  .bars li:focus-visible::before {
+    opacity: 0.7;
+  }
+  .bars li:hover::after,
+  .bars li:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 0.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--foreground);
+    color: var(--background);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .bars li:first-child:hover::after,
+  .bars li:first-child:focus-visible::after {
+    left: 0;
+    transform: none;
+  }
+  .bars li:last-child:hover::after,
+  .bars li:last-child:focus-visible::after {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+  .chart-axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.25rem;
+  }
+</style>

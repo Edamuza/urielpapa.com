@@ -1,7 +1,11 @@
 ---
 /**
  * Plerdy heatmaps and session analytics (site hash 6cae3291…, suid 82781).
- * The snippet is Plerdy's own, kept as supplied (var changed to const for the linter); it loads its script async.
+ * Plerdy's own snippet, unchanged except that it now loads on the visitor's
+ * first scroll, tap or key press instead of during page load. Its tracker
+ * measures the whole page as it starts (Lighthouse flagged ~60 ms of forced
+ * reflow), and clicks and scrolls, which heatmaps record, only happen after
+ * an interaction anyway.
  */
 ---
 
@@ -13,11 +17,19 @@
     w._protocol = w.location.protocol == "https:" ? "https://" : "http://";
     w._site_hash_code = "6cae3291ef79a17750d3be1d7df6376d";
     w._suid = 82781;
-    const s = d.createElement("script");
-    s.async = true;
-    s.referrerPolicy = "strict-origin-when-cross-origin";
-    s.src = "https://a.plerdy.com/public/js/click/main.js?v=" + Math.random();
-    d.head.appendChild(s);
+    let loaded = false;
+    const load = () => {
+      if (loaded) return;
+      loaded = true;
+      const s = d.createElement("script");
+      s.async = true;
+      s.referrerPolicy = "strict-origin-when-cross-origin";
+      s.src = "https://a.plerdy.com/public/js/click/main.js?v=" + Math.random();
+      d.head.appendChild(s);
+    };
+    ["scroll", "pointerdown", "keydown", "touchstart"].forEach(e =>
+      w.addEventListener(e, load, { once: true, passive: true })
+    );
   })(window, document);
 </script>
 <!-- END PLERDY CODE -->

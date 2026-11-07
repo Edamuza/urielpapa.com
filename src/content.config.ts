@@ -144,6 +144,8 @@ const projects = defineCollection({
       stack: z.array(reference("stack")).default([]),
       hubs: z.array(z.enum(HUB_IDS)).default([]),
       order: z.number().default(100),
+      // Shown as a large card at the top of the Projects sections on the home and projects pages.
+      featured: z.boolean().default(false),
       draft: z.boolean().default(false),
       // GitHub repository shown as a card on the project page, as "owner/name".
       repo: z

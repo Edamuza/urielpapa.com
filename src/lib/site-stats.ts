@@ -25,10 +25,11 @@ const NOT_IN_SITEMAP = [
   "/search",
   "/contact/thanks",
   "/newsletter/thanks",
+  "/dashboard",
 ];
 
-/** Public pages, counted at build the way the sitemap lists them. */
-export async function countPages(): Promise<number> {
+/** Public pages, listed the way the sitemap lists them. */
+export async function listPages(): Promise<Set<string>> {
   const paths = new Set<string>();
   // Fixed pages: every .astro file in src/pages without a [param] in its path.
   for (const file of Object.keys(import.meta.glob("/src/pages/**/*.astro"))) {
@@ -38,7 +39,9 @@ export async function countPages(): Promise<number> {
         .replace(/^\/src\/pages/, "")
         .replace(/\.astro$/, "")
         .replace(/\/index$/, "") || "/";
-    if (!NOT_IN_SITEMAP.includes(path)) paths.add(path);
+    // The private dashboard (and its sign-in page) is never a public page.
+    if (!NOT_IN_SITEMAP.includes(path) && !path.startsWith("/dashboard"))
+      paths.add(path);
   }
   for (const p of await getAllBlogEntries()) paths.add(postUrl(p));
   for (const n of await getNotes()) paths.add(noteUrl(n));
@@ -53,7 +56,12 @@ export async function countPages(): Promise<number> {
   for (const [base, total] of listings)
     for (let page = 2; page <= pageCount(total); page++)
       paths.add(pageHref(base, page));
-  return paths.size;
+  return paths;
+}
+
+/** Public pages, counted at build the way the sitemap lists them. */
+export async function countPages(): Promise<number> {
+  return (await listPages()).size;
 }
 
 /** Whole days from launch to today in Manila, where the site is published. */

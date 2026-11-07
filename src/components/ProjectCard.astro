@@ -20,8 +20,8 @@ const { href, title, summary, liveUrl, cover, coverAlt } = Astro.props;
     title={title}
     src={cover}
     alt={coverAlt}
-    widths={[400, 640, 960]}
-    sizes="(min-width: 1024px) 24rem, (min-width: 640px) 45vw, 100vw"
+    widths={[400, 560, 720, 800, 960]}
+    sizes="(min-width: 1024px) 24rem, (min-width: 640px) calc(50vw - 2rem), calc(100vw - 2rem)"
     class="border-border w-full border-b text-4xl"
   />
   <div class="flex flex-1 flex-col p-4">

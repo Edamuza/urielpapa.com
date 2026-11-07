@@ -31,6 +31,7 @@ const SITEMAP_EXCLUDE = [
   "/keystatic",
   "/preview",
   "/404",
+  "/dashboard",
 ];
 
 /** Last-changed date per content URL, for the sitemap's lastmod. */
@@ -103,7 +104,8 @@ export default defineConfig({
   // The stylesheet is about 10 KB compressed, so inlining it saves a
   // render-blocking request on every first visit.
   build: { inlineStylesheets: "always" },
-  adapter: vercel(),
+  // The dashboard's search refresh inspects every page in Search Console, which takes a while.
+  adapter: vercel({ maxDuration: 60 }),
   integrations: [
     mdx(),
     react(),
@@ -223,6 +225,54 @@ export default defineConfig({
         access: "secret",
         context: "server",
         default: "urielpapa.com <contact@urielpapa.com>",
+      }),
+      /** Fallback password for the private /dashboard page, used only while Google sign-in (below) is not set up. With neither, the page is a 404 in production. */
+      DASHBOARD_PASSWORD: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: OAuth client ID (Google Cloud, Google Auth Platform, Clients, Web application). */
+      DASHBOARD_GOOGLE_CLIENT_ID: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: that OAuth client's secret. Also signs the session cookie. */
+      DASHBOARD_GOOGLE_CLIENT_SECRET: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard Google sign-in: the Google account email(s) allowed in, comma-separated. */
+      DASHBOARD_EMAILS: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": a Google service account key (JSON) with read access to the Search Console property. */
+      GSC_SERVICE_ACCOUNT_JSON: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": Bing Webmaster Tools API key. */
+      BING_WEBMASTER_API_KEY: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": GitHub token that can write this repo's contents, to save the snapshot. */
+      GITHUB_DATA_TOKEN: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      /** Dashboard "Refresh search data": Microsoft Clarity Data Export API token (Clarity, Settings, Data export). */
+      CLARITY_API_TOKEN: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
       }),
       BUTTONDOWN_API_KEY: envField.string({
         access: "secret",
