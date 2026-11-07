@@ -8,7 +8,7 @@ import { readdirSync, readFileSync } from "node:fs";
 
 const DIR = "src/content/blog";
 // The day the daily news take started to require photos and an X or Threads embed.
-const STANDARD_FROM = "2026-11-04";
+const STANDARD_FROM = "2026-11-08";
 
 const field = (front, name) =>
   front.match(new RegExp(`^${name}:\\s*['"]?([^'"\\n]*)`, "m"))?.[1].trim();
