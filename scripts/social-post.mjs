@@ -80,16 +80,21 @@ async function syndication(id) {
   // A long post (over 280 characters) arrives cut short here; FxTwitter has the full text.
   if (j.note_tweet) {
     const full = await fxtwitter(j.user.screen_name, id);
-    return { ...full, media: media.length ? media : full.media, card, via: "X's embed server, with the full text from FxTwitter" };
+    const fullCard = card && { ...card, url: full.links[card.url] ?? card.url };
+    return { ...full, media: media.length ? media : full.media, card: fullCard, via: "X's embed server, with the full text from FxTwitter" };
   }
   return { author: j.user.name, handle: j.user.screen_name, date: utcDate(j.created_at), text, media, card, via: "X's embed server" };
 }
+
+const expand = (text, links) => Object.entries(links).reduce((out, [short, long]) => out.split(short).join(long), text);
 
 /** FxTwitter: the same post through a public mirror of X's API. */
 async function fxtwitter(handle, id) {
   const j = await get(`https://api.fxtwitter.com/${handle}/status/${id}`);
   const t = j?.tweet;
   if (!t?.text) throw new Error(j?.message || "FxTwitter returned no post");
+  // Short t.co links mapped to where they lead.
+  const links = Object.fromEntries((t.raw_text?.facets ?? []).filter(f => f.type === "url" && f.replacement).map(f => [f.original, f.replacement]));
   const media = (t.media?.all ?? []).slice(0, 4).map(m => ({
     type: m.type === "photo" ? "photo" : "video",
     src: m.type === "photo" ? m.url : m.thumbnail_url,
@@ -101,8 +106,9 @@ async function fxtwitter(handle, id) {
     author: t.author.name,
     handle: t.author.screen_name,
     date: utcDate(t.created_timestamp ?? t.created_at),
-    text: t.raw_text?.text ?? t.text,
+    text: expand(t.raw_text?.text ?? t.text, links),
     media,
+    links,
     via: "FxTwitter",
   };
 }
