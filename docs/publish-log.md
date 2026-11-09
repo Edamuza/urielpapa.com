@@ -25,3 +25,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-06 | news | warning | openai-gpt-image-2-6-gif-svg | No photos (Wikimedia Commons unreachable) and no embed (no verifiable post found).
 - 2026-11-07 | news | warning | meta-acquires-conductor-agents | No photos (Wikimedia Commons unreachable) and no embed (no verifiable post found).
 - 2026-11-08 | news | published | meta-muse-spaces-small-business |
+- 2026-11-09 | news | published | nvidia-board-investigation-jensen-huang |
