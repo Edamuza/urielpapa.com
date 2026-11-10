@@ -309,6 +309,7 @@ export default config({
         hubs: fields.multiselect({ label: "Related topic hubs", options: hubOptions }),
         order: fields.integer({ label: "Order in list", defaultValue: 100 }),
         featured: fields.checkbox({ label: "Featured", description: "Show it as a large card at the top of the Projects sections on the home and projects pages.", defaultValue: false }),
+        showOnHome: fields.checkbox({ label: "Show on the home page", description: "Untick for agency work that should only appear on the projects page. The home page shows the top 5 ticked projects, featured first.", defaultValue: true }),
         draft: fields.checkbox({ label: "Draft", defaultValue: false }),
         repo: fields.text({ label: "GitHub repository", description: 'Shown as a card on the project page, as "owner/name", e.g. Edamuza/Travel_Ease.' }),
         cover: fields.image({ label: "Featured image", description: "Required. Shown on the project cards.", directory: "src/assets/images/content", publicPath: "../../assets/images/content/", validation: { isRequired: true } }),
