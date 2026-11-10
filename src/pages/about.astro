@@ -1,7 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
-import Avatar from "@/components/Avatar.astro";
 import SocialIcon from "@/components/SocialIcon.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import { SITE, SOCIALS } from "@/config";
@@ -12,6 +11,8 @@ import { getHubs } from "@/utils/content";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
 const hubs = await getHubs();
+// The line on the portrait: job title, city and country.
+const [city, country] = SITE.location.split(", ");
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -45,12 +46,37 @@ const schema = [
 >
   <div class="app-layout max-w-read pt-8">
     <Breadcrumbs crumbs={crumbs} />
-    <div class="flex items-center gap-4">
-      <Avatar size={72} eager />
-      <h1 class="h1">About {SITE.name}</h1>
-    </div>
+    <h1 class="h1">About {SITE.name}</h1>
 
-    <div class="mt-6 space-y-4 text-lg">
+    {
+      /* The same floating cut-out portrait as the home page on phones: a
+        giant name behind it and the name and title over its bottom-left. */
+    }
+    <figure class="about-portrait">
+      <span class="about-portrait__bigname" aria-hidden="true">Uriel Papa</span>
+      <div class="about-portrait__float">
+        <img
+          src="/images/uriel-papa-portrait.webp"
+          srcset="/images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
+          sizes="(min-width: 640px) 290px, 230px"
+          width="1200"
+          height="1787"
+          alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
+          title="Uriel Papa"
+          loading="eager"
+          decoding="async"
+          class="about-portrait__img"
+        />
+      </div>
+      <figcaption>
+        <span class="block font-semibold">{SITE.name}</span>
+        <span class="text-muted-foreground block text-sm"
+          >{SITE.jobTitle}&nbsp;· {city}{country && `, ${country}`}</span
+        >
+      </figcaption>
+    </figure>
+
+    <div class="mt-8 space-y-4 text-lg">
       <p>
         <strong
           >I'm Uriel Papa, a builder and founder in the Philippines.</strong
@@ -174,3 +200,95 @@ const schema = [
     />
   </div>
 </Layout>
+
+<style>
+  /* Floating portrait: soft shadow, a gentle 6s bob that stops for reduced
+     motion, and the jacket fading out at the bottom under the caption. No
+     light outline or glow, so no white shows around it in dark mode. */
+  .about-portrait {
+    --portrait-h: clamp(300px, 52svh, 430px);
+    --portrait-shadow: rgb(0 0 0 / 0.18);
+    position: relative;
+    isolation: isolate;
+    margin: 1.25rem 0 0;
+    overflow-x: clip;
+  }
+  :global([data-theme="dark"]) .about-portrait {
+    --portrait-shadow: rgb(0 0 0 / 0.6);
+  }
+  .about-portrait__float {
+    position: relative;
+    z-index: 1;
+    width: fit-content;
+    margin-inline: auto;
+    animation: about-float 6s ease-in-out infinite;
+    filter: drop-shadow(0 24px 40px var(--portrait-shadow));
+  }
+  .about-portrait__img {
+    display: block;
+    width: auto;
+    height: var(--portrait-h);
+    mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  }
+  @keyframes about-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-portrait__float {
+      animation: none;
+    }
+  }
+  /* Giant "URIEL PAPA" behind the portrait: faint grey in light mode, a white
+     outline (no fill) in dark mode. */
+  .about-portrait__bigname {
+    position: absolute;
+    top: 6%;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    width: min-content;
+    margin-inline: auto;
+    font-family: var(--ff-display);
+    font-weight: 800;
+    font-size: min(29vw, calc(var(--portrait-h) * 0.4));
+    line-height: 0.82;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--foreground);
+    opacity: 0.1;
+    pointer-events: none;
+    user-select: none;
+  }
+  :global([data-theme="dark"]) .about-portrait__bigname {
+    /* An outline drawn with shadows rather than text-stroke, which would also
+       trace the font's overlapping inner contours. */
+    --o: rgb(255 255 255 / 0.5);
+    color: var(--background);
+    text-shadow:
+      1px 0 var(--o),
+      -1px 0 var(--o),
+      0 1px var(--o),
+      0 -1px var(--o),
+      1px 1px var(--o),
+      -1px -1px var(--o),
+      1px -1px var(--o),
+      -1px 1px var(--o);
+    opacity: 1;
+  }
+  .about-portrait figcaption {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    bottom: 0.25rem;
+  }
+  .about-portrait figcaption > span:first-child {
+    font-size: 1.25rem;
+  }
+</style>
