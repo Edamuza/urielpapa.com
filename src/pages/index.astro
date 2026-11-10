@@ -335,10 +335,11 @@ const [city, country] = SITE.location.split(", ");
   :global(.js) .intro-more:not(.is-open) {
     display: none;
   }
-  /* Hero portrait: a soft radial glow behind it (white in dark mode so the
-     black suit doesn't vanish into #0a0a0a), a faint light outline and a soft
-     shadow so it looks like it floats, and a gentle 6s bob that stops for
-     reduced motion. The jacket fades out at the bottom, right above the name. */
+  /* Hero portrait: a very soft radial glow behind it, a soft shadow so it
+     looks like it floats, and a gentle 6s bob that stops for reduced motion.
+     No light outline or strong white glow in dark mode, so no white shows
+     around it on the near-black background. The jacket fades out at the
+     bottom, right above the name. */
   .hero-portrait {
     --portrait-glow: rgb(0 0 0 / 0.07);
     --portrait-outline: rgb(0 0 0 / 0);
@@ -355,8 +356,8 @@ const [city, country] = SITE.location.split(", ");
     }
   }
   :global([data-theme="dark"]) .hero-portrait {
-    --portrait-glow: rgb(255 255 255 / 0.2);
-    --portrait-outline: rgb(255 255 255 / 0.35);
+    --portrait-glow: rgb(255 255 255 / 0.07);
+    --portrait-outline: rgb(255 255 255 / 0);
     --portrait-shadow: rgb(0 0 0 / 0.6);
   }
   .hero-portrait::before {
