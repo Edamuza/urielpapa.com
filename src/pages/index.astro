@@ -105,54 +105,70 @@ const [city, country] = SITE.location.split(", ");
       class="border-border border-b pt-6 pb-10 sm:py-14"
       aria-labelledby="intro-h"
     >
-      <div class="max-w-3xl">
-        <div class="mb-3 flex items-center gap-3 sm:mb-5">
-          <Avatar size={56} eager class="max-sm:size-10!" />
-          <p class="font-semibold">
-            {SITE.name}<span
-              class="text-muted-foreground block text-sm font-normal"
-              >{SITE.jobTitle} · {city}{
-                country && <span class="max-sm:hidden">, {country}</span>
-              }</span
-            >
+      <div
+        class="md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-10 lg:gap-16"
+      >
+        <div class="max-w-3xl">
+          <div class="mb-3 flex items-center gap-3 sm:mb-5">
+            {
+              /* Phones get the small photo by the name; wider screens get the big one on the right. */
+            }
+            <Avatar size={56} eager class="max-sm:size-10! md:hidden" />
+            <p class="font-semibold">
+              {SITE.name}<span
+                class="text-muted-foreground block text-sm font-normal"
+                >{SITE.jobTitle} · {city}{
+                  country && <span class="max-sm:hidden">, {country}</span>
+                }</span
+              >
+            </p>
+          </div>
+          <h1 id="intro-h" class="h1">
+            Uriel Papa: I&nbsp;see the problem. I&nbsp;build the solution.
+            I&nbsp;grow the business.
+          </h1>
+          <p class="max-w-read mt-4 text-lg sm:mt-5">
+            <strong
+              >I'm Uriel Papa, a builder and founder from the Philippines, and I
+              love technology.</strong
+            >{" "}
+            AI and programming are what excite me most, and I like finding out how
+            things really work. Here I share what I've learned and the mistakes I've
+            made as a founder, along with my takes on tech news and notes from seminars.
+          </p>
+          <button
+            type="button"
+            class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
+            aria-controls="intro-more"
+            aria-expanded="false"
+          >
+            See more
+          </button>
+          <p id="intro-more" class="intro-more max-w-read mt-4 text-lg">
+            That excitement comes down to a few simple things. Why technology?
+            It keeps changing what's possible, and I like being close to that.
+            Why programming? It lets me turn an idea into something people can
+            actually use, and seeing it work is my favorite part. Why AI? It's
+            changing how we build, learn and work faster than anyone can
+            predict, and I want to understand how it really works instead of
+            only using it. I'll be honest: I don't know what the future looks
+            like, for my own work or for society, and I love that. The
+            uncertainty is the exciting part, and I'd rather be in the middle of
+            it, learning out loud.
+          </p>
+          <p class="mt-6 flex flex-wrap gap-3">
+            <a href="/projects" class="btn btn-filled">See my projects</a>
+            <a href="/contact" class="btn">Contact me</a>
           </p>
         </div>
-        <h1 id="intro-h" class="h1">
-          Uriel Papa: I&nbsp;see the problem. I&nbsp;build the solution.
-          I&nbsp;grow the business.
-        </h1>
-        <p class="max-w-read mt-4 text-lg sm:mt-5">
-          <strong
-            >I'm Uriel Papa, a builder and founder from the Philippines, and I
-            love technology.</strong
-          >{" "}
-          AI and programming are what excite me most, and I like finding out how things
-          really work. Here I share what I've learned and the mistakes I've made as
-          a founder, along with my takes on tech news and notes from seminars.
-        </p>
-        <button
-          type="button"
-          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
-          aria-controls="intro-more"
-          aria-expanded="false"
-        >
-          See more
-        </button>
-        <p id="intro-more" class="intro-more max-w-read mt-4 text-lg">
-          That excitement comes down to a few simple things. Why technology? It
-          keeps changing what's possible, and I like being close to that. Why
-          programming? It lets me turn an idea into something people can
-          actually use, and seeing it work is my favorite part. Why AI? It's
-          changing how we build, learn and work faster than anyone can predict,
-          and I want to understand how it really works instead of only using it.
-          I'll be honest: I don't know what the future looks like, for my own
-          work or for society, and I love that. The uncertainty is the exciting
-          part, and I'd rather be in the middle of it, learning out loud.
-        </p>
-        <p class="mt-6 flex flex-wrap gap-3">
-          <a href="/projects" class="btn btn-filled">See my projects</a>
-          <a href="/contact" class="btn">Contact me</a>
-        </p>
+        <div class="border-border hidden rounded-full border p-2 md:block">
+          <Avatar
+            size={240}
+            eager
+            alt={`Portrait of ${SITE.name}, builder and founder from the Philippines`}
+            class="md:max-lg:size-[200px]!"
+          />
+        </div>
       </div>
     </section>
 
