@@ -403,8 +403,47 @@ const [city, country] = SITE.location.split(", ");
      title and both buttons are on the first screen. The text column flattens
      (display: contents) so its children can be reordered around the portrait,
      and the portrait's height follows the screen height. */
+  /* Giant "URIEL PAPA" behind the portrait: faint grey in light mode, a white
+     outline (no fill) in dark mode. */
   .hero-portrait__bigname {
-    display: none;
+    position: absolute;
+    top: 6%;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    width: min-content;
+    margin-inline: auto;
+    font-family: var(--ff-display);
+    font-weight: 800;
+    font-size: 6.5rem;
+    line-height: 0.82;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--foreground);
+    opacity: 0.1;
+    pointer-events: none;
+    user-select: none;
+  }
+  :global([data-theme="dark"]) .hero-portrait__bigname {
+    /* An outline drawn with shadows rather than text-stroke, which would also
+       trace the font's overlapping inner contours. */
+    --o: rgb(255 255 255 / 0.5);
+    color: var(--background);
+    text-shadow:
+      1px 0 var(--o),
+      -1px 0 var(--o),
+      0 1px var(--o),
+      0 -1px var(--o),
+      1px 1px var(--o),
+      -1px -1px var(--o),
+      1px -1px var(--o),
+      -1px 1px var(--o);
+    opacity: 1;
+  }
+  .hero-portrait__float {
+    position: relative;
+    z-index: 1;
   }
   @media (max-width: 1023px) {
     .hero-intro {
@@ -444,27 +483,9 @@ const [city, country] = SITE.location.split(", ");
       display: none;
     }
     .hero-portrait__bigname {
-      display: block;
-      position: absolute;
-      top: 6%;
-      left: 0;
-      right: 0;
-      z-index: 0;
-      width: min-content;
-      margin-inline: auto;
-      font-family: var(--ff-display);
-      font-weight: 800;
       font-size: min(29vw, calc(var(--portrait-h) * 0.4));
-      line-height: 0.82;
-      letter-spacing: -0.03em;
-      text-transform: uppercase;
-      text-align: center;
-      color: var(--foreground);
-      opacity: 0.1;
     }
     .hero-portrait__float {
-      position: relative;
-      z-index: 1;
       width: fit-content;
       margin-inline: auto;
       filter: drop-shadow(0 0 1px var(--portrait-outline));
