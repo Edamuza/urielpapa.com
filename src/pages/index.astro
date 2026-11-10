@@ -188,14 +188,6 @@ const [city, country] = SITE.location.split(", ");
                 )}
               </ul>
             </div>
-            <button
-              type="button"
-              class="carousel-toggle btn bg-background mt-4 min-h-9 px-3 py-1 text-sm"
-              aria-pressed="false"
-              data-carousel-toggle
-            >
-              Pause
-            </button>
           </div>
           <p class="mt-6 text-center">
             <a href="/projects" class="btn">
@@ -327,9 +319,10 @@ const [city, country] = SITE.location.split(", ");
     display: none;
   }
   /* Projects carousel: the list is rendered twice and the track slides left
-     by one copy's width, so the loop never shows a seam. It pauses on hover,
-     on keyboard focus and with the Pause button. With reduced motion it
-     doesn't move at all and scrolls by hand instead. */
+     by one copy's width, so the loop never shows a seam. It pauses while
+     someone interacts with a card: hover, keyboard focus, or a touch (which
+     the script turns into .is-paused for a few seconds). With reduced motion
+     it doesn't move at all and scrolls by hand instead. */
   .carousel-viewport {
     mask-image: linear-gradient(
       to right,
@@ -361,25 +354,38 @@ const [city, country] = SITE.location.split(", ");
     .carousel-track {
       animation: none;
     }
-    .carousel-track > :global([aria-hidden="true"]),
-    .carousel-toggle {
+    .carousel-track > :global([aria-hidden="true"]) {
       display: none;
     }
   }
 </style>
 
 <script>
+  // Touch screens have no hover, so a touch on the carousel pauses it and it
+  // starts moving again a few seconds after the finger lifts.
   document
     .querySelectorAll<HTMLElement>("[data-carousel]")
     .forEach(carousel => {
-      const button = carousel.querySelector<HTMLButtonElement>(
-        "[data-carousel-toggle]"
+      let resume: number | undefined;
+      carousel.addEventListener(
+        "touchstart",
+        () => {
+          window.clearTimeout(resume);
+          carousel.classList.add("is-paused");
+        },
+        { passive: true }
       );
-      button?.addEventListener("click", () => {
-        const paused = carousel.classList.toggle("is-paused");
-        button.setAttribute("aria-pressed", String(paused));
-        button.textContent = paused ? "Play" : "Pause";
-      });
+      carousel.addEventListener(
+        "touchend",
+        () => {
+          window.clearTimeout(resume);
+          resume = window.setTimeout(
+            () => carousel.classList.remove("is-paused"),
+            3000
+          );
+        },
+        { passive: true }
+      );
     });
 
   const more = document.getElementById("intro-more");
