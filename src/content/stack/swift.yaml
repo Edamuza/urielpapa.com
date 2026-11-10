@@ -1,0 +1,5 @@
+name: "Swift"
+group: languages-frameworks
+use: "Zeke's native Mac app, with its Dock badge and menu bar item, and the helper that opens and quits apps so they can update."
+url: https://www.swift.org
+order: 17

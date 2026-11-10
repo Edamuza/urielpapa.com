@@ -124,5 +124,16 @@
       "Compare LLMs on cost, speed and quality for one business task, and get a recommendation for the cheapest model that is good enough.",
       "Teams that add an LLM to a business process have to pick a model, and they usually ask \"which one, and what will it cost?\" The answer is often a guess, based on the largest model or a public leaderboard rather than their own task."
     ]
+  },
+  {
+    "repo": "Edamuza/zeke",
+    "description": null,
+    "language": "Python",
+    "license": "MIT",
+    "stars": 0,
+    "readme": [
+      "Every app, tool and library on your Mac — checked, secured and updated from one place.",
+      "Zeke is a small, local-first update and security center for macOS. It lists everything installed on your Mac — apps, Homebrew, npm, Ruby gems, Python packages, CLIs and macOS itself — tells you honestly what's up to date, what has a new version and what it can't tell, checks for known security problems, and updates things on a…"
+    ]
   }
 ]

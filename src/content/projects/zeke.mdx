@@ -1,0 +1,149 @@
+---
+title: Zeke
+seoTitle: "Zeke: Open-Source Mac Update and Security Center"
+updated: 2026-11-10
+description: An open-source update and security center for macOS that checks every app, tool and library on a Mac, flags known vulnerabilities and updates on your schedule.
+summary: >-
+  My Mac had apps, Homebrew packages, npm tools for several Node installs, Ruby gems and Python packages, each with its own updater and none of them telling me the whole story. I built Zeke, a local-first update and security center that lists all of it in one place, says honestly what's current, what's new and what it can't tell, checks for known vulnerabilities, and updates on a schedule I control. It runs on the Python that ships with macOS, with no account, no cloud and no telemetry.
+outcome: One local dashboard for 11 kinds of Mac software, with vulnerability checks, security-first update plans and no third-party dependencies.
+period: November 2026
+year: 2026
+role: Designed it and directed the AI agents that built and tested it
+team: Solo, with AI agents
+status: Open source, version 0.1.0 (early)
+kind: SoftwareApplication
+stack:
+  - python
+  - swift
+  - javascript
+  - homebrew
+hubs:
+  - tech-stacks
+  - automation
+order: 5.5
+draft: false
+cover: ../../assets/images/content/zeke-how-it-works.png
+coverAlt: "Diagram of how Zeke works: 11 sources on a Mac, from macOS and App Store apps to Homebrew, npm, Ruby gems and Python packages, feed one engine that gives every item one of three states, up to date, new version or can't tell, and runs security checks, leading to an update plan, Open and update for self-updating apps, and fixes shown as commands to copy, all behind a privacy ledger"
+repo: Edamuza/zeke
+---
+
+## Abstract: Zeke in brief
+
+A Mac collects software from many places. Apps come from the App Store, from downloads and from Homebrew. Developer tools come from npm, Ruby gems, Python and their own installers. Each has its own updater, and none of them tells you about the rest. I built Zeke, an open-source update and security center for macOS. It lists every app, tool and library in one place and gives each one of three honest states: up to date, new version, or can't tell. It checks installed versions against known vulnerabilities, puts security fixes first in its update plan, and never runs `sudo` or deletes anything. It runs on the Python that ships with macOS, with no account, no cloud and no telemetry.
+
+## The problem I saw: a dozen updaters and no single answer
+
+My Mac is where I build everything, from [the job and client CRM](/projects/job-client-crm) to this site. Over time it filled up with software that updates in different ways. Some apps update from the App Store, some only while they're open, and some never, because they were installed in a way that blocks their own updater. Homebrew handles its own packages. Each Node install keeps its own set of global npm tools. Ruby and Python keep their own libraries.
+
+So "is my Mac up to date?" had no single answer. I'd have to ask six tools, and some of them answer with silence. A check that fails quietly looks the same as a check that found nothing, and that's the worst outcome for security: you believe you're patched when you're not.
+
+The tools I depend on most are also the ones that need patching fastest. In September 2026, [OpenCode quietly fixed a critical flaw](/news/opencode-mcp-oauth-rce) with no security advisory, so vulnerability scanners wouldn't flag old installs. A plain "update everything" isn't safe either. In August 2026, [a hijacked keyv release spread a worm across npm](/news/keyv-npm-worm-supply-chain-attack), so blindly pulling the latest version can be the problem. I wanted one place that tells me the truth, puts real security fixes first, and lets me hold back anything I don't trust yet.
+
+## What the research says about patching and update checks
+
+**Unpatched software is a main way in.** Verizon's 2025 Data Breach Investigations Report, [as reported by Infosecurity Magazine](https://www.infosecurity-magazine.com/news/verizon-dbir-jump-vulnerability/), found that exploiting a vulnerability was the first step in 20% of breaches, up 34% from the year before. Only 54% of vulnerable edge devices were fully fixed, in a median of 32 days.
+
+**The default update check skips apps.** Homebrew's [command reference](https://docs.brew.sh/Manpage) says `brew outdated` only includes casks marked `auto_updates true` when you add `--greedy`. Those are apps that update themselves, so a plain check can call them current when they aren't. Zeke always runs the greedy check.
+
+**An empty scan isn't a clean bill of health.** Homebrew's own [vulnerability scanning guide](https://docs.brew.sh/Homebrew-Vulnerability-Management) says `brew vulns` checks formulae only, "not casks or every package installed by other tools". It also warns that no findings doesn't mean a device is free of vulnerabilities. That's why Zeke shows what each check covered and never shows a "secure" badge.
+
+**Self-updating apps need to be open.** Sparkle, the updater many Mac apps use, [downloads and installs updates in the background](https://sparkle-project.github.io/documentation/customization/) and checks once a day by default. An app you rarely open rarely gets that chance, which is why Zeke can open it for a moment and let its own updater work.
+
+## Why Zeke stays small, local and honest
+
+A tool that installs software is a tool an attacker would love to control. So I designed Zeke around a few rules.
+
+**Three states, never two.** Every item is up to date, has a new version, or can't be told. A collector that fails, a feed older than 14 days or a version that can't be parsed all become "can't tell", with the reason shown. The interface never says "secure"; no badge means "nothing known".
+
+**No new dependencies.** The engine runs on `/usr/bin/python3`, the Python that ships with macOS, using only its standard library. Upgrading or cleaning up Homebrew's Python can never break the tool that updates Homebrew. The dashboard is a single HTML file with no outside assets, and the Mac app and its helper are two small Swift programs.
+
+**Nothing privileged or destructive.** Zeke never runs `sudo`, never deletes files, never trusts a Homebrew tap for you and never unloads a launch item. When a fix needs one of those, it shows the exact command to copy.
+
+**A privacy ledger.** Every web request goes through one HTTP client, which refuses any host that isn't on a list of 7. Most of them are download only: the CISA exploited-vulnerability list, the SOFA macOS patch feed, the OSV vulnerability databases and Homebrew's app catalog. The App Store lookup sends the store IDs of your App Store apps to Apple. Anything that would send your package list to a third party, such as `brew vulns`, is off until you turn it on. The Security tab shows the ledger with the last contact for each entry.
+
+## What I built: one inventory, security checks and safe updates
+
+![Diagram of how Zeke works: 11 sources on a Mac, from macOS and App Store apps to Homebrew, npm, Ruby gems and Python packages, feed one engine that gives every item one of three states, up to date, new version or can't tell, and runs security checks, leading to an update plan, Open and update for self-updating apps, and fixes shown as commands to copy, all behind a privacy ledger](../../assets/images/content/zeke-how-it-works.png)
+
+Zeke reads 11 kinds of software and knows where each one's latest version comes from:
+
+| Source | Where "latest" comes from | How it updates |
+| --- | --- | --- |
+| macOS | `softwareupdate` | Opens Software Update, never automatic |
+| App Store apps, including iPhone and iPad apps | Apple's lookup, in your Mac's region | Opens App Store updates |
+| Other apps in /Applications | Homebrew's public app catalog, matched by name | Open and update |
+| Homebrew formulae and casks | `brew outdated --greedy` | `brew upgrade` |
+| npm globals, for every Node install it finds | `npm outdated -g` | `npm install -g` with that install's own npm |
+| Ruby gems, Python packages and uv tools | Their own tools | Their own tools, Python only when you click |
+| Claude Code, opencode and uv | npm registry, PyPI or their own updater | Their own self-updaters |
+
+The security checks run on every scan:
+
+- **Known vulnerabilities** in every installed version of each Ruby gem and Python package, matched on the Mac against the OSV database and flagged red when CISA lists the flaw as actively exploited.
+- **macOS patch level** from the SOFA feed, marked urgent when the newer release fixes exploited flaws.
+- **Mac protections**: FileVault, System Integrity Protection, Gatekeeper, the firewall, automatic security updates and XProtect.
+- **Homebrew lifecycle**: deprecated and soon-to-be-disabled packages, with the replacement Homebrew suggests.
+- **Background launch items** that point to deleted programs, or that appeared since last week.
+- **Apps that can't update themselves**, for example because a `sudo` install left them owned by root, with the one-line fix.
+
+The dashboard has four tabs: Inventory, Security, Runs and logs, and Schedule. The native app wraps it in a window, adds a Dock badge with the number of updates, with "!" when something is urgent, and a menu bar item. Three background jobs handle the dashboard server, a daily auto-update and a weekly deep check. There's also a `zeke` command for the terminal.
+
+## How Zeke works: from scan to safe update
+
+1. **Scan.** The engine asks every source what's installed and what's newest, then runs the security checks. Each collector records whether it worked, so a failure shows up as "can't tell" with its error.
+2. **Plan.** "Update everything" shows its plan before it runs. Items with an open vulnerability go first, grouped by tool. Items you put on hold, and versions you chose to skip, are left out. Python packages, macOS and apps outside Homebrew are never included.
+3. **Run safely.** Commands run as argument lists with no shell, after `--`, and package names must pass a strict pattern. Only one run can happen at a time, because two `brew upgrade`s at once can deadlock. Every step records its exit status and full output, and you can stop a run.
+4. **Schedule.** The daily job runs only once a day, on Wi-Fi or Ethernet faster than 50 Mbps, and never on a phone hotspot. On a slow network it tries again after 1 hour, then 3 hours, then waits for the next day.
+5. **Notify.** After a run, Zeke scans again and posts a notification. The first scan after an upgrade sets a baseline and notifies nothing, so you aren't flooded.
+
+![Diagram of Zeke's Open and update flow in five steps: pre-check that the app's updater can write to its own bundle, open the app quietly in the background, wait for its update to download, quit it so the update installs, and verify the new version, with three tested results: a Squirrel app updated and closed in about 20 seconds, an already-open app updated and left open, and a root-owned app refused at once with the fix to copy](../../assets/images/content/zeke-open-and-update.png)
+
+**Open and update** handles the hardest case: apps outside Homebrew that only update while they're open and install when they quit. Zeke first checks that the app's updater can write to its own files. If it can't, Zeke doesn't open the app and shows the fix instead. Otherwise it opens the app in the background without stealing focus, watches the updater's download, quits the app normally so the update installs, and reads the version on disk again. An app you already had open is watched but never closed.
+
+The dashboard server is built for the same caution. It listens only on the Mac itself and rejects other host names, which blocks DNS rebinding. Every API request needs a per-install token that the page itself never contains, checked in constant time. No endpoint accepts a command, a path or a URL; updates only run from the engine's own command table, for items in the last scan. Advisory text from the feeds is treated as untrusted and escaped, under a strict Content-Security-Policy.
+
+## How I built and tested Zeke
+
+I started with a written spec, not code. It defines every source, the three status rules, the safety rules, the schedules, the server's security model and the security checks, along with numbered acceptance checks. Any change to how Zeke behaves has to change the spec in the same pull request. I then directed AI agents to build each part against that spec, the same way I built [InboxPilot](/projects/inboxpilot) and [the CRM](/projects/job-client-crm).
+
+Testing happened at three levels:
+
+- **Unit tests** cover version comparison for apps, gems and Python packages, vulnerability ranges, which findings count as urgent, and the update plan, including holds, security-first ordering and refusing unsafe package names. They use a temporary data folder, so they never touch a real install.
+- **Acceptance checks** in the spec cover what unit tests can't: a second run refused while one is busy, requests without a token or from another origin refused, malformed requests answered with an error instead of a crash, a finding titled with HTML shown as plain text, and a killed run marked as interrupted.
+- **Real-world runs** of Open and update on my own Mac: a Squirrel app updated and closed in about 20 seconds, an app that was already open updated and stayed open, a root-owned app was refused at once with the fix, and pressing Stop mid-run closed the app Zeke had opened.
+
+On every push, the repository's CI compiles the engine with the system Python, runs the unit tests, checks the shell scripts and background job templates, and builds the Mac app and helper on a macOS runner.
+
+The whole project is about 4,300 lines of code: about 2,900 of Python, 660 for the one-file dashboard, 500 of Swift and 200 of shell scripts.
+
+## Results: what Zeke does today
+
+- Lists 11 kinds of Mac software in one inventory, including every Node install's npm tools, which are easy to forget.
+- Gives every item an honest state, and shows "can't tell" with a reason instead of a false "up to date".
+- Checks every installed version of each Ruby gem and Python package against known vulnerabilities on the Mac itself, and flags the ones CISA lists as exploited.
+- A full scan with security checks takes about 6 seconds, and the security checks add about 1 second at most.
+- Updates in a plan with security fixes first, and respects holds and skipped versions.
+- Updates self-updating apps without me opening each one, and never closes an app I already had open.
+- Has no third-party dependencies, needs no account and sends no telemetry. It's released under the MIT license.
+
+## Limitations of Zeke
+
+Zeke is early. Version 0.1.0 was built and tested on Apple Silicon. It should work on Intel Macs, but that's less tested.
+
+The Mac app is ad-hoc signed when you build it from source, and there's no notarized download yet. You install it with `git clone` and `./install.sh`, which needs Xcode Command Line Tools.
+
+The "latest version" for apps outside Homebrew and the App Store comes from Homebrew's catalog matched by app name. When the version formats don't line up, Zeke says "can't tell" instead of guessing. Some apps download their update but wait for you to click their own "Restart to update" button; Zeke tells you when that happens.
+
+Some things aren't covered yet:
+
+- npm packages aren't checked for vulnerabilities, because that would mean sending package names to OSV.dev. It's planned as an opt-in.
+- Apps outside Homebrew have no reliable vulnerability source, so they get version checks only.
+- Commands run by brew, npm, gem, pip and Software Update make their own network requests, which Zeke can't restrict.
+
+## Sources
+
+1. [Verizon's DBIR Reveals 34% Jump in Vulnerability Exploitation](https://www.infosecurity-magazine.com/news/verizon-dbir-jump-vulnerability/), Infosecurity Magazine, on Verizon's 2025 Data Breach Investigations Report.
+2. [brew(1) command reference](https://docs.brew.sh/Manpage), Homebrew documentation, accessed November 2026.
+3. [Homebrew Vulnerability Scanning and Patch Management](https://docs.brew.sh/Homebrew-Vulnerability-Management), Homebrew documentation, accessed November 2026.
+4. [Customizing Sparkle](https://sparkle-project.github.io/documentation/customization/), Sparkle documentation, accessed November 2026.
+5. [Zeke on GitHub](https://github.com/Edamuza/zeke), including its spec, security policy and changelog.
