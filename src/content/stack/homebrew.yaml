@@ -1,0 +1,5 @@
+name: "Homebrew"
+group: infrastructure
+use: "Installing and updating my Mac's tools, and the app catalog Zeke uses to tell when an app has a new version."
+url: https://brew.sh
+order: 9
