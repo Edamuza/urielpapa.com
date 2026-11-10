@@ -102,10 +102,10 @@ const [city, country] = SITE.location.split(", ");
   }
   <div class="app-layout">
     <section
-      class="border-border border-b pt-6 pb-10 sm:py-14"
+      class="border-border border-b pt-6 pb-10 sm:py-14 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-10"
       aria-labelledby="intro-h"
     >
-      <div class="max-w-3xl">
+      <div class="max-w-3xl lg:self-center">
         <div class="mb-3 flex items-center gap-3 sm:mb-5">
           <Avatar size={56} eager class="max-sm:size-10!" />
           <p class="font-semibold">
@@ -154,6 +154,27 @@ const [city, country] = SITE.location.split(", ");
           <a href="/contact" class="btn">Contact me</a>
         </p>
       </div>
+      {
+        /* Floating cut-out portrait. Large screens only: phones already show the
+          avatar next to the name. It sits on the section's bottom border, so the
+          cropped jacket fades out there instead of ending on a hard line. */
+      }
+      <figure class="hero-portrait max-lg:hidden">
+        <div class="hero-portrait__float">
+          <img
+            src="/images/uriel-papa-portrait.webp"
+            srcset="/images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
+            sizes="360px"
+            width="1200"
+            height="1787"
+            alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
+            title="Uriel Papa"
+            loading="eager"
+            decoding="async"
+            class="hero-portrait__img"
+          />
+        </div>
+      </figure>
     </section>
 
     <SiteStats />
@@ -317,6 +338,64 @@ const [city, country] = SITE.location.split(", ");
   }
   :global(.js) .intro-more:not(.is-open) {
     display: none;
+  }
+  /* Hero portrait: a soft radial glow behind it (white in dark mode so the
+     black suit doesn't vanish into #0a0a0a), a faint light outline and a soft
+     shadow so it looks like it floats, and a gentle 6s bob that stops for
+     reduced motion. The bottom margin cancels the section's padding so the
+     faded jacket meets the border line. */
+  .hero-portrait {
+    --portrait-glow: rgb(0 0 0 / 0.07);
+    --portrait-outline: rgb(0 0 0 / 0);
+    --portrait-shadow: rgb(0 0 0 / 0.18);
+    position: relative;
+    isolation: isolate;
+    width: 360px;
+    margin: 0 0 -3.5rem;
+  }
+  :global([data-theme="dark"]) .hero-portrait {
+    --portrait-glow: rgb(255 255 255 / 0.2);
+    --portrait-outline: rgb(255 255 255 / 0.35);
+    --portrait-shadow: rgb(0 0 0 / 0.6);
+  }
+  .hero-portrait::before {
+    content: "";
+    position: absolute;
+    inset: 2% -22% 8%;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse 55% 50% at 50% 38%,
+      var(--portrait-glow) 0%,
+      transparent 72%
+    );
+    pointer-events: none;
+  }
+  /* The outline and shadow go on the wrapper, so the image's bottom fade
+     (mask) doesn't clip them into a box. */
+  .hero-portrait__float {
+    animation: hero-float 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 1px var(--portrait-outline))
+      drop-shadow(0 24px 40px var(--portrait-shadow));
+  }
+  .hero-portrait__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    mask-image: linear-gradient(to bottom, #000 82%, transparent 100%);
+  }
+  @keyframes hero-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-portrait__float {
+      animation: none;
+    }
   }
   /* Projects carousel: the list is rendered twice and the track slides left
      by one copy's width, so the loop never shows a seam. It pauses while
