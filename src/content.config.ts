@@ -146,6 +146,8 @@ const projects = defineCollection({
       order: z.number().default(100),
       // Shown as a large card at the top of the Projects sections on the home and projects pages.
       featured: z.boolean().default(false),
+      // Off for agency and team work that should only appear on /projects.
+      showOnHome: z.boolean().default(true),
       draft: z.boolean().default(false),
       // GitHub repository shown as a card on the project page, as "owner/name".
       repo: z
@@ -157,9 +159,10 @@ const projects = defineCollection({
         .or(z.literal(""))
         .nullish()
         .transform(v => (v ? v : undefined)),
-      // Featured image for project cards, with its alt text.
-      cover: image().optional(),
-      coverAlt: z.string().optional(),
+      // Featured image for project cards, with its alt text. Every project
+      // needs both, so no card on the site is ever shown without an image.
+      cover: image(),
+      coverAlt: z.string().min(1, "The featured image needs alt text"),
     }),
 });
 

@@ -1,4 +1,5 @@
 ---
+import { getEntries, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { PERSON_ID } from "@/utils/schema";
 import Avatar from "@/components/Avatar.astro";
@@ -8,6 +9,7 @@ import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import SiteStats from "@/components/SiteStats.astro";
 import FeaturedProject from "@/components/FeaturedProject.astro";
+import ProjectTile from "@/components/ProjectTile.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
@@ -32,12 +34,31 @@ const events = (await getEventNotes()).slice(0, 2);
 const hubEntries = await getHubs();
 const allBlog = await getAllBlogEntries();
 const allNotes = await getNotes();
-// The home page shows only the featured projects; the rest live on /projects.
-// With nothing featured, it shows the first two projects instead.
+// The home page shows the top 5 of my own projects (agency work is left to
+// /projects): featured ones first as large cards, then the rest in their set
+// order as image cards. The full list lives on /projects.
 const projects = await getProjects();
-const featuredProjects = projects.some(p => p.data.featured)
-  ? projects.filter(p => p.data.featured)
-  : projects.slice(0, 2);
+const homeProjects = projects.filter(p => p.data.showOnHome);
+const topProjects = [
+  ...homeProjects.filter(p => p.data.featured),
+  ...homeProjects.filter(p => !p.data.featured),
+].slice(0, 5);
+const largeCount = Math.min(3, topProjects.filter(p => p.data.featured).length);
+const featuredProjects = topProjects.slice(0, largeCount);
+const tileProjects = topProjects.slice(largeCount);
+const topStacks = new Map(
+  await Promise.all(
+    topProjects.map(
+      async p =>
+        [
+          p.id,
+          (await getEntries(
+            p.data.stack.slice(0, 4)
+          )) as CollectionEntry<"stack">[],
+        ] as const
+    )
+  )
+);
 
 const hubCount = (id: string) =>
   allBlog.filter(p => p.data.hub === id).length +
@@ -147,14 +168,30 @@ const [city, country] = SITE.location.split(", ");
           <h2 id="projects-h" class="h2 mb-2 scroll-mt-24">
             Projects
           </h2>
+          <p class="max-w-read text-muted-foreground mb-6">
+            Projects I built outside my agency, each with a case study on the
+            problem, the evidence and the results.
+          </p>
           {featuredProjects.length > 0 && (
-            <div class="mb-6 grid gap-4">
+            <div class="mb-5 grid gap-5">
               {featuredProjects.map(p => (
-                <FeaturedProject project={p} />
+                <FeaturedProject project={p} stack={topStacks.get(p.id)} />
               ))}
             </div>
           )}
-          <p class="mt-2">
+          {tileProjects.length > 0 && (
+            <ul
+              class:list={[
+                "grid gap-5 sm:grid-cols-2",
+                tileProjects.length !== 2 && "lg:grid-cols-3",
+              ]}
+            >
+              {tileProjects.map(p => (
+                <ProjectTile project={p} stack={topStacks.get(p.id)} />
+              ))}
+            </ul>
+          )}
+          <p class="mt-8 text-center">
             <a href="/projects" class="btn">
               See all {projects.length} projects →
             </a>

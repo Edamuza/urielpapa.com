@@ -5,35 +5,61 @@ import type { CollectionEntry } from "astro:content";
 import ProjectCover from "@/components/ProjectCover.astro";
 import { projectUrl } from "@/utils/content";
 
-type Props = { project: CollectionEntry<"projects">; headingLevel?: 2 | 3 };
-const { project, headingLevel = 3 } = Astro.props;
+type Props = {
+  project: CollectionEntry<"projects">;
+  stack?: CollectionEntry<"stack">[];
+  headingLevel?: 2 | 3;
+};
+const { project, stack = [], headingLevel = 3 } = Astro.props;
 const { data } = project;
 const href = projectUrl(project);
 const Heading = `h${headingLevel}` as "h2" | "h3";
 ---
 
 <article
-  class="border-foreground/80 grid overflow-hidden rounded-lg border md:grid-cols-[3fr_2fr]"
+  class="group border-border bg-background hover:border-foreground/70 grid overflow-hidden rounded-xl border transition duration-200 hover:shadow-[0_16px_40px_-20px_rgb(0_0_0/0.35)] md:grid-cols-[3fr_2fr]"
 >
-  <a href={href} class="block" title={`${data.title} case study`}>
+  <a
+    href={href}
+    class="bg-muted border-border block overflow-hidden border-b md:border-r md:border-b-0"
+    title={`${data.title} case study`}
+  >
     <ProjectCover
       title={data.title}
       src={data.cover}
       alt={data.coverAlt}
       widths={[560, 720, 960, 1280]}
       sizes="(min-width: 1024px) 40rem, (min-width: 768px) 60vw, calc(100vw - 2rem)"
-      class="border-border h-full w-full border-b text-5xl md:border-r md:border-b-0"
+      class="h-full w-full text-5xl transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100"
     />
   </a>
-  <div class="flex flex-col p-5">
-    <p class="meta text-sm font-semibold tracking-wide uppercase">
+  <div class="flex flex-col p-6">
+    <p class="label-caps text-muted-foreground">
       Featured · {data.year}
     </p>
-    <Heading class="mt-1 text-xl font-semibold">
-      <a href={href}>{data.title}</a>
+    <Heading class="font-display mt-2 text-2xl leading-tight font-bold">
+      <a href={href} class="no-underline hover:underline">{data.title}</a>
     </Heading>
-    <p class="mt-2 flex-1 text-[0.95rem]">{data.description}</p>
-    <p class="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm font-semibold">
+    <p class="mt-3 text-[0.95rem] leading-relaxed">{data.description}</p>
+    <p
+      class="border-foreground/80 mt-4 border-l-2 pl-3 text-[0.95rem] font-semibold"
+    >
+      {data.outcome}
+    </p>
+    {
+      stack.length > 0 && (
+        <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Built with">
+          {stack.slice(0, 4).map(s => (
+            <li class="bg-muted rounded-full px-2.5 py-0.5 text-xs">
+              {s.data.name}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <p
+      class="mt-auto flex flex-wrap gap-x-5 gap-y-1 pt-5 text-sm font-semibold"
+    >
       <a href={href}>Read the case study →</a>
       {
         data.liveUrl && (
