@@ -8,7 +8,6 @@ import HubCard from "@/components/HubCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import WorkWithMe from "@/components/WorkWithMe.astro";
 import SiteStats from "@/components/SiteStats.astro";
-import FeaturedProject from "@/components/FeaturedProject.astro";
 import ProjectTile from "@/components/ProjectTile.astro";
 import { SITE } from "@/config";
 import { HUBS } from "@/data/hubs";
@@ -35,17 +34,14 @@ const hubEntries = await getHubs();
 const allBlog = await getAllBlogEntries();
 const allNotes = await getNotes();
 // The home page shows the top 5 of my own projects (agency work is left to
-// /projects): featured ones first as large cards, then the rest in their set
-// order as image cards. The full list lives on /projects.
+// /projects) in a looping carousel: featured ones first, then the rest in their
+// set order. The full list lives on /projects.
 const projects = await getProjects();
 const homeProjects = projects.filter(p => p.data.showOnHome);
 const topProjects = [
   ...homeProjects.filter(p => p.data.featured),
   ...homeProjects.filter(p => !p.data.featured),
 ].slice(0, 5);
-const largeCount = Math.min(3, topProjects.filter(p => p.data.featured).length);
-const featuredProjects = topProjects.slice(0, largeCount);
-const tileProjects = topProjects.slice(largeCount);
 const topStacks = new Map(
   await Promise.all(
     topProjects.map(
@@ -172,26 +168,28 @@ const [city, country] = SITE.location.split(", ");
             Projects I built outside my agency, each with a case study on the
             problem, the evidence and the results.
           </p>
-          {featuredProjects.length > 0 && (
-            <div class="mb-5 grid gap-5">
-              {featuredProjects.map(p => (
-                <FeaturedProject project={p} stack={topStacks.get(p.id)} />
-              ))}
+          <div class="project-carousel relative" data-carousel>
+            <div class="carousel-viewport overflow-hidden py-2">
+              <ul
+                class="carousel-track flex w-max gap-5"
+                aria-label="Top projects"
+              >
+                {[false, true].map(clone =>
+                  topProjects.map(p => (
+                    <ProjectTile
+                      project={p}
+                      stack={topStacks.get(p.id)}
+                      showFeatured
+                      clone={clone}
+                      sizes="(min-width: 640px) 21rem, 18rem"
+                      class="w-[18rem] shrink-0 sm:w-[21rem]"
+                    />
+                  ))
+                )}
+              </ul>
             </div>
-          )}
-          {tileProjects.length > 0 && (
-            <ul
-              class:list={[
-                "grid gap-5 sm:grid-cols-2",
-                tileProjects.length !== 2 && "lg:grid-cols-3",
-              ]}
-            >
-              {tileProjects.map(p => (
-                <ProjectTile project={p} stack={topStacks.get(p.id)} />
-              ))}
-            </ul>
-          )}
-          <p class="mt-8 text-center">
+          </div>
+          <p class="mt-6 text-center">
             <a href="/projects" class="btn">
               See all {projects.length} projects →
             </a>
@@ -320,9 +318,76 @@ const [city, country] = SITE.location.split(", ");
   :global(.js) .intro-more:not(.is-open) {
     display: none;
   }
+  /* Projects carousel: the list is rendered twice and the track slides left
+     by one copy's width, so the loop never shows a seam. It pauses while
+     someone interacts with a card: hover, keyboard focus, or a touch (which
+     the script turns into .is-paused for a few seconds). With reduced motion
+     it doesn't move at all and scrolls by hand instead. */
+  .carousel-viewport {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 4%,
+      #000 96%,
+      transparent
+    );
+  }
+  .carousel-track {
+    animation: carousel-scroll 45s linear infinite;
+  }
+  .project-carousel:hover .carousel-track,
+  .project-carousel:focus-within .carousel-track,
+  .project-carousel.is-paused .carousel-track {
+    animation-play-state: paused;
+  }
+  @keyframes carousel-scroll {
+    to {
+      /* One copy's width: half the track, plus half of one gap. */
+      transform: translateX(calc(-50% - 0.625rem));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-viewport {
+      overflow-x: auto;
+      mask-image: none;
+    }
+    .carousel-track {
+      animation: none;
+    }
+    .carousel-track > :global([aria-hidden="true"]) {
+      display: none;
+    }
+  }
 </style>
 
 <script>
+  // Touch screens have no hover, so a touch on the carousel pauses it and it
+  // starts moving again a few seconds after the finger lifts.
+  document
+    .querySelectorAll<HTMLElement>("[data-carousel]")
+    .forEach(carousel => {
+      let resume: number | undefined;
+      carousel.addEventListener(
+        "touchstart",
+        () => {
+          window.clearTimeout(resume);
+          carousel.classList.add("is-paused");
+        },
+        { passive: true }
+      );
+      carousel.addEventListener(
+        "touchend",
+        () => {
+          window.clearTimeout(resume);
+          resume = window.setTimeout(
+            () => carousel.classList.remove("is-paused"),
+            3000
+          );
+        },
+        { passive: true }
+      );
+    });
+
   const more = document.getElementById("intro-more");
   const toggle = document.querySelector<HTMLButtonElement>(
     '[aria-controls="intro-more"]'

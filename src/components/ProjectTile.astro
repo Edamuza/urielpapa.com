@@ -10,8 +10,24 @@ type Props = {
   project: CollectionEntry<"projects">;
   stack?: CollectionEntry<"stack">[];
   headingLevel?: 2 | 3;
+  /** Says "Featured" before the year, for featured projects. */
+  showFeatured?: boolean;
+  /** A copy that only fills a looping carousel: hidden from screen readers and skipped by Tab. */
+  clone?: boolean;
+  /** Overrides the image sizes hint, e.g. for a fixed-width carousel card. */
+  sizes?: string;
+  class?: string;
 };
-const { project, stack = [], headingLevel = 3 } = Astro.props;
+const {
+  project,
+  stack = [],
+  headingLevel = 3,
+  showFeatured = false,
+  clone = false,
+  sizes = "(min-width: 1024px) 22rem, (min-width: 640px) calc(50vw - 2.5rem), calc(100vw - 2rem)",
+  class: className,
+} = Astro.props;
+const tabIndex = clone ? -1 : undefined;
 const { data } = project;
 const href = projectUrl(project);
 const Heading = `h${headingLevel}` as "h2" | "h3";
@@ -19,7 +35,11 @@ const liveHost = data.liveUrl ? new URL(data.liveUrl).hostname : undefined;
 ---
 
 <li
-  class="group border-border bg-background hover:border-foreground/70 relative flex flex-col overflow-hidden rounded-xl border transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-16px_rgb(0_0_0/0.35)] motion-reduce:hover:translate-y-0"
+  aria-hidden={clone ? "true" : undefined}
+  class:list={[
+    className,
+    "group border-border bg-background hover:border-foreground/70 relative flex flex-col overflow-hidden rounded-xl border transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-16px_rgb(0_0_0/0.35)] motion-reduce:hover:translate-y-0",
+  ]}
 >
   <div class="bg-muted border-border overflow-hidden border-b">
     <ProjectCover
@@ -27,18 +47,21 @@ const liveHost = data.liveUrl ? new URL(data.liveUrl).hostname : undefined;
       src={data.cover}
       alt={data.coverAlt}
       widths={[400, 560, 720, 800]}
-      sizes="(min-width: 1024px) 22rem, (min-width: 640px) calc(50vw - 2.5rem), calc(100vw - 2rem)"
+      sizes={sizes}
       class="w-full text-4xl transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
     />
   </div>
   <div class="flex flex-1 flex-col p-5">
     <p class="label-caps text-muted-foreground">
-      {data.year}{data.status.startsWith("Live") && " · Live"}
+      {showFeatured && data.featured && "Featured · "}{data.year}{
+        data.status.startsWith("Live") && " · Live"
+      }
     </p>
     <Heading class="h3 mt-1.5 leading-snug">
       <a
         href={href}
         title={`${data.title} case study`}
+        tabindex={tabIndex}
         class="no-underline group-hover:underline after:absolute after:inset-0 after:content-['']"
         >{data.title}</a
       >
@@ -67,6 +90,7 @@ const liveHost = data.liveUrl ? new URL(data.liveUrl).hostname : undefined;
             href={data.liveUrl}
             rel="noopener"
             title={`Open the live ${data.title} demo at ${liveHost}`}
+            tabindex={tabIndex}
             class="relative z-10 truncate"
           >
             Live demo ↗
