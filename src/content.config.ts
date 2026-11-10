@@ -157,9 +157,10 @@ const projects = defineCollection({
         .or(z.literal(""))
         .nullish()
         .transform(v => (v ? v : undefined)),
-      // Featured image for project cards, with its alt text.
-      cover: image().optional(),
-      coverAlt: z.string().optional(),
+      // Featured image for project cards, with its alt text. Every project
+      // needs both, so no card on the site is ever shown without an image.
+      cover: image(),
+      coverAlt: z.string().min(1, "The featured image needs alt text"),
     }),
 });
 
