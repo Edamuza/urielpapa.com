@@ -24,21 +24,23 @@ const isActive = (href: string) =>
   Skip to content
 </a>
 
-<!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down. -->
+<!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down.
+     Below lg there is no bar: only the round menu button shows, floating over the page. -->
 <header
   id="site-header"
   class:list={[
-    "bg-background sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none",
+    "lg:bg-background pointer-events-none sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none lg:pointer-events-auto",
     isHome ? "top-9" : "top-0",
   ]}
 >
   <div class="app-layout">
     <div
-      class="border-border flex items-center justify-between gap-4 border-b py-4 sm:py-5"
+      class="lg:border-border flex items-center justify-end gap-4 py-3 lg:justify-between lg:border-b lg:py-5"
     >
       <a
         href="/"
-        class="font-display text-xl font-bold whitespace-nowrap no-underline sm:text-2xl"
+        class="font-display hidden text-2xl font-bold whitespace-nowrap no-underline lg:block"
+        title="Uriel Papa, home page"
       >
         {SITE.name}
       </a>
@@ -107,7 +109,7 @@ const isActive = (href: string) =>
         <!-- Mobile menu: a native <details> so it works without JavaScript -->
         <details class="group lg:hidden" id="mobile-menu">
           <summary
-            class="border-foreground flex size-11 cursor-pointer list-none items-center justify-center rounded-full border [&::-webkit-details-marker]:hidden"
+            class="border-foreground bg-background pointer-events-auto relative z-50 flex size-12 cursor-pointer list-none items-center justify-center rounded-full border shadow-md [&::-webkit-details-marker]:hidden"
             aria-label="Menu"
             title="Open or close the menu"
           >
@@ -116,7 +118,7 @@ const isActive = (href: string) =>
           </summary>
           <nav
             aria-label="Mobile"
-            class="bg-background fixed inset-x-0 top-28 bottom-0 z-40 overflow-y-auto px-4 pb-8"
+            class="bg-background pointer-events-auto fixed inset-x-0 top-0 bottom-0 z-40 overflow-y-auto px-4 pt-[4.5rem] pb-8"
           >
             <!-- Search and the theme toggle first, then the same pages as the
                  desktop menu, then the smaller sections below. -->
@@ -147,7 +149,11 @@ const isActive = (href: string) =>
             </div>
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
-                [...NAV, { href: "/about", label: "About" }].map(item => (
+                [
+                  { href: "/", label: "Home" },
+                  ...NAV,
+                  { href: "/about", label: "About" },
+                ].map(item => (
                   <li>
                     <a
                       href={item.href}
@@ -254,8 +260,9 @@ const isActive = (href: string) =>
     menu?.addEventListener("toggle", () => {
       if (!menu.open || !panel) return;
       show();
-      // Open the panel right under the header, wherever the page is scrolled.
-      panel.style.top = `${header.getBoundingClientRect().bottom}px`;
+      // Open the panel from the top of the header, wherever the page is scrolled;
+      // the round button stays on top of it as the close button.
+      panel.style.top = `${Math.max(0, header.getBoundingClientRect().top)}px`;
     });
   }
 </script>
