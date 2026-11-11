@@ -27,3 +27,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-08 | news | published | meta-muse-spaces-small-business |
 - 2026-11-09 | news | published | nvidia-board-investigation-jensen-huang |
 - 2026-11-10 | news | published | sec-data-breach-bir-probe |
+- 2026-11-11 | news | published | chatgpt-businesses-claim-listing |
