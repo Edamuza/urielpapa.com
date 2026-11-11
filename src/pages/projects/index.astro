@@ -107,14 +107,14 @@ const schema = [
             </p>
           </div>
           <p class="max-w-read text-muted-foreground -mt-2 mb-6">{g.intro}</p>
-          <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul class="grid gap-x-5 sm:grid-cols-2 sm:gap-y-5 lg:grid-cols-3 xl:grid-cols-4">
             {g.items.map(p => (
-              <ProjectTile project={p} stack={stacks.get(p.id)} />
+              <ProjectTile project={p} stack={stacks.get(p.id)} layout="row" />
             ))}
             {g.note && (
-              <li class="bg-muted flex flex-col justify-end rounded-xl p-6">
+              <li class="bg-muted mt-3 flex flex-col justify-end rounded-xl p-5 sm:mt-0">
                 <h3 class="h3">{g.note.title}</h3>
-                <p class="mt-2 text-[0.95rem] leading-relaxed">{g.note.text}</p>
+                <p class="mt-2 text-sm leading-relaxed">{g.note.text}</p>
                 {"cta" in g.note && (
                   <p class="mt-4">
                     <a

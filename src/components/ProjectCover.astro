@@ -11,8 +11,18 @@ type Props = {
   widths: number[];
   sizes: string;
   class?: string;
+  /** Aspect-ratio classes; pass your own (e.g. responsive ones) to replace the 16:10 default. */
+  aspect?: string;
 };
-const { title, src, alt, widths, sizes, class: className } = Astro.props;
+const {
+  title,
+  src,
+  alt,
+  widths,
+  sizes,
+  class: className,
+  aspect = "aspect-[16/10]",
+} = Astro.props;
 
 const initials = title
   .split(/\s+/)
@@ -30,12 +40,13 @@ const initials = title
       title={alt ?? ""}
       widths={widths}
       sizes={sizes}
-      class:list={["aspect-[16/10] object-cover object-top", className]}
+      class:list={[aspect, "object-cover object-top", className]}
     />
   ) : (
     <div
       class:list={[
-        "bg-muted text-muted-foreground font-display flex aspect-[16/10] items-center justify-center font-bold",
+        "bg-muted text-muted-foreground font-display flex items-center justify-center font-bold",
+        aspect,
         className,
       ]}
       aria-hidden="true"

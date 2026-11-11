@@ -106,13 +106,59 @@ export const CONTACT = {
 };
 
 /** Header navigation (ux-ui-spec.md §4). */
+/** Desktop header links. "Work with me" sits after them as the one button. */
 export const NAV = [
   { href: "/blog", label: "Writing" },
-  { href: "/projects", label: "Projects" },
   { href: "/news", label: "News" },
+  { href: "/projects", label: "Projects" },
+  { href: "/about", label: "About" },
+];
+
+/** The phone menu lists every main page, including the ones the desktop
+ * header leaves to the Writing page, About and the footer. */
+export const MENU = [
+  { href: "/", label: "Home" },
+  { href: "/blog", label: "Writing" },
+  { href: "/news", label: "News" },
+  { href: "/projects", label: "Projects" },
   { href: "/topics", label: "Topics" },
   { href: "/events", label: "Events" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+];
+
+/** Where every "Work with me" link goes: the contact form with "Work together" picked. */
+export const WORK_WITH_ME_HREF = "/contact#work";
+
+/** "Start here" picks in the Writing page's side rail (post slugs). */
+export const START_HERE = [
+  "laravel-vs-nextjs",
+  "n8n-messenger-instagram-chatbot",
+  "how-to-check-if-chatgpt-cites-your-site",
+];
+
+/** "Proof of work" numbers on the home page, from the projects' case studies. */
+export const PROOF = [
+  {
+    value: "115 pages",
+    label: "in the ERP I led and co-developed in under 3 months",
+    href: "/projects/vite-seo-erp",
+  },
+  {
+    value: "5,241",
+    label: "automated tests on that ERP",
+    href: "/projects/vite-seo-erp",
+  },
+  {
+    value: "5 plugins",
+    label: "in my WordPress SEO suite, about 11,700 lines",
+    href: "/projects/wordpress-seo-plugins",
+  },
+  {
+    value: "13 agents",
+    label: "in the job and client CRM I built for myself",
+    href: "/projects/job-client-crm",
+  },
 ];
 
 /** Show drafts with a "Draft" banner (preview builds only, never production). */

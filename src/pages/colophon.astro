@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import SiteStats from "@/components/SiteStats.astro";
 import { WEBSITE_ID, breadcrumbNode } from "@/utils/schema";
 
 const crumbs = [
@@ -94,5 +95,6 @@ const crumbs = [
         >.
       </p>
     </div>
+    <SiteStats />
   </div>
 </Layout>

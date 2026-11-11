@@ -1,63 +1,114 @@
 ---
-// An image card for one project, used in the project grids on the home and
-// projects pages. The whole card opens the case study; the live demo link
+// A compact card for one project, used in the home carousel and the project
+// grids on /projects. The whole card opens the case study; the live demo link
 // sits above that so it stays clickable on its own.
+//
+// Sizes follow the Nov 2026 card review: cards stay under about half the
+// screen height (Smashing, NN/g), so the stack chips and the separate
+// "Case study" row are gone and the outcome is clamped. The full outcome and
+// stack are on the case study page.
+//
+// layout "row" (the /projects grid): on phones the card becomes a list row
+// with a small thumbnail, since a list scans better than cards for similar
+// items (NN/g); from the sm breakpoint up it is a normal card.
 import type { CollectionEntry } from "astro:content";
 import ProjectCover from "@/components/ProjectCover.astro";
 import { projectUrl } from "@/utils/content";
 
 type Props = {
   project: CollectionEntry<"projects">;
+  /** Kept for callers; the compact card no longer shows stack chips. */
   stack?: CollectionEntry<"stack">[];
   headingLevel?: 2 | 3;
-  /** Says "Featured" before the year, for featured projects. */
+  /** Says "Featured" instead of the year, for featured projects. */
   showFeatured?: boolean;
   /** A copy that only fills a looping carousel: hidden from screen readers and skipped by Tab. */
   clone?: boolean;
   /** Overrides the image sizes hint, e.g. for a fixed-width carousel card. */
   sizes?: string;
+  /** "card" everywhere (carousel), or "row" on phones and a card from sm up (grid). */
+  layout?: "card" | "row";
   class?: string;
 };
 const {
   project,
-  stack = [],
   headingLevel = 3,
   showFeatured = false,
   clone = false,
-  sizes = "(min-width: 1024px) 22rem, (min-width: 640px) calc(50vw - 2.5rem), calc(100vw - 2rem)",
+  sizes,
+  layout = "card",
   class: className,
 } = Astro.props;
+const row = layout === "row";
 const tabIndex = clone ? -1 : undefined;
 const { data } = project;
 const href = projectUrl(project);
 const Heading = `h${headingLevel}` as "h2" | "h3";
 const liveHost = data.liveUrl ? new URL(data.liveUrl).hostname : undefined;
+const eyebrow =
+  showFeatured && data.featured
+    ? `Featured · ${data.year}`
+    : data.status.startsWith("Live")
+      ? `${data.year} · Live`
+      : String(data.year);
+const imageSizes =
+  sizes ??
+  (row
+    ? "(min-width: 1280px) 18rem, (min-width: 1024px) 22rem, (min-width: 640px) calc(50vw - 2.5rem), 5.5rem"
+    : "18rem");
 ---
 
 <li
   aria-hidden={clone ? "true" : undefined}
   class:list={[
     className,
-    "group border-border bg-background hover:border-foreground/70 relative flex flex-col overflow-hidden rounded-xl border transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-16px_rgb(0_0_0/0.35)] motion-reduce:hover:translate-y-0",
+    "group relative",
+    row
+      ? "border-border flex items-start gap-3 border-b py-3 last:border-b-0 sm:flex-col sm:items-stretch sm:gap-0 sm:overflow-hidden sm:rounded-xl sm:border sm:py-0 sm:last:border-b"
+      : "border-border flex flex-col overflow-hidden rounded-xl border",
+    "bg-background sm:hover:border-foreground/70 transition duration-200 motion-reduce:hover:translate-y-0 sm:hover:-translate-y-0.5 sm:hover:shadow-[0_12px_32px_-16px_rgb(0_0_0/0.35)]",
   ]}
 >
-  <div class="bg-muted border-border overflow-hidden border-b">
+  <div
+    class:list={[
+      "bg-muted border-border shrink-0 overflow-hidden",
+      row
+        ? "w-[5.5rem] rounded-md border sm:w-auto sm:rounded-none sm:border-0 sm:border-b"
+        : "border-b",
+    ]}
+  >
     <ProjectCover
       title={data.title}
       src={data.cover}
       alt={data.coverAlt}
-      widths={[400, 560, 720, 800]}
-      sizes={sizes}
-      class="w-full text-4xl transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
+      widths={row ? [176, 400, 560, 720] : [320, 480, 640]}
+      sizes={imageSizes}
+      aspect={row ? "aspect-[4/3] sm:aspect-[16/10]" : "aspect-[16/10]"}
+      class="w-full text-2xl transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:group-hover:scale-100"
     />
   </div>
-  <div class="flex flex-1 flex-col p-5">
-    <p class="label-caps text-muted-foreground">
-      {showFeatured && data.featured && "Featured · "}{data.year}{
-        data.status.startsWith("Live") && " · Live"
+  <div class:list={["flex min-w-0 flex-1 flex-col", row ? "sm:p-4" : "p-4"]}>
+    <p
+      class="label-caps text-muted-foreground flex items-baseline justify-between gap-3"
+    >
+      <span>{eyebrow}</span>
+      {
+        liveHost && (
+          <a
+            href={data.liveUrl}
+            rel="noopener"
+            title={`Open the live ${data.title} demo at ${liveHost}`}
+            tabindex={tabIndex}
+            class="text-foreground relative z-10 hidden normal-case sm:inline"
+          >
+            Live ↗
+          </a>
+        )
       }
     </p>
-    <Heading class="h3 mt-1.5 leading-snug">
+    <Heading
+      class="font-display mt-1 line-clamp-2 text-base leading-snug font-semibold sm:text-lg"
+    >
       <a
         href={href}
         title={`${data.title} case study`}
@@ -66,37 +117,13 @@ const liveHost = data.liveUrl ? new URL(data.liveUrl).hostname : undefined;
         >{data.title}</a
       >
     </Heading>
-    <p class="text-muted-foreground mt-2 flex-1 text-[0.95rem] leading-relaxed">
-      {data.outcome}
-    </p>
-    {
-      stack.length > 0 && (
-        <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Built with">
-          {stack.slice(0, 3).map(s => (
-            <li class="bg-muted rounded-full px-2.5 py-0.5 text-xs">
-              {s.data.name}
-            </li>
-          ))}
-        </ul>
-      )
-    }
     <p
-      class="border-border mt-4 flex items-center justify-between gap-3 border-t pt-3 text-sm font-semibold"
+      class:list={[
+        "text-muted-foreground mt-1.5 text-sm leading-normal",
+        row ? "line-clamp-2 sm:line-clamp-3" : "line-clamp-2",
+      ]}
     >
-      <span aria-hidden="true">Case study →</span>
-      {
-        liveHost && (
-          <a
-            href={data.liveUrl}
-            rel="noopener"
-            title={`Open the live ${data.title} demo at ${liveHost}`}
-            tabindex={tabIndex}
-            class="relative z-10 truncate"
-          >
-            Live demo ↗
-          </a>
-        )
-      }
+      {data.outcome}
     </p>
   </div>
 </li>

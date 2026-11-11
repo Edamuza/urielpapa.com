@@ -4,7 +4,7 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconX from "@/assets/icons/IconX.svg";
-import { NAV, SITE } from "@/config";
+import { MENU, NAV, SITE, WORK_WITH_ME_HREF } from "@/config";
 
 const path = Astro.url.pathname.replace(/\.html$/, "");
 const section = "/" + (path.split("/")[1] ?? "");
@@ -26,11 +26,13 @@ const isActive = (href: string) =>
 
 <!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down.
      Below lg there is no bar and it takes no space: only the round menu button shows,
-     floating over the top right of the page (and sliding away the same way). -->
+     at the top right of the page. It stays at the top with the page and scrolls away
+     with it, so it never floats over the content. -->
 <header
   id="site-header"
+  data-min-top={isHome ? "36" : "0"}
   class:list={[
-    "lg:bg-background pointer-events-none sticky z-40 transition-[translate,opacity] duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none max-lg:h-0 max-lg:data-[hidden]:-translate-y-24 max-lg:data-[hidden]:opacity-0 lg:pointer-events-auto",
+    "lg:bg-background pointer-events-none sticky z-40 transition-[translate,opacity] duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none max-lg:relative max-lg:top-0 max-lg:h-0 lg:pointer-events-auto",
     isHome ? "top-9" : "top-0",
   ]}
 >
@@ -60,6 +62,7 @@ const isActive = (href: string) =>
                       : "no-underline hover:underline",
                   ]}
                   aria-current={isActive(item.href) ? "page" : undefined}
+                  title={`${item.label}, Uriel Papa`}
                 >
                   {item.label}
                 </a>
@@ -68,16 +71,17 @@ const isActive = (href: string) =>
           }
           <li>
             <a
-              href="/about"
+              href={WORK_WITH_ME_HREF}
               class:list={[
-                "lg:border-foreground ms-1 block rounded-lg px-2 py-2 font-medium lg:border lg:px-3 lg:py-1.5",
-                isActive("/about")
-                  ? "underline decoration-2 underline-offset-8 lg:no-underline"
-                  : "no-underline hover:underline",
+                "border-foreground ms-2 block rounded-lg border px-3 py-1.5 font-semibold no-underline transition-colors duration-150 hover:bg-[var(--foreground)] hover:text-[var(--background)]",
+                isActive("/contact") &&
+                  "bg-[var(--foreground)] text-[var(--background)]",
               ]}
-              aria-current={isActive("/about") ? "page" : undefined}
+              title="Work with Uriel Papa: send a message about your project"
+              data-event="work_with_me_click"
+              data-event-from="header"
             >
-              About
+              Work with me
             </a>
           </li>
         </ul>
@@ -151,11 +155,7 @@ const isActive = (href: string) =>
             </div>
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
-                [
-                  { href: "/", label: "Home" },
-                  ...NAV,
-                  { href: "/about", label: "About" },
-                ].map(item => (
+                MENU.map(item => (
                   <li>
                     <a
                       href={item.href}
@@ -171,6 +171,15 @@ const isActive = (href: string) =>
                 ))
               }
             </ul>
+            <a
+              href={WORK_WITH_ME_HREF}
+              class="btn btn-filled mt-5 w-full"
+              title="Work with Uriel Papa: send a message about your project"
+              data-event="work_with_me_click"
+              data-event-from="menu"
+            >
+              Work with me
+            </a>
             <ul class="mt-4 flex flex-wrap gap-x-6">
               {
                 [
@@ -243,13 +252,15 @@ const isActive = (href: string) =>
   panel?.addEventListener("click", e => {
     if ((e.target as HTMLElement).closest("a")) close();
   });
-  window.matchMedia("(min-width: 64rem)").addEventListener("change", e => {
+  const desktop = window.matchMedia("(min-width: 64rem)");
+  desktop.addEventListener("change", e => {
     if (e.matches) close();
   });
 
-  // Hide the header (on phones: the round menu button) while scrolling down, and
-  // show it again on a short scroll up. It always shows near the top and the bottom
-  // of the page, while the menu is open, or while it has keyboard focus.
+  // On desktop, hide the header while scrolling down and show it again on a short
+  // scroll up. It always shows near the top and the bottom of the page, while the
+  // menu is open, or while it has keyboard focus. On phones the round menu button
+  // is not sticky at all: it sits at the top of the page and scrolls with it.
   // (A mouse click also focuses a button, such as the theme toggle; that must not pin it.)
   if (header) {
     const show = () => header.removeAttribute("data-hidden");
@@ -279,7 +290,7 @@ const isActive = (href: string) =>
         nearEdge ||
         menu?.open ||
         header.querySelector(":focus-visible") !== null;
-      if (keep || travel < -24) show();
+      if (keep || !desktop.matches || travel < -24) show();
       else if (travel > 24) hide();
     };
     window.addEventListener(
@@ -300,11 +311,22 @@ const isActive = (href: string) =>
       const open = menu.open;
       summary?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
       summary?.setAttribute("title", open ? "Close the menu" : "Open the menu");
+      if (summary) summary.removeAttribute("style");
       if (!open || !panel) return;
       show();
-      // Open the panel from the top of the header, wherever the page is scrolled;
-      // the round button stays on top of it as the close button.
-      panel.style.top = `${Math.max(0, header.getBoundingClientRect().top)}px`;
+      // Open the panel from the top of the header, but never under the pinned quote
+      // bar on the homepage. The round button stays on top of it as the close
+      // button; if the page is scrolled so the button is partly out of view, it is
+      // held in view while the menu is open.
+      const minTop = Number(header.dataset.minTop ?? 0);
+      const top = Math.max(minTop, header.getBoundingClientRect().top);
+      panel.style.top = `${top}px`;
+      const r = summary?.getBoundingClientRect();
+      if (summary && r && r.top < top + 8) {
+        summary.style.position = "fixed";
+        summary.style.top = `${top + 8}px`;
+        summary.style.left = `${r.left}px`;
+      }
     });
   }
 </script>
