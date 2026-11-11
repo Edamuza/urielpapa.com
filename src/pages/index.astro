@@ -208,7 +208,7 @@ const [city, country] = SITE.location.split(", ");
             linkTitle="See all of Uriel Papa's projects and case studies"
             class="mb-2"
           />
-          <p class="max-w-read text-muted-foreground mb-6">
+          <p class="max-w-read text-muted-foreground mb-5">
             Projects I built outside my agency, each with a case study on the
             problem, the evidence and the results.
           </p>
@@ -225,8 +225,8 @@ const [city, country] = SITE.location.split(", ");
                       stack={topStacks.get(p.id)}
                       showFeatured
                       clone={clone}
-                      sizes="(min-width: 640px) 21rem, 18rem"
-                      class="w-[18rem] shrink-0 sm:w-[21rem]"
+                      sizes="(min-width: 640px) 16rem, 15rem"
+                      class="carousel-card w-[15rem] shrink-0 sm:w-[16rem]"
                     />
                   ))
                 )}
@@ -624,10 +624,11 @@ const [city, country] = SITE.location.split(", ");
     }
   }
   /* Projects carousel: the list is rendered twice and the track slides left
-     by one copy's width, so the loop never shows a seam. It pauses while
-     someone interacts with a card: hover, keyboard focus, or a touch (which
-     the script turns into .is-paused for a few seconds). With reduced motion
-     it doesn't move at all and scrolls by hand instead. */
+     by one copy's width, so the loop never shows a seam. It pauses on hover and
+     keyboard focus. On touch screens and narrow windows it does not move by
+     itself: it swipes, snapping to each card with the next one peeking in
+     (NN/g and Smashing advise against auto-rotation on phones). With reduced
+     motion it doesn't move at all and scrolls by hand instead. */
   .carousel-viewport {
     mask-image: linear-gradient(
       to right,
@@ -638,11 +639,10 @@ const [city, country] = SITE.location.split(", ");
     );
   }
   .carousel-track {
-    animation: carousel-scroll 45s linear infinite;
+    animation: carousel-scroll 40s linear infinite;
   }
   .project-carousel:hover .carousel-track,
-  .project-carousel:focus-within .carousel-track,
-  .project-carousel.is-paused .carousel-track {
+  .project-carousel:focus-within .carousel-track {
     animation-play-state: paused;
   }
   @keyframes carousel-scroll {
@@ -651,45 +651,27 @@ const [city, country] = SITE.location.split(", ");
       transform: translateX(calc(-50% - 0.625rem));
     }
   }
-  @media (prefers-reduced-motion: reduce) {
+  @media (hover: none), (max-width: 639px), (prefers-reduced-motion: reduce) {
     .carousel-viewport {
       overflow-x: auto;
-      mask-image: none;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 1rem;
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to right, #000 85%, transparent);
+    }
+    .carousel-viewport::-webkit-scrollbar {
+      display: none;
     }
     .carousel-track {
       animation: none;
+    }
+    .carousel-track > :global(.carousel-card) {
+      scroll-snap-align: start;
     }
     .carousel-track > :global([aria-hidden="true"]) {
       display: none;
     }
   }
 </style>
-
-<script>
-  // Touch screens have no hover, so a touch on the carousel pauses it and it
-  // starts moving again a few seconds after the finger lifts.
-  document
-    .querySelectorAll<HTMLElement>("[data-carousel]")
-    .forEach(carousel => {
-      let resume: number | undefined;
-      carousel.addEventListener(
-        "touchstart",
-        () => {
-          window.clearTimeout(resume);
-          carousel.classList.add("is-paused");
-        },
-        { passive: true }
-      );
-      carousel.addEventListener(
-        "touchend",
-        () => {
-          window.clearTimeout(resume);
-          resume = window.setTimeout(
-            () => carousel.classList.remove("is-paused"),
-            3000
-          );
-        },
-        { passive: true }
-      );
-    });
-</script>

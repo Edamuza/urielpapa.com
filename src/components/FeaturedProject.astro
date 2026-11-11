@@ -17,7 +17,7 @@ const Heading = `h${headingLevel}` as "h2" | "h3";
 ---
 
 <article
-  class="group border-border bg-background hover:border-foreground/70 grid overflow-hidden rounded-xl border transition duration-200 hover:shadow-[0_16px_40px_-20px_rgb(0_0_0/0.35)] md:grid-cols-[3fr_2fr]"
+  class="group border-border bg-background hover:border-foreground/70 grid overflow-hidden rounded-xl border transition duration-200 hover:shadow-[0_16px_40px_-20px_rgb(0_0_0/0.35)] md:grid-cols-2"
 >
   <a
     href={href}
@@ -28,28 +28,40 @@ const Heading = `h${headingLevel}` as "h2" | "h3";
       title={data.title}
       src={data.cover}
       alt={data.coverAlt}
-      widths={[560, 720, 960, 1280]}
-      sizes="(min-width: 1024px) 40rem, (min-width: 768px) 60vw, calc(100vw - 2rem)"
+      widths={[400, 560, 720, 960]}
+      sizes="(min-width: 1280px) 38rem, (min-width: 768px) 50vw, calc(100vw - 2rem)"
+      aspect="aspect-[16/9]"
       class="h-full w-full text-5xl transition-transform duration-300 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100"
     />
   </a>
-  <div class="flex flex-col p-6">
+  <div class="flex flex-col p-4 sm:p-6">
     <p class="label-caps text-muted-foreground">
       Featured · {data.year}
     </p>
-    <Heading class="font-display mt-2 text-2xl leading-tight font-bold">
-      <a href={href} class="no-underline hover:underline">{data.title}</a>
+    <Heading
+      class="font-display mt-1.5 line-clamp-2 text-xl leading-tight font-bold sm:text-2xl"
+    >
+      <a
+        href={href}
+        class="no-underline hover:underline"
+        title={`${data.title} case study`}>{data.title}</a
+      >
     </Heading>
-    <p class="mt-3 text-[0.95rem] leading-relaxed">{data.description}</p>
+    <p class="mt-2 line-clamp-2 hidden text-[0.95rem] leading-relaxed sm:block">
+      {data.description}
+    </p>
     <p
-      class="border-foreground/80 mt-4 border-l-2 pl-3 text-[0.95rem] font-semibold"
+      class="border-foreground/80 mt-3 line-clamp-3 border-l-2 pl-3 text-sm font-semibold sm:line-clamp-2 sm:text-[0.95rem]"
     >
       {data.outcome}
     </p>
     {
       stack.length > 0 && (
-        <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Built with">
-          {stack.slice(0, 4).map(s => (
+        <ul
+          class="mt-3 hidden flex-wrap gap-1.5 sm:flex"
+          aria-label="Built with"
+        >
+          {stack.slice(0, 3).map(s => (
             <li class="bg-muted rounded-full px-2.5 py-0.5 text-xs">
               {s.data.name}
             </li>
@@ -58,12 +70,18 @@ const Heading = `h${headingLevel}` as "h2" | "h3";
       )
     }
     <p
-      class="mt-auto flex flex-wrap gap-x-5 gap-y-1 pt-5 text-sm font-semibold"
+      class="mt-auto flex flex-wrap gap-x-5 gap-y-1 pt-4 text-sm font-semibold"
     >
-      <a href={href}>Read the case study →</a>
+      <a href={href} title={`Read the ${data.title} case study`}
+        >Read the case study →</a
+      >
       {
         data.liveUrl && (
-          <a href={data.liveUrl} rel="noopener">
+          <a
+            href={data.liveUrl}
+            rel="noopener"
+            title={`Open the live ${data.title} demo`}
+          >
             Live demo ↗
           </a>
         )
