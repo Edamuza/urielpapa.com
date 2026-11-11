@@ -1,0 +1,45 @@
+---
+/**
+ * A section heading with its "view all" link on the right, in the same place
+ * on every section (ux-ui refresh, Nov 2026). On narrow screens the link stays
+ * on the heading's line and wraps under it only when there is no room.
+ */
+type Props = {
+  id: string;
+  title: string;
+  href?: string;
+  linkText?: string;
+  linkTitle?: string;
+  level?: "h2" | "h3";
+  class?: string;
+};
+const {
+  id,
+  title,
+  href,
+  linkText = "View all →",
+  linkTitle,
+  level: Heading = "h2",
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1",
+    className,
+  ]}
+>
+  <Heading id={id} class={Heading === "h2" ? "h2" : "h3"}>{title}</Heading>
+  {
+    href && (
+      <a
+        href={href}
+        class="font-semibold whitespace-nowrap"
+        title={linkTitle ?? `${linkText.replace(/\s*→$/, "")}: ${title}`}
+      >
+        {linkText}
+      </a>
+    )
+  }
+</div>

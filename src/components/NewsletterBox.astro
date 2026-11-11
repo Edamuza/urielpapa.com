@@ -2,20 +2,29 @@
 import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import { NEWSLETTER } from "@/config";
 
-/** align "start" lines the box up with a left-aligned column (posts, /blog). */
-type Props = { heading?: string; from: string; align?: "center" | "start" };
+/** align "start" lines the box up with a left-aligned column (posts, /blog).
+ * "rail" fits the box into a side rail or a two-box row: full width, no outer margin. */
+type Props = {
+  heading?: string;
+  from: string;
+  align?: "center" | "start";
+  variant?: "default" | "rail";
+};
 const {
   heading = "Get new posts by email",
   from,
   align = "center",
+  variant = "default",
 } = Astro.props;
+const rail = variant === "rail";
 const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
 ---
 
 <section
   class:list={[
-    "border-foreground max-w-read my-12 rounded-lg border p-5 sm:p-6",
-    align === "center" && "mx-auto",
+    "border-foreground rounded-lg border p-5 sm:p-6",
+    !rail && "max-w-read my-12",
+    !rail && align === "center" && "mx-auto",
   ]}
   aria-labelledby={`${id}-h`}
 >
@@ -32,7 +41,7 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
     data-from={from}
     novalidate
   >
-    <div class="flex flex-col gap-2 sm:flex-row">
+    <div class:list={["flex flex-col gap-2", !rail && "sm:flex-row"]}>
       <label for={`${id}-email`} class="sr-only">Email address</label>
       <input
         id={`${id}-email`}

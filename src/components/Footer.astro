@@ -99,7 +99,10 @@ const siteLinks = [
   <div
     class="border-border flex flex-wrap items-center justify-between gap-4 border-t py-6"
   >
-    <p class="meta">© {year} {SITE.name}</p>
+    <p class="meta flex flex-wrap items-center gap-x-4">
+      <span>© {year} {SITE.name}</span>
+      <a href="#top" title="Back to the top of this page">Back to top ↑</a>
+    </p>
     {
       TRUST_BADGES.length > 0 && (
         <ul class="flex flex-wrap items-center gap-3" aria-label="Badges">
