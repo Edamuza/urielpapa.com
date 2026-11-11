@@ -81,30 +81,35 @@ const isActive = (href: string) =>
       </nav>
 
       <div class="flex items-center gap-1">
-        <a
-          href="/search"
-          class="flex size-11 items-center justify-center rounded-lg no-underline"
-          aria-label="Search"
-          title="Search"
-        >
-          <IconSearch class="size-6" aria-hidden="true" />
-        </a>
-        <button
-          id="theme-btn"
-          type="button"
-          class="flex size-11 items-center justify-center rounded-lg"
-          title="Toggle dark theme"
-          aria-label="Toggle dark theme"
-        >
-          <IconMoon class="size-6 dark:hidden" aria-hidden="true" />
-          <IconSunHigh class="hidden size-6 dark:block" aria-hidden="true" />
-        </button>
+        <!-- Desktop only: on phones and tablets, search and the theme toggle sit inside the menu. -->
+        <div class="hidden items-center gap-1 lg:flex">
+          <a
+            href="/search"
+            class="flex size-11 items-center justify-center rounded-lg no-underline"
+            aria-label="Search"
+            title="Search Uriel Papa's articles, projects and news"
+          >
+            <IconSearch class="size-6" aria-hidden="true" />
+          </a>
+          <button
+            id="theme-btn"
+            type="button"
+            data-theme-toggle
+            class="flex size-11 items-center justify-center rounded-lg"
+            title="Toggle dark theme"
+            aria-label="Toggle dark theme"
+          >
+            <IconMoon class="size-6 dark:hidden" aria-hidden="true" />
+            <IconSunHigh class="hidden size-6 dark:block" aria-hidden="true" />
+          </button>
+        </div>
 
         <!-- Mobile menu: a native <details> so it works without JavaScript -->
         <details class="group lg:hidden" id="mobile-menu">
           <summary
-            class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg [&::-webkit-details-marker]:hidden"
+            class="border-foreground flex size-11 cursor-pointer list-none items-center justify-center rounded-full border [&::-webkit-details-marker]:hidden"
             aria-label="Menu"
+            title="Open or close the menu"
           >
             <IconMenuDeep class="size-6 group-open:hidden" aria-hidden="true" />
             <IconX class="hidden size-6 group-open:block" aria-hidden="true" />
@@ -113,7 +118,33 @@ const isActive = (href: string) =>
             aria-label="Mobile"
             class="bg-background fixed inset-x-0 top-28 bottom-0 z-40 overflow-y-auto px-4 pb-8"
           >
-            <!-- Same pages as the desktop menu, then the smaller sections below. -->
+            <!-- Search and the theme toggle first, then the same pages as the
+                 desktop menu, then the smaller sections below. -->
+            <div class="flex gap-3 py-4">
+              <a
+                href="/search"
+                class="border-border flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border font-medium no-underline"
+                title="Search Uriel Papa's articles, projects and news"
+              >
+                <IconSearch class="size-5" aria-hidden="true" />
+                Search
+              </a>
+              <button
+                type="button"
+                data-theme-toggle
+                class="border-border flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border font-medium"
+                title="Switch between light and dark mode"
+                aria-label="Toggle dark theme"
+              >
+                <IconMoon class="size-5 dark:hidden" aria-hidden="true" />
+                <IconSunHigh
+                  class="hidden size-5 dark:block"
+                  aria-hidden="true"
+                />
+                <span class="dark:hidden">Dark mode</span>
+                <span class="hidden dark:inline">Light mode</span>
+              </button>
+            </div>
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
                 [...NAV, { href: "/about", label: "About" }].map(item => (

@@ -11,10 +11,11 @@ let theme: Theme =
 
 function reflect(): void {
   document.documentElement.setAttribute("data-theme", theme);
-  // The button's label stays "Toggle dark theme"; aria-pressed carries the state.
+  // The buttons' label stays "Toggle dark theme"; aria-pressed carries the state.
+  // One sits in the desktop header, one in the mobile menu.
   document
-    .querySelector("#theme-btn")
-    ?.setAttribute("aria-pressed", String(theme === "dark"));
+    .querySelectorAll("[data-theme-toggle]")
+    .forEach(btn => btn.setAttribute("aria-pressed", String(theme === "dark")));
 }
 
 function persist(): void {
@@ -28,10 +29,12 @@ function persist(): void {
 
 reflect();
 
-document.querySelector("#theme-btn")?.addEventListener("click", () => {
-  theme = theme === "light" ? "dark" : "light";
-  persist();
-});
+document.querySelectorAll("[data-theme-toggle]").forEach(btn =>
+  btn.addEventListener("click", () => {
+    theme = theme === "light" ? "dark" : "light";
+    persist();
+  })
+);
 
 // Follow OS-level changes unless the reader picked a theme.
 window
