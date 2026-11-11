@@ -24,21 +24,24 @@ const isActive = (href: string) =>
   Skip to content
 </a>
 
-<!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down. -->
+<!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down.
+     Below lg there is no bar and it takes no space: only the round menu button shows,
+     floating over the top right of the page (and sliding away the same way). -->
 <header
   id="site-header"
   class:list={[
-    "bg-background sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none",
+    "lg:bg-background pointer-events-none sticky z-40 transition-[translate,opacity] duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none max-lg:h-0 max-lg:data-[hidden]:-translate-y-24 max-lg:data-[hidden]:opacity-0 lg:pointer-events-auto",
     isHome ? "top-9" : "top-0",
   ]}
 >
   <div class="app-layout">
     <div
-      class="border-border flex items-center justify-between gap-4 border-b py-4 sm:py-5"
+      class="lg:border-border flex items-center justify-end gap-4 py-2 lg:justify-between lg:border-b lg:py-5"
     >
       <a
         href="/"
-        class="font-display text-xl font-bold whitespace-nowrap no-underline sm:text-2xl"
+        class="font-display hidden text-2xl font-bold whitespace-nowrap no-underline lg:block"
+        title="Uriel Papa, home page"
       >
         {SITE.name}
       </a>
@@ -81,42 +84,78 @@ const isActive = (href: string) =>
       </nav>
 
       <div class="flex items-center gap-1">
-        <a
-          href="/search"
-          class="flex size-11 items-center justify-center rounded-lg no-underline"
-          aria-label="Search"
-          title="Search"
-        >
-          <IconSearch class="size-6" aria-hidden="true" />
-        </a>
-        <button
-          id="theme-btn"
-          type="button"
-          class="flex size-11 items-center justify-center rounded-lg"
-          title="Toggle dark theme"
-          aria-label="Toggle dark theme"
-        >
-          <IconMoon class="size-6 dark:hidden" aria-hidden="true" />
-          <IconSunHigh class="hidden size-6 dark:block" aria-hidden="true" />
-        </button>
+        <!-- Desktop only: on phones and tablets, search and the theme toggle sit inside the menu. -->
+        <div class="hidden items-center gap-1 lg:flex">
+          <a
+            href="/search"
+            class="flex size-11 items-center justify-center rounded-lg no-underline"
+            aria-label="Search"
+            title="Search Uriel Papa's articles, projects and news"
+          >
+            <IconSearch class="size-6" aria-hidden="true" />
+          </a>
+          <button
+            id="theme-btn"
+            type="button"
+            data-theme-toggle
+            class="flex size-11 items-center justify-center rounded-lg"
+            title="Toggle dark theme"
+            aria-label="Toggle dark theme"
+          >
+            <IconMoon class="size-6 dark:hidden" aria-hidden="true" />
+            <IconSunHigh class="hidden size-6 dark:block" aria-hidden="true" />
+          </button>
+        </div>
 
         <!-- Mobile menu: a native <details> so it works without JavaScript -->
         <details class="group lg:hidden" id="mobile-menu">
           <summary
-            class="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg [&::-webkit-details-marker]:hidden"
-            aria-label="Menu"
+            class="border-foreground bg-background/90 pointer-events-auto relative z-50 flex size-12 cursor-pointer list-none items-center justify-center rounded-full border shadow-md backdrop-blur transition-transform duration-150 active:scale-90 motion-reduce:transition-none [&::-webkit-details-marker]:hidden"
+            aria-label="Open menu"
+            title="Open the menu"
           >
             <IconMenuDeep class="size-6 group-open:hidden" aria-hidden="true" />
             <IconX class="hidden size-6 group-open:block" aria-hidden="true" />
           </summary>
           <nav
             aria-label="Mobile"
-            class="bg-background fixed inset-x-0 top-28 bottom-0 z-40 overflow-y-auto px-4 pb-8"
+            class="bg-background pointer-events-auto fixed inset-x-0 top-0 bottom-0 z-40 overflow-y-auto px-4 pt-2 pb-8"
           >
-            <!-- Same pages as the desktop menu, then the smaller sections below. -->
+            <!-- Search and the theme toggle first, level with the round close button,
+                 then the same pages as the
+                 desktop menu, then the smaller sections below. -->
+            <div class="flex gap-3 pe-16 pt-0 pb-4">
+              <a
+                href="/search"
+                class="border-border flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border font-medium no-underline"
+                title="Search Uriel Papa's articles, projects and news"
+              >
+                <IconSearch class="size-5" aria-hidden="true" />
+                Search
+              </a>
+              <button
+                type="button"
+                data-theme-toggle
+                class="border-border flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border font-medium"
+                title="Switch between light and dark mode"
+                aria-label="Toggle dark theme"
+              >
+                <IconMoon class="size-5 dark:hidden" aria-hidden="true" />
+                <IconSunHigh
+                  class="hidden size-5 dark:block"
+                  aria-hidden="true"
+                />
+                <span class="dark:hidden">Dark mode</span>
+                <span class="hidden dark:inline">Light mode</span>
+              </button>
+            </div>
             <ul class="border-border divide-border divide-y border-y text-lg">
               {
-                [...NAV, { href: "/about", label: "About" }].map(item => (
+                [
+                  { href: "/", label: "Home" },
+                  ...NAV,
+                  { href: "/about", label: "About" },
+                ].map(item => (
                   <li>
                     <a
                       href={item.href}
@@ -161,6 +200,18 @@ const isActive = (href: string) =>
 </header>
 
 <style is:global>
+  /* The mobile menu fades and slides in a little when it opens. */
+  @media (prefers-reduced-motion: no-preference) {
+    #mobile-menu[open] > nav {
+      animation: mobile-menu-in 180ms ease-out;
+    }
+  }
+  @keyframes mobile-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
   /* Lock page scroll while the mobile menu is open; the panel scrolls itself.
      Pure CSS, so it works without JavaScript. Only below the lg breakpoint, where
      the menu is shown: a menu left open when the window widens must not lock it. */
@@ -172,25 +223,43 @@ const isActive = (href: string) =>
 </style>
 
 <script>
-  // Close the mobile menu with Escape.
   const menu = document.querySelector<HTMLDetailsElement>("#mobile-menu");
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && menu?.open) {
-      menu.open = false;
-      menu.querySelector("summary")?.focus();
-    }
-  });
-
-  // Hide the header while scrolling down, show it again when scrolling up.
-  // It always shows near the top, while the menu is open, or while it has keyboard focus.
-  // (A mouse click also focuses a button, such as the theme toggle; that must not pin it.)
+  const summary = menu?.querySelector("summary");
   const header = document.querySelector<HTMLElement>("#site-header");
   const panel = menu?.querySelector<HTMLElement>("nav");
+  const close = () => {
+    if (menu?.open) menu.open = false;
+  };
+
+  // Close the mobile menu with Escape, and give focus back to its button.
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && menu?.open) {
+      close();
+      summary?.focus();
+    }
+  });
+  // Close it after a link in it is tapped (also for links to the page you are on),
+  // and when the window grows to the desktop layout, where the menu is hidden.
+  panel?.addEventListener("click", e => {
+    if ((e.target as HTMLElement).closest("a")) close();
+  });
+  window.matchMedia("(min-width: 64rem)").addEventListener("change", e => {
+    if (e.matches) close();
+  });
+
+  // Hide the header (on phones: the round menu button) while scrolling down, and
+  // show it again on a short scroll up. It always shows near the top and the bottom
+  // of the page, while the menu is open, or while it has keyboard focus.
+  // (A mouse click also focuses a button, such as the theme toggle; that must not pin it.)
   if (header) {
     const show = () => header.removeAttribute("data-hidden");
+    const hide = () => header.setAttribute("data-hidden", "");
     // Read the scroll position on the first scroll, not while the page is still
     // loading, where reading it would force an extra layout.
     let lastY: number | undefined;
+    // How far the page has moved in the current direction; small jitters and
+    // momentum bounces don't flip it.
+    let travel = 0;
     let ticking = false;
     const update = () => {
       ticking = false;
@@ -200,12 +269,18 @@ const isActive = (href: string) =>
         return;
       }
       const delta = y - lastY;
-      if (Math.abs(delta) < 8) return;
-      const keep =
-        y < 80 || menu?.open || header.querySelector(":focus-visible") !== null;
-      if (delta > 0 && !keep) header.setAttribute("data-hidden", "");
-      else show();
       lastY = y;
+      if (delta === 0) return;
+      travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
+      const nearEdge =
+        y < 80 ||
+        y + window.innerHeight >= document.documentElement.scrollHeight - 80;
+      const keep =
+        nearEdge ||
+        menu?.open ||
+        header.querySelector(":focus-visible") !== null;
+      if (keep || travel < -24) show();
+      else if (travel > 24) hide();
     };
     window.addEventListener(
       "scroll",
@@ -221,10 +296,15 @@ const isActive = (href: string) =>
       if ((e.target as HTMLElement).matches(":focus-visible")) show();
     });
     menu?.addEventListener("toggle", () => {
-      if (!menu.open || !panel) return;
+      // The button's label says what tapping it does next.
+      const open = menu.open;
+      summary?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      summary?.setAttribute("title", open ? "Close the menu" : "Open the menu");
+      if (!open || !panel) return;
       show();
-      // Open the panel right under the header, wherever the page is scrolled.
-      panel.style.top = `${header.getBoundingClientRect().bottom}px`;
+      // Open the panel from the top of the header, wherever the page is scrolled;
+      // the round button stays on top of it as the close button.
+      panel.style.top = `${Math.max(0, header.getBoundingClientRect().top)}px`;
     });
   }
 </script>
