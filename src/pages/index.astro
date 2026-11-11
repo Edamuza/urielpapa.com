@@ -1,7 +1,6 @@
 ---
 import { getEntries, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { PERSON_ID } from "@/utils/schema";
 import PostCard from "@/components/PostCard.astro";
 import HubCard from "@/components/HubCard.astro";
@@ -92,10 +91,9 @@ const [city, country] = SITE.location.split(", ");
             href="/news"
             aria-label="View all news"
             title="See all of Uriel Papa's news takes"
-            class="inline-flex shrink-0 items-center gap-1 whitespace-nowrap"
+            class="shrink-0 whitespace-nowrap"
           >
             View all
-            <IconArrowRight class="size-4 shrink-0" aria-hidden="true" />
           </a>
         </aside>
       </div>
