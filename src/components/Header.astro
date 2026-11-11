@@ -25,17 +25,18 @@ const isActive = (href: string) =>
 </a>
 
 <!-- Sticks under the quote bar (h-9) on the homepage, at the top elsewhere; slides up out of view while scrolling down.
-     Below lg there is no bar: only the round menu button shows, floating over the page. -->
+     Below lg there is no bar and it takes no space: only the round menu button shows,
+     floating over the top right of the page (and sliding away the same way). -->
 <header
   id="site-header"
   class:list={[
-    "lg:bg-background pointer-events-none sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none lg:pointer-events-auto",
+    "lg:bg-background pointer-events-none sticky z-40 transition-transform duration-200 ease-out data-[hidden]:-translate-y-full motion-reduce:transition-none max-lg:h-0 max-lg:data-[hidden]:-translate-y-24 lg:pointer-events-auto",
     isHome ? "top-9" : "top-0",
   ]}
 >
   <div class="app-layout">
     <div
-      class="lg:border-border flex items-center justify-end gap-4 py-3 lg:justify-between lg:border-b lg:py-5"
+      class="lg:border-border flex items-center justify-end gap-4 py-2 lg:justify-between lg:border-b lg:py-5"
     >
       <a
         href="/"
@@ -118,11 +119,12 @@ const isActive = (href: string) =>
           </summary>
           <nav
             aria-label="Mobile"
-            class="bg-background pointer-events-auto fixed inset-x-0 top-0 bottom-0 z-40 overflow-y-auto px-4 pt-[4.5rem] pb-8"
+            class="bg-background pointer-events-auto fixed inset-x-0 top-0 bottom-0 z-40 overflow-y-auto px-4 pt-2 pb-8"
           >
-            <!-- Search and the theme toggle first, then the same pages as the
+            <!-- Search and the theme toggle first, level with the round close button,
+                 then the same pages as the
                  desktop menu, then the smaller sections below. -->
-            <div class="flex gap-3 py-4">
+            <div class="flex gap-3 pe-16 pt-0 pb-4">
               <a
                 href="/search"
                 class="border-border flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border font-medium no-underline"
