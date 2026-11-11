@@ -119,23 +119,12 @@ const [city, country] = SITE.location.split(", ");
           a website that gets found, ads that bring in leads, software built around
           how your team works, and AI that takes repetitive tasks off your plate.
         </p>
-        <button
-          type="button"
-          class="see-more mt-2 min-h-11 items-center font-semibold underline underline-offset-[3px]"
-          aria-controls="intro-more"
-          aria-expanded="false"
+        <a
+          href="/about"
+          class="see-more mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-[3px]"
+          title="Read more about Uriel Papa's background and experience"
+          >See more</a
         >
-          See more
-        </button>
-        <p id="intro-more" class="intro-more max-w-read mt-4 text-lg">
-          Here's what that looks like in practice. I founded and ran my own
-          agency at 21, so I know the marketing and business side from the
-          inside. I led and co-developed an ERP with 115 pages and 5,241
-          automated tests in under 3 months, built 5 WordPress SEO plugins, set
-          up AI chatbots and outreach workflows on n8n, and ran Meta ads that
-          started inbound conversations for about US$1 each. Whether you need
-          someone for a project or someone to join your team, I'm open to both.
-        </p>
         <p class="hero-actions mt-6 flex flex-wrap gap-3">
           <a
             href="/contact"
@@ -328,21 +317,6 @@ const [city, country] = SITE.location.split(", ");
 </Layout>
 
 <style>
-  /* The second intro paragraph starts collapsed under "See more", so the
-     buttons sit right under the opening line. Without JavaScript (no .js class)
-     it simply shows. */
-  .see-more {
-    display: none;
-  }
-  :global(.js) .see-more {
-    display: inline-flex;
-  }
-  :global(.js) .intro-more {
-    margin-top: 0.75rem;
-  }
-  :global(.js) .intro-more:not(.is-open) {
-    display: none;
-  }
   /* Hero portrait: a very soft radial glow behind it, a soft shadow so it
      looks like it floats, and a gentle 6s bob that stops for reduced motion.
      No light outline or strong white glow in dark mode, so no white shows
@@ -483,9 +457,7 @@ const [city, country] = SITE.location.split(", ");
     }
     .see-more {
       order: 5;
-    }
-    .intro-more {
-      order: 6;
+      align-self: flex-start;
     }
     .hero-portrait::before {
       display: none;
@@ -584,15 +556,4 @@ const [city, country] = SITE.location.split(", ");
         { passive: true }
       );
     });
-
-  const more = document.getElementById("intro-more");
-  const toggle = document.querySelector<HTMLButtonElement>(
-    '[aria-controls="intro-more"]'
-  );
-  toggle?.addEventListener("click", () => {
-    const open = toggle.getAttribute("aria-expanded") !== "true";
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.textContent = open ? "See less" : "See more";
-    more?.classList.toggle("is-open", open);
-  });
 </script>
