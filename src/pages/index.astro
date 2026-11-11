@@ -3,18 +3,17 @@ import { getEntries, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { PERSON_ID } from "@/utils/schema";
 import PostCard from "@/components/PostCard.astro";
-import HubCard from "@/components/HubCard.astro";
+import HubChip from "@/components/HubChip.astro";
+import SectionHeader from "@/components/SectionHeader.astro";
+import { Image } from "astro:assets";
 import NewsletterBox from "@/components/NewsletterBox.astro";
-import WorkWithMe from "@/components/WorkWithMe.astro";
-import SiteStats from "@/components/SiteStats.astro";
 import ProjectTile from "@/components/ProjectTile.astro";
-import { SITE } from "@/config";
+import { PROOF, SITE, WORK_WITH_ME_HREF } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
   formatDate,
   getAllBlogEntries,
   getEventNotes,
-  getHubs,
   getNewsTakes,
   getNotes,
   getPosts,
@@ -24,12 +23,16 @@ import {
   postUrl,
   readingTime,
 } from "@/utils/content";
+import { postThumb } from "@/utils/thumbnails";
 
 const posts = await getPosts();
-const latestNews = (await getNewsTakes())[0];
+const allNews = await getNewsTakes();
+const latestNews = allNews[0];
+const railNews = allNews.slice(0, 5);
+const [featured, ...morePosts] = posts.slice(0, 4);
+const featuredThumb = featured && postThumb(featured);
 const notes = (await getNotes()).slice(0, 3);
 const events = (await getEventNotes()).slice(0, 2);
-const hubEntries = await getHubs();
 const allBlog = await getAllBlogEntries();
 const allNotes = await getNotes();
 // The home page shows the top 5 of my own projects (agency work is left to
@@ -127,7 +130,7 @@ const [city, country] = SITE.location.split(", ");
         >
         <p class="hero-actions mt-6 flex flex-wrap gap-3">
           <a
-            href="/contact"
+            href={WORK_WITH_ME_HREF}
             class="btn btn-filled"
             title="Work with Uriel Papa on a project or in a role"
             >Work with me</a
@@ -170,14 +173,41 @@ const [city, country] = SITE.location.split(", ");
       </figure>
     </section>
 
-    <SiteStats />
+    <section class="border-border border-b py-10" aria-labelledby="proof-h">
+      <h2 id="proof-h" class="label-caps text-muted-foreground mb-5">
+        Proof of work
+      </h2>
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
+        {
+          PROOF.map(item => (
+            <li class="border-foreground border-t-2 pt-3">
+              <a
+                href={item.href}
+                class="block no-underline hover:underline"
+                title={`See the case study: ${item.value} ${item.label}`}
+              >
+                <span class="font-display block text-2xl leading-tight font-bold sm:text-3xl">
+                  {item.value}
+                </span>
+                <span class="meta mt-1 block">{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
     {
       projects.length > 0 && (
         <section class="py-10" aria-labelledby="projects-h">
-          <h2 id="projects-h" class="h2 mb-2 scroll-mt-24">
-            Projects
-          </h2>
+          <SectionHeader
+            id="projects-h"
+            title="Projects"
+            href="/projects"
+            linkText={`See all ${projects.length} →`}
+            linkTitle="See all of Uriel Papa's projects and case studies"
+            class="mb-2"
+          />
           <p class="max-w-read text-muted-foreground mb-6">
             Projects I built outside my agency, each with a case study on the
             problem, the evidence and the results.
@@ -203,63 +233,153 @@ const [city, country] = SITE.location.split(", ");
               </ul>
             </div>
           </div>
-          <p class="mt-6 text-center">
-            <a href="/projects" class="btn">
-              See all {projects.length} projects →
-            </a>
-          </p>
         </section>
       )
     }
 
-    <section class="border-border border-t py-10" aria-labelledby="latest-h">
-      <h2 id="latest-h" class="h2 mb-5">Latest writing</h2>
-      {
-        posts.length > 0 ? (
-          <ul class="max-w-read">
-            {posts.slice(0, 6).map(p => (
-              <PostCard
-                href={postUrl(p)}
-                title={p.data.title}
-                summary={p.data.dek}
-                hub={p.data.hub}
-                date={p.data.published}
-                minutes={readingTime(p.body)}
-                draft={p.data.draft}
-              />
-            ))}
-          </ul>
-        ) : (
-          <p class="max-w-read">
-            The first posts are being written. Subscribe below to get them when
-            they're out.
-          </p>
-        )
-      }
-      <p class="mt-4"><a href="/blog">All writing →</a></p>
-    </section>
-
-    <section class="border-border border-t py-10" aria-labelledby="topics-h">
-      <h2 id="topics-h" class="h2 mb-2">Topics</h2>
-      <p class="max-w-read mb-6">
-        Seven areas I write about, all about technology and what it changes.
-      </p>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="border-border with-rail border-t py-10">
+      <section aria-labelledby="latest-h" class="min-w-0">
+        <SectionHeader
+          id="latest-h"
+          title="Latest writing"
+          href="/blog"
+          linkText="All writing →"
+          linkTitle="All of Uriel Papa's writing"
+        />
         {
-          HUBS.map(h => {
-            const entry = hubEntries.find(e => e.id === h.id);
-            return (
-              <HubCard
-                href={`/topics/${h.id}`}
-                name={h.name}
-                summary={entry?.data.summary ?? ""}
-                count={hubCount(h.id)}
-              />
-            );
-          })
+          featured ? (
+            <>
+              <article class="border-border grid gap-5 border-b pb-6 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+                {featuredThumb && (
+                  <a
+                    href={postUrl(featured)}
+                    tabindex="-1"
+                    aria-hidden="true"
+                    class="border-border bg-muted block self-start overflow-hidden rounded-lg border"
+                    title={`Read: ${featured.data.title}`}
+                  >
+                    <Image
+                      src={featuredThumb.src}
+                      alt={featuredThumb.alt}
+                      title={featuredThumb.title}
+                      widths={[400, 640, 800]}
+                      sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw"
+                      class="aspect-[3/2] h-auto w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                )}
+                <div class="min-w-0">
+                  <p class="label-caps text-muted-foreground">Newest</p>
+                  <h3 class="h3 mt-2 text-xl leading-snug sm:text-2xl">
+                    <a
+                      href={postUrl(featured)}
+                      title={`Read: ${featured.data.title}`}
+                    >
+                      {featured.data.title}
+                    </a>
+                  </h3>
+                  <p class="mt-2">{featured.data.dek}</p>
+                  <p class="meta mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <HubChip hub={featured.data.hub} />
+                    <time datetime={isoDate(featured.data.published)}>
+                      {formatDate(featured.data.published)}
+                    </time>
+                    <span>{readingTime(featured.body)} min read</span>
+                  </p>
+                </div>
+              </article>
+              <ul class="pt-5">
+                {morePosts.map(p => (
+                  <PostCard
+                    href={postUrl(p)}
+                    title={p.data.title}
+                    hub={p.data.hub}
+                    date={p.data.published}
+                    minutes={readingTime(p.body)}
+                    draft={p.data.draft}
+                    thumb={postThumb(p)}
+                    variant="compact"
+                  />
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p class="max-w-read">
+              The first posts are being written. Subscribe below to get them
+              when they're out.
+            </p>
+          )
         }
-      </ul>
-    </section>
+      </section>
+
+      <aside class="flex flex-col gap-8" aria-label="News and topics">
+        {
+          railNews.length > 0 && (
+            <section aria-labelledby="rail-news-h">
+              <SectionHeader
+                id="rail-news-h"
+                title="Latest news"
+                href="/news"
+                linkText="All news →"
+                linkTitle="All of Uriel Papa's news takes"
+                level="h3"
+                class="mb-2"
+              />
+              <ul>
+                {railNews.map(n => (
+                  <li class="border-border grid grid-cols-[3.5rem_minmax(0,1fr)] gap-3 border-t py-3">
+                    <time
+                      datetime={isoDate(n.data.published)}
+                      class="text-muted-foreground pt-0.5 font-mono text-xs"
+                    >
+                      {formatDate(n.data.published, "D MMM")}
+                    </time>
+                    <a
+                      href={postUrl(n)}
+                      class="leading-snug font-medium"
+                      title={`Read: ${n.data.title}`}
+                    >
+                      {n.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        <section aria-labelledby="topics-h">
+          <SectionHeader
+            id="topics-h"
+            title="Topics"
+            href="/topics"
+            linkText="All topics →"
+            linkTitle="The seven topics Uriel Papa writes about"
+            level="h3"
+            class="mb-3"
+          />
+          <ul class="flex flex-wrap gap-2">
+            {
+              HUBS.map(h => (
+                <li>
+                  <a
+                    href={`/topics/${h.id}`}
+                    class="border-foreground inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium no-underline hover:underline"
+                    title={`${h.name}: ${hubCount(h.id)} posts by Uriel Papa`}
+                  >
+                    {h.name}
+                    <span class="text-muted-foreground font-mono text-xs">
+                      {hubCount(h.id)}
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </aside>
+    </div>
 
     <div class="border-border grid gap-10 border-t py-10 md:grid-cols-2">
       <section aria-labelledby="notes-h">
@@ -307,12 +427,28 @@ const [city, country] = SITE.location.split(", ");
       </section>
     </div>
 
-    <NewsletterBox from="home" />
-    <WorkWithMe
-      text="Want to work together?"
-      linkText="Get in touch →"
-      from="home"
-    />
+    <div class="grid gap-5 pt-4 pb-14 md:grid-cols-2">
+      <NewsletterBox from="home" variant="rail" />
+      <section
+        class="bg-accent text-accent-foreground flex flex-col items-start rounded-lg p-5 sm:p-6"
+        aria-labelledby="work-h"
+      >
+        <h2 id="work-h" class="h3">Have a problem worth solving?</h2>
+        <p class="mt-1 flex-1 opacity-85">
+          Web apps and business systems, AI automation and chatbots, and SEO or
+          GEO set-up. I read every message myself.
+        </p>
+        <a
+          href={WORK_WITH_ME_HREF}
+          class="btn border-accent-foreground bg-accent-foreground text-accent mt-5"
+          title="Work with Uriel Papa: send a message about your project"
+          data-event="work_with_me_click"
+          data-event-from="home"
+        >
+          Work with me →
+        </a>
+      </section>
+    </div>
   </div>
 </Layout>
 

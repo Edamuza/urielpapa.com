@@ -7,7 +7,15 @@ import HubChip from "@/components/HubChip.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import Pagination from "@/components/Pagination.astro";
 import { HUBS } from "@/data/hubs";
-import { getPosts, postUrl, readingTime } from "@/utils/content";
+import { START_HERE } from "@/config";
+import {
+  getPosts,
+  getNewsTakes,
+  getNotes,
+  postUrl,
+  readingTime,
+} from "@/utils/content";
+import { postThumb } from "@/utils/thumbnails";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 import { pageCount, pageHref, pageItems } from "@/utils/pagination";
 
@@ -17,6 +25,11 @@ const { page } = Astro.props;
 const allPosts = await getPosts();
 const pages = pageCount(allPosts.length);
 const posts = pageItems(allPosts, page);
+const startHere = START_HERE.map(id => allPosts.find(p => p.id === id)).filter(
+  p => p !== undefined
+);
+const newsCount = (await getNewsTakes()).length;
+const notesCount = (await getNotes()).length;
 const path = pageHref("/blog", page);
 const pageLabel = page > 1 ? `Page ${page} of ${pages}` : "";
 const title = "Writing";
@@ -47,45 +60,119 @@ const schema = [
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro}>
       {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
-      <nav aria-label="Browse by topic" class="mt-5">
-        <ul class="flex flex-wrap gap-2">
+    </PageIntro>
+
+    <!-- Filter bar: every chip is a plain link to its topic page, so it works
+         without JavaScript and each filter has its own URL. On phones the chips
+         scroll sideways in one line. -->
+    <div
+      class="border-border mb-8 flex flex-col gap-3 border-y py-3 lg:flex-row lg:items-center lg:justify-between"
+    >
+      <nav aria-label="Browse by topic" class="min-w-0">
+        <ul
+          class="-mx-4 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0 lg:pb-0"
+        >
+          <li class="shrink-0">
+            <a
+              href="/blog"
+              class="bg-accent text-accent-foreground border-accent inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium no-underline"
+              aria-current="page"
+              title="All writing by Uriel Papa"
+            >
+              All {allPosts.length}
+            </a>
+          </li>
           {
             HUBS.map(h => (
-              <li>
+              <li class="shrink-0">
                 <HubChip hub={h.id} size="md" />
               </li>
             ))
           }
         </ul>
       </nav>
-      <p class="meta mt-4">
-        Looking for something shorter? See <a href="/notes">notes</a> and <a
-          href="/news">news takes</a
-        >.
-      </p>
-    </PageIntro>
-    {
-      posts.length > 0 ? (
-        <ul class="max-w-read">
-          {posts.map(p => (
-            <PostCard
-              href={postUrl(p)}
-              title={p.data.title}
-              summary={p.data.dek}
-              hub={p.data.hub}
-              date={p.data.published}
-              minutes={readingTime(p.body)}
-              frame={p.data.frame}
-              draft={p.data.draft}
-              headingLevel="h2"
-            />
-          ))}
-        </ul>
-      ) : (
-        <p class="max-w-read">The first posts are being written.</p>
-      )
-    }
-    <Pagination base="/blog" page={page} pages={pages} label="Writing" />
-    <NewsletterBox from="blog-index" align="start" />
+      <form
+        action="/search"
+        method="get"
+        role="search"
+        class="flex shrink-0 gap-2"
+      >
+        <label for="writing-q" class="sr-only">Search the writing</label>
+        <input
+          id="writing-q"
+          name="q"
+          type="search"
+          placeholder="Search posts"
+          class="border-foreground bg-background min-h-11 w-full rounded-lg border px-3 py-2 text-sm lg:w-52"
+        />
+        <button type="submit" class="btn">Search</button>
+      </form>
+    </div>
+
+    <div class="with-rail">
+      <div class="min-w-0">
+        {
+          posts.length > 0 ? (
+            <ul>
+              {posts.map(p => (
+                <PostCard
+                  href={postUrl(p)}
+                  title={p.data.title}
+                  summary={p.data.dek}
+                  hub={p.data.hub}
+                  date={p.data.published}
+                  minutes={readingTime(p.body)}
+                  frame={p.data.frame}
+                  draft={p.data.draft}
+                  headingLevel="h2"
+                  thumb={postThumb(p)}
+                />
+              ))}
+            </ul>
+          ) : (
+            <p class="max-w-read">The first posts are being written.</p>
+          )
+        }
+        <Pagination base="/blog" page={page} pages={pages} label="Writing" />
+      </div>
+
+      <aside class="flex flex-col gap-6 lg:pb-12" aria-label="More to read">
+        {
+          startHere.length > 0 && (
+            <section class="rail-box" aria-labelledby="start-here-h">
+              <h2 id="start-here-h" class="h3 mb-2">
+                Start here
+              </h2>
+              <ul class="divide-border divide-y">
+                {startHere.map(p => (
+                  <li class="py-3 last:pb-0">
+                    <a
+                      href={postUrl(p)}
+                      class="font-semibold"
+                      title={`Read: ${p.data.title}`}
+                    >
+                      {p.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+        <section class="rail-box" aria-labelledby="shorter-h">
+          <h2 id="shorter-h" class="h3 mb-2">Shorter reads</h2>
+          <p>
+            <a href="/news" title="Uriel Papa's takes on recent tech news"
+              >{newsCount} news takes</a
+            > on the week's releases, and <a
+              href="/notes"
+              title="Uriel Papa's short notes and quick tips"
+              >{notesCount} {notesCount === 1 ? "note" : "notes"}</a
+            > under 400 words.
+          </p>
+        </section>
+        <NewsletterBox from="blog-index" variant="rail" />
+      </aside>
+    </div>
   </div>
 </Layout>

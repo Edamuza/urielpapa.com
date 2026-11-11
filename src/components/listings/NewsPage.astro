@@ -2,10 +2,11 @@
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import PageIntro from "@/components/PageIntro.astro";
-import PostCard from "@/components/PostCard.astro";
+import HubChip from "@/components/HubChip.astro";
+import { HUBS } from "@/data/hubs";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import Pagination from "@/components/Pagination.astro";
-import { formatDate, getNewsTakes, postUrl } from "@/utils/content";
+import { formatDate, getNewsTakes, isoDate, postUrl } from "@/utils/content";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 import { pageCount, pageHref, pageItems } from "@/utils/pagination";
 
@@ -37,6 +38,16 @@ const crumbs = [
   ...(page > 1 ? [{ name: `Page ${page}`, href: path }] : []),
 ];
 
+/** "openai.com" from the announcement's URL, shown as the take's source. */
+const sourceHost = (url?: string) => {
+  if (!url) return undefined;
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return undefined;
+  }
+};
+
 const months = new Map<string, typeof news>();
 for (const n of news) {
   const key = formatDate(n.data.published, "MMMM YYYY");
@@ -66,29 +77,90 @@ const schema = [
     <PageIntro title={heading} intro={intro}>
       {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
     </PageIntro>
-    {
-      news.length === 0 ? (
-        <p class="max-w-read">The first news takes are on the way.</p>
-      ) : (
-        [...months].map(([month, items]) => (
-          <section class="max-w-read mb-8">
-            <h2 class="h3 border-border mb-3 border-b pb-2">{month}</h2>
-            <ul>
-              {items.map(n => (
-                <PostCard
-                  href={postUrl(n)}
-                  title={n.data.title}
-                  hub={n.data.hub}
-                  date={n.data.published}
-                  draft={n.data.draft}
-                />
-              ))}
-            </ul>
-          </section>
-        ))
-      )
-    }
-    <Pagination base="/news" page={page} pages={pages} label="News" />
-    <NewsletterBox from="news-index" />
+    <div class="with-rail">
+      <div class="min-w-0">
+        {
+          news.length === 0 ? (
+            <p class="max-w-read">The first news takes are on the way.</p>
+          ) : (
+            [...months].map(([month, items]) => (
+              <section class="mb-10">
+                <h2 class="h3 border-foreground bg-background sticky top-0 z-10 border-b py-2">
+                  {month}
+                </h2>
+                <ul>
+                  {items.map(n => {
+                    const host = sourceHost(n.data.sourceUrl);
+                    return (
+                      <li class="border-border grid grid-cols-[4.25rem_minmax(0,1fr)] gap-4 border-b py-4 last:border-b-0 sm:grid-cols-[5.5rem_minmax(0,1fr)] sm:gap-6">
+                        <time
+                          datetime={isoDate(n.data.published)}
+                          class="text-muted-foreground font-mono text-sm leading-snug"
+                        >
+                          {formatDate(n.data.published, "D MMM")}
+                          <span class="block text-xs">
+                            {formatDate(n.data.published, "ddd")}
+                          </span>
+                        </time>
+                        <div class="min-w-0">
+                          <h3 class="text-lg leading-snug font-semibold">
+                            <a
+                              href={postUrl(n)}
+                              title={`Read: ${n.data.title}`}
+                            >
+                              {n.data.title}
+                            </a>
+                          </h3>
+                          <p class="mt-1 text-[0.95rem]">{n.data.dek}</p>
+                          <p class="meta mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                            <HubChip hub={n.data.hub} />
+                            {host && <span>Source: {host}</span>}
+                            {n.data.draft && (
+                              <span class="border-foreground rounded border border-dashed px-1.5 text-xs font-semibold">
+                                Draft
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            ))
+          )
+        }
+        <Pagination base="/news" page={page} pages={pages} label="News" />
+      </div>
+      <aside class="flex flex-col gap-6 lg:pb-12" aria-label="About news takes">
+        <section class="rail-box" aria-labelledby="what-h">
+          <h2 id="what-h" class="h3 mb-2">What's a news take?</h2>
+          <p>
+            A short post on one announcement: what happened, what changed, why
+            it matters and what I think. Longer explainers live in <a
+              href="/blog"
+              title="All of Uriel Papa's long posts">Writing</a
+            >.
+          </p>
+        </section>
+        <section class="rail-box" aria-labelledby="news-topics-h">
+          <h2 id="news-topics-h" class="h3 mb-3">Browse by topic</h2>
+          <ul class="flex flex-wrap gap-2">
+            {
+              HUBS.map(h => (
+                <li>
+                  <HubChip hub={h.id} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+        <NewsletterBox
+          from="news-index"
+          heading="Get the news by email"
+          variant="rail"
+        />
+      </aside>
+    </div>
   </div>
 </Layout>

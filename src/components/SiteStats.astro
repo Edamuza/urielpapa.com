@@ -1,6 +1,6 @@
 ---
 /**
- * Home page stats, all counted at build from the site's own content (see
+ * Site stats on the Colophon (they were on the home page until Nov 2026), all counted at build from the site's own content (see
  * src/lib/site-stats.ts): published posts, pages in the sitemap, days since
  * launch and outside sources cited.
  */
@@ -22,12 +22,12 @@ const since = formatDate(new Date(LAUNCH_DATE));
 const built = formatDate(new Date());
 ---
 
-<section class="border-border border-b py-10" aria-labelledby="stats-h">
+<section class="border-border mt-10 border-t py-10" aria-labelledby="stats-h">
   <h2 id="stats-h" class="h2 mb-2">The site in numbers</h2>
   <p class="max-w-read mb-6">
     How urielpapa.com is doing since it launched on {since}.
   </p>
-  <dl class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <dl class="grid grid-cols-2 gap-4">
     <div class="border-foreground/80 rounded-lg border p-4">
       <dt class="label-caps text-muted-foreground">Days since launch</dt>
       <dd class="font-display mt-1 text-3xl font-bold">{fmt(days)}</dd>
