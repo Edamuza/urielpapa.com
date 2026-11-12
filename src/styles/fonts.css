@@ -1,0 +1,53 @@
+/*
+ * Metric-matched fallbacks shown while the web fonts load, so text keeps its
+ * size and swapping in the web font barely shifts the layout.
+ *
+ * One family per web font, named in astro.config.ts (`${name} Fallback`). Arial
+ * covers Windows and Apple devices; Liberation Sans and Arimo are drawn to Arial's
+ * metrics and cover Linux, ChromeOS and Lighthouse, so the same overrides apply.
+ * The overrides are the ones Astro computed from the @fontsource files for Arial
+ * and Arial Bold; recompute them if the font packages change.
+ */
+@font-face {
+  font-family: "Albert Sans Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Arimo");
+  font-weight: 100 600;
+  size-adjust: 103.8581%;
+  ascent-override: 91.471%;
+  descent-override: 24.0713%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Albert Sans Fallback";
+  src: local("Arial Bold"), local("Liberation Sans Bold"), local("Arimo Bold");
+  font-weight: 700 900;
+  size-adjust: 96.4623%;
+  ascent-override: 98.4841%;
+  descent-override: 25.9169%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Arimo");
+  font-weight: 100 600;
+  size-adjust: 108.3444%;
+  ascent-override: 85.8374%;
+  descent-override: 24.9205%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  src: local("Arial Bold"), local("Liberation Sans Bold"), local("Arimo Bold");
+  font-weight: 700 900;
+  size-adjust: 100.6291%;
+  ascent-override: 92.4186%;
+  descent-override: 26.8312%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New"), local("Liberation Mono"), local("Cousine");
+  size-adjust: 99.9837%;
+  ascent-override: 102.0166%;
+  descent-override: 30.0049%;
+}

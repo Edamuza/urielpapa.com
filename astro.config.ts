@@ -63,7 +63,17 @@ for (const hub of new Set(PUBLISHED.map(e => e.hub).filter(Boolean))) {
   ]);
 }
 
-/** A self-hosted Latin font family from an @fontsource package (woff2 for browsers, woff for OG images). */
+/**
+ * A self-hosted Latin font family from an @fontsource package (woff2 for browsers, woff for OG images).
+ *
+ * Astro's generated fallbacks are turned off: they add two families per font
+ * ("… fallback: Arial" and "… fallback: Arial Bold") that only name Arial, so on
+ * Linux and Android, where Arial is missing, Chrome looks each one up and fails
+ * for every font size and weight in the first layout. Those blocking font
+ * lookups were the main long task on mobile Lighthouse. The single metric-matched
+ * "<name> Fallback" family in src/styles/fonts.css replaces them and also finds
+ * Liberation Sans, so the fallback works there too.
+ */
 function localFont(
   name: string,
   pkg: string,
@@ -89,7 +99,8 @@ function localFont(
     name,
     cssVariable,
     provider: fontProviders.local(),
-    fallbacks,
+    fallbacks: [`${name} Fallback`, ...fallbacks],
+    optimizedFallbacks: false,
     options: {
       variants: variants as [(typeof variants)[number], ...typeof variants],
     },
