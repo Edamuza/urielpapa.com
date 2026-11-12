@@ -8,7 +8,7 @@ import SectionHeader from "@/components/SectionHeader.astro";
 import { Image } from "astro:assets";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import ProjectTile from "@/components/ProjectTile.astro";
-import { PROOF, SITE, WORK_WITH_ME_HREF } from "@/config";
+import { CAREER_START, PROOF, SITE, WORK_WITH_ME_HREF } from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
   formatDate,
@@ -39,6 +39,17 @@ const allNotes = await getNotes();
 // /projects) in a looping carousel: featured ones first, then the rest in their
 // set order. The full list lives on /projects.
 const projects = await getProjects();
+// Proof-of-work values with {years} or {projects} are filled in here, so
+// the numbers stay true as time passes and projects are added.
+const careerYears = Math.floor(
+  (Date.now() - new Date(CAREER_START).getTime()) / (365.25 * 86_400_000)
+);
+const proof = PROOF.map(item => ({
+  ...item,
+  value: item.value
+    .replace("{years}", String(careerYears))
+    .replace("{projects}", String(projects.length)),
+}));
 const homeProjects = projects.filter(p => p.data.showOnHome);
 const topProjects = [
   ...homeProjects.filter(p => p.data.featured),
@@ -195,12 +206,12 @@ const [city, country] = SITE.location.split(", ");
       </h2>
       <ul class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
         {
-          PROOF.map(item => (
+          proof.map(item => (
             <li class="border-foreground border-t-2 pt-3">
               <a
                 href={item.href}
                 class="block no-underline hover:underline"
-                title={`See the case study: ${item.value} ${item.label}`}
+                title={item.title}
               >
                 <span class="font-display block text-2xl leading-tight font-bold sm:text-3xl">
                   {item.value}
