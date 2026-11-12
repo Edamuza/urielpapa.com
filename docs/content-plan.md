@@ -38,7 +38,7 @@ Status: draft = in the repo with `draft: true`; live = published.
 
 ## Daily news takes
 
-One short news take a day (frame `news-take`, under /news), 400-700 words, on a real announcement from the last 48 hours in AI, automation, search/SEO, web frameworks, or technology for business. Each one cites the primary source in `sourceUrl`, explains what changed in plain words and what it means for founders and small businesses, and links to the most related post on the site. Skip a day rather than publish a thin or unverified take: mass low-value AI posts are the hack the method warns against.
+Up to three short news takes a week (frame `news-take`, under /news), 400-700 words, on a real announcement from the last 48 hours with a Philippine or small-business angle (rules in `docs/news-brief.md`, "What qualifies"). Changed on 12 Nov 2026 from one a day: the SEO audit found global news takes drew two thirds of impressions and almost no clicks, so the time goes to evergreen posts instead. Each one cites the primary source in `sourceUrl`, explains what changed in plain words and what it means for founders and small businesses, and links to the most related post on the site. Skip a day rather than publish a thin or unverified take: mass low-value AI posts are the hack the method warns against.
 
 ## Linking rules
 

@@ -137,27 +137,41 @@ export const START_HERE = [
   "how-to-check-if-chatgpt-cites-your-site",
 ];
 
-/** "Proof of work" numbers on the home page, from the projects' case studies. */
+/** First paid work in the industry (résumé: marketing specialist, Feb 2023). */
+export const CAREER_START = "2023-02-01";
+
+/**
+ * Proof-of-work tiles on the home page, from the résumé. `{years}` and
+ * `{projects}` in a value are filled in at build time (years since
+ * CAREER_START, and the number of published projects), so they stay true.
+ * "50+ people" is Uriel's own count (12 Nov 2026) of everyone led, freelance
+ * teams and the agency together. "8 events": the résumé's 7 seminars and
+ * expos plus the AppBuildersPH hackathon; update it after each new event.
+ */
 export const PROOF = [
   {
-    value: "115 pages",
-    label: "in the ERP I led and co-developed in under 3 months",
-    href: "/projects/vite-seo-erp",
+    value: "{years}+ years",
+    label: "in web development, software and marketing, since 2023",
+    href: "/about",
+    title: "Read Uriel Papa's experience on the About page",
   },
   {
-    value: "5,241",
-    label: "automated tests on that ERP",
-    href: "/projects/vite-seo-erp",
+    value: "{projects}+ projects",
+    label: "handled, from client websites to my own products",
+    href: "/projects",
+    title: "See Uriel Papa's projects and case studies",
   },
   {
-    value: "5 plugins",
-    label: "in my WordPress SEO suite, about 11,700 lines",
-    href: "/projects/wordpress-seo-plugins",
+    value: "50+ people",
+    label: "led across my career, from freelance teams to the company I built",
+    href: "/about",
+    title: "Read about the teams Uriel Papa has led",
   },
   {
-    value: "13 agents",
-    label: "in the job and client CRM I built for myself",
-    href: "/projects/job-client-crm",
+    value: "8 events",
+    label: "business expos, seminars and a hackathon attended",
+    href: "/events",
+    title: "See Uriel Papa's notes from seminars and events",
   },
 ];
 
