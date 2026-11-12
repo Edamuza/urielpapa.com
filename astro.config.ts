@@ -67,15 +67,6 @@ for (const hub of new Set(PUBLISHED.map(e => e.hub).filter(Boolean))) {
 /**
  * A self-hosted Latin font family from an @fontsource package (woff2 for browsers, woff for OG images).
  *
- * `preloaded` lists the upright weights that Layout.astro preloads because the
- * first screen uses them. Those use font-display: optional: Chrome holds the
- * first paint briefly (up to ~100 ms) for a preloaded optional font, so the page
- * paints in the real font and nothing reflows when it arrives (with swap, the
- * text first laid out in the fallback re-wrapped and moved the header nav and
- * the listing sidebars: CLS 0.07 on /blog). If a font is still not there by
- * then, that one page view keeps the fallback and the next one has it cached.
- * Other weights and italics keep swap.
- *
  * Astro's generated fallbacks are turned off: they add two families per font
  * ("… fallback: Arial" and "… fallback: Arial Bold") that only name Arial, so on
  * Linux and Android, where Arial is missing, Chrome looks each one up and fails
@@ -90,7 +81,7 @@ function localFont(
   cssVariable: string,
   weights: number[],
   fallbacks: string[],
-  { italic = false, preloaded = [] as number[] } = {}
+  { italic = false } = {}
 ) {
   const styles = italic
     ? (["normal", "italic"] as const)
@@ -99,10 +90,7 @@ function localFont(
     styles.map(style => ({
       weight,
       style,
-      display:
-        style === "normal" && preloaded.includes(weight)
-          ? ("optional" as const)
-          : ("swap" as const),
+      display: "swap" as const,
       src: [
         `@fontsource/${pkg}/files/${pkg}-latin-${weight}-${style}.woff2`,
         `@fontsource/${pkg}/files/${pkg}-latin-${weight}-${style}.woff`,
@@ -179,8 +167,7 @@ export default defineConfig({
       "bricolage-grotesque",
       "--ff-display",
       [600, 700],
-      ["system-ui", "sans-serif"],
-      { preloaded: [600, 700] }
+      ["system-ui", "sans-serif"]
     ),
     localFont(
       "Albert Sans",
@@ -188,7 +175,7 @@ export default defineConfig({
       "--ff-body",
       [400, 500, 600, 700],
       ["system-ui", "sans-serif"],
-      { italic: true, preloaded: [400, 500, 600] }
+      { italic: true }
     ),
     localFont(
       "JetBrains Mono",
