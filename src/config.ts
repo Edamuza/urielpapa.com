@@ -144,55 +144,34 @@ export const CAREER_START = "2023-02-01";
  * Proof-of-work tiles on the home page, from the résumé. `{years}` and
  * `{projects}` in a value are filled in at build time (years since
  * CAREER_START, and the number of published projects), so they stay true.
+ * "50+ people" is Uriel's own count (12 Nov 2026) of everyone led, freelance
+ * teams and the agency together. "8 events": the résumé's 7 seminars and
+ * expos plus the AppBuildersPH hackathon; update it after each new event.
  */
 export const PROOF = [
   {
     value: "{years}+ years",
-    label: "building websites, software and marketing, since 2023",
+    label: "in web development, software and marketing, since 2023",
     href: "/about",
     title: "Read Uriel Papa's experience on the About page",
   },
   {
-    value: "{projects} projects",
-    label: "built and shipped, each with a case study",
+    value: "{projects}+ projects",
+    label: "handled, from client websites to my own products",
     href: "/projects",
-    title: "See all of Uriel Papa's projects and case studies",
+    title: "See Uriel Papa's projects and case studies",
   },
   {
-    value: "22 people",
-    label: "on the team I led at the agency I founded at 21",
-    href: "/blog/closing-my-agency",
-    title: "Read Uriel Papa's notes on founding and closing an agency",
+    value: "50+ people",
+    label: "led across my career, from freelance teams to the company I built",
+    href: "/about",
+    title: "Read about the teams Uriel Papa has led",
   },
   {
-    value: "33 leads",
-    label: "in 5 days from Meta ads, at about US$1 each",
-    href: "/blog/organic-content-vs-paid-ads",
-    title: "Read how the Meta ads compared with organic content",
-  },
-  {
-    value: "115 pages",
-    label: "in the ERP I led and co-developed in under 3 months",
-    href: "/projects/vite-seo-erp",
-    title: "See the case study: the VITE SEO ERP",
-  },
-  {
-    value: "5,241",
-    label: "automated tests on that ERP",
-    href: "/projects/vite-seo-erp",
-    title: "See the case study: 5,241 automated tests on the ERP",
-  },
-  {
-    value: "5 plugins",
-    label: "in my WordPress SEO suite, about 11,700 lines",
-    href: "/projects/wordpress-seo-plugins",
-    title: "See the case study: the WordPress SEO plugin suite",
-  },
-  {
-    value: "13 agents",
-    label: "in the job and client CRM I built for myself",
-    href: "/projects/job-client-crm",
-    title: "See the case study: the job and client CRM",
+    value: "8 events",
+    label: "business expos, seminars and a hackathon attended",
+    href: "/events",
+    title: "See Uriel Papa's notes from seminars and events",
   },
 ];
 
