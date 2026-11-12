@@ -1,6 +1,6 @@
 # Scheduled task: daily tech news take
 
-Schedule: every day at 08:00 (Manila). Paste everything below the line into a new scheduled task in the Claude desktop app.
+Schedule: every day at 08:00 (Manila); it publishes at most 3 takes a week and skips the other days (docs/news-brief.md, "What qualifies"). Paste everything below the line into a new scheduled task in the Claude desktop app.
 
 ---
 
@@ -15,8 +15,9 @@ You publish one short tech news take a day on urielpapa.com, Uriel Papa's person
 
 ## 2. Pick one story
 
+- First count this week's takes (Monday to Sunday, Manila). At 3, publish nothing and log `skipped | weekly cap reached`.
 - Search the web for announcements from the last 48 hours in: AI models and tools (OpenAI, Anthropic, Google Gemini, Meta, open models), automation (n8n, Zapier, Make, AI agents), search and SEO (Google Search, AI Overviews, Bing, ChatGPT search, Perplexity), web frameworks and hosting (Astro, Next.js, Laravel, Vercel, Cloudflare), and technology for small businesses, especially in the Philippines.
-- Pick the one most useful to founders and small-business owners and closest to the site's topics. Open the primary source (the official announcement, docs, changelog or filing), not only news coverage. Confirm the date.
+- Pick the one most useful to founders and small-business owners and closest to the site's topics. It must have the Philippine or small-business angle that docs/news-brief.md requires; big-tech corporate news with no action for a small business does not qualify. Open the primary source (the official announcement, docs, changelog or filing), not only news coverage. Confirm the date.
 - The story must have at least one X or Threads post about it that the Embeds section of docs/news-brief.md accepts (the company's or executive's own post first). If it has none, take the next strongest story.
 - If nothing in the last 48 hours is both real and relevant, publish nothing and write "skipped: no strong story" in the run summary. Skipping is better than a thin post.
 

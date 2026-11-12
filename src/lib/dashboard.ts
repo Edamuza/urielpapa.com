@@ -378,6 +378,12 @@ export type SearchConsole = {
       pageCount?: number;
       queries: (Row & { query: string })[];
       pages: (Row & { path: string })[];
+      /** Totals per week (weeks start on Monday), oldest first. */
+      weeks?: (Row & { week: string })[];
+      /** Top countries by impressions (Search Console's 3-letter codes). */
+      countries?: (Row & { country: string })[];
+      /** Desktop, mobile and tablet. */
+      devices?: (Row & { device: string })[];
     } & Partial<Row>;
     requested: { path: string; on: string }[];
   };
@@ -411,6 +417,8 @@ export type SearchConsole = {
     issues?: { url: string; httpCode: number | null; issues: string }[];
     /** What the refresh did about Bing, e.g. submitted the sitemap. */
     actions?: string[];
+    /** Pages sent to Bing's URL Submission API, and when. */
+    submitted?: { path: string; on: string }[];
   };
   /** Microsoft Clarity, from its Data Export API (last 3 days at most). */
   clarity?: ClaritySnapshot;

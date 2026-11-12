@@ -255,11 +255,23 @@ async function readGoogle(
   const from = manilaDay(-28);
   const to = manilaDay(-1);
   const base = { startDate: from, endDate: to, type: "web" };
-  const [totals, queries, pageRows] = await Promise.all([
-    searchAnalytics(token, base),
-    searchAnalytics(token, { ...base, dimensions: ["query"], rowLimit: 1000 }),
-    searchAnalytics(token, { ...base, dimensions: ["page"], rowLimit: 1000 }),
-  ]);
+  const [totals, queries, pageRows, dayRows, countryRows, deviceRows] =
+    await Promise.all([
+      searchAnalytics(token, base),
+      searchAnalytics(token, {
+        ...base,
+        dimensions: ["query"],
+        rowLimit: 1000,
+      }),
+      searchAnalytics(token, { ...base, dimensions: ["page"], rowLimit: 1000 }),
+      searchAnalytics(token, { ...base, dimensions: ["date"], rowLimit: 100 }),
+      searchAnalytics(token, {
+        ...base,
+        dimensions: ["country"],
+        rowLimit: 10,
+      }),
+      searchAnalytics(token, { ...base, dimensions: ["device"] }),
+    ]);
   const t = totals[0];
   const row = (r: GscRow) => ({
     clicks: r.clicks,
@@ -328,6 +340,31 @@ async function readGoogle(
     known.map(([, i]) => i.checked).sort()[0] ??
     previous.indexing.lastUpdated ??
     manilaDay();
+  // Days into Monday-to-Sunday weeks; position weighted by impressions.
+  const weekMap = new Map<
+    string,
+    { clicks: number; impressions: number; weighted: number }
+  >();
+  for (const r of dayRows) {
+    const date = new Date(`${r.keys?.[0]}T00:00:00Z`);
+    if (Number.isNaN(date.getTime())) continue;
+    date.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 6) % 7));
+    const week = date.toISOString().slice(0, 10);
+    const w = weekMap.get(week) ?? { clicks: 0, impressions: 0, weighted: 0 };
+    w.clicks += r.clicks;
+    w.impressions += r.impressions;
+    w.weighted += r.position * r.impressions;
+    weekMap.set(week, w);
+  }
+  const weeks = [...weekMap]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([week, w]) => ({
+      week,
+      clicks: w.clicks,
+      impressions: w.impressions,
+      ctr: round(w.impressions ? w.clicks / w.impressions : 0, 4),
+      position: round(w.impressions ? w.weighted / w.impressions : 0, 1),
+    }));
   const google: SearchConsole["google"] = {
     checkedOn: manilaDay(),
     indexing: {
@@ -359,6 +396,13 @@ async function readGoogle(
               .replace(/\/$/, "") || "/",
           ...row(r),
         })),
+      weeks,
+      countries: countryRows
+        .sort((a, b) => b.impressions - a.impressions)
+        .map(r => ({ country: (r.keys?.[0] ?? "").toUpperCase(), ...row(r) })),
+      devices: deviceRows
+        .sort((a, b) => b.impressions - a.impressions)
+        .map(r => ({ device: r.keys?.[0] ?? "", ...row(r) })),
     },
     // Search Console's API doesn't list past indexing requests; keep what was recorded.
     requested: previous.requested,
@@ -457,7 +501,81 @@ const issueWords = (v: number | string | undefined) => {
 
 const SITEMAP = `${SITE.url}/sitemap-index.xml`;
 
-async function readBing(): Promise<SearchConsole["bing"]> {
+/** Most URLs one refresh submits to Bing, whatever the daily quota allows. */
+const BING_SUBMIT_MAX = 10;
+
+/**
+ * Which pages to hand Bing first: the homepage and About (who the site is),
+ * the topic hubs, long-form posts and projects, then everything else. News
+ * takes come last because they age fastest.
+ */
+const bingRank = (path: string) =>
+  path === "/" || path === "/about"
+    ? 0
+    : path.startsWith("/topics/")
+      ? 1
+      : path.startsWith("/blog/") && !path.startsWith("/blog/page/")
+        ? 2
+        : path.startsWith("/projects/")
+          ? 3
+          : path.startsWith("/news/") && !path.startsWith("/news/page/")
+            ? 5
+            : 4;
+
+/**
+ * Submits pages Bing has never been sent through the URL Submission API, up
+ * to the day's quota. IndexNow already announces changed pages; this asks
+ * Bing to crawl the ones that matter most, which a new site with few links
+ * needs. Returns the updated submission log and what happened, in words.
+ */
+async function submitToBing(
+  pages: string[],
+  submitted: { path: string; on: string }[]
+): Promise<{ submitted: { path: string; on: string }[]; action?: string }> {
+  const sent = new Set(submitted.map(s => s.path));
+  const todo = pages
+    .filter(p => !sent.has(p))
+    .sort((a, b) => bingRank(a) - bingRank(b) || a.localeCompare(b));
+  if (!todo.length) return { submitted };
+  try {
+    // GetUrlSubmissionQuota answers with one object, not a list.
+    const res = await fetch(
+      `https://ssl.bing.com/webmaster/api.svc/json/GetUrlSubmissionQuota?siteUrl=${encodeURIComponent(PROPERTY)}&apikey=${BING_WEBMASTER_API_KEY}`,
+      { signal: timeout() }
+    );
+    if (!res.ok)
+      throw new Error(
+        `Bing GetUrlSubmissionQuota failed (${res.status}): ${(await res.text()).slice(0, 200)}`
+      );
+    const quota = ((await res.json()) as { d?: { DailyQuota?: number } }).d;
+    const room = Math.min(BING_SUBMIT_MAX, quota?.DailyQuota ?? 0);
+    if (room <= 0)
+      return {
+        submitted,
+        action: `Bing's URL submission quota is used up for today; ${todo.length} pages wait for the next refresh.`,
+      };
+    const batch = todo.slice(0, room);
+    await bingPost("SubmitUrlBatch", {
+      siteUrl: PROPERTY,
+      urlList: batch.map(p => SITE.url + (p === "/" ? "/" : p)),
+    });
+    const on = manilaDay();
+    return {
+      submitted: [...submitted, ...batch.map(path => ({ path, on }))],
+      action: `Submitted ${batch.length} pages to Bing (${batch.join(", ")}); ${todo.length - batch.length} still to send.`,
+    };
+  } catch (e) {
+    return {
+      submitted,
+      action: `Submitting pages to Bing failed: ${String(e instanceof Error ? e.message : e).slice(0, 160)}`,
+    };
+  }
+}
+
+async function readBing(
+  pages: string[],
+  previous: SearchConsole["bing"]
+): Promise<SearchConsole["bing"]> {
   const from = manilaDay(-28);
   const to = manilaDay(-1);
   const [traffic, crawl, feeds, issues] = await Promise.all([
@@ -492,6 +610,8 @@ async function readBing(): Promise<SearchConsole["bing"]> {
       );
     }
   }
+  const sent = await submitToBing(pages, previous.submitted ?? []);
+  if (sent.action) actions.push(sent.action);
 
   return {
     checkedOn: manilaDay(),
@@ -537,6 +657,7 @@ async function readBing(): Promise<SearchConsole["bing"]> {
       issues: issueWords(i.Issues),
     })),
     actions,
+    submitted: sent.submitted,
   };
 }
 
@@ -704,7 +825,9 @@ export async function refreshSearchData(
         until
       )
     : undefined;
-  const bing = BING_WEBMASTER_API_KEY ? readBing() : undefined;
+  const bing = BING_WEBMASTER_API_KEY
+    ? readBing(pages, previous.bing)
+    : undefined;
   const clarity = CLARITY_API_TOKEN ? readClarity() : undefined;
 
   const [g, b, c] = await Promise.allSettled([google, bing, clarity]);

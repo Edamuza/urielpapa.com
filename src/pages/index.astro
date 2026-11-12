@@ -109,8 +109,16 @@ const [city, country] = SITE.location.split(", ");
     >
       <div class="hero-text max-w-3xl">
         <h1 id="intro-h" class="h1">
-          I&nbsp;see the problem. I&nbsp;build the solution. I&nbsp;grow the
-          business.
+          {
+            /* Name and service first, so search engines and AI read who this is
+              and what the work is from the H1; the slogan stays the big line. */
+          }
+          <span
+            class="label-caps text-muted-foreground mb-3 block leading-normal"
+            >{SITE.name}: websites, software and AI automation for businesses in
+            the {SITE.location}</span
+          >{" "}
+          I&nbsp;see the problem. I&nbsp;build the solution. I&nbsp;grow the business.
         </h1>
         <p class="hero-lead max-w-read mt-4 text-lg sm:mt-5">
           <strong

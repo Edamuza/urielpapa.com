@@ -7,6 +7,8 @@ order: 1
 startHere:
   - post: what-is-tokenization
     reason: Start with tokens, the unit every model reads, writes, limits and charges by.
+  - post: free-github-repos-to-learn-ai-agents
+    reason: Six free GitHub repos, from beginner courses to working starter apps, to learn how to build AI agents.
 ---
 
 Here I write about how large language models (LLMs) actually work, for anyone who uses AI tools and wants to understand what is happening underneath. That means the building blocks: tokenization, context windows, prompting, and the difference between a model and the harness around it.

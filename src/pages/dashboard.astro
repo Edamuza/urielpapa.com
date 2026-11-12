@@ -633,7 +633,12 @@ const sections = [
         {fmt(bing.clicks)} clicks and {fmt(bing.impressions)} impressions{
           bing.from ? ` (${range(bing.from, bing.to)})` : ""
         }. {bing.notes} New and changed posts reach Bing through IndexNow on each
-        deploy; unchanged pages are not re-sent.
+        deploy; unchanged pages are not re-sent. Each refresh also asks Bing to crawl
+        up to 10 pages it was never sent, most important first{
+          bing.submitted?.length
+            ? `: ${fmt(bing.submitted.length)} of ${fmt(pages.size)} sent so far`
+            : ""
+        }.
       </p>
       <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
         <div class="tile">
@@ -864,6 +869,103 @@ const sections = [
           </tbody>
         </table>
       </div>
+      {
+        perf.weeks && perf.weeks.length > 0 && (
+          <>
+            <h3 class="h3 mt-6 mb-2">By week</h3>
+            <p class="meta mb-2">
+              Weeks start on Monday; the first and last weeks may be partial.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Week of</th>
+                    <th class="r">Clicks</th>
+                    <th class="r">Impressions</th>
+                    <th class="r">CTR</th>
+                    <th class="r">Position</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {perf.weeks.map(w => (
+                    <tr>
+                      <td>{day(w.week)}</td>
+                      <td class="r">{fmt(w.clicks)}</td>
+                      <td class="r">{fmt(w.impressions)}</td>
+                      <td class="r">{pct(w.ctr)}</td>
+                      <td class="r">{fmt(w.position, 1)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )
+      }
+      {
+        (perf.countries?.length || perf.devices?.length) && (
+          <div class="mt-6 grid gap-6 md:grid-cols-2">
+            {perf.countries && perf.countries.length > 0 && (
+              <div>
+                <h3 class="h3 mb-2">By country</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Country</th>
+                        <th class="r">Clicks</th>
+                        <th class="r">Impressions</th>
+                        <th class="r">Position</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {perf.countries.map(c => (
+                        <tr>
+                          <td>{c.country}</td>
+                          <td class="r">{fmt(c.clicks)}</td>
+                          <td class="r">{fmt(c.impressions)}</td>
+                          <td class="r">{fmt(c.position, 1)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+            {perf.devices && perf.devices.length > 0 && (
+              <div>
+                <h3 class="h3 mb-2">By device</h3>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Device</th>
+                        <th class="r">Clicks</th>
+                        <th class="r">Impressions</th>
+                        <th class="r">Position</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {perf.devices.map(d => (
+                        <tr>
+                          <td>
+                            {d.device.charAt(0) +
+                              d.device.slice(1).toLowerCase()}
+                          </td>
+                          <td class="r">{fmt(d.clicks)}</td>
+                          <td class="r">{fmt(d.impressions)}</td>
+                          <td class="r">{fmt(d.position, 1)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      }
     </section>
 
     <section id="behavior" aria-labelledby="behavior-h" class="dash-section">
