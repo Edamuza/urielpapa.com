@@ -75,6 +75,14 @@ for (const hub of new Set(PUBLISHED.map(e => e.hub).filter(Boolean))) {
  * the listing sidebars: CLS 0.07 on /blog). If a font is still not there by
  * then, that one page view keeps the fallback and the next one has it cached.
  * Other weights and italics keep swap.
+ *
+ * Astro's generated fallbacks are turned off: they add two families per font
+ * ("… fallback: Arial" and "… fallback: Arial Bold") that only name Arial, so on
+ * Linux and Android, where Arial is missing, Chrome looks each one up and fails
+ * for every font size and weight in the first layout. Those blocking font
+ * lookups were the main long task on mobile Lighthouse. The single metric-matched
+ * "<name> Fallback" family in src/styles/fonts.css replaces them and also finds
+ * Liberation Sans, so the fallback works there too.
  */
 function localFont(
   name: string,
@@ -105,7 +113,8 @@ function localFont(
     name,
     cssVariable,
     provider: fontProviders.local(),
-    fallbacks,
+    fallbacks: [`${name} Fallback`, ...fallbacks],
+    optimizedFallbacks: false,
     options: {
       variants: variants as [(typeof variants)[number], ...typeof variants],
     },
