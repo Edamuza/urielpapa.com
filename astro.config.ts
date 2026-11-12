@@ -19,6 +19,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeImageTitles } from "./src/utils/rehype/imageTitles";
+import { rehypeImageSizes } from "./src/utils/rehype/imageSizes";
 import { contentEntries } from "./scripts/content-urls.mjs";
 
 const SITE_URL = "https://urielpapa.com";
@@ -127,7 +128,7 @@ export default defineConfig({
   ],
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeCallouts, rehypeImageTitles],
+      rehypePlugins: [rehypeCallouts, rehypeImageTitles, rehypeImageSizes],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "min-dark" },
