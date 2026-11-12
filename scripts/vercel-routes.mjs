@@ -52,6 +52,17 @@ const extra = [
     continue: true,
   },
   {
+    // Email assets (the animated signature photo). They have to be public so mail
+    // clients can load them, but they stay out of search and image search, and
+    // nothing on the site links to them.
+    src: "^/email/(.*)$",
+    headers: {
+      "X-Robots-Tag": "noindex, noimageindex, nofollow, noarchive",
+      "Cache-Control": "public, max-age=86400",
+    },
+    continue: true,
+  },
+  {
     // Admin, API and preview routes are for people and forms, never for search.
     src: "^/(keystatic|api|preview)(/.*)?$",
     headers: { "X-Robots-Tag": "noindex, nofollow" },
