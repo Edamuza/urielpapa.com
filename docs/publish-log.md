@@ -29,3 +29,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-10 | news | published | sec-data-breach-bir-probe |
 - 2026-11-11 | news | published | chatgpt-businesses-claim-listing |
 - 2026-11-12 | news | published | gemini-4-carbon-paid-developers |
+- 2026-11-13 | news | skipped | - | Weekly cap reached: 5 takes already published this week (9 to 15 Nov), against the limit of 3 set after the 12 Nov SEO audit.
