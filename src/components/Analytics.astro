@@ -1,6 +1,9 @@
 ---
 /**
- * GA4, loaded after the first interaction or 4 seconds so it never blocks reading.
+ * GA4, loaded on the visitor's first scroll, tap, key press or mouse move (or,
+ * failing that, when they switch away from the tab) so it never runs during
+ * page load. A fixed timer used to load it after 4 seconds, which landed inside
+ * PageSpeed Insights' measurement and cost blocking time and Speed Index.
  * Consent Mode v2 defaults are set before anything loads: the site has no ads, so
  * ad storage and ad personalisation are always denied; analytics storage is
  * granted except in the EEA, the UK and Switzerland, where it is denied
@@ -48,8 +51,10 @@ const consentDeniedRegions = (
     window.gtag("js", new Date());
     window.gtag("config", id);
   };
-  ["scroll", "pointerdown", "keydown"].forEach(e =>
+  ["scroll", "pointerdown", "pointermove", "keydown", "touchstart"].forEach(e =>
     addEventListener(e, load, { once: true, passive: true })
   );
-  setTimeout(load, 4000);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") load();
+  });
 </script>

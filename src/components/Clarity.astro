@@ -2,8 +2,9 @@
 /**
  * Microsoft Clarity: heatmaps, session recordings and behaviour signals
  * (rage clicks, dead clicks, scroll depth). Clarity's own snippet, loaded
- * like GA4 after the first interaction or 4 seconds so it never blocks
- * reading. In the EEA, the UK and Switzerland Clarity runs without cookies
+ * like GA4 on the first scroll, tap, key press or mouse move (or when the
+ * visitor switches away), never on a timer, so it never runs during page
+ * load. In the EEA, the UK and Switzerland Clarity runs without cookies
  * unless consent is given, so no banner is needed for it.
  */
 type Props = { id: string };
@@ -29,9 +30,11 @@ const { id } = Astro.props;
       const y = l.getElementsByTagName(r)[0];
       y.parentNode.insertBefore(t, y);
     };
-    ["scroll", "pointerdown", "keydown"].forEach(e =>
-      addEventListener(e, load, { once: true, passive: true })
+    ["scroll", "pointerdown", "pointermove", "keydown", "touchstart"].forEach(
+      e => addEventListener(e, load, { once: true, passive: true })
     );
-    setTimeout(load, 4000);
+    l.addEventListener("visibilitychange", () => {
+      if (l.visibilityState === "hidden") load();
+    });
   })(window, document, "clarity", "script", id);
 </script>
