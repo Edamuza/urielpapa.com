@@ -1,0 +1,120 @@
+---
+title: "Microsoft 365 Outage Hits Outlook, Teams, SharePoint and Copilot"
+seoTitle: "Microsoft 365 Outage: Outlook, Teams and Copilot Down"
+description: >-
+  A Microsoft 365 outage on November 12, 2026 cut access to Exchange Online,
+  Teams, SharePoint and Copilot. What Microsoft says and what to do now.
+dek: >-
+  Microsoft says a core process on its servers is getting overwhelmed and
+  taking capacity offline. Recovery has started, but slowly, right as the
+  Philippine workday begins on Friday.
+hub: tech-and-business
+frame: news-take
+takeaways:
+  - >-
+    On November 12, 2026, Microsoft confirmed that users may be unable to
+    connect to multiple Microsoft 365 services, including Exchange Online,
+    Teams, SharePoint Online and Microsoft 365 Copilot, under incident
+    MO1550821.
+  - >-
+    Microsoft says the load is not from more traffic: a core process on
+    affected servers is becoming overwhelmed, causing capacity loss.
+  - >-
+    Downdetector logged a peak of about 130,000 Outlook problem reports,
+    according to Tom's Guide's live coverage.
+  - >-
+    At 23:04 UTC (7:04 a.m. Friday in Manila), Microsoft said it was returning
+    a portion of servers to service and seeing limited recovery.
+businessImpact:
+  - >-
+    Email, Teams chats and SharePoint files may be slow or unreachable until
+    Microsoft finishes recovery, so plan the first hours of the workday around
+    it.
+  - >-
+    AI tools that read Microsoft 365 data, including Copilot and connectors in
+    ChatGPT and Claude, may fail until the connection is back.
+sourceUrl: https://status.cloud.microsoft/
+published: 2026-11-13
+related: []
+projects: []
+stack: []
+faq:
+  - q: Is Microsoft 365 down because of a cyberattack?
+    a: >-
+      Microsoft has not said anything about an attack. Its updates point to a
+      server problem: a core process on affected servers becoming overwhelmed,
+      and a small number of recent configuration updates it is investigating as
+      possible contributors.
+  - q: Will emails sent to me during the outage be lost?
+    a: >-
+      Microsoft has not said that mail is lost. Security Affairs advises IT
+      teams to expect delayed emails and messages until services fully
+      recover, so check again later before asking senders to resend.
+event: {}
+syndication: []
+draft: false
+---
+
+Microsoft 365 has been partly down since the afternoon of November 12, 2026 (US time), and users may be unable to connect to Exchange Online, Outlook, Teams, SharePoint Online and Microsoft 365 Copilot. Microsoft says a core process on its servers is getting overwhelmed and taking capacity offline. Recovery has started but is slow, and it overlaps with the start of Friday's workday in the Philippines.
+
+This take is part of my [Technology and Business](/topics/tech-and-business "Technology and Business articles") writing.
+
+## What happened?
+
+Microsoft's [Microsoft 365 Status account](https://x.com/MSFT365Status "Microsoft 365 Status on X") first reported trouble with Exchange Online mailboxes in the Americas at 17:54 UTC on November 12. The problem soon grew into a wider incident, MO1550821, covering several services. A separate Teams issue earlier that day (TM1550488) was already resolved by then.
+
+Microsoft posted the first Exchange alert on X:
+
+<SocialPost platform="x" url="https://x.com/MSFT365Status/status/2120938282204688468" author="Microsoft 365 Status" handle="MSFT365Status" date="2026-11-12" text={"We're investigating reports of users experiencing issues accessing Exchange Online mailboxes through multiple connection methods in the Americas. More details can be found in the Microsoft 365 admin center under EX1550543."} />
+
+Microsoft first blamed elevated load, then said traffic had not increased. [Tom's Guide's live coverage](https://www.tomsguide.com/news/live/microsoft-outlook-down-live-updates-outage-11-12-26 "Tom's Guide live updates on the November 12 Microsoft 365 outage") quotes Microsoft saying the load came from "a large number of servers being unexpectedly unavailable." The same coverage says Outlook reports on Downdetector peaked at about 130,000.
+
+![A long, low green Microsoft data center building behind a black security fence, with two metal exhaust towers, an empty road in front and a blue sky with large white clouds](../../assets/images/content/microsoft-365-outage-exchange-teams-copilot-1.jpg "A long, low green Microsoft data center building behind a black security fence, with two metal exhaust towers, an empty road in front and a blue sky with large white clouds")
+
+*Microsoft 365 runs on Microsoft's own data centers, like this one in Middenmeer in the Netherlands. Photo: [Hay Kranen](https://commons.wikimedia.org/wiki/File:Microsoft_Data_Center_Middenmeer,_the_Netherlands_-_1.jpg "Hay Kranen's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
+
+## Who is affected?
+
+Anyone on Microsoft 365 for Business or Enterprise may be affected, in any region. Microsoft's [service health page](https://status.cloud.microsoft/ "Microsoft 365 service health status page") lists these services as potentially impacted:
+
+- Exchange Online (Outlook email), Microsoft Teams and SharePoint Online
+- Microsoft 365 Copilot, Planner, To Do and Intune
+- Microsoft Defender XDR and Defender for Office 365
+- Several Microsoft Purview services, including Data Loss Prevention
+- Power BI, where exporting reports with sensitivity labels to PDF may fail
+
+The outage also reaches AI tools. [Security Affairs reports](https://securityaffairs.com/202932/security/microsoft-cloud-outage-hits-outlook-teams-copilot-and-ai-services.html "Security Affairs on the Microsoft cloud outage and its effect on AI services") that OpenAI and Anthropic both flagged failing Microsoft 365 connectors, so ChatGPT and Claude could not reach users' inboxes either.
+
+![A man walks down a narrow aisle between two walls of server racks covered in black cables, while a second man stands at the far end of the aisle](../../assets/images/content/microsoft-365-outage-exchange-teams-copilot-2.jpg "A man walks down a narrow aisle between two walls of server racks covered in black cables, while a second man stands at the far end of the aisle")
+
+*Microsoft says this outage started on its servers, not with a traffic spike. Photo: [Robert Scoble](https://commons.wikimedia.org/wiki/File:Microsoft_Bing_Maps%27_datacenter_-_Flickr_-_Robert_Scoble.jpg "Robert Scoble's photo of a Microsoft data center on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+## How serious is it?
+
+Serious, and longer than a typical blip. By 22:09 UTC, Microsoft said its "actions taken thus far have not provided the anticipated relief." It also said it is reviewing a small number of recent configuration updates as possible contributors. Its latest update, at 23:04 UTC (7:04 a.m. Friday in Manila), reports limited recovery:
+
+<SocialPost platform="x" url="https://x.com/MSFT365Status/status/2121016338181161457" author="Microsoft 365 Status" handle="MSFT365Status" date="2026-11-12" text={"We're returning a portion of affected servers to the service, and they remain stable so far. We're also shifting traffic to alternate routes wherever possible and observing limited recovery. In parallel, we've streamlined the process of returning the remaining affected servers to service. As capacity is restored, users may experience a gradual recovery as their clients reconnect. More info under EX1550543 and MO1550821 in the Microsoft 365 admin center, as well as http://status.cloud.microsoft if the admin center is not available to you."} />
+
+## What does it mean for small businesses and founders?
+
+My read: if your business runs on Outlook and Teams, this is a morning where your main tools may not work, and there is nothing you can fix on your side. The outage began overnight in the Philippines, so many teams will meet it when they log in on Friday.
+
+It also shows how much now sits on one account. Email, files, chat, security tools and AI assistants all went down together. A business with no second way to reach clients feels that the most.
+
+![The Microsoft logo and name on a low stone wall in front of Building 92, a modern glass and stone building with an angled roof on Microsoft's Redmond campus](../../assets/images/content/microsoft-365-outage-exchange-teams-copilot-3.jpg "The Microsoft logo and name on a low stone wall in front of Building 92, a modern glass and stone building with an angled roof on Microsoft's Redmond campus")
+
+*Microsoft, based in Redmond, Washington, says users will see a gradual recovery as capacity returns. Photo: [Jiaqian AirplaneFan](https://commons.wikimedia.org/wiki/File:Building_92_of_Microsoft_Redmond_Campus_-_panoramio.jpg "Jiaqian AirplaneFan's photo on Wikimedia Commons"), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/ "Creative Commons Attribution 3.0 license").*
+
+## What should you do now?
+
+1. **Check the status, not your settings.** Look at [Microsoft's service health page](https://status.cloud.microsoft/ "Microsoft 365 service health status page") or Health in the Microsoft 365 admin center before you reset passwords or reinstall Outlook.
+2. **Tell clients and staff early.** Post a short note on your other channels (Viber, Messenger, SMS) that email may be delayed today.
+3. **Don't resend everything.** Microsoft has not said mail is lost. Wait for recovery, then follow up only on time-sensitive messages.
+4. **Keep files you need today offline.** If OneDrive or SharePoint is synced on your laptop, work from the local copy.
+5. **Write down your backup channel.** After today, agree with your team which tool you use when Microsoft 365 is down.
+
+## Where can you learn more?
+
+- [Microsoft 365 service health status](https://status.cloud.microsoft/ "Microsoft 365 service health status page") - Microsoft's public status page for this incident.
+- [Microsoft 365 Status on X](https://x.com/MSFT365Status "Microsoft 365 Status on X") - Microsoft's running updates on MO1550821 and EX1550543.
+- [Tom's Guide live coverage](https://www.tomsguide.com/news/live/microsoft-outlook-down-live-updates-outage-11-12-26 "Tom's Guide live updates on the November 12 Microsoft 365 outage") - A timeline with Downdetector numbers.
