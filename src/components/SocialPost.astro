@@ -207,7 +207,10 @@ const grid =
     }
   </blockquote>
   <figcaption class="meta mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
-    <a href={url} title={`${author} on ${site}, ${when}`}
+    <a
+      href={url}
+      title={`${author} on ${site}, ${when}`}
+      class="inline-flex min-h-6 items-center"
       >Post by {author} (@{handle}) on {site}, {when}</a
     >
     <button

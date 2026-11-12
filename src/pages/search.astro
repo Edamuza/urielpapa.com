@@ -113,6 +113,9 @@ const crumbs = [
 
 <style is:global>
   #pagefind-search {
+    /* Room for the search box Pagefind mounts after load (its input is
+       64px * --pagefind-ui-scale 0.8), so the footer does not jump down. */
+    min-height: calc(64px * 0.8);
     --pagefind-ui-font: var(--ff-body);
     --pagefind-ui-text: var(--foreground);
     --pagefind-ui-background: var(--background);

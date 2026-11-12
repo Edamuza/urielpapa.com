@@ -126,7 +126,7 @@ const [city, country] = SITE.location.split(", ");
           href="/about"
           class="see-more mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-[3px]"
           title="Read more about Uriel Papa's background and experience"
-          >See more</a
+          >More about me</a
         >
         <p class="hero-actions mt-6 flex flex-wrap gap-3">
           <a
@@ -151,18 +151,26 @@ const [city, country] = SITE.location.split(", ");
         <span class="hero-portrait__bigname" aria-hidden="true">Uriel Papa</span
         >
         <div class="hero-portrait__float">
-          <img
-            src="/images/uriel-papa-portrait.webp"
-            srcset="/images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
-            sizes="(min-width: 1024px) 320px, 300px"
-            width="1200"
-            height="1787"
-            alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
-            title="Uriel Papa"
-            loading="eager"
-            decoding="async"
-            class="hero-portrait__img"
-          />
+          <picture class="contents">
+            <source
+              type="image/avif"
+              srcset="/images/uriel-papa-portrait-320.avif 320w, /images/uriel-papa-portrait-480.avif 480w, /images/uriel-papa-portrait-560.avif 560w, /images/uriel-papa-portrait-800.avif 800w, /images/uriel-papa-portrait.avif 1200w"
+              sizes="(min-width: 1024px) 320px, 270px"
+            />
+            <img
+              src="/images/uriel-papa-portrait.webp"
+              srcset="/images/uriel-papa-portrait-320.webp 320w, /images/uriel-papa-portrait-480.webp 480w, /images/uriel-papa-portrait-560.webp 560w, /images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
+              sizes="(min-width: 1024px) 320px, 270px"
+              width="1200"
+              height="1787"
+              alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
+              title="Uriel Papa"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="hero-portrait__img"
+            />
+          </picture>
         </div>
         <figcaption class="relative mt-3 text-center">
           <span class="block font-semibold">{SITE.name}</span>

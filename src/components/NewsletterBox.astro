@@ -93,24 +93,13 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
 
 <script>
   import { track } from "@/scripts/events";
+  import { loadTurnstileOnInteraction } from "@/scripts/turnstile";
 
   type Turnstile = { reset: (el?: Element) => void };
   const turnstile = () =>
     (window as unknown as { turnstile?: Turnstile }).turnstile;
 
-  // Load Turnstile once per page, only when a widget was rendered (site key set).
-  if (
-    document.querySelector("form[data-newsletter] .cf-turnstile") &&
-    !document.querySelector(
-      'script[src*="challenges.cloudflare.com/turnstile"]'
-    )
-  ) {
-    const s = document.createElement("script");
-    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    s.async = true;
-    s.defer = true;
-    document.head.appendChild(s);
-  }
+  loadTurnstileOnInteraction();
 
   for (const form of document.querySelectorAll<HTMLFormElement>(
     "form[data-newsletter]"

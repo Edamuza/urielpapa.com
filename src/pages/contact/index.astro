@@ -35,17 +35,6 @@ const field =
   description="Contact Uriel Papa to work together, invite Uriel to speak at an event, or ask about something on the site. Every message is read and answered."
   schema={schema}
 >
-  {
-    PUBLIC_TURNSTILE_SITE_KEY && (
-      <script
-        is:inline
-        slot="head"
-        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-        async
-        defer
-      />
-    )
-  }
   <div class="app-layout max-w-read pt-8">
     <Breadcrumbs crumbs={crumbs} />
     <h1 class="h1">Contact</h1>
@@ -222,6 +211,9 @@ const field =
 
 <script>
   import { track } from "@/scripts/events";
+  import { loadTurnstileOnInteraction } from "@/scripts/turnstile";
+
+  loadTurnstileOnInteraction();
 
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const status = document.querySelector<HTMLElement>("#form-status");
