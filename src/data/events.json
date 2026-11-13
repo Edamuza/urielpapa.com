@@ -2,6 +2,7 @@
   "talks": [],
   "sponsored": [
     {
+      "id": "wordcamp-philippines-2026",
       "name": "WordCamp Philippines 2026",
       "organizer": "WordCamp Philippines",
       "url": "https://philippines.wordcamp.org/2026/",
@@ -11,7 +12,117 @@
       "dateLabel": "28–29 August 2026",
       "venue": "Iloilo Convention Center",
       "city": "Iloilo City",
-      "role": "Micro sponsor"
+      "role": "Micro sponsor",
+      "note": "wordcamp-philippines-2026-iloilo",
+      "roster": [
+        {
+          "tier": "Super Admin",
+          "sponsors": [
+            {
+              "name": "Bantala Digital Marketing Services",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/bantala-digital-marketing-services/"
+            },
+            {
+              "name": "Hostinger",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/hostinger/"
+            },
+            {
+              "name": "Woo",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/woo/"
+            },
+            {
+              "name": "WordPress.com",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/wordpressdotcom/"
+            },
+            {
+              "name": "Yoast",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/yoast/"
+            }
+          ]
+        },
+        {
+          "tier": "Editor",
+          "sponsors": [
+            {
+              "name": "GreenGeeks",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/greengeeks-web-hosting/"
+            }
+          ]
+        },
+        {
+          "tier": "Author",
+          "sponsors": [
+            {
+              "name": "Huawei Cloud",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/huawei-cloud/"
+            },
+            {
+              "name": "Mindy Chat",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/mindy-chat/"
+            }
+          ]
+        },
+        {
+          "tier": "Contributor",
+          "sponsors": [
+            {
+              "name": "Codev",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/codev/"
+            },
+            {
+              "name": "Elementor",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/elementor/"
+            },
+            {
+              "name": "Kirki",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/kirki/"
+            }
+          ]
+        },
+        {
+          "tier": "Viewer and in-kind",
+          "sponsors": [
+            {
+              "name": "Iloilo Convention Center",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/iloilo-convention-center/"
+            },
+            {
+              "name": "LeoKoo.com",
+              "url": "https://philippines.wordcamp.org/2026/sponsor/leokoo-com/"
+            }
+          ]
+        },
+        {
+          "tier": "Micro sponsors",
+          "sponsors": [
+            {
+              "name": "Allen Palmes",
+              "url": "https://khleomix.com/"
+            },
+            {
+              "name": "Benjamin Rafael Intal",
+              "url": "https://gambit.ph/"
+            },
+            {
+              "name": "Christian Ynion",
+              "url": "https://inksite.ph/"
+            },
+            {
+              "name": "Donna Russell Escobar",
+              "url": "https://website.ninja/"
+            },
+            {
+              "name": "Krista Lopez",
+              "url": "https://kristalopez.com/"
+            },
+            {
+              "name": "Uriel Papa",
+              "url": "/about",
+              "me": true
+            }
+          ]
+        }
+      ]
     }
   ],
   "attended": [
