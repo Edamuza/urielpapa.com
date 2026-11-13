@@ -30,3 +30,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-11 | news | published | chatgpt-businesses-claim-listing |
 - 2026-11-12 | news | published | gemini-4-carbon-paid-developers |
 - 2026-11-13 | news | skipped | - | Weekly cap reached: 5 takes already published this week (9 to 15 Nov), against the limit of 3 set after the 12 Nov SEO audit.
+- 2026-11-13 | news | warning | gcash-no-signal-pay | Published on Uriel's request over the weekly cap (7th take of 9 to 15 Nov, limit 3); embed is a CLTV36 news post, as GCash has not posted about it on X.
