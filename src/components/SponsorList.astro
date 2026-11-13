@@ -4,12 +4,21 @@
  * entry highlighted. Data lives in src/data/events.json (sponsored[].roster).
  * MDX: <SponsorList event="wordcamp-philippines-2026" />
  */
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import Avatar from "@/components/Avatar.astro";
 import events from "@/data/events.json";
+import wcph2026 from "@/assets/images/content/wordcamp-philippines-2026-micro-sponsors.jpg";
+
+/** Screenshots of each event's official sponsors page, showing my listing. */
+const SCREENSHOTS: Record<string, { src: ImageMetadata; taken: string }> = {
+  "wordcamp-philippines-2026": { src: wcph2026, taken: "13 November 2026" },
+};
 
 type Props = { event: string; class?: string };
 const { event, class: className } = Astro.props;
 const e = events.sponsored.find(s => s.id === event);
+const shot = e ? SCREENSHOTS[e.id] : undefined;
 ---
 
 {
@@ -25,6 +34,37 @@ const e = events.sponsored.find(s => s.id === event);
         <span class="label-caps text-muted-foreground block">Sponsor list</span>
         <span class="text-foreground font-semibold">{e.name} sponsors</span>
       </figcaption>
+      {shot && (
+        <div class="mb-5 max-w-3xl">
+          <a
+            href={e.sponsorsUrl}
+            title={`Open the official ${e.name} sponsors page, where Uriel Papa is listed as a ${e.role.toLowerCase()}`}
+            rel="noopener"
+            class="border-border block overflow-hidden rounded-md border"
+          >
+            <Image
+              src={shot.src}
+              alt={`Screenshot of the Micro Sponsors section on the official ${e.name} sponsors page, listing Uriel Papa with a profile photo alongside five other micro sponsors`}
+              title={`Uriel Papa listed as a ${e.role.toLowerCase()} on the official ${e.name} sponsors page`}
+              widths={[640, 960, 1568]}
+              sizes="(min-width: 768px) 720px, 100vw"
+              loading="lazy"
+              class="h-auto w-full"
+            />
+          </a>
+          <p class="text-muted-foreground mt-2 text-sm">
+            Screenshot of the{" "}
+            <a
+              href={e.sponsorsUrl}
+              title={`Official ${e.name} sponsors page`}
+              rel="noopener"
+            >
+              official sponsors page
+            </a>
+            , taken {shot.taken}.
+          </p>
+        </div>
+      )}
       <dl class="space-y-4">
         {e.roster.map(group => (
           <div>
