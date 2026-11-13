@@ -1,12 +1,11 @@
 ---
 /**
- * The full sponsor list of an event Uriel sponsored, by tier, with Uriel's own
- * entry highlighted. Data lives in src/data/events.json (sponsored[].roster).
+ * The full sponsor list of an event Uriel sponsored, as a plain tier-by-tier
+ * list with Uriel's own entry in bold. Data lives in src/data/events.json (sponsored[].roster).
  * MDX: <SponsorList event="wordcamp-philippines-2026" />
  */
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
-import Avatar from "@/components/Avatar.astro";
 import events from "@/data/events.json";
 import wcph2026 from "@/assets/images/content/wordcamp-philippines-2026-micro-sponsors.jpg";
 
@@ -24,100 +23,79 @@ const shot = e ? SCREENSHOTS[e.id] : undefined;
 {
   e && (
     <figure
-      class:list={[
-        "not-prose border-border rounded-lg border p-4 sm:p-5",
-        className,
-      ]}
+      class:list={["not-prose", className]}
       aria-labelledby={`${e.id}-sponsors-cap`}
     >
-      <figcaption id={`${e.id}-sponsors-cap`} class="mb-4">
-        <span class="label-caps text-muted-foreground block">Sponsor list</span>
-        <span class="text-foreground font-semibold">{e.name} sponsors</span>
+      <figcaption
+        id={`${e.id}-sponsors-cap`}
+        class="text-foreground mb-3 font-semibold"
+      >
+        {e.name} sponsors
       </figcaption>
       {shot && (
-        <div class="mb-5 max-w-3xl">
-          <a
-            href={e.sponsorsUrl}
-            title={`Open the official ${e.name} sponsors page, where Uriel Papa is listed as a ${e.role.toLowerCase()}`}
-            rel="noopener"
-            class="border-border block overflow-hidden rounded-md border"
-          >
-            <Image
-              src={shot.src}
-              alt={`Screenshot of the Micro Sponsors section on the official ${e.name} sponsors page, listing Uriel Papa with a profile photo alongside five other micro sponsors`}
-              title={`Uriel Papa listed as a ${e.role.toLowerCase()} on the official ${e.name} sponsors page`}
-              widths={[640, 960, 1568]}
-              sizes="(min-width: 768px) 720px, 100vw"
-              loading="lazy"
-              class="h-auto w-full"
-            />
-          </a>
-          <p class="text-muted-foreground mt-2 text-sm">
-            Screenshot of the{" "}
-            <a
-              href={e.sponsorsUrl}
-              title={`Official ${e.name} sponsors page`}
-              rel="noopener"
-            >
-              official sponsors page
-            </a>
-            , taken {shot.taken}.
-          </p>
-        </div>
+        <a
+          href={e.sponsorsUrl}
+          title={`Open the official ${e.name} sponsors page, where Uriel Papa is listed as a ${e.role.toLowerCase()}`}
+          rel="noopener"
+          class="mb-4 block max-w-2xl"
+        >
+          <Image
+            src={shot.src}
+            alt={`Screenshot of the Micro Sponsors section on the official ${e.name} sponsors page, listing Uriel Papa with a profile photo alongside five other micro sponsors`}
+            title={`Uriel Papa listed as a ${e.role.toLowerCase()} on the official ${e.name} sponsors page`}
+            widths={[640, 960, 1344]}
+            sizes="(min-width: 768px) 672px, 100vw"
+            loading="lazy"
+            class="border-border h-auto w-full rounded-md border"
+          />
+        </a>
       )}
-      <dl class="space-y-4">
+      <dl class="divide-border border-border divide-y border-y text-[0.95rem]">
         {e.roster.map(group => (
-          <div>
-            <dt class="text-muted-foreground mb-1.5 text-sm">{group.tier}</dt>
+          <div class="grid gap-0.5 py-2.5 sm:grid-cols-[11rem_1fr] sm:gap-4">
+            <dt class="text-muted-foreground">{group.tier}</dt>
             <dd>
-              <ul class="flex flex-wrap gap-2">
-                {group.sponsors.map(s =>
-                  "me" in s && s.me ? (
-                    <li>
-                      <a
-                        href={s.url}
-                        title={`About ${s.name}, a ${e.role.toLowerCase()} of ${e.name}`}
-                        class="bg-accent text-accent-foreground inline-flex items-center gap-2 rounded-full py-1 ps-1 pe-3 text-sm font-semibold no-underline hover:underline"
-                      >
-                        <Avatar
-                          size={24}
-                          alt={`Uriel Papa, ${e.role.toLowerCase()} of ${e.name}`}
-                        />
-                        {s.name} (me)
-                      </a>
-                    </li>
+              {group.sponsors.map((s, i) => (
+                <>
+                  {i > 0 && ", "}
+                  {"me" in s && s.me ? (
+                    <a
+                      href={s.url}
+                      title={`About ${s.name}, a ${e.role.toLowerCase()} of ${e.name}`}
+                      class="text-foreground font-semibold"
+                    >
+                      {s.name} (me)
+                    </a>
                   ) : (
-                    <li>
-                      <a
-                        href={s.url}
-                        title={
-                          group.tier === "Micro sponsors"
-                            ? `${s.name}, micro sponsor of ${e.name}`
-                            : `${s.name}, ${group.tier} tier sponsor of ${e.name}`
-                        }
-                        rel="noopener"
-                        class="border-border inline-flex items-center rounded-full border px-3 py-1 text-sm no-underline hover:underline"
-                      >
-                        {s.name}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
+                    <a
+                      href={s.url}
+                      title={
+                        group.tier === "Micro sponsors"
+                          ? `${s.name}, micro sponsor of ${e.name}`
+                          : `${s.name}, ${group.tier} tier sponsor of ${e.name}`
+                      }
+                      rel="noopener"
+                      class="text-foreground no-underline hover:underline"
+                    >
+                      {s.name}
+                    </a>
+                  )}
+                </>
+              ))}
             </dd>
           </div>
         ))}
       </dl>
-      <p class="text-muted-foreground mt-4 text-sm">
-        Source:{" "}
+      <p class="text-muted-foreground mt-2 text-sm">
+        From the{" "}
         <a
           href={e.sponsorsUrl}
           title={`Official ${e.name} sponsors page`}
           rel="noopener"
         >
-          official {e.name} sponsors page
+          official sponsors page
         </a>
-        .
+        {shot && `, screenshot taken ${shot.taken}`}.
       </p>
     </figure>
   )
