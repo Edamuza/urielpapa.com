@@ -6,8 +6,8 @@ description: >-
   Teams, SharePoint and Copilot. What Microsoft says and what to do now.
 dek: >-
   Microsoft says a core process on its servers is getting overwhelmed and
-  taking capacity offline. Recovery has started, but slowly, right as the
-  Philippine workday begins on Friday.
+  taking capacity offline. A first round of fixes did not hold, so the outage
+  runs into the Philippine workday on Friday.
 hub: tech-and-business
 frame: news-take
 takeaways:
@@ -23,8 +23,9 @@ takeaways:
     Downdetector logged a peak of about 130,000 Outlook problem reports,
     according to Tom's Guide's live coverage.
   - >-
-    At 23:04 UTC (7:04 a.m. Friday in Manila), Microsoft said it was returning
-    a portion of servers to service and seeing limited recovery.
+    At 00:06 UTC on November 13 (8:06 a.m. in Manila), Microsoft said servers
+    it had returned to service could become unresponsive again once they
+    received traffic.
 businessImpact:
   - >-
     Email, Teams chats and SharePoint files may be slow or unreachable until
@@ -55,7 +56,7 @@ syndication: []
 draft: false
 ---
 
-Microsoft 365 has been partly down since the afternoon of November 12, 2026 (US time), and users may be unable to connect to Exchange Online, Outlook, Teams, SharePoint Online and Microsoft 365 Copilot. Microsoft says a core process on its servers is getting overwhelmed and taking capacity offline. Recovery has started but is slow, and it overlaps with the start of Friday's workday in the Philippines.
+Microsoft 365 has been partly down since the afternoon of November 12, 2026 (US time), and users may be unable to connect to Exchange Online, Outlook, Teams, SharePoint Online and Microsoft 365 Copilot. Microsoft says a core process on its servers is getting overwhelmed and taking capacity offline. Servers Microsoft brought back have been failing again under traffic, so the outage runs into Friday's workday in the Philippines.
 
 This take is part of my [Technology and Business](/topics/tech-and-business "Technology and Business articles") writing.
 
@@ -83,6 +84,8 @@ Anyone on Microsoft 365 for Business or Enterprise may be affected, in any regio
 - Several Microsoft Purview services, including Data Loss Prevention
 - Power BI, where exporting reports with sensitivity labels to PDF may fail
 
+Microsoft revised this list at 01:01 UTC on November 13, so check the status page for the current one.
+
 The outage also reaches AI tools. [Security Affairs reports](https://securityaffairs.com/202932/security/microsoft-cloud-outage-hits-outlook-teams-copilot-and-ai-services.html "Security Affairs on the Microsoft cloud outage and its effect on AI services") that OpenAI and Anthropic both flagged failing Microsoft 365 connectors, so ChatGPT and Claude could not reach users' inboxes either.
 
 ![A man walks down a narrow aisle between two walls of server racks covered in black cables, while a second man stands at the far end of the aisle](../../assets/images/content/microsoft-365-outage-exchange-teams-copilot-2.jpg "A man walks down a narrow aisle between two walls of server racks covered in black cables, while a second man stands at the far end of the aisle")
@@ -91,9 +94,15 @@ The outage also reaches AI tools. [Security Affairs reports](https://securityaff
 
 ## How serious is it?
 
-Serious, and longer than a typical blip. By 22:09 UTC, Microsoft said its "actions taken thus far have not provided the anticipated relief." It also said it is reviewing a small number of recent configuration updates as possible contributors. Its latest update, at 23:04 UTC (7:04 a.m. Friday in Manila), reports limited recovery:
+Serious, and longer than a typical blip. By 22:09 UTC, Microsoft said its "actions taken thus far have not provided the anticipated relief." It also said it is reviewing a small number of recent configuration updates as possible contributors.
 
-<SocialPost platform="x" url="https://x.com/MSFT365Status/status/2121016338181161457" author="Microsoft 365 Status" handle="MSFT365Status" date="2026-11-12" text={"We're returning a portion of affected servers to the service, and they remain stable so far. We're also shifting traffic to alternate routes wherever possible and observing limited recovery. In parallel, we've streamlined the process of returning the remaining affected servers to service. As capacity is restored, users may experience a gradual recovery as their clients reconnect. More info under EX1550543 and MO1550821 in the Microsoft 365 admin center, as well as http://status.cloud.microsoft if the admin center is not available to you."} />
+At 23:04 UTC (7:04 a.m. Friday in Manila), Microsoft said it was returning servers to service and [observing limited recovery](https://x.com/MSFT365Status/status/2121016338181161457 "Microsoft 365 Status post on limited recovery, 23:04 UTC").
+
+That recovery did not hold. At 00:06 UTC (8:06 a.m. in Manila), Microsoft said the returned servers can fail again once traffic reaches them, and it is now rebuilding some servers with a previous configuration:
+
+<SocialPost platform="x" url="https://x.com/MSFT365Status/status/2121031935010951521" author="Microsoft 365 Status" handle="MSFT365Status" date="2026-11-13" text={"The servers we returned to service can become unresponsive again once they receive traffic; we're analyzing diagnostic data to determine what's triggering the behavior. In parallel, we're temporarily limiting which types of traffic can reach the affected infrastructure in some locations. Additionally, we're rebuilding a subset of affected servers using a previous configuration to validate if this prevents them from becoming unresponsive. More info under EX1550543 and MO1550821 in the Microsoft 365 admin center, as well as http://status.cloud.microsoft if the admin center is not available to you."} />
+
+Downdetector reports have dropped from the peak but not gone away. [Tom's Guide](https://www.tomsguide.com/news/live/microsoft-outlook-down-live-updates-outage-11-12-26 "Tom's Guide live updates on the November 12 Microsoft 365 outage") still counted about 30,000 Outlook reports at 7:50 p.m. Eastern Time on November 12 (8:50 a.m. in Manila).
 
 ## What does it mean for small businesses and founders?
 
