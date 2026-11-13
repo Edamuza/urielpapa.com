@@ -130,38 +130,54 @@ const schema = [
                   <th scope="col" class="py-2 pe-4">
                     Where
                   </th>
-                  <th scope="col" class="py-2">
+                  <th scope="col" class="py-2 pe-4">
                     Sponsorship
+                  </th>
+                  <th scope="col" class="py-2">
+                    Notes
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {sponsored.map(e => (
-                  <tr class="border-border border-b align-top">
-                    <td class="py-2 pe-4 whitespace-nowrap">{e.dateLabel}</td>
-                    <td class="py-2 pe-4">
-                      <a
-                        href={e.url}
-                        title={`Visit the official ${e.name} website`}
-                        rel="noopener"
-                      >
-                        {e.name}
-                      </a>
-                    </td>
-                    <td class="py-2 pe-4">
-                      {e.venue}, {e.city}
-                    </td>
-                    <td class="py-2">
-                      <a
-                        href={e.sponsorsUrl}
-                        title={`See Uriel Papa listed as a ${e.role.toLowerCase()} on the ${e.name} sponsors page`}
-                        rel="noopener"
-                      >
-                        {e.role}
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                {sponsored.map(e => {
+                  const note = e.note ? noteFor(e.note) : undefined;
+                  return (
+                    <tr class="border-border border-b align-top">
+                      <td class="py-2 pe-4 whitespace-nowrap">{e.dateLabel}</td>
+                      <td class="py-2 pe-4">
+                        <a
+                          href={e.url}
+                          title={`Visit the official ${e.name} website`}
+                          rel="noopener"
+                        >
+                          {e.name}
+                        </a>
+                      </td>
+                      <td class="py-2 pe-4">
+                        {e.venue}, {e.city}
+                      </td>
+                      <td class="py-2 pe-4">
+                        <a
+                          href={e.sponsorsUrl}
+                          title={`See Uriel Papa listed as a ${e.role.toLowerCase()} on the ${e.name} sponsors page`}
+                          rel="noopener"
+                        >
+                          {e.role}
+                        </a>
+                      </td>
+                      <td class="py-2">
+                        {note && (
+                          <a
+                            href={postUrl(note)}
+                            title={`Read Uriel Papa's notes on ${e.name}`}
+                          >
+                            {note.data.draft ? "Draft note" : "Read my notes"}
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
