@@ -154,7 +154,7 @@ const schema = [
     </section>
 
     <section class="mt-10" aria-labelledby="ev-h">
-      <h2 id="ev-h" class="h2 mb-4">Seminars and training</h2>
+      <h2 id="ev-h" class="h2 mb-4">Seminars, training and sponsorships</h2>
       <ul class="list-disc space-y-1 ps-5">
         {
           events.attended.map(e => (
@@ -164,6 +164,22 @@ const schema = [
           ))
         }
       </ul>
+      {
+        events.sponsored.map(e => (
+          <p class="mt-4">
+            I was also a {e.role.toLowerCase()} of{" "}
+            <a
+              href={e.sponsorsUrl}
+              title={`See Uriel Papa on the ${e.name} sponsors page`}
+              rel="noopener"
+            >
+              {e.name}
+            </a>{" "}
+            in {e.city} ({e.dateLabel}), supporting the WordPress community I
+            built my first client websites in.
+          </p>
+        ))
+      }
     </section>
 
     <section class="mt-10" aria-labelledby="cert-h">

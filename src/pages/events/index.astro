@@ -6,7 +6,7 @@ import { hubName } from "@/data/hubs";
 import events from "@/data/events.json";
 import CertificationList from "@/components/CertificationList.astro";
 import { getEventNotes, postUrl } from "@/utils/content";
-import { breadcrumbNode, collectionNode } from "@/utils/schema";
+import { breadcrumbNode, collectionNode, PERSON_ID } from "@/utils/schema";
 
 type Talk = {
   date: string;
@@ -17,12 +17,13 @@ type Talk = {
   video?: string;
 };
 const talks = events.talks as Talk[];
+const sponsored = events.sponsored;
 const notes = await getEventNotes();
 const noteFor = (slug: string) => notes.find(n => n.id === slug);
 
 const title = "Talks, Seminars and Training";
 const intro =
-  "The seminars, conferences and trainings I attend, with notes on what I learned and what I changed afterward.";
+  "The seminars, conferences and trainings I attend or sponsor, with notes on what I learned and what I changed afterward.";
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "Events", href: "/events" },
@@ -35,12 +36,30 @@ const schema = [
     items: notes.map(n => ({ name: n.data.title, href: postUrl(n) })),
   }),
   breadcrumbNode(crumbs),
+  ...sponsored.map(e => ({
+    "@type": "Event",
+    name: e.name,
+    url: e.url,
+    startDate: e.startDate,
+    endDate: e.endDate,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: e.venue,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: e.city,
+        addressCountry: "PH",
+      },
+    },
+    sponsor: { "@id": PERSON_ID },
+  })),
 ];
 ---
 
 <Layout
   title={title}
-  description="Seminars, conferences and trainings Uriel Papa has attended in the Philippines, with event notes on technology adoption, leadership, branding and marketing."
+  description="Seminars, conferences and trainings Uriel Papa attended or sponsored in the Philippines, including WordCamp Philippines 2026, with notes on tech, leadership and marketing."
   schema={schema}
 >
   <div class="app-layout pt-8">
@@ -82,6 +101,64 @@ const schema = [
                     <td class="py-2">
                       {t.slides && <a href={t.slides}>Slides</a>}{" "}
                       {t.video && <a href={t.video}>Video</a>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      sponsored.length > 0 && (
+        <section class="mb-12" aria-labelledby="sponsored-h">
+          <h2 id="sponsored-h" class="h2 mb-4">
+            Events I sponsored
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[36rem] text-left text-[0.95rem]">
+              <thead>
+                <tr class="border-foreground border-b">
+                  <th scope="col" class="py-2 pe-4">
+                    Date
+                  </th>
+                  <th scope="col" class="py-2 pe-4">
+                    Event
+                  </th>
+                  <th scope="col" class="py-2 pe-4">
+                    Where
+                  </th>
+                  <th scope="col" class="py-2">
+                    Sponsorship
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sponsored.map(e => (
+                  <tr class="border-border border-b align-top">
+                    <td class="py-2 pe-4 whitespace-nowrap">{e.dateLabel}</td>
+                    <td class="py-2 pe-4">
+                      <a
+                        href={e.url}
+                        title={`Visit the official ${e.name} website`}
+                        rel="noopener"
+                      >
+                        {e.name}
+                      </a>
+                    </td>
+                    <td class="py-2 pe-4">
+                      {e.venue}, {e.city}
+                    </td>
+                    <td class="py-2">
+                      <a
+                        href={e.sponsorsUrl}
+                        title={`See Uriel Papa listed as a ${e.role.toLowerCase()} on the ${e.name} sponsors page`}
+                        rel="noopener"
+                      >
+                        {e.role}
+                      </a>
                     </td>
                   </tr>
                 ))}
