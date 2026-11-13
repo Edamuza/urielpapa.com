@@ -41,6 +41,13 @@ const mdxComponents = {
       channel: fields.text({ label: "Channel name" }),
     },
   }),
+  SponsorList: block({
+    label: "Sponsor list",
+    description: "The full sponsor list of an event I sponsored, with my name highlighted. Edit the list in src/data/events.json.",
+    schema: {
+      event: fields.text({ label: "Event id from src/data/events.json (sponsored[].id)" }),
+    },
+  }),
   SocialPost: block({
     label: "X or Threads post",
     description: "An official post from X or Threads that adds to the section above it, shown as a fast static card. Copy the text exactly.",

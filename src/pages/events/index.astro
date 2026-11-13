@@ -5,6 +5,7 @@ import PageIntro from "@/components/PageIntro.astro";
 import { hubName } from "@/data/hubs";
 import events from "@/data/events.json";
 import CertificationList from "@/components/CertificationList.astro";
+import SponsorList from "@/components/SponsorList.astro";
 import { getEventNotes, postUrl } from "@/utils/content";
 import { breadcrumbNode, collectionNode, PERSON_ID } from "@/utils/schema";
 
@@ -181,6 +182,9 @@ const schema = [
               </tbody>
             </table>
           </div>
+          {sponsored.map(e => (
+            <SponsorList event={e.id} class="mt-6" />
+          ))}
         </section>
       )
     }
