@@ -1,13 +1,15 @@
 /* eslint-disable no-console -- a CLI script; its output is the terminal log. */
 // Refreshes src/data/repos.json, the saved GitHub details behind the repo cards
-// on project pages, including a short glimpse of each README. Reads every
-// project's `repo` field and asks the GitHub API.
+// on project pages and in posts, including a short glimpse of each README.
+// Reads every project's `repo` field and every <RepoCard repo="…" /> in a blog
+// post, and asks the GitHub API.
 // Usage: GITHUB_TOKEN=... node scripts/update-repos.mjs (the token is optional,
 // but unauthenticated requests are limited to 60 an hour).
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { readmeGlimpse } from "./lib/readme-glimpse.mjs";
 
 const DIR = "src/content/projects";
+const POSTS = "src/content/blog";
 const OUT = "src/data/repos.json";
 
 const files = (await readdir(DIR)).filter(f => /\.mdx?$/.test(f));
@@ -16,6 +18,13 @@ for (const f of files) {
   const text = await readFile(`${DIR}/${f}`, "utf8");
   const m = text.match(/^repo:\s*["']?([\w.-]+\/[\w.-]+)["']?\s*$/m);
   if (m) repos.push(m[1]);
+}
+
+for (const f of (await readdir(POSTS)).filter(f => f.endsWith(".mdx"))) {
+  const text = await readFile(`${POSTS}/${f}`, "utf8");
+  for (const m of text.matchAll(/<RepoCard\s+repo="([\w.-]+\/[\w.-]+)"/g)) {
+    if (!repos.some(r => r.toLowerCase() === m[1].toLowerCase())) repos.push(m[1]);
+  }
 }
 
 const previous = JSON.parse(await readFile(OUT, "utf8").catch(() => "[]"));

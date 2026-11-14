@@ -1,9 +1,10 @@
 ---
-// A GitHub repository card for a project page.
+// A GitHub repository card for a project page or a post (as <RepoCard repo="owner/name" /> in MDX).
 import GitHub from "@/assets/icons/socials/github.svg";
 import { getRepo } from "@/data/repos";
 
-type Props = { repo: string };
+type Props = { repo: string; class?: string };
+const { class: className = "my-8" } = Astro.props;
 const info = await getRepo(Astro.props.repo);
 
 // GitHub's own colors for the languages these projects use.
@@ -18,16 +19,20 @@ const LANGUAGE_COLORS: Record<string, string> = {
   Blade: "#f7523f",
 };
 const dot = info.language ? LANGUAGE_COLORS[info.language] : undefined;
+const stars = (info.stars ?? 0).toLocaleString("en-US");
 ---
 
 <aside
-  class="max-w-read border-border mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border p-4"
+  class:list={[
+    "not-prose max-w-read border-border flex flex-wrap items-center gap-x-4 gap-y-3 rounded-lg border p-4",
+    className,
+  ]}
   aria-label="Source code"
 >
   <GitHub class="size-8 shrink-0" aria-hidden="true" />
   <div class="min-w-0 flex-1 basis-56">
     <p class="font-semibold break-words">
-      <a href={info.url} rel="noopener">
+      <a href={info.url} rel="noopener" title={`${info.repo} on GitHub`}>
         <span class="font-normal">{info.owner}/</span>{info.name}
       </a>
     </p>
@@ -52,14 +57,21 @@ const dot = info.language ? LANGUAGE_COLORS[info.language] : undefined;
           {info.license && <span>{info.license} license</span>}
           {(info.stars ?? 0) > 0 && (
             <span>
-              {info.stars} {info.stars === 1 ? "star" : "stars"}
+              {stars} {info.stars === 1 ? "star" : "stars"}
             </span>
           )}
         </p>
       )
     }
   </div>
-  <a href={info.url} rel="noopener" class="btn shrink-0"> View on GitHub ↗ </a>
+  <a
+    href={info.url}
+    rel="noopener"
+    class="btn shrink-0"
+    title={`View ${info.repo} on GitHub`}
+  >
+    View on GitHub ↗
+  </a>
   {
     info.readme && (
       <div class="border-border basis-full border-t pt-3">
@@ -70,7 +82,11 @@ const dot = info.language ? LANGUAGE_COLORS[info.language] : undefined;
           ))}
         </div>
         <p class="mt-2 text-[0.95rem]">
-          <a href={`${info.url}#readme`} rel="noopener">
+          <a
+            href={`${info.url}#readme`}
+            rel="noopener"
+            title={`Read the full README of ${info.repo} on GitHub`}
+          >
             Read the full README ↗
           </a>
         </p>

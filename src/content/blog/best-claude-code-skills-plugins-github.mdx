@@ -98,6 +98,8 @@ Five repos passed. Each one gets the same checks.
 - **License and activity:** MIT, about 317,000 stars, last push November 3, 2026. Built by Jesse Vincent.
 - **Watch out for:** the test-driven skill "deletes code written before tests", so do not point it at a half-written branch you want to keep. The optional visual companion loads a logo that reports the Superpowers version. `SUPERPOWERS_DISABLE_TELEMETRY` turns it off.
 
+<RepoCard repo="obra/superpowers" />
+
 Superpowers installs with `/plugin install superpowers@claude-plugins-official`, from Anthropic's own marketplace.
 
 ### Anthropic's skills repo
@@ -110,6 +112,8 @@ Superpowers installs with `/plugin install superpowers@claude-plugins-official`,
 - **License and activity:** the README says many skills, including the four document skills, are Apache 2.0. GitHub shows no single license for the repo, so check each skill folder. About 194,000 stars, last push November 6, 2026.
 - **Watch out for:** the README says the skills are "for demonstration and educational purposes only" and may behave differently from what Claude does. Test them before you rely on them.
 
+<RepoCard repo="anthropics/skills" />
+
 ### Spec Kit
 
 [github/spec-kit](https://github.com/github/spec-kit "GitHub Spec Kit on GitHub") is GitHub's toolkit for spec-driven development: you write what to build and why, then the agent turns it into a plan, tasks and code.
@@ -119,6 +123,8 @@ Superpowers installs with `/plugin install superpowers@claude-plugins-official`,
 - **Cost:** free. It needs Python 3.11 or later and uv.
 - **License and activity:** MIT, about 150,000 stars, last push November 12, 2026. Maintained by GitHub.
 - **Watch out for:** its catalogs include community extensions, and the README says listings "are not audits or endorsements". Review that code first.
+
+<RepoCard repo="github/spec-kit" />
 
 I built my [job and client matching CRM](/projects/job-client-crm "Job and Client Matching CRM case study") by directing AI agents against a written spec, and that is the habit Spec Kit makes formal.
 
@@ -132,6 +138,8 @@ I built my [job and client matching CRM](/projects/job-client-crm "Job and Clien
 - **License and activity:** Apache 2.0, about 117,000 stars, last push November 13, 2026. Built by Alex Newman under the thedotmack account.
 - **Watch out for:** anonymous usage analytics are on by default, and `npx claude-mem telemetry disable` turns them off. Wrap secrets in `<private>` tags so they are never stored.
 
+<RepoCard repo="thedotmack/claude-mem" />
+
 ### wshobson/agents
 
 [wshobson/agents](https://github.com/wshobson/agents "wshobson/agents plugin catalog on GitHub") is one large catalog of plugins, subagents, skills and commands, written once in the Claude Code plugin format.
@@ -141,6 +149,8 @@ I built my [job and client matching CRM](/projects/job-client-crm "Job and Clien
 - **Cost:** free.
 - **License and activity:** MIT, about 42,500 stars, last push November 9, 2026. Maintained by Seth Hobson.
 - **Watch out for:** its own README says the LLM judge scores in its evaluation tool "do not prove that a task succeeds in a project". Installing everything would also crowd Claude's context.
+
+<RepoCard repo="wshobson/agents" />
 
 ## How do the five repos compare?
 

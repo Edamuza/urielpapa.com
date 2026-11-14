@@ -20,6 +20,7 @@ function plain(text) {
     .replace(/<br\s*\/?>/gi, " ")
     .replace(/<[^>]+>/g, " ") // HTML tags
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
+    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, " ") // reference images, such as badges
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links keep their text
     .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1") // reference links
     .replace(/(\*\*|__)(.+?)\1/g, "$2") // bold
@@ -34,11 +35,13 @@ function plain(text) {
 function isLinkRow(raw) {
   const rest = raw
     .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/!?\[[^\]]*\]\[[^\]]*\]/g, "")
     .replace(/\[[^\]]*\]\([^)]*\)/g, "")
     .replace(/<a\b[^>]*>[\s\S]*?<\/a>/gi, "")
     .replace(/<[^>]+>/g, "")
     .replace(/https?:\/\/\S+/g, "")
-    .replace(/[\s·|•,*_-]+/g, "");
+    .replace(/&[a-z#0-9]+;/gi, "")
+    .replace(/[\s·|•,*_\-\p{S}\p{Extended_Pictographic}\uFE0F]+/gu, "");
   return rest.length < 15;
 }
 
@@ -65,7 +68,7 @@ function blocks(markdown) {
     if (isLinkRow(raw)) continue;
     const t = plain(raw);
     if (t.length < 25 || t.endsWith(":")) continue; // too short, or a lead-in to a list
-    if (/^(live (demo|website|site)|demo app\b|demo:|website:|built with\b)/i.test(t)) continue;
+    if (/^(live (demo|website|site)|demo app\b|demo:|website:|built with\b|click (on )?the (image|video)\b|(check out|see|visit) https?:\/\/\S+ for\b)/i.test(t)) continue;
     if (/^https?:\/\/\S+$/.test(t)) continue;
     out.push({ type: "p", text: t });
   }
@@ -94,11 +97,15 @@ export function readmeGlimpse(markdown) {
 
   // A short intro borrows the first paragraph of the first real section (not
   // a table of contents). If that section opens with a list or table, stop.
+  // With no intro at all, look at the first three sections for one.
   if (paras.join(" ").length < SHORT_INTRO && firstHeading !== -1) {
     const rest = list.slice(firstHeading);
-    const start = rest.findIndex(b => b.type === "heading" && !/contents/i.test(b.text));
-    const next = start === -1 ? undefined : rest[start + 1];
-    if (next?.type === "p") paras.push(next.text);
+    const sections = rest
+      .map((b, i) => (b.type === "heading" && !/contents/i.test(b.text) ? i : -1))
+      .filter(i => i >= 0)
+      .slice(0, paras.length ? 1 : 3);
+    const next = sections.map(i => rest[i + 1]).find(b => b?.type === "p");
+    if (next) paras.push(next.text);
   }
 
   const out = [];

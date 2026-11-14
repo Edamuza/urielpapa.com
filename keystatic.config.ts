@@ -41,6 +41,13 @@ const mdxComponents = {
       channel: fields.text({ label: "Channel name" }),
     },
   }),
+  RepoCard: block({
+    label: "GitHub repo card",
+    description: "A GitHub repository card with its stars, license and the opening of its README. Run node scripts/update-repos.mjs after adding one.",
+    schema: {
+      repo: fields.text({ label: "Repository (owner/name)" }),
+    },
+  }),
   SponsorList: block({
     label: "Sponsor list",
     description: "The full sponsor list of an event I sponsored, with my name highlighted. Edit the list in src/data/events.json.",

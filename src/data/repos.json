@@ -1,51 +1,43 @@
 [
   {
-    "repo": "Edamuza/viteseo-enterpriserp",
-    "description": null,
-    "language": "PHP",
-    "license": null,
-    "stars": 0,
-    "readme": null
-  },
-  {
-    "repo": "Edamuza/viteseo-nfc",
-    "description": null,
-    "language": "PHP",
-    "license": null,
-    "stars": 0,
-    "readme": [
-      "NFC card platform built with Laravel. It has a public side and an admin side, and manages NFC cards, the links and profiles behind them, and the sticker templates used for printing."
-    ]
-  },
-  {
-    "repo": "Edamuza/Travel_Ease",
-    "description": null,
+    "repo": "activepieces/activepieces",
+    "description": "AI Agents & MCPs & AI Workflow Automation • (~400 MCP servers for AI agents) • AI Automation / AI Agent with MCPs • AI Workflows & AI Agents • MCPs for AI Agents",
     "language": "TypeScript",
     "license": null,
-    "stars": 1,
+    "stars": 25513,
     "readme": [
-      "Travel planning, business discovery, and LGU-assisted destination management in one full-stack web platform.",
-      "TravelEase is a full-stack travel management web application built for trip planning, destination discovery, business registration, and administrative coordination."
+      "An open source replacement for Zapier",
+      "All-in-one AI automation designed to be extensible through a type-safe pieces framework written in TypeScript. When you contribute pieces to Activepieces they become automatically available as MCP servers that you can use with LLMs through Claude Desktop, Cursor or Windsurf!"
     ]
   },
   {
-    "repo": "Edamuza/viteseo-client-portal",
-    "description": "Secure client quotation portal with OTP authentication",
+    "repo": "AminForou/mcp-gsc",
+    "description": "Google Search Console Insights with Claude AI for SEOs",
+    "language": "Python",
+    "license": "MIT",
+    "stars": 2200,
+    "readme": [
+      "A Model Context Protocol (MCP) server that connects Google Search Console (GSC) to AI assistants, allowing you to analyze your SEO data through natural language conversations. Works with Claude Desktop, Cursor, Codex CLI, Gemini CLI, Antigravity, and any other MCP-compatible client."
+    ]
+  },
+  {
+    "repo": "anthropics/skills",
+    "description": "Public repository for Agent Skills",
+    "language": "Python",
+    "license": null,
+    "stars": 194147,
+    "readme": [
+      "Skills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that's creating documents with your company's brand guidelines, analyzing data using your organization's specific workflows, or automating personal tasks."
+    ]
+  },
+  {
+    "repo": "ChromeDevTools/chrome-devtools-mcp",
+    "description": "Chrome DevTools for coding agents",
     "language": "TypeScript",
-    "license": null,
-    "stars": 0,
+    "license": "Apache-2.0",
+    "stars": 55455,
     "readme": [
-      "A private Next.js app for sharing quotations with clients. Clients sign in with a one-time passcode (OTP) to view their quotes and download them as PDFs. There are no client passwords: admins generate the access codes."
-    ]
-  },
-  {
-    "repo": "Edamuza/Wordpress-Plugins",
-    "description": null,
-    "language": null,
-    "license": null,
-    "stars": 0,
-    "readme": [
-      "A small set of WordPress plugins built for SEO and content work at Vite SEO. Each plugin is a zip file at the root of this repo."
+      "Chrome DevTools for agents (chrome-devtools-mcp) lets your coding agent (such as Antigravity, Claude, Cursor or Copilot) control and inspect a live Chrome browser. It is available as a Model-Context-Protocol (MCP) server and as a CLI. Both give your AI coding assistant access to the full power of Chrome DevTools for reliable automation, in-depth debugging, and performance analysis."
     ]
   },
   {
@@ -60,14 +52,36 @@
     ]
   },
   {
-    "repo": "joshfermano/liora-local",
-    "description": "Offline AI companion for Filipino mothers. Gemma 4 runs on the iPhone; WHO-based rules say when to go to the hospital. Expo + llama.rn, works in airplane mode.",
+    "repo": "Edamuza/docusift-uriel",
+    "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 1,
+    "stars": 0,
     "readme": [
-      "Know when to go, even with no signal.",
-      "An offline AI companion for Filipino mothers. She tells Liora how she feels in Tagalog, English or Taglish. Gemma 4 runs on her iPhone, and rules written from WHO guidance tell her whether to go to the hospital now, go to the health centre soon, or wait."
+      "Turns Philippine invoices and official receipts into validated, structured data, with a human review step for anything uncertain.",
+      "Bookkeepers, accounting staff and small finance teams in the Philippines still key invoices and official receipts into spreadsheets by hand. It is slow, and typing errors in TINs, VAT amounts or totals surface later as mismatches during reconciliation or tax filing."
+    ]
+  },
+  {
+    "repo": "Edamuza/inboxpilot-uriel",
+    "description": null,
+    "language": "TypeScript",
+    "license": null,
+    "stars": 0,
+    "readme": [
+      "An AI triage agent for a small business inbox. It classifies messages, drafts grounded replies and proposes actions. A human approves every one of them.",
+      "Small businesses such as cafés and caterers get customer messages from email, Facebook and website forms. Someone has to read each one, work out what it is, look up hours, prices or open slots, and write a reply."
+    ]
+  },
+  {
+    "repo": "Edamuza/modelbench-uriel",
+    "description": null,
+    "language": "TypeScript",
+    "license": null,
+    "stars": 0,
+    "readme": [
+      "Compare LLMs on cost, speed and quality for one business task, and get a recommendation for the cheapest model that is good enough.",
+      "Teams that add an LLM to a business process have to pick a model, and they usually ask \"which one, and what will it cost?\" The answer is often a guess, based on the largest model or a public leaderboard rather than their own task."
     ]
   },
   {
@@ -93,36 +107,52 @@
     ]
   },
   {
-    "repo": "Edamuza/inboxpilot-uriel",
+    "repo": "Edamuza/Travel_Ease",
     "description": null,
     "language": "TypeScript",
     "license": null,
-    "stars": 0,
+    "stars": 1,
     "readme": [
-      "An AI triage agent for a small business inbox. It classifies messages, drafts grounded replies and proposes actions. A human approves every one of them.",
-      "Small businesses such as cafés and caterers get customer messages from email, Facebook and website forms. Someone has to read each one, work out what it is, look up hours, prices or open slots, and write a reply."
+      "Travel planning, business discovery, and LGU-assisted destination management in one full-stack web platform.",
+      "TravelEase is a full-stack travel management web application built for trip planning, destination discovery, business registration, and administrative coordination."
     ]
   },
   {
-    "repo": "Edamuza/docusift-uriel",
-    "description": null,
+    "repo": "Edamuza/viteseo-client-portal",
+    "description": "Secure client quotation portal with OTP authentication",
     "language": "TypeScript",
     "license": null,
     "stars": 0,
     "readme": [
-      "Turns Philippine invoices and official receipts into validated, structured data, with a human review step for anything uncertain.",
-      "Bookkeepers, accounting staff and small finance teams in the Philippines still key invoices and official receipts into spreadsheets by hand. It is slow, and typing errors in TINs, VAT amounts or totals surface later as mismatches during reconciliation or tax filing."
+      "A private Next.js app for sharing quotations with clients. Clients sign in with a one-time passcode (OTP) to view their quotes and download them as PDFs. There are no client passwords: admins generate the access codes."
     ]
   },
   {
-    "repo": "Edamuza/modelbench-uriel",
+    "repo": "Edamuza/viteseo-enterpriserp",
     "description": null,
-    "language": "TypeScript",
+    "language": "PHP",
+    "license": null,
+    "stars": 0,
+    "readme": null
+  },
+  {
+    "repo": "Edamuza/viteseo-nfc",
+    "description": null,
+    "language": "PHP",
     "license": null,
     "stars": 0,
     "readme": [
-      "Compare LLMs on cost, speed and quality for one business task, and get a recommendation for the cheapest model that is good enough.",
-      "Teams that add an LLM to a business process have to pick a model, and they usually ask \"which one, and what will it cost?\" The answer is often a guess, based on the largest model or a public leaderboard rather than their own task."
+      "NFC card platform built with Laravel. It has a public side and an admin side, and manages NFC cards, the links and profiles behind them, and the sticker templates used for printing."
+    ]
+  },
+  {
+    "repo": "Edamuza/Wordpress-Plugins",
+    "description": null,
+    "language": null,
+    "license": null,
+    "stars": 0,
+    "readme": [
+      "A small set of WordPress plugins built for SEO and content work at Vite SEO. Each plugin is a zip file at the root of this repo."
     ]
   },
   {
@@ -134,6 +164,140 @@
     "readme": [
       "Every app, tool and library on your Mac — checked, secured and updated from one place.",
       "Zeke is a small, local-first update and security center for macOS. It lists everything installed on your Mac — apps, Homebrew, npm, Ruby gems, Python packages, CLIs and macOS itself — tells you honestly what's up to date, what has a new version and what it can't tell, checks for known security problems, and updates things on a…"
+    ]
+  },
+  {
+    "repo": "github/spec-kit",
+    "description": "💫 Toolkit to help you get started with SDD or any other process!",
+    "language": "Python",
+    "license": "MIT",
+    "stars": 149692,
+    "readme": [
+      "Spec Kit is an open source toolkit that gives AI coding agents structured processes, reusable templates, and documented outcomes. Start with a ready-made process, customize it, or bring your own."
+    ]
+  },
+  {
+    "repo": "googleanalytics/google-analytics-mcp",
+    "description": null,
+    "language": "Python",
+    "license": "Apache-2.0",
+    "stars": 3776,
+    "readme": [
+      "This repo contains the source code for running a local or remote multi-tenant MCP server that interacts with APIs for Google Analytics.",
+      "Join the discussion and ask questions in the 🤖-analytics-mcp channel on Discord."
+    ]
+  },
+  {
+    "repo": "joshfermano/liora-local",
+    "description": "Offline AI companion for Filipino mothers. Gemma 4 runs on the iPhone; WHO-based rules say when to go to the hospital. Expo + llama.rn, works in airplane mode.",
+    "language": "TypeScript",
+    "license": null,
+    "stars": 1,
+    "readme": [
+      "Know when to go, even with no signal.",
+      "An offline AI companion for Filipino mothers. She tells Liora how she feels in Tagalog, English or Taglish. Gemma 4 runs on her iPhone, and rules written from WHO guidance tell her whether to go to the hospital now, go to the health centre soon, or wait."
+    ]
+  },
+  {
+    "repo": "kestra-io/kestra",
+    "description": "Orchestrate everything, everywhere. The open-source control plane for workflows across data, infrastructure, business processes and AI agents. Declarative YAML, event-driven, any language, Git-versioned, scalable to millions of executions.",
+    "language": "Java",
+    "license": "Apache-2.0",
+    "stars": 30223,
+    "readme": [
+      "Open-source orchestration platform for data, AI, and infrastructure workflows",
+      "Kestra is an open-source, event-driven orchestration platform for data, AI, and infrastructure workflows. It unifies scheduled and event-driven automation behind a declarative, language-agnostic interface."
+    ]
+  },
+  {
+    "repo": "microsoft/playwright-mcp",
+    "description": "Playwright MCP server",
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "stars": 39612,
+    "readme": [
+      "A Model Context Protocol (MCP) server that provides browser automation capabilities using Playwright. This server enables LLMs to interact with web pages through structured accessibility snapshots, bypassing the need for screenshots or visually-tuned models."
+    ]
+  },
+  {
+    "repo": "node-red/node-red",
+    "description": "Low-code programming for event-driven applications",
+    "language": "JavaScript",
+    "license": "Apache-2.0",
+    "stars": 23842,
+    "readme": null
+  },
+  {
+    "repo": "obra/superpowers",
+    "description": "An agentic skills framework & software development methodology that works.",
+    "language": "Shell",
+    "license": "MIT",
+    "stars": 317241,
+    "readme": [
+      "Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.",
+      "It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it doesn't just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do."
+    ]
+  },
+  {
+    "repo": "simstudioai/sim",
+    "description": "Sim is the collaborative workspace to build, deploy, and monitor AI agents and workflows. Used by 100,000+ builders.",
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "stars": 30133,
+    "readme": [
+      "A workspace to build, deploy and manage AI agents and workflows."
+    ]
+  },
+  {
+    "repo": "thedotmack/claude-mem",
+    "description": "Persistent Context Across Sessions for Every Agent –  Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+    "language": "TypeScript",
+    "license": "Apache-2.0",
+    "stars": 116856,
+    "readme": [
+      "Every new session, your agent starts from zero. It re-reads the same files, re-asks the same questions, and walks back into mistakes you already fixed together."
+    ]
+  },
+  {
+    "repo": "upstash/context7",
+    "description": "Context7 Platform -- Up-to-date docs for AI agents",
+    "language": "TypeScript",
+    "license": "MIT",
+    "stars": 64767,
+    "readme": [
+      "Context7 pulls up-to-date, version-specific documentation and code examples straight from the source — and gives them to your coding agent."
+    ]
+  },
+  {
+    "repo": "windmill-labs/windmill",
+    "description": "Code-first platform for workflows, apps and AI agents, on the fastest self-hostable orchestrator (benchmarked against Airflow, Prefect and Temporal). Business teams build with AI, engineers control what ships. Open-source alternative to Lovable, Retool and n8n.",
+    "language": "Rust",
+    "license": null,
+    "stars": 18577,
+    "readme": [
+      "Open-source, self-hostable code-first platform for workflows, apps and AI agents, running on the fastest self-hostable orchestrator. Engineers write code in 20+ languages and sync it with Git. Business teams build on the same platform with AI, while review, promotion between environments and isolated workers keep engineers in control of what ships."
+    ]
+  },
+  {
+    "repo": "WordPress/mcp-adapter",
+    "description": "An MCP adapter that bridges the Abilities API to the Model Context Protocol, enabling MCP clients to discover and invoke WordPress plugin, theme, and core abilities programmatically.",
+    "language": "PHP",
+    "license": "GPL-2.0",
+    "stars": 1920,
+    "readme": [
+      "The official WordPress package for MCP integration that exposes WordPress abilities as Model Context Protocol (MCP) tools, resources, and prompts for AI agents.",
+      "MCP Adapter bridges WordPress's Abilities API with the MCP specification, giving AI agents a standardized way to interact with WordPress functionality."
+    ]
+  },
+  {
+    "repo": "wshobson/agents",
+    "description": "Plugins, agents, skills, and commands for Claude Code, Codex CLI, Cursor, OpenCode, Antigravity CLI, GitHub Copilot, and Pi, written once in Markdown and adapted to each tool by generators with validation and evals.",
+    "language": "Python",
+    "license": "MIT",
+    "stars": 42490,
+    "readme": [
+      "Use one collection of plugins, agents, skills, and commands across Claude Code, OpenAI Codex CLI, Cursor, OpenCode, Antigravity CLI, GitHub Copilot, and Pi. A harness is the coding tool that loads and runs the components.",
+      "Contributors write each component once, in Markdown, in the Claude Code plugin format. Adapters under tools/adapters/ generate the format each harness reads, map model aliases to that harness's…"
     ]
   }
 ]

@@ -3,6 +3,7 @@ import Callout from "./Callout.astro";
 import YouTube from "./YouTube.astro";
 import SocialPost from "./SocialPost.astro";
 import SponsorList from "./SponsorList.astro";
+import RepoCard from "./RepoCard.astro";
 
 /** Components available inside every MDX body (and in Keystatic's editor). */
 export const mdxComponents = {
@@ -11,4 +12,5 @@ export const mdxComponents = {
   YouTube,
   SocialPost,
   SponsorList,
+  RepoCard,
 };
