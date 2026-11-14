@@ -1,0 +1,215 @@
+---
+title: The Best Open-Source Claude Code Skills and Plugins on GitHub
+seoTitle: Best Open-Source Claude Code Skills on GitHub (2026)
+description: >-
+  The best open-source Claude Code skills and plugins on GitHub: Superpowers,
+  Anthropic's skills, Spec Kit, Claude-Mem and wshobson/agents, with limits.
+dek: >-
+  Five free repos that change how Claude Code plans, remembers and builds,
+  checked on November 14, 2026. Each one adds tokens to every session, so I
+  also show how to keep the list short.
+hub: ai
+frame: best-of
+takeaways:
+  - >-
+    Superpowers, with about 317,000 GitHub stars, makes Claude Code brainstorm,
+    plan and write failing tests before it writes code, and installs from
+    Anthropic's official plugin marketplace.
+  - >-
+    Anthropic's own skills repo includes the docx, pdf, pptx and xlsx skills
+    behind Claude's document features, released under Apache 2.0 as reference
+    code.
+  - >-
+    GitHub's Spec Kit turns a written spec into a plan, tasks and code through
+    slash commands, and its docs list Claude Code among more than 40 supported
+    coding agents.
+  - >-
+    Claude-Mem gives Claude Code memory between sessions, but its installer
+    offers a 30-day trial of a paid observer and turns on anonymous usage
+    analytics by default.
+  - >-
+    Claude Code's plugin docs say every skill Claude can call on its own puts
+    its name and description in context on every turn, so unused plugins still
+    cost tokens.
+published: 2026-11-14
+related:
+  - free-github-repos-to-learn-ai-agents
+  - open-source-seo-geo-tools-github
+projects: []
+stack:
+  - claude-code
+  - claude
+  - github
+faq:
+  - q: Do these skills work outside Claude Code?
+    a: >-
+      Most do. Superpowers lists installs for Codex, Cursor, Gemini CLI,
+      GitHub Copilot CLI, OpenCode and more, Spec Kit supports more than 40
+      agents, and wshobson/agents generates versions for seven coding tools.
+      Anthropic's skills also run in Claude.ai and the Claude API.
+  - q: Are Claude Code plugins free?
+    a: >-
+      All five repos are free to install, but they run on your Claude plan or
+      API key, so heavy skills use more of it. Claude-Mem is the only one that
+      offers a paid hosted option during setup, and you can skip it with a
+      provider flag.
+  - q: How many plugins should I install at once?
+    a: >-
+      Start with one and add another only when you miss it. Every skill Claude
+      can call on its own adds its name and description to each turn, and
+      wshobson/agents alone holds 185 skills, so install single plugins from it,
+      not the whole catalog.
+event: {}
+syndication: []
+draft: false
+---
+
+The best open-source Claude Code skills and plugins on GitHub are Superpowers for a full plan-then-test workflow, Anthropic's own skills repo for document work and reference code, and GitHub's Spec Kit for building from a written spec. All three are free and were updated in November 2026. Claude-Mem adds memory between sessions, and wshobson/agents is a large catalog you install one plugin at a time.
+
+This review is part of my [AI, in Depth](/topics/ai "AI, in Depth: Uriel Papa's articles on AI") writing. I built a multi-agent Claude Code pipeline that audits a production codebase in under 6 minutes, so I care about what a plugin adds to every session, not only what it promises.
+
+## How did I choose these repos?
+
+I judged every repo on the same five checks, against the GitHub API and each README on November 14, 2026:
+
+- **Free and open:** an open-source license, or a README that says which parts are open.
+- **Active:** a push to the repository in November 2026.
+- **Real Claude Code support:** a documented install path for Claude Code, not only a mention.
+- **Stars:** a popularity signal only. Stars do not prove a skill works in your project.
+- **Not covered before:** I left out the SEO skills from my review of [open-source SEO and GEO tools on GitHub](/blog/open-source-seo-geo-tools-github "The best open-source SEO and GEO tools on GitHub") and the n8n skills from my [free n8n workflow templates](/blog/free-n8n-workflow-templates-github "Free n8n workflow templates on GitHub") post.
+
+![A red Swiss Army knife with its blades and tools opened out](../../assets/images/content/best-claude-code-skills-plugins-github-1.jpg "A red Swiss Army knife with its blades and tools opened out")
+
+*A plugin bundles several tools into one install, like a pocket knife. Photo: [Andrew Toskin](https://commons.wikimedia.org/wiki/File:Victorinox_Swiss_Army_Knife_-_Tinker_%2814934336443%29.jpg "Andrew Toskin's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+A pocket knife is a fair picture of a plugin, and of its cost. Every blade you carry adds weight, even the ones you never open.
+
+## Which Claude Code skills and plugins are worth installing?
+
+Five repos passed. Each one gets the same checks.
+
+### Superpowers
+
+[obra/superpowers](https://github.com/obra/superpowers "Superpowers on GitHub") is a set of skills that its README calls "a complete software development methodology for your coding agents".
+
+- **Who it's for:** builders who let Claude Code work on its own for long stretches and want it to plan and test first.
+- **What's inside:** skills for brainstorming, writing plans, git worktrees, test-driven development, systematic debugging, code review and finishing a branch. They trigger on their own, so the agent asks what you want before it writes code.
+- **Cost:** free. Prime Radiant, the company behind it, offers paid enterprise support.
+- **License and activity:** MIT, about 317,000 stars, last push November 3, 2026. Built by Jesse Vincent.
+- **Watch out for:** the test-driven skill "deletes code written before tests", so do not point it at a half-written branch you want to keep. The optional visual companion loads a logo that reports the Superpowers version. `SUPERPOWERS_DISABLE_TELEMETRY` turns it off.
+
+<RepoCard repo="obra/superpowers" />
+
+Superpowers installs with `/plugin install superpowers@claude-plugins-official`, from Anthropic's own marketplace.
+
+### Anthropic's skills repo
+
+[anthropics/skills](https://github.com/anthropics/skills "Anthropic's skills repository on GitHub") is Anthropic's public collection of example skills, plus the template and spec for writing your own.
+
+- **Who it's for:** anyone who wants document skills in Claude Code, or a clean example before writing a first skill.
+- **What's inside:** creative, design, developer and enterprise example skills, and the docx, pdf, pptx and xlsx skills "that power Claude's document capabilities". Install with `/plugin marketplace add anthropics/skills`, then pick `document-skills` or `example-skills`.
+- **Cost:** free. The same example skills are already in paid Claude.ai plans.
+- **License and activity:** the README says many skills, including the four document skills, are Apache 2.0. GitHub shows no single license for the repo, so check each skill folder. About 194,000 stars, last push November 6, 2026.
+- **Watch out for:** the README says the skills are "for demonstration and educational purposes only" and may behave differently from what Claude does. Test them before you rely on them.
+
+<RepoCard repo="anthropics/skills" />
+
+### Spec Kit
+
+[github/spec-kit](https://github.com/github/spec-kit "GitHub Spec Kit on GitHub") is GitHub's toolkit for spec-driven development: you write what to build and why, then the agent turns it into a plan, tasks and code.
+
+- **Who it's for:** people who already write specs, or who want the agent to stop guessing on bigger features.
+- **What's inside:** the `specify` CLI and skills such as `/speckit-specify`, `/speckit-plan`, `/speckit-tasks` and `/speckit-implement`, plus extensions for bug fixing and idea assessment. The [Claude Code integration page](https://github.com/github/spec-kit/blob/main/docs/integrations/claude.md "Spec Kit's Claude Code integration guide") installs them as `.claude/skills/speckit-*`.
+- **Cost:** free. It needs Python 3.11 or later and uv.
+- **License and activity:** MIT, about 150,000 stars, last push November 12, 2026. Maintained by GitHub.
+- **Watch out for:** its catalogs include community extensions, and the README says listings "are not audits or endorsements". Review that code first.
+
+<RepoCard repo="github/spec-kit" />
+
+I built my [job and client matching CRM](/projects/job-client-crm "Job and Client Matching CRM case study") by directing AI agents against a written spec, and that is the habit Spec Kit makes formal.
+
+### Claude-Mem
+
+[thedotmack/claude-mem](https://github.com/thedotmack/claude-mem "Claude-Mem on GitHub") gives Claude Code memory between sessions: a second agent takes notes while you work, and the next session starts with a short index of them.
+
+- **Who it's for:** people who return to the same codebase daily and are tired of re-explaining it.
+- **What's inside:** hooks that pass each tool call to a local worker, SQLite storage in `~/.claude-mem`, and three MCP search tools. It works with Claude Code, Codex, Cursor, OpenCode and 11 more agents.
+- **Cost:** the code is free. After sign-in, the installer offers a hosted observer with a 30-day free trial that asks for a payment method. You can instead use your own OpenRouter or Gemini key, or your Anthropic plan.
+- **License and activity:** Apache 2.0, about 117,000 stars, last push November 13, 2026. Built by Alex Newman under the thedotmack account.
+- **Watch out for:** anonymous usage analytics are on by default, and `npx claude-mem telemetry disable` turns them off. Wrap secrets in `<private>` tags so they are never stored.
+
+<RepoCard repo="thedotmack/claude-mem" />
+
+### wshobson/agents
+
+[wshobson/agents](https://github.com/wshobson/agents "wshobson/agents plugin catalog on GitHub") is one large catalog of plugins, subagents, skills and commands, written once in the Claude Code plugin format.
+
+- **Who it's for:** developers who want a ready-made specialist, such as a Python, security or code review plugin.
+- **What's inside:** 94 plugins holding 202 agents, 185 skills and 105 commands. Add the marketplace with `/plugin marketplace add wshobson/agents`, then install only the plugins you need.
+- **Cost:** free.
+- **License and activity:** MIT, about 42,500 stars, last push November 9, 2026. Maintained by Seth Hobson.
+- **Watch out for:** its own README says the LLM judge scores in its evaluation tool "do not prove that a task succeeds in a project". Installing everything would also crowd Claude's context.
+
+<RepoCard repo="wshobson/agents" />
+
+## How do the five repos compare?
+
+The five repos split into two workflows, one memory tool and two libraries you pick from.
+
+| Repo | Best for | License | Stars (Nov 14, 2026) | Last push |
+| --- | --- | --- | --- | --- |
+| obra/superpowers | Plan, test and review before code | MIT | about 317,000 | Nov 3, 2026 |
+| anthropics/skills | Document skills and reference code | Apache 2.0 (most skills) | about 194,000 | Nov 6, 2026 |
+| github/spec-kit | Building from a written spec | MIT | about 150,000 | Nov 12, 2026 |
+| thedotmack/claude-mem | Memory between sessions | Apache 2.0 | about 117,000 | Nov 13, 2026 |
+| wshobson/agents | Single specialist plugins | MIT | about 42,500 | Nov 9, 2026 |
+
+Superpowers and Spec Kit overlap, because both make the agent plan first. Pick one of the two, not both.
+
+## What is the difference between a skill, a plugin and a subagent?
+
+A Claude Code skill is a folder with a `SKILL.md` file of instructions that Claude loads when a task matches its description. A plugin is a bundle that installs several skills, subagents, hooks or MCP servers as one unit, according to Claude Code's [plugins overview](https://code.claude.com/docs/en/plugins "Claude Code plugins overview"). A subagent is a separate Claude instance that a plugin or skill can hand work to, with its own context window.
+
+The difference matters for cost. The plugins overview says the name and description of every skill and agent that Claude can call on its own sit in Claude's context on every turn, "even in sessions where nothing from the plugin runs". The full text loads only when used.
+
+So a small, focused plugin is cheaper than a catalog. My explainer on [tokenization](/blog/what-is-tokenization "What is tokenization in AI?") shows why every extra line of context has a price.
+
+Anthropic's own explainer walks through how Agent Skills load only what a task needs:
+
+<YouTube id="fOxC44g8vig" title="Claude Agent Skills Explained" channel="Anthropic" />
+
+## How do you install a third-party plugin safely?
+
+A Claude Code plugin runs with your user privileges, whichever marketplace it comes from. The plugins overview puts it plainly: "a plugin you install can run code with your user privileges". Before you install any of these:
+
+- **Prefer Anthropic's marketplaces when you can.** Claude Code accepts the official names, such as `claude-plugins-official`, only for marketplaces in Anthropic's own GitHub organization. Superpowers is there.
+- **Read the hooks and scripts,** not only the skill text. Claude-Mem, for example, runs a hook on every tool call.
+- **Check `allowed-tools`.** The [skills documentation](https://code.claude.com/docs/en/skills "Claude Code skills documentation") says this field lets Claude use the listed tools without asking during that turn.
+- **Turn off telemetry you did not ask for,** using the flags above.
+
+![Technical blueprints of the James Webb Space Telescope](../../assets/images/content/best-claude-code-skills-plugins-github-2.jpg "Technical blueprints of the James Webb Space Telescope")
+
+*Superpowers and Spec Kit both make the agent draw the plan before it builds. Image: [James Webb Space Telescope](https://commons.wikimedia.org/wiki/File:Blueprints_of_the_James_Webb_Space_Telescope.jpg "Blueprints of the James Webb Space Telescope on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+Five minutes of reading costs less than undoing a hook you never saw.
+
+## Which one should you start with?
+
+Start with the problem you have today:
+
+- **The agent jumps into code too fast:** Superpowers, from the official marketplace.
+- **You build bigger features from a brief:** Spec Kit, with `specify init my-project --integration claude`.
+- **You need Word, PDF, PowerPoint or Excel output:** the `document-skills` plugin from Anthropic's repo.
+- **You keep re-explaining the same codebase:** Claude-Mem, set up with your own provider and telemetry off.
+- **You want one specialist, such as Python or security:** a single plugin from wshobson/agents.
+
+Install one, use it for a week, then decide on the next. If you are still learning how agents work, my list of [free GitHub repos to learn AI agents](/blog/free-github-repos-to-learn-ai-agents "Free GitHub repos to learn AI agents") is the better first stop.
+
+## Where can you learn more?
+
+- [Claude Code security documentation](https://code.claude.com/docs/en/security "Claude Code security documentation") - how permissions, workspace trust and prompt injection protection work before you add plugins.
+- [Anthropic's skill template](https://github.com/anthropics/skills/blob/main/template/SKILL.md "Anthropic's SKILL.md template on GitHub") - the smallest working skill, a name, a description and your instructions, to copy when you write your own.
+- [Spec-driven development quickstart](https://github.com/github/spec-kit/blob/main/docs/quickstart.md "Spec Kit's spec-driven development quickstart") - GitHub's own walkthrough from constitution to working code.
+- [Claude Code subagents documentation](https://code.claude.com/docs/en/sub-agents "Claude Code subagents documentation") - how subagents get their own context window, tools and permissions, and when to write one.
+
+*Repository details are from the GitHub API and each README, checked on November 14, 2026. Claude and Claude Code are trademarks of Anthropic. This post is not endorsed by or affiliated with any of the projects listed.*
