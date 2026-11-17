@@ -34,3 +34,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-14 | news | skipped | - | Weekly cap reached: 7 takes already published this week (9 to 15 Nov), against the limit of 3.
 - 2026-11-15 | news | skipped | - | Weekly cap reached: 7 takes already published this week (9 to 15 Nov), against the limit of 3.
 - 2026-11-16 | news | published | shopify-stores-poppy-ai-agents |
+- 2026-11-17 | news | skipped | - | No strong story with a Philippine or small-business action; Google Business Profile typed hours is not confirmed for the Philippines and the fuel price cut had no primary source.
