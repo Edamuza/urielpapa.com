@@ -285,25 +285,142 @@ const field =
           /* Free slots from Uriel's Google Calendar, filled in by the script
             below from /api/slots. Picking one books the call on send. */
         }
-        <fieldset data-booking hidden aria-describedby="c-slot-tz c-slot-err">
-          <legend class="font-semibold">
-            Pick a time for your free 15-minute call{" "}
-            <span class="meta">(optional)</span>
+        <fieldset
+          data-booking
+          hidden
+          aria-describedby="c-slot-tz c-slot-err"
+          class="border-border min-w-0 rounded-2xl border p-4 sm:p-6"
+        >
+          <legend class="sr-only">
+            Pick a time for your free 15-minute call (optional)
           </legend>
-          <p id="c-slot-tz" class="meta mt-1" data-slot-tz></p>
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="h3" aria-hidden="true">Book your free call</p>
+              <p class="meta mt-0.5">
+                Optional. Pick a time and it goes straight into my calendar.
+              </p>
+            </div>
+            <ul class="flex flex-wrap gap-2 text-sm" aria-label="Call details">
+              <li
+                class="border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"
+                  ></path></svg
+                >
+                15 min
+              </li>
+              <li
+                class="border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><rect x="3" y="6" width="12" height="12" rx="2"></rect><path
+                    d="m15 10 6-3v10l-6-3"></path></svg
+                >
+                Google Meet
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-5 flex items-center justify-between gap-2">
+            <p class="label-caps text-muted-foreground" id="c-slot-day-label">
+              1. Pick a day
+            </p>
+            <div class="flex gap-1">
+              <button
+                type="button"
+                class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
+                aria-label="Earlier days"
+                data-slot-prev
+                ><svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg
+                ></button
+              >
+              <button
+                type="button"
+                class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
+                aria-label="Later days"
+                data-slot-next
+                ><svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg
+                ></button
+              >
+            </div>
+          </div>
           <div
-            class="mt-3 flex gap-2 overflow-x-auto pb-1"
+            class="slot-days -mx-1 mt-2 flex snap-x gap-2 overflow-x-auto scroll-smooth px-1 pt-1 pb-2"
             role="group"
-            aria-label="Day"
+            aria-labelledby="c-slot-day-label"
             data-slot-days
           >
           </div>
+
+          <p class="label-caps text-muted-foreground mt-4">2. Pick a time</p>
+          <div class="mt-2 space-y-4" data-slot-times></div>
+
           <div
-            class="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4"
-            data-slot-times
+            class="border-border data-picked:border-foreground mt-5 flex items-center gap-3 rounded-xl border border-dashed p-3 text-sm data-picked:border-solid"
+            data-slot-summary
           >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              class="size-5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
+                d="M16 3v4M8 3v4M3 10h18"></path></svg
+            >
+            <p class="min-w-0 flex-1" aria-live="polite" data-slot-picked>
+              No time picked yet. You can also just send a message.
+            </p>
+            <button
+              type="button"
+              class="shrink-0 text-sm font-semibold underline underline-offset-3"
+              hidden
+              data-slot-clear>Clear</button
+            >
           </div>
-          <p class="mt-2 text-sm" aria-live="polite" data-slot-picked></p>
+          <p
+            id="c-slot-tz"
+            class="meta mt-3 flex items-start gap-1.5"
+            data-slot-tz
+          >
+          </p>
           <p
             id="c-slot-err"
             class="mt-1 text-sm font-semibold"
@@ -532,62 +649,141 @@ const field =
     if (!data?.enabled || !data.slots?.length) return;
 
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const dayFmt = new Intl.DateTimeFormat(undefined, {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    });
-    const timeFmt = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-    const byDay = new Map<string, string[]>();
+    const fmt = (o: Intl.DateTimeFormatOptions) =>
+      new Intl.DateTimeFormat(undefined, o);
+    const keyFmt = fmt({ year: "numeric", month: "2-digit", day: "2-digit" });
+    const longDay = fmt({ weekday: "long", month: "long", day: "numeric" });
+    const timeFmt = fmt({ hour: "numeric", minute: "2-digit" });
+    const hourFmt = fmt({ hour: "numeric", hourCycle: "h23" });
+    const minutes = (data as { minutes?: number }).minutes ?? 15;
+    const byDay = new Map<string, Date[]>();
     for (const iso of data.slots) {
-      const key = dayFmt.format(new Date(iso));
-      byDay.set(key, [...(byDay.get(key) ?? []), iso]);
+      const at = new Date(iso);
+      const key = keyFmt.format(at);
+      byDay.set(key, [...(byDay.get(key) ?? []), at]);
     }
 
     const days = booking.querySelector<HTMLElement>("[data-slot-days]")!;
     const times = booking.querySelector<HTMLElement>("[data-slot-times]")!;
     const picked = booking.querySelector<HTMLElement>("[data-slot-picked]")!;
+    const summary = booking.querySelector<HTMLElement>("[data-slot-summary]")!;
+    const clear =
+      booking.querySelector<HTMLButtonElement>("[data-slot-clear]")!;
+    const prev = booking.querySelector<HTMLButtonElement>("[data-slot-prev]")!;
+    const next = booking.querySelector<HTMLButtonElement>("[data-slot-next]")!;
     booking.querySelector("[data-slot-tz]")!.textContent =
-      `Times are in your time zone (${zone}). You'll get a Google Calendar invite with a Meet link.`;
+      `Times are in your time zone (${zone.replace(/_/g, " ")}). Google Calendar sends you the invite with the Meet link.`;
+    const empty = picked.textContent;
 
-    // Every slot is one radio input; a day button shows only that day's slots.
-    for (const [day, list] of byDay) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className =
-        "border-border aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background min-h-11 shrink-0 rounded-lg border px-3 text-sm font-medium whitespace-nowrap";
-      button.textContent = day;
-      button.setAttribute("aria-pressed", "false");
-      button.addEventListener("click", () => showDay(day));
-      days.append(button);
-      for (const iso of list) {
-        const label = document.createElement("label");
-        label.dataset.day = day;
-        label.className =
-          "border-border has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-background has-[:focus-visible]:outline-accent flex min-h-11 cursor-pointer items-center justify-center rounded-lg border text-sm font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2";
-        const input = document.createElement("input");
-        input.type = "radio";
-        input.name = "slot";
-        input.value = iso;
-        input.className = "sr-only";
-        input.addEventListener("change", () => {
-          picked.textContent = `Your call: ${day}, ${timeFmt.format(new Date(iso))}`;
-        });
-        label.append(input, timeFmt.format(new Date(iso)));
-        times.append(label);
+    // One tile per day; each day has a panel of radio "chips", grouped into
+    // morning and afternoon. Only the chosen day's panel shows.
+    for (const [key, list] of byDay) {
+      const first = list[0];
+      const tile = document.createElement("button");
+      tile.type = "button";
+      tile.dataset.day = key;
+      tile.setAttribute("aria-pressed", "false");
+      tile.setAttribute(
+        "aria-label",
+        `${longDay.format(first)}, ${list.length} times free`
+      );
+      tile.className =
+        "border-border hover:border-foreground aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background flex w-[4.75rem] shrink-0 snap-start flex-col items-center rounded-xl border px-2 py-2.5 transition-colors";
+      const part = (o: Intl.DateTimeFormatOptions, cls: string) => {
+        const span = document.createElement("span");
+        span.className = cls;
+        span.textContent = fmt(o).format(first);
+        tile.append(span);
+      };
+      part({ weekday: "short" }, "label-caps opacity-70");
+      part(
+        { day: "numeric" },
+        "text-2xl leading-tight font-semibold font-[family-name:var(--ff-display)]"
+      );
+      part({ month: "short" }, "text-xs opacity-70");
+      tile.addEventListener("click", () => showDay(key, true));
+      days.append(tile);
+
+      const panel = document.createElement("div");
+      panel.dataset.day = key;
+      panel.className = "space-y-4";
+      const groups: [string, Date[]][] = [
+        ["Morning", list.filter(d => Number(hourFmt.format(d)) < 12)],
+        ["Afternoon", list.filter(d => Number(hourFmt.format(d)) >= 12)],
+      ];
+      for (const [name, group] of groups) {
+        if (!group.length) continue;
+        const section = document.createElement("div");
+        const heading = document.createElement("p");
+        heading.className = "meta mb-2";
+        heading.textContent = name;
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-3 gap-2 sm:grid-cols-4";
+        for (const at of group) {
+          const label = document.createElement("label");
+          label.className =
+            "border-border hover:border-foreground has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-background has-[:focus-visible]:outline-accent flex min-h-11 cursor-pointer items-center justify-center rounded-lg border text-sm font-medium tabular-nums transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2";
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "slot";
+          input.value = at.toISOString();
+          input.className = "sr-only";
+          input.addEventListener("change", () => {
+            const end = new Date(at.getTime() + minutes * 60_000);
+            picked.innerHTML = "";
+            const strong = document.createElement("strong");
+            strong.textContent = longDay.format(at);
+            picked.append(
+              strong,
+              document.createElement("br"),
+              `${timeFmt.format(at)} to ${timeFmt.format(end)}, Google Meet`
+            );
+            summary.dataset.picked = "";
+            clear.hidden = false;
+          });
+          label.append(input, timeFmt.format(at));
+          grid.append(label);
+        }
+        section.append(heading, grid);
+        panel.append(section);
       }
+      times.append(panel);
     }
-    function showDay(day: string) {
-      for (const b of days.querySelectorAll("button"))
-        b.setAttribute("aria-pressed", String(b.textContent === day));
-      for (const l of times.querySelectorAll<HTMLElement>("label"))
-        l.hidden = l.dataset.day !== day;
+
+    clear.addEventListener("click", () => {
+      for (const r of times.querySelectorAll<HTMLInputElement>("input"))
+        r.checked = false;
+      picked.textContent = empty;
+      delete summary.dataset.picked;
+      clear.hidden = true;
+    });
+    const tiles = [...days.querySelectorAll<HTMLButtonElement>("button")];
+    const step = () => days.clientWidth * 0.8;
+    prev.addEventListener("click", () =>
+      days.scrollBy({ left: -step(), behavior: "smooth" })
+    );
+    next.addEventListener("click", () =>
+      days.scrollBy({ left: step(), behavior: "smooth" })
+    );
+    const arrows = () => {
+      prev.disabled = days.scrollLeft < 8;
+      next.disabled =
+        days.scrollLeft + days.clientWidth >= days.scrollWidth - 8;
+    };
+    days.addEventListener("scroll", arrows, { passive: true });
+    function showDay(key: string, focusTile = false) {
+      for (const t of tiles) {
+        const on = t.dataset.day === key;
+        t.setAttribute("aria-pressed", String(on));
+        if (on && focusTile)
+          t.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+      for (const p of times.querySelectorAll<HTMLElement>(":scope > div"))
+        p.hidden = p.dataset.day !== key;
     }
     showDay(byDay.keys().next().value!);
     booking.hidden = false;
+    arrows();
     if (callTimes) callTimes.hidden = true;
   }
   loadSlots();
@@ -606,6 +802,13 @@ const field =
   }
   form:has(input[name="topic"][value="work"]:checked) .work-fields {
     display: block;
+  }
+  /* The day strip scrolls sideways without a bar; the arrows move it. */
+  .slot-days {
+    scrollbar-width: none;
+  }
+  .slot-days::-webkit-scrollbar {
+    display: none;
   }
   form:has(input[name="workKind"][value="client"]:checked) .client-fields,
   form:has(input[name="workKind"][value="employer"]:checked) .employer-fields {
