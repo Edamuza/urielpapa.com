@@ -113,6 +113,20 @@ const body = (label = "Body") =>
     },
   });
 
+const sources = (min: number) =>
+  fields.array(
+    fields.object({
+      title: fields.text({ label: "Page title", validation: { length: { min: 3 } } }),
+      url: fields.url({ label: "URL", validation: { isRequired: true } }),
+    }),
+    {
+      label: "Sources",
+      description: `Pages you opened and took facts from. At least ${min}.`,
+      itemLabel: p => p.fields.title.value || "Source",
+      validation: { length: { min } },
+    }
+  );
+
 const syndication = fields.array(
   fields.object({
     network: fields.select({
@@ -133,6 +147,7 @@ export default config({
     brand: { name: "urielpapa.com" },
     navigation: {
       Writing: ["blog", "notes", "newsletter"],
+      "Short pages": ["answers", "glossary", "releases"],
       Site: ["hubs", "projects", "stack", "now"],
     },
   },
@@ -332,6 +347,89 @@ export default config({
       },
     }),
 
+    answers: collection({
+      label: "Answers",
+      slugField: "question",
+      path: "src/content/answers/*",
+      previewUrl: "/answers/{slug}",
+      format: { contentField: "body" },
+      entryLayout: "content",
+      columns: ["question", "published"],
+      schema: {
+        question: fields.slug({
+          name: { label: "Question (as people type it, ends with ?)", validation: { length: { min: 5, max: 70 } } },
+        }),
+        seoTitle: fields.text({ label: "SEO title (optional, 60 max)", validation: { length: { max: 60 } } }),
+        description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 120, max: 170 } } }),
+        answer: fields.text({ label: "Short answer (about 40 words, shown first)", multiline: true, validation: { length: { min: 40, max: 300 } } }),
+        hub: fields.select({ label: "Topic hub", options: hubOptions, defaultValue: "ai" }),
+        stack: fields.array(fields.relationship({ label: "Tool", collection: "stack" }), { label: "Tools mentioned", itemLabel: p => p.value ?? "Tool" }),
+        glossary: fields.array(fields.relationship({ label: "Term", collection: "glossary" }), { label: "Glossary terms used", itemLabel: p => p.value ?? "Term" }),
+        related: fields.array(fields.relationship({ label: "Answer", collection: "answers" }), { label: "Related answers", itemLabel: p => p.value ?? "Answer" }),
+        deeper: fields.relationship({ label: "Long post that goes deeper", collection: "blog" }),
+        sources: sources(2),
+        published: fields.date({ label: "Published", defaultValue: { kind: "today" }, validation: { isRequired: true } }),
+        lastChecked: fields.date({ label: "Last checked", defaultValue: { kind: "today" }, validation: { isRequired: true } }),
+        draft: fields.checkbox({ label: "Draft", defaultValue: true }),
+        body: body("Body (250–700 words)"),
+      },
+    }),
+
+    glossary: collection({
+      label: "Glossary",
+      slugField: "term",
+      path: "src/content/glossary/*",
+      previewUrl: "/glossary/{slug}",
+      format: { contentField: "body" },
+      entryLayout: "content",
+      columns: ["term", "hub"],
+      schema: {
+        term: fields.slug({ name: { label: "Term", validation: { length: { min: 2, max: 60 } } } }),
+        aka: fields.array(fields.text({ label: "Other name" }), { label: "Also called", itemLabel: p => p.value }),
+        seoTitle: fields.text({ label: "SEO title (optional, 60 max)", validation: { length: { max: 60 } } }),
+        description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 120, max: 170 } } }),
+        definition: fields.text({ label: "One-sentence definition", multiline: true, validation: { length: { min: 40, max: 300 } } }),
+        hub: fields.select({ label: "Topic hub", options: hubOptions, defaultValue: "ai" }),
+        stack: fields.array(fields.relationship({ label: "Tool", collection: "stack" }), { label: "Tools", itemLabel: p => p.value ?? "Tool" }),
+        related: fields.array(fields.relationship({ label: "Term", collection: "glossary" }), { label: "Related terms", itemLabel: p => p.value ?? "Term" }),
+        deeper: fields.array(fields.relationship({ label: "Post", collection: "blog" }), { label: "Read more (posts)", itemLabel: p => p.value ?? "Post" }),
+        sources: sources(1),
+        published: fields.date({ label: "Published", defaultValue: { kind: "today" }, validation: { isRequired: true } }),
+        lastChecked: fields.date({ label: "Last checked", defaultValue: { kind: "today" }, validation: { isRequired: true } }),
+        draft: fields.checkbox({ label: "Draft", defaultValue: true }),
+        body: body("Body (300–600 words, with an example)"),
+      },
+    }),
+
+    releases: collection({
+      label: "Release notes",
+      slugField: "title",
+      path: "src/content/releases/*",
+      previewUrl: "/releases/{slug}",
+      format: { contentField: "body" },
+      entryLayout: "content",
+      columns: ["title", "releasedOn"],
+      schema: {
+        title: fields.slug({
+          name: { label: "Title (with the exact version)", validation: { length: { min: 5, max: 70 } } },
+          slug: { label: "Slug", description: "<tool id>-<version>, e.g. astro-7-1" },
+        }),
+        seoTitle: fields.text({ label: "SEO title (optional, 60 max)", validation: { length: { max: 60 } } }),
+        description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 120, max: 170 } } }),
+        tool: fields.relationship({ label: "Tool (from the Stack)", collection: "stack", validation: { isRequired: true } }),
+        version: fields.text({ label: "Version", validation: { length: { min: 1 } } }),
+        releasedOn: fields.date({ label: "Released on", validation: { isRequired: true } }),
+        sourceUrl: fields.url({ label: "Official changelog or release page", validation: { isRequired: true } }),
+        hub: fields.select({ label: "Topic hub", options: hubOptions, defaultValue: "tech-stacks" }),
+        upgrade: fields.text({ label: "Should a small team upgrade now? (one line)", validation: { length: { min: 20, max: 200 } } }),
+        previous: fields.relationship({ label: "Previous release note", collection: "releases" }),
+        sources: sources(0),
+        published: fields.date({ label: "Published", defaultValue: { kind: "today" }, validation: { isRequired: true } }),
+        draft: fields.checkbox({ label: "Draft", defaultValue: true }),
+        body: body("Body (200–450 words)"),
+      },
+    }),
+
     stack: collection({
       label: "Stack items",
       slugField: "name",
@@ -349,6 +447,17 @@ export default config({
         use: fields.text({ label: "What I use it for (one line)" }),
         url: fields.url({ label: "Official site" }),
         order: fields.integer({ label: "Order within group", defaultValue: 100 }),
+        about: fields.text({
+          label: "Tool page text",
+          description: "Two or three paragraphs, blank line between them. The tool page (/stack/<id>) is only built once this is written.",
+          multiline: true,
+        }),
+        hub: fields.select({ label: "Topic hub (tool page)", options: [{ label: "None", value: "" }, ...hubOptions], defaultValue: "" }),
+        pricing: fields.text({ label: "Pricing, in one or two sentences" }),
+        pricingSource: fields.url({ label: "Pricing source" }),
+        pricingChecked: fields.date({ label: "Pricing checked on" }),
+        alternatives: fields.array(fields.relationship({ label: "Tool", collection: "stack" }), { label: "Alternatives", itemLabel: p => p.value ?? "Tool" }),
+        changelog: fields.url({ label: "Official changelog (watched by the release-notes task)" }),
       },
     }),
   },

@@ -27,11 +27,15 @@ for (const name of readdirSync(DIR).filter(f => f.endsWith(".mdx"))) {
   if (field(front, "frame") !== "news-take" || field(front, "draft") === "true") continue;
   if (published < STANDARD_FROM) continue;
   checked++;
+  // Philippine briefs (docs/content-500.md) need 1 to 3 photos; the agency's own
+  // post is embedded when there is one, so the embed is not required.
+  const phBrief = field(front, "phBrief") === "true";
+  const [minPhotos, maxPhotos] = phBrief ? [1, 3] : [2, 3];
 
   const lines = body.split("\n");
   const images = lines.map((line, i) => [line.trim(), i]).filter(([line]) => line.startsWith("!["));
-  if (images.length < 2 || images.length > 3) {
-    problems.push(`${name}: has ${images.length} photos; a news take needs 2 or 3`);
+  if (images.length < minPhotos || images.length > maxPhotos) {
+    problems.push(`${name}: has ${images.length} photos; a ${phBrief ? "Philippine brief" : "news take"} needs ${minPhotos} to ${maxPhotos}`);
   }
   for (const [line, i] of images) {
     const m = line.match(/^!\[([^\]]*)\]\(([^\s)]+)(?: "([^"]*)")?\)$/);
@@ -43,7 +47,7 @@ for (const name of readdirSync(DIR).filter(f => f.endsWith(".mdx"))) {
       problems.push(`${name}: ${m?.[2] ?? line} has no credit line (author and license links) right under it`);
     }
   }
-  if (!/<SocialPost\b[^>]*platform="(x|threads)"/.test(body)) {
+  if (!phBrief && !/<SocialPost\b[^>]*platform="(x|threads)"/.test(body)) {
     problems.push(`${name}: has no embedded X or Threads post (<SocialPost platform="x" … /> or "threads")`);
   }
 }

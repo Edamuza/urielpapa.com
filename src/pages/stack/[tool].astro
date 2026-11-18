@@ -1,0 +1,257 @@
+---
+/**
+ * Tool page: how Uriel uses a tool, what it costs, alternatives, and every page
+ * on the site that names it. Only built for Stack items with an `about` text.
+ */
+import { getCollection, getEntries } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import HubChip from "@/components/HubChip.astro";
+import { SITE } from "@/config";
+import { STACK_GROUPS, hubName } from "@/data/hubs";
+import {
+  answerUrl,
+  formatDate,
+  getAllBlogEntries,
+  getAnswers,
+  getProjects,
+  getReleases,
+  getTerms,
+  getToolPages,
+  isoDate,
+  postUrl,
+  projectUrl,
+  releaseUrl,
+  termUrl,
+  toolUrl,
+  type Tool,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
+
+export async function getStaticPaths() {
+  return (await getToolPages()).map(tool => ({
+    params: { tool: tool.id },
+    props: { tool },
+  }));
+}
+
+type Props = { tool: Tool };
+const { tool } = Astro.props;
+const { data } = tool;
+const url = abs(toolUrl(tool));
+const names = <T extends { data: { stack: { id: string }[] } }>(list: T[]) =>
+  list.filter(e => e.data.stack.some(s => s.id === tool.id));
+
+const releases = (await getReleases()).filter(r => r.data.tool.id === tool.id);
+const answers = names(await getAnswers());
+const terms = names(await getTerms());
+const posts = names(await getAllBlogEntries());
+const projects = names(await getProjects());
+const alternatives = await getEntries(data.alternatives);
+const allTools = await getCollection("stack");
+const group = STACK_GROUPS.find(g => g.id === data.group)?.label;
+const sameGroup = allTools
+  .filter(
+    t =>
+      t.id !== tool.id &&
+      t.data.group === data.group &&
+      !alternatives.some(a => a.id === t.id)
+  )
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+const paragraphs = (data.about ?? "")
+  .split(/\n\s*\n/)
+  .map(p => p.trim())
+  .filter(Boolean);
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Stack", href: "/stack" },
+  { name: data.name, href: toolUrl(tool) },
+];
+const description = `${data.name} in Uriel Papa's stack: ${data.use}`
+  .replace(/\s+/g, " ")
+  .slice(0, 165);
+const schema = [
+  {
+    "@type": "SoftwareApplication",
+    "@id": `${url}#software`,
+    name: data.name,
+    ...(data.url && { url: data.url, sameAs: [data.url] }),
+    applicationCategory: group,
+    description: paragraphs[0] ?? data.use,
+    mainEntityOfPage: { "@id": `${url}#page` },
+  },
+  {
+    "@type": "Article",
+    "@id": `${url}#article`,
+    mainEntityOfPage: { "@id": `${url}#page` },
+    headline: `${data.name}: how I use it`,
+    description,
+    author: { "@id": PERSON_ID },
+    about: { "@id": `${url}#software` },
+    inLanguage: SITE.lang,
+  },
+  breadcrumbNode(crumbs),
+];
+const sections = [
+  {
+    id: "releases",
+    heading: `${data.name} release notes`,
+    items: releases.map(r => ({
+      href: releaseUrl(r),
+      title: r.data.title,
+      note: `released ${formatDate(r.data.releasedOn)}`,
+    })),
+  },
+  {
+    id: "posts",
+    heading: `Posts that use ${data.name}`,
+    items: posts.map(p => ({ href: postUrl(p), title: p.data.title })),
+  },
+  {
+    id: "projects",
+    heading: `Projects built with ${data.name}`,
+    items: projects.map(p => ({ href: projectUrl(p), title: p.data.title })),
+  },
+  {
+    id: "answers",
+    heading: `Questions about ${data.name}`,
+    items: answers.map(a => ({ href: answerUrl(a), title: a.data.question })),
+  },
+  {
+    id: "terms",
+    heading: "Terms to know",
+    items: terms.map(t => ({ href: termUrl(t), title: t.data.term })),
+  },
+].filter(s => s.items.length > 0);
+---
+
+<Layout
+  title={`${data.name}: How I Use It, Cost and Alternatives`}
+  description={description.length >= 120
+    ? description
+    : `${description} What it costs, alternatives, and every post, project and release note about it.`.slice(
+        0,
+        170
+      )}
+  schema={schema}
+>
+  <article class="app-layout max-w-read pt-8" data-pagefind-body>
+    <Breadcrumbs crumbs={crumbs} />
+    <p class="meta mb-2">Tool · {group}</p>
+    <h1 class="h1">{data.name}</h1>
+    <p class="meta mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+      {data.hub && <HubChip hub={data.hub} />}
+      {
+        data.url && (
+          <a
+            href={data.url}
+            rel="noopener"
+            title={`${data.name}'s official website`}
+          >
+            Official site
+          </a>
+        )
+      }
+      {
+        data.changelog && (
+          <a
+            href={data.changelog}
+            rel="noopener"
+            title={`${data.name}'s official changelog`}
+          >
+            Changelog
+          </a>
+        )
+      }
+    </p>
+
+    <div class="app-prose mt-6">
+      <p class="text-lg font-medium">
+        <strong>How I use it:</strong>{" "}
+        {data.use}
+      </p>
+      {paragraphs.map(p => <p>{p}</p>)}
+      {
+        data.pricing && (
+          <>
+            <h2>What it costs</h2>
+            <p>
+              {data.pricing.replace(/\.\s*$/, "")} (checked{" "}
+              <time datetime={isoDate(data.pricingChecked!)}>
+                {formatDate(data.pricingChecked!)}
+              </time>
+              ,{" "}
+              <a
+                href={data.pricingSource}
+                rel="noopener"
+                title={`${data.name} pricing source`}
+              >
+                source
+              </a>
+              ).
+            </p>
+          </>
+        )
+      }
+      {
+        (alternatives.length > 0 || sameGroup.length > 0) && (
+          <>
+            <h2>Alternatives and related tools</h2>
+            <ul>
+              {[...alternatives, ...sameGroup].map(t => (
+                <li>
+                  <a
+                    href={toolUrl(t)}
+                    title={`${t.data.name} on Uriel Papa's Stack page`}
+                  >
+                    {t.data.name}
+                  </a>
+                  : {t.data.use}
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </div>
+
+    {
+      sections.map(s => (
+        <section class="mt-8" aria-labelledby={`tool-${s.id}`}>
+          <h2 id={`tool-${s.id}`} class="h3 mb-3">
+            {s.heading}
+          </h2>
+          <ul class="space-y-2">
+            {s.items.map(i => (
+              <li>
+                <a href={i.href} title={i.title}>
+                  {i.title}
+                </a>
+                {"note" in i && i.note && <span class="meta"> · {i.note}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <p class="mt-8">
+      <a href="/stack" title="Every tool Uriel Papa uses">The whole stack</a>
+      {
+        data.hub && (
+          <>
+            {" · "}More in{" "}
+            <a
+              href={`/topics/${data.hub}`}
+              title={`Everything on ${hubName(data.hub)} on this site`}
+            >
+              {hubName(data.hub)}
+            </a>
+          </>
+        )
+      }
+    </p>
+  </article>
+</Layout>

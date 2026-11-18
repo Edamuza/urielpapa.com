@@ -63,6 +63,9 @@ const blog = defineCollection({
           .max(5, "Use at most 5 key takeaways"),
         businessImpact: z.array(z.string()).max(4).default([]),
         sourceUrl: optionalUrl,
+        // A Philippine business or regulation brief (docs/content-500.md): a news
+        // take written by its own task, outside the 3-a-week news cap.
+        phBrief: z.boolean().default(false),
         published: z.coerce.date(),
         updated: optionalDate,
         updateNote: optionalText,
@@ -181,14 +184,127 @@ const hubs = defineCollection({
   }),
 });
 
+/**
+ * Sources for the short page types (answers, glossary terms, release notes).
+ * Each one is a page the writer opened; the quality check (scripts/check-content.mjs)
+ * counts them per type.
+ */
+const sources = z
+  .array(z.object({ title: z.string().min(3), url: z.url() }))
+  .default([]);
+
 const stack = defineCollection({
   loader: glob({ pattern: "**/*.{yaml,yml}", base: "./src/content/stack" }),
+  schema: z
+    .object({
+      name: z.string(),
+      group: z.enum(STACK_GROUP_IDS),
+      use: z.string(),
+      url: optionalUrl,
+      order: z.number().default(100),
+      // Tool page (/stack/<id>). The page is only built once `about` is written,
+      // so no tool gets a thin page with nothing but a name and a link.
+      about: optionalText,
+      hub: z.preprocess(v => v || undefined, z.enum(HUB_IDS).optional()),
+      pricing: optionalText,
+      pricingSource: optionalUrl,
+      pricingChecked: optionalDate,
+      alternatives: z.array(reference("stack")).max(5).default([]),
+      // Official changelog or releases page, watched by the release-notes task.
+      changelog: optionalUrl,
+    })
+    .refine(d => !d.pricing || (d.pricingSource && d.pricingChecked), {
+      message: "Pricing needs its source URL and the date it was checked",
+      path: ["pricingSource"],
+    })
+    .refine(d => !d.about || d.hub, {
+      message: "A tool page needs its topic hub",
+      path: ["hub"],
+    }),
+});
+
+/** One question per page (/answers/<slug>). See docs/content-500.md. */
+const answers = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/answers" }),
   schema: z.object({
-    name: z.string(),
-    group: z.enum(STACK_GROUP_IDS),
-    use: z.string(),
-    url: optionalUrl,
-    order: z.number().default(100),
+    question: z
+      .string()
+      .max(70, "The question (H1) must be 70 characters or fewer")
+      .refine(q => q.trim().endsWith("?"), "The question must end with ?"),
+    seoTitle: z.string().max(60).optional(),
+    description: z
+      .string()
+      .min(120, "Meta description must be at least 120 characters")
+      .max(170, "Meta description must be 170 characters or fewer"),
+    // The answer in 40 words or fewer; shown first and used in the schema.
+    answer: z
+      .string()
+      .min(40)
+      .max(300, "Keep the short answer to 300 characters (about 40 words)"),
+    hub: z.enum(HUB_IDS),
+    stack: z.array(reference("stack")).max(4).default([]),
+    glossary: z.array(reference("glossary")).max(5).default([]),
+    related: z.array(reference("answers")).max(4).default([]),
+    deeper: reference("blog").nullish(),
+    sources,
+    published: z.coerce.date(),
+    lastChecked: z.coerce.date(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+/** Glossary terms (/glossary/<term>), one DefinedTermSet. */
+const glossary = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/glossary",
+  }),
+  schema: z.object({
+    term: z.string().max(60),
+    aka: z.array(z.string()).default([]),
+    seoTitle: z.string().max(60).optional(),
+    description: z
+      .string()
+      .min(120, "Meta description must be at least 120 characters")
+      .max(170, "Meta description must be 170 characters or fewer"),
+    // One-sentence definition, shown first and used as the DefinedTerm description.
+    definition: z.string().min(40).max(300),
+    hub: z.enum(HUB_IDS),
+    stack: z.array(reference("stack")).max(4).default([]),
+    related: z.array(reference("glossary")).max(5).default([]),
+    deeper: z.array(reference("blog")).max(2).default([]),
+    sources,
+    published: z.coerce.date(),
+    lastChecked: z.coerce.date(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+/** Release notes (/releases/<tool>-<version>) for tools on the Stack page. */
+const releases = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/releases",
+  }),
+  schema: z.object({
+    title: z.string().max(70, "Title (H1) must be 70 characters or fewer"),
+    seoTitle: z.string().max(60).optional(),
+    description: z
+      .string()
+      .min(120, "Meta description must be at least 120 characters")
+      .max(170, "Meta description must be 170 characters or fewer"),
+    tool: reference("stack"),
+    version: z.string().min(1),
+    releasedOn: z.coerce.date(),
+    // The official changelog, release page or announcement.
+    sourceUrl: z.url(),
+    hub: z.enum(HUB_IDS),
+    // One line: upgrade now, soon, or wait, and why.
+    upgrade: z.string().min(20).max(200),
+    previous: reference("releases").nullish(),
+    sources,
+    published: z.coerce.date(),
+    draft: z.boolean().default(false),
   }),
 });
 
@@ -220,6 +336,9 @@ export const collections = {
   projects,
   hubs,
   stack,
+  answers,
+  glossary,
+  releases,
   newsletter,
   pages,
 };

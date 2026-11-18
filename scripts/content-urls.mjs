@@ -33,6 +33,9 @@ const COLLECTIONS = [
   { dir: "src/content/projects", url: slug => `/projects/${slug}` },
   { dir: "src/content/hubs", url: slug => `/topics/${slug}` },
   { dir: "src/content/pages", url: slug => `/${slug}` },
+  { dir: "src/content/answers", url: slug => `/answers/${slug}` },
+  { dir: "src/content/glossary", url: slug => `/glossary/${slug}` },
+  { dir: "src/content/releases", url: slug => `/releases/${slug}` },
 ];
 
 /**
@@ -48,7 +51,7 @@ export function entryFor(file, text) {
   if (!collection || !/\.(md|mdx)$/.test(name) || name.startsWith("_")) return undefined;
   const slug = name.replace(/\.(md|mdx)$/, "");
   const data = frontmatter(text);
-  const date = data.updated || data.published;
+  const date = data.updated || data.lastChecked || data.published;
   return {
     file,
     path: collection.url(slug, data),
