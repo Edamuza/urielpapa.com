@@ -40,6 +40,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const message = String(form.get("message") ?? "")
     .trim()
     .slice(0, 5000);
+  // Only asked when "Work together" is picked: when the sender is free for the
+  // free 15-minute discovery call. Optional.
+  const callTimes =
+    topicKey === "work"
+      ? String(form.get("callTimes") ?? "")
+          .trim()
+          .slice(0, 300)
+      : "";
 
   const errors: Record<string, string> = {};
   if (!name) errors.name = "Please enter your name.";
@@ -90,7 +98,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       to: [CONTACT_TO_EMAIL],
       reply_to: email,
       subject: `[urielpapa.com] ${topic}: ${name}`,
-      text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}\n\n${message}`,
+      text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}${
+        callTimes ? `\nGood times for a call: ${callTimes}` : ""
+      }\n\n${message}`,
     }),
     signal: AbortSignal.timeout(8000),
   })

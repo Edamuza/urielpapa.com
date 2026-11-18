@@ -1,0 +1,94 @@
+---
+// Results strip on the home page, right under Proof of work: real client results
+// (each linked to the story behind it), short client quotes once Uriel adds
+// them, and one quiet link to the free discovery call. Nothing here is an
+// example figure: the numbers come from RESULTS and TESTIMONIALS in config.ts.
+import { RESULTS, TESTIMONIALS, WORK_WITH_ME_HREF } from "@/config";
+
+type Props = { from: string };
+const { from } = Astro.props;
+---
+
+{
+  RESULTS.length > 0 && (
+    <section class="border-border border-b py-10" aria-labelledby="results-h">
+      <h2 id="results-h" class="label-caps text-muted-foreground mb-5">
+        Results for businesses
+      </h2>
+      {/* Phones: a 2×2 grid of compact cards (number and a short line); from
+          sm up the cards show the full sentence. */}
+      <ul class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+        {RESULTS.map(r => (
+          <li class="result-card border-border bg-muted/50 hover:border-foreground rounded-xl border transition-colors duration-150">
+            <a
+              href={r.href}
+              title={r.title}
+              class="group flex h-full flex-col p-3.5 no-underline sm:p-5"
+            >
+              <span class="text-muted-foreground flex items-center gap-1.5 text-[0.6875rem] font-semibold tracking-[0.08em] uppercase sm:text-xs">
+                <span
+                  class="bg-foreground size-1.5 rounded-full"
+                  aria-hidden="true"
+                />
+                {r.kind}
+              </span>
+              <span class="font-display mt-2 block text-[1.0625rem] leading-tight font-bold sm:text-xl">
+                {r.value}
+              </span>
+              <span class="mt-1 block text-sm leading-snug sm:hidden">
+                {r.short}
+              </span>
+              <span class="mt-1 hidden sm:block">{r.text}</span>
+              <span class="meta mt-auto flex items-center justify-between pt-3 group-hover:underline">
+                <span class="hidden sm:inline">Read how</span>
+                <span class="sr-only sm:hidden">Read how</span>
+                <span
+                  aria-hidden="true"
+                  class="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                >
+                  →
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      {TESTIMONIALS.length > 0 && (
+        <ul class="mt-6 grid gap-6 sm:grid-cols-2">
+          {TESTIMONIALS.map(t => (
+            <li>
+              <figure class="border-foreground border-s-2 ps-4">
+                <blockquote class="text-lg">“{t.quote}”</blockquote>
+                <figcaption class="meta mt-2">
+                  {t.href ? (
+                    <a href={t.href} title={`${t.name}, ${t.role}`}>
+                      {t.name}
+                    </a>
+                  ) : (
+                    t.name
+                  )}
+                  , {t.role}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p class="mt-6 font-semibold">
+        Want results like these?{" "}
+        <a
+          href={WORK_WITH_ME_HREF}
+          title="Book a free 15-minute discovery call with Uriel Papa"
+          data-event="work_with_me_click"
+          data-event-from={from}
+          class="whitespace-nowrap"
+        >
+          Book a free 15-minute call →
+        </a>
+      </p>
+      <p class="meta mt-1">
+        No obligation. I read and answer every message myself.
+      </p>
+    </section>
+  )
+}

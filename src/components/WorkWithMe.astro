@@ -1,30 +1,51 @@
 ---
-/** Quiet "work with me" line (ux-ui-spec.md §5.10): end of long posts, About, Projects only. */
+/** Quiet "work with me" line (ux-ui-spec.md §5.10): end of long posts, About, Projects only.
+ * On posts the question follows the post's topic, as the spec suggests. No sticky
+ * bar or pop-up: it sits where a reader has finished reading. */
+import { WORK_WITH_ME_HREF } from "@/config";
+
 type Props = {
   text?: string;
   linkText?: string;
+  /** The post's topic, to pick a question that fits it. */
+  hub?: string;
   from: string;
   align?: "center" | "start";
 };
+
+const HUB_TEXT: Record<string, string> = {
+  ai: "Want AI working in your business?",
+  automation: "Need an automation like this for your team?",
+  "tech-and-business": "Have a business problem software could fix?",
+  "seo-geo-aeo": "Want your site found on Google and in AI answers?",
+  "tech-stacks": "Building something like this?",
+  marketing: "Need more leads from your marketing?",
+  "founder-journey": "Building a business and need a hand with the tech?",
+};
+
 const {
-  text = "Building something like this?",
-  linkText = "Let's talk →",
+  hub,
+  text = (hub && HUB_TEXT[hub]) || "Building something like this?",
+  linkText = "Book a free 15-minute call →",
   from,
   align = "center",
 } = Astro.props;
 ---
 
-<p
-  class:list={[
-    "max-w-read my-8 text-lg",
-    align === "center" && "mx-auto text-center",
-  ]}
+<div
+  class:list={["max-w-read my-8", align === "center" && "mx-auto text-center"]}
 >
-  {text}{" "}
-  <a
-    href="/contact#work"
-    class="font-semibold whitespace-nowrap"
-    data-event="work_with_me_click"
-    data-event-from={from}>{linkText}</a
-  >
-</p>
+  <p class="text-lg">
+    {text}{" "}
+    <a
+      href={WORK_WITH_ME_HREF}
+      class="font-semibold whitespace-nowrap"
+      title="Work with Uriel Papa: book a free 15-minute discovery call"
+      data-event="work_with_me_click"
+      data-event-from={from}>{linkText}</a
+    >
+  </p>
+  <p class="meta mt-1">
+    No obligation. I read and answer every message myself.
+  </p>
+</div>

@@ -2,7 +2,7 @@
 import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
-import { CONTACT, SITE, SOCIALS } from "@/config";
+import { CONTACT, SITE, SOCIALS, WORK_WITH_ME_OFFER } from "@/config";
 import SocialIcon from "@/components/SocialIcon.astro";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
@@ -43,6 +43,10 @@ const field =
       speak, or ask about something I wrote.
     </p>
     <p class="mt-3">{CONTACT.kindOfWork}</p>
+    <p class="border-foreground mt-6 rounded-lg border p-4">
+      <strong>{WORK_WITH_ME_OFFER}.</strong> Pick "Work together", tell me the problem
+      and when you're free, and I'll reply to set a time.
+    </p>
 
     <form
       id="contact-form"
@@ -125,6 +129,21 @@ const field =
         </p>
       </fieldset>
 
+      <div class="call-field">
+        <label for="c-call" class="font-semibold"
+          >Good times for a 15-minute call <span class="meta">(optional)</span
+          ></label
+        >
+        <input
+          id="c-call"
+          name="callTimes"
+          type="text"
+          maxlength="300"
+          placeholder="e.g. weekdays after 2 PM, Philippine time"
+          class={field}
+        />
+      </div>
+
       <div>
         <label for="c-message" class="font-semibold"
           >Message <span aria-hidden="true">*</span></label
@@ -178,16 +197,21 @@ const field =
         >
         </p>
         <p class="meta mt-3">
-          Your name, email and message are sent to my inbox and used only to
-          reply to you. Nothing is added to a mailing list. By sending this you
-          agree to the <a href="/privacy">privacy policy</a>.
+          Your name, email, message and any call times are sent to my inbox and
+          used only to reply to you. Nothing is added to a mailing list. By
+          sending this you agree to the <a
+            href="/privacy"
+            title="How urielpapa.com handles what you send">privacy policy</a
+          >.
         </p>
       </div>
     </form>
 
     <div class="border-border mt-10 border-t pt-6">
       <p>
-        Or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{
+        Or email <a href={`mailto:${SITE.email}`} title="Email Uriel Papa"
+          >{SITE.email}</a
+        >{
           SOCIALS.map(s => (
             <>
               {" "}
@@ -196,6 +220,7 @@ const field =
                 href={s.url}
                 rel="me noopener"
                 class="inline-flex items-center gap-1"
+                title={`Uriel Papa on ${s.label}`}
               >
                 <SocialIcon name={s.name} />
                 {s.label}
@@ -299,3 +324,13 @@ const field =
     }
   });
 </script>
+
+<style>
+  /* The call times field only shows when "Work together" is picked. */
+  .call-field {
+    display: none;
+  }
+  form:has(input[name="topic"][value="work"]:checked) .call-field {
+    display: block;
+  }
+</style>

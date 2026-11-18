@@ -352,7 +352,15 @@ const schema = [
       </section>
 
       <NewsletterBox from={`${kind}-end`} align="start" />
-      {kind === "post" && <WorkWithMe from={`post:${post.id}`} align="start" />}
+      {
+        kind === "post" && (
+          <WorkWithMe
+            from={`post:${post.id}`}
+            hub={post.data.hub}
+            align="start"
+          />
+        )
+      }
     </div>
   </div>
 </Layout>
