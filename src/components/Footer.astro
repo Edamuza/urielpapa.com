@@ -8,16 +8,47 @@ import { HUBS } from "@/data/hubs";
 const year = new Date().getFullYear();
 
 const siteLinks = [
-  { href: "/blog", label: "Writing" },
-  { href: "/notes", label: "Notes" },
-  { href: "/news", label: "News" },
-  { href: "/events", label: "Events" },
-  { href: "/projects", label: "Projects" },
-  { href: "/now", label: "Now" },
-  { href: "/stack", label: "Stack" },
-  { href: "/about", label: "About" },
-  { href: "/colophon", label: "Colophon" },
-  { href: "/privacy", label: "Privacy" },
+  { href: "/blog", label: "Writing", title: "All of Uriel Papa's writing" },
+  { href: "/notes", label: "Notes", title: "Short notes and quick tips" },
+  { href: "/news", label: "News", title: "Uriel Papa's takes on tech news" },
+  {
+    href: "/events",
+    label: "Events",
+    title: "Notes from seminars, expos and events",
+  },
+  {
+    href: "/answers",
+    label: "Answers",
+    title: "Short answers to common questions",
+  },
+  {
+    href: "/glossary",
+    label: "Glossary",
+    title: "Glossary of AI, automation and SEO terms",
+  },
+  {
+    href: "/releases",
+    label: "Releases",
+    title: "Release notes for the tools Uriel Papa follows",
+  },
+  {
+    href: "/projects",
+    label: "Projects",
+    title: "Uriel Papa's projects and case studies",
+  },
+  { href: "/now", label: "Now", title: "What Uriel Papa is working on now" },
+  {
+    href: "/stack",
+    label: "Stack",
+    title: "The tools and tech stack Uriel Papa uses",
+  },
+  { href: "/about", label: "About", title: "About Uriel Papa" },
+  { href: "/colophon", label: "Colophon", title: "How this site is built" },
+  {
+    href: "/privacy",
+    label: "Privacy",
+    title: "Privacy policy for urielpapa.com",
+  },
 ];
 ---
 
@@ -28,19 +59,27 @@ const siteLinks = [
     <div class="max-w-sm">
       <div class="flex items-center gap-3">
         <Avatar size={40} />
-        <a href="/about" class="font-display text-lg font-bold no-underline"
-          >{SITE.name}</a
+        <a
+          href="/about"
+          class="font-display text-lg font-bold no-underline"
+          title="About Uriel Papa">{SITE.name}</a
         >
       </div>
       <p class="meta mt-3">{SITE.bio}</p>
       <p class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-        <a href="/newsletter">Newsletter</a>
-        <a href="/rss.xml" class="inline-flex items-center gap-1"
+        <a href="/newsletter" title="Get Uriel Papa's newsletter by email"
+          >Newsletter</a
+        >
+        <a
+          href="/rss.xml"
+          class="inline-flex items-center gap-1"
+          title="Follow new posts by RSS feed"
           ><IconRss class="size-4" aria-hidden="true" />RSS</a
         >
-        <a href="/contact">Contact</a>
+        <a href="/contact" title="Contact Uriel Papa">Contact</a>
         <a
           href="/contact#work"
+          title="Work with Uriel Papa: book a free 15-minute discovery call"
           data-event="work_with_me_click"
           data-event-from="footer">Work with me</a
         >
@@ -53,7 +92,12 @@ const siteLinks = [
         {
           HUBS.map(h => (
             <li>
-              <a href={`/topics/${h.id}`}>{h.name}</a>
+              <a
+                href={`/topics/${h.id}`}
+                title={`Read Uriel Papa's writing on ${h.name}`}
+              >
+                {h.name}
+              </a>
             </li>
           ))
         }
@@ -66,7 +110,9 @@ const siteLinks = [
         {
           siteLinks.map(l => (
             <li>
-              <a href={l.href}>{l.label}</a>
+              <a href={l.href} title={l.title}>
+                {l.label}
+              </a>
             </li>
           ))
         }
@@ -83,6 +129,7 @@ const siteLinks = [
                 href={s.url}
                 rel="me noopener"
                 class="inline-flex items-center gap-1.5"
+                title={`Uriel Papa on ${s.label}`}
                 data-event="outbound_profile_click"
                 data-event-network={s.name}
               >
@@ -92,7 +139,11 @@ const siteLinks = [
             </li>
           ))
         }
-        <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+        <li>
+          <a href={`mailto:${SITE.email}`} title="Email Uriel Papa">
+            {SITE.email}
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -108,7 +159,7 @@ const siteLinks = [
         <ul class="flex flex-wrap items-center gap-3" aria-label="Badges">
           {TRUST_BADGES.map(b => (
             <li>
-              <a href={b.href} target="_blank" rel="noopener">
+              <a href={b.href} target="_blank" rel="noopener" title={b.alt}>
                 <img
                   src={b.src}
                   alt={b.alt}

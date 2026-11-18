@@ -1,0 +1,89 @@
+---
+title: "Apache mod_http2 Flaw Is Being Exploited: Update to 2.4.71 Now"
+seoTitle: "Apache mod_http2 Flaw: Update to 2.4.71"
+description: >-
+  Singapore's CSA warned on November 17, 2026 that a critical Apache HTTP Server
+  flaw in mod_http2 is being exploited. Which versions are hit and what to check.
+dek: >-
+  Apache 2.4.55 to 2.4.70 with mod_http2 turned on can be taken over remotely.
+  Version 2.4.71 fixes it. If you use shared hosting, ask your host today.
+hub: tech-stacks
+frame: news-take
+takeaways:
+  - >-
+    On November 17, 2026, Singapore's Cyber Security Agency said a flaw in Apache
+    HTTP Server's mod_http2 module is reportedly being exploited, with a public
+    proof-of-concept.
+  - >-
+    The flaw, CVE-2026-119618, affects Apache 2.4.55 through 2.4.70 with mod_http2
+    enabled and can lead to remote code execution.
+  - >-
+    Apache fixed it in version 2.4.71 on November 11, 2026, along with two other
+    flaws.
+businessImpact:
+  - >-
+    Any business site on an Apache server, from a VPS to shared hosting, should
+    confirm it runs 2.4.71 or later this week.
+  - >-
+    On shared hosting you cannot patch Apache yourself, so the action is a support
+    ticket asking your host to confirm the fix.
+sourceUrl: https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-164/
+published: 2026-11-18
+related:
+  - php2shell-critical-php-vulnerabilities
+projects: []
+stack: []
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+If your website runs on Apache, check its version today. Singapore's Cyber Security Agency (CSA) warned on November 17, 2026 that attackers are reportedly exploiting a flaw in Apache HTTP Server's HTTP/2 module that can let them run code on the server. Apache 2.4.71 fixes it. If you are on shared hosting, ask your host to confirm they have updated.
+
+This take is part of my [tech stacks](/topics/tech-stacks "Tech stacks articles") writing. It follows my take on [php2shell, two critical PHP flaws](/news/php2shell-critical-php-vulnerabilities "php2shell: two critical PHP flaws and what site owners should do"), which hit the same kind of servers.
+
+## What happened?
+
+In [alert AL-2026-164](https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-164/ "CSA alert AL-2026-164 on Apache mod_http2"), CSA said: "This vulnerability is reportedly being actively exploited, and a proof-of-concept exploit is publicly available." It applies to "Apache HTTP Server versions 2.4.55 to before 2.4.71 with mod_http2 enabled."
+
+![Rows of black rack servers with blinking drive bays in a bright server room, with orange cables at the far end and a grey chair beside them](../../assets/images/content/apache-mod-http2-flaw-update-1.jpg "Rows of black rack servers with blinking drive bays in a bright server room, with orange cables at the far end and a grey chair beside them")
+
+*The flaw affects Apache HTTP Server 2.4.55 to 2.4.70 with mod_http2 turned on. Photo: [torkildr](https://www.flickr.com/photos/8718930@N07/3462607995 "torkildr's photo on Flickr"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
+
+CSA posted the warning on X:
+
+<SocialPost platform="x" url="https://x.com/CSAsingapore/status/2122588144566686072" author="CSA" handle="CSAsingapore" date="2026-11-17" text={"Attackers are exploiting a high-severity vulnerability in Apache HTTP Server’s mod_http2 module to achieve remote code execution. Patch immediately. 🔗: https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-164/"} media={[{"src":"https://pbs.twimg.com/media/HXTyqhpbYAAv2RC.jpg","alt":"The word ALERT in yellow above a hand on a laptop keyboard, with a glowing warning triangle floating over the keys","width":1440,"height":1440}]} />
+
+## What changed?
+
+Apache's [security page for 2.4](https://httpd.apache.org/security/vulnerabilities_24.html "Apache HTTP Server 2.4 vulnerabilities") lists the flaw as CVE-2026-119618, rated critical by Apache: "mod_http2: heap corruption and RCE in assign_headers." CSA rates it high, with a CVSS score of 8.1.
+
+- **Affected:** Apache HTTP Server 2.4.55 through 2.4.70, and mod_h2 2.0.8 through 2.0.42 from GitHub.
+- **Fixed:** version 2.4.71, released on November 11, 2026.
+- **Found by:** Anthropic's open-source scanner, reported on October 26, and Google Cloud's vulnerability researchers, reported on November 3.
+- **Also fixed in 2.4.71:** a mod_md crash rated important (2.4.30 to 2.4.70) and a low-rated mod_vhost_alias bug.
+
+Neither CSA nor Apache lists a workaround. The fix is the update.
+
+![A laptop screen showing CSS code for a website menu, with a second laptop out of focus in the background](../../assets/images/content/apache-mod-http2-flaw-update-2.jpg "A laptop screen showing CSS code for a website menu, with a second laptop out of focus in the background")
+
+*Apache fixed the flaw in version 2.4.71, released on November 11, 2026. Photo: [Semtrio](https://www.flickr.com/photos/163837264@N07/43368152754 "Semtrio's photo on Flickr"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+## What does it mean for businesses and founders?
+
+My read is that this is a "do it this week" item, not a "watch and wait" one. A remote code execution flaw with public exploit code is the kind attackers scan for across the whole internet, and small business sites are scanned like everyone else.
+
+Who has to act depends on where your site lives. On a VPS or your own server, you or your developer update Apache. On shared or managed hosting, the host updates it, and your job is to ask. If your site runs on Nginx or a hosted platform like Shopify, this flaw does not apply to it.
+
+## What should you do now?
+
+1. **Find out if you run Apache.** Ask your developer or host, or run `apachectl -v` on your server.
+2. **Check the version.** Anything from 2.4.55 to 2.4.70 needs the update to 2.4.71.
+3. **Update, or ask your host to.** On shared hosting, open a ticket asking them to confirm Apache 2.4.71 or later.
+4. **Watch your server.** Look for unknown files or new admin accounts if you were on an affected version.
+
+## Where can you learn more?
+
+- [CSA alert AL-2026-164](https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-164/ "CSA alert AL-2026-164 on Apache mod_http2") - The exploitation warning.
+- [Apache HTTP Server 2.4 vulnerabilities](https://httpd.apache.org/security/vulnerabilities_24.html "Apache HTTP Server 2.4 vulnerabilities") - Versions, fixes and credits.

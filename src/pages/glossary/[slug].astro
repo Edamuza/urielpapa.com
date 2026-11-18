@@ -1,0 +1,137 @@
+---
+import { getEntries, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import ShortArticle from "@/components/short/ShortArticle.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SITE } from "@/config";
+import {
+  answerUrl,
+  getAnswers,
+  getTerms,
+  isoDateTime,
+  postUrl,
+  termUrl,
+  toolUrl,
+  type Term,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID, WEBSITE_ID } from "@/utils/schema";
+import { hubName } from "@/data/hubs";
+
+export async function getStaticPaths() {
+  const terms = await getTerms();
+  return terms.map(term => ({
+    params: { slug: term.id },
+    props: { term, all: terms },
+  }));
+}
+
+type Props = { term: Term; all: Term[] };
+const { term, all } = Astro.props;
+const { data } = term;
+const { Content } = await render(term);
+const url = abs(termUrl(term));
+
+const tools = await getEntries(data.stack);
+const deeper = (await getEntries(data.deeper)).filter(p => !p.data.draft);
+const answers = (await getAnswers()).filter(a =>
+  a.data.glossary.some(g => g.id === term.id)
+);
+// Picked related terms first, then others in the same hub, A to Z.
+const picked = all.filter(t => data.related.some(r => r.id === t.id));
+const sameHub = all.filter(
+  t => t.id !== term.id && t.data.hub === data.hub && !picked.includes(t)
+);
+const related = [...picked, ...sameHub].slice(0, 5);
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Glossary", href: "/glossary" },
+  { name: data.term, href: termUrl(term) },
+];
+const schema = [
+  {
+    "@type": "DefinedTerm",
+    "@id": `${url}#term`,
+    name: data.term,
+    ...(data.aka.length > 0 && { alternateName: data.aka }),
+    description: data.definition,
+    url,
+    inDefinedTermSet: { "@id": `${abs("/glossary")}#set` },
+    mainEntityOfPage: { "@id": `${url}#page` },
+  },
+  {
+    "@type": "Article",
+    "@id": `${url}#article`,
+    mainEntityOfPage: { "@id": `${url}#page` },
+    headline: data.heading ?? `What is ${data.term}?`,
+    description: data.description,
+    image: abs("/og.png"),
+    datePublished: isoDateTime(data.published),
+    dateModified: isoDateTime(data.lastChecked),
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    about: { "@id": `${url}#term` },
+    articleSection: hubName(data.hub),
+    inLanguage: SITE.lang,
+    citation: data.sources.map(s => s.url),
+  },
+  breadcrumbNode(crumbs),
+];
+const heading = data.heading ?? `What is ${data.term}?`;
+---
+
+<Layout
+  title={data.seoTitle ?? `${data.term}: Definition and Example`}
+  description={data.description}
+  ogType="article"
+  publishedTime={data.published}
+  schema={schema}
+  draft={data.draft}
+>
+  <ShortArticle
+    crumbs={crumbs}
+    heading={heading}
+    hub={data.hub}
+    url={url}
+    published={data.published}
+    checked={data.lastChecked}
+    kind={data.aka.length > 0
+      ? `Glossary term · also called ${data.aka.join(", ")}`
+      : "Glossary term"}
+    sources={data.sources}
+    index={{ href: "/glossary", label: "The full glossary" }}
+    groups={[
+      {
+        heading: "Related terms",
+        items: related.map(t => ({
+          href: termUrl(t),
+          title: t.data.term,
+          linkTitle: `What ${t.data.term} means, in the glossary`,
+        })),
+      },
+      {
+        heading: "Questions that use this term",
+        items: answers.map(a => ({
+          href: answerUrl(a),
+          title: a.data.question,
+        })),
+      },
+      {
+        heading: "Tools",
+        items: tools.map(t => ({
+          href: toolUrl(t),
+          title: t.data.name,
+          linkTitle: `${t.data.name} on Uriel Papa's Stack page`,
+        })),
+      },
+      {
+        heading: "Read more",
+        items: deeper.map(p => ({ href: postUrl(p), title: p.data.title })),
+      },
+    ]}
+  >
+    <p class="text-lg font-medium">{data.definition}</p>
+    <Content components={mdxComponents} />
+  </ShortArticle>
+</Layout>

@@ -130,6 +130,73 @@ export const MENU = [
 /** Where every "Work with me" link goes: the contact form with "Work together" picked. */
 export const WORK_WITH_ME_HREF = "/contact#work";
 
+/** The first step a "Work with me" click leads to (approved by Uriel, Nov 2026).
+ * Shown under every "Work with me" button and at the top of the contact form. */
+export const WORK_WITH_ME_OFFER =
+  "Free 15-minute discovery call, no obligation";
+
+/**
+ * Client results for the home page's results strip, next to "Work with me".
+ * Only real, sourced numbers: each one links to the page that tells the story.
+ * Never add an estimate or an example figure here.
+ */
+export const RESULTS: {
+  /** What the number is about: "Leads", "Money", "Time" or "Service". */
+  kind: string;
+  value: string;
+  /** A few words under the number on phones, where the cards sit two by two. */
+  short: string;
+  text: string;
+  href: string;
+  title: string;
+}[] = [
+  {
+    kind: "Leads",
+    value: "33 lead conversations",
+    short: "in 5 days of Meta ads, about US$1 each",
+    text: "in the first 5 days of Meta ads on about US$8 a day, about US$1 each",
+    href: "/blog/organic-content-vs-paid-ads",
+    title: "Read how a small Meta ads budget brought in 33 lead conversations",
+  },
+  {
+    kind: "Money",
+    value: "US$550 + ₱2,178",
+    short: "a month in tool fees, replaced by one ERP",
+    text: "a month: what per-seat HR, CRM and project tools would cost a 22-person team at list prices, replaced by one ERP built in under 3 months",
+    href: "/projects/vite-seo-erp",
+    title:
+      "Read the ERP case study and the per-seat tool costs it was built to replace",
+  },
+  {
+    kind: "Time",
+    value: "12 messages in 40 seconds",
+    short: "sorted by an AI inbox agent in testing",
+    text: "sorted by an AI inbox agent that drafts the replies for a person to approve, in testing on sample café messages",
+    href: "/projects/inboxpilot",
+    title:
+      "Read the InboxPilot case study: an AI inbox agent with human approval",
+  },
+  {
+    kind: "Service",
+    value: "Replies at any hour",
+    short: "an AI chatbot on Messenger and Instagram",
+    text: "an AI chatbot on Messenger and Instagram that answers inquiries, books consultations and logs leads",
+    href: "/blog/n8n-messenger-instagram-chatbot",
+    title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
+  },
+];
+
+/**
+ * Short client quotes for the results strip. Empty until Uriel adds real ones
+ * with the client's permission; the strip shows no quote while it is empty.
+ */
+export const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  role: string;
+  href?: string;
+}[] = [];
+
 /** "Start here" picks in the Writing page's side rail (post slugs). */
 export const START_HERE = [
   "laravel-vs-nextjs",

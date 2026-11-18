@@ -3,3 +3,14 @@ group: automation
 use: "The Messenger and Instagram chatbot and the ERP's 5 outreach workflows."
 url: https://n8n.io
 order: 1
+hub: automation
+about: |-
+  n8n is a workflow automation tool: you connect apps and APIs as nodes on a canvas, and each run of a workflow is one execution. Unlike Zapier and Make, it can run on your own server.
+
+  The Messenger and Instagram chatbot I led and co-developed runs on self-hosted n8n: a webhook from Meta starts a workflow that calls an AI model through OpenRouter and sends the reply. The ERP we built also runs its 5 outreach workflows on n8n.
+
+  What I like is that the bill follows runs, not steps, so a workflow with many nodes costs the same as a short one. The trade-off is that self-hosting makes updates, backups and uptime your job.
+pricing: The self-hosted Community edition has no license fee for your own business's workflows. n8n Cloud starts at 20 euros a month for 2,500 executions, billed annually, and every plan includes unlimited users and workflows.
+pricingSource: https://n8n.io/pricing/
+pricingChecked: 2026-11-18
+changelog: https://docs.n8n.io/release-notes/

@@ -11,6 +11,10 @@ export type Post = CollectionEntry<"blog">;
 export type Note = CollectionEntry<"notes">;
 export type Project = CollectionEntry<"projects">;
 export type Hub = CollectionEntry<"hubs">;
+export type Answer = CollectionEntry<"answers">;
+export type Term = CollectionEntry<"glossary">;
+export type Release = CollectionEntry<"releases">;
+export type Tool = CollectionEntry<"stack">;
 
 const visible = (e: { data: { draft?: boolean } }) =>
   SHOW_DRAFTS || !e.data.draft;
@@ -54,6 +58,37 @@ export async function getHubs(): Promise<Hub[]> {
   );
 }
 
+export async function getAnswers(): Promise<Answer[]> {
+  return (await getCollection("answers")).filter(visible).sort(byNewest);
+}
+
+/** Glossary terms, A to Z. */
+export async function getTerms(): Promise<Term[]> {
+  return (await getCollection("glossary"))
+    .filter(visible)
+    .sort((a, b) =>
+      a.data.term.localeCompare(b.data.term, "en", { sensitivity: "base" })
+    );
+}
+
+/** Release notes, newest release first. */
+export async function getReleases(): Promise<Release[]> {
+  return (await getCollection("releases"))
+    .filter(visible)
+    .sort(
+      (a, b) =>
+        b.data.releasedOn.getTime() - a.data.releasedOn.getTime() ||
+        b.data.published.getTime() - a.data.published.getTime()
+    );
+}
+
+/** Stack items that have a written tool page (an `about` text). */
+export async function getToolPages(): Promise<Tool[]> {
+  return (await getCollection("stack"))
+    .filter(t => t.data.about)
+    .sort((a, b) => a.data.name.localeCompare(b.data.name));
+}
+
 export async function getNewsletterIssues() {
   return (await getCollection("newsletter")).filter(visible).sort(byNewest);
 }
@@ -68,6 +103,13 @@ export function postUrl(post: Pick<Post, "id" | "data">): string {
 export const noteUrl = (note: Pick<Note, "id">) => `/notes/${note.id}`;
 export const projectUrl = (project: Pick<Project, "id">) =>
   `/projects/${project.id}`;
+
+export const answerUrl = (a: Pick<Answer, "id">) => `/answers/${a.id}`;
+export const termUrl = (t: Pick<Term, "id">) => `/glossary/${t.id}`;
+export const releaseUrl = (r: Pick<Release, "id">) => `/releases/${r.id}`;
+/** The tool's own page when it has one, else its row on /stack. */
+export const toolUrl = (t: Pick<Tool, "id" | "data">) =>
+  t.data.about ? `/stack/${t.id}` : `/stack#${t.id}`;
 
 export function readingTime(body: string | undefined): number {
   const words = (body ?? "")

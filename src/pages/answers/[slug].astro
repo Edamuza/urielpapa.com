@@ -1,0 +1,129 @@
+---
+import { getEntries, getEntry, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import ShortArticle from "@/components/short/ShortArticle.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SITE } from "@/config";
+import {
+  answerUrl,
+  getAnswers,
+  isoDateTime,
+  postUrl,
+  termUrl,
+  toolUrl,
+  type Answer,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID, WEBSITE_ID } from "@/utils/schema";
+import { hubName } from "@/data/hubs";
+
+export async function getStaticPaths() {
+  const answers = await getAnswers();
+  return answers.map(answer => ({
+    params: { slug: answer.id },
+    props: { answer, all: answers },
+  }));
+}
+
+type Props = { answer: Answer; all: Answer[] };
+const { answer, all } = Astro.props;
+const { data } = answer;
+const { Content } = await render(answer);
+const url = abs(answerUrl(answer));
+
+const terms = (await getEntries(data.glossary)).filter(t => !t.data.draft);
+const tools = await getEntries(data.stack);
+const deeperEntry = data.deeper ? await getEntry(data.deeper) : undefined;
+const deeper = deeperEntry && !deeperEntry.data.draft ? deeperEntry : undefined;
+// Picked related questions first, then the newest others in the same hub.
+const picked = all.filter(a => data.related.some(r => r.id === a.id));
+const sameHub = all.filter(
+  a => a.id !== answer.id && a.data.hub === data.hub && !picked.includes(a)
+);
+const related = [...picked, ...sameHub].slice(0, 4);
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Answers", href: "/answers" },
+  { name: data.question, href: answerUrl(answer) },
+];
+const schema = [
+  {
+    "@type": "Article",
+    "@id": `${url}#article`,
+    mainEntityOfPage: { "@id": `${url}#page` },
+    headline: data.question,
+    description: data.description,
+    image: abs("/og.png"),
+    datePublished: isoDateTime(data.published),
+    dateModified: isoDateTime(data.lastChecked),
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    articleSection: hubName(data.hub),
+    inLanguage: SITE.lang,
+    citation: data.sources.map(s => s.url),
+    mainEntity: {
+      "@type": "Question",
+      name: data.question,
+      acceptedAnswer: { "@type": "Answer", text: data.answer },
+    },
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={data.seoTitle ?? data.question}
+  description={data.description}
+  ogType="article"
+  publishedTime={data.published}
+  schema={schema}
+  draft={data.draft}
+>
+  <ShortArticle
+    crumbs={crumbs}
+    heading={data.question}
+    hub={data.hub}
+    url={url}
+    published={data.published}
+    checked={data.lastChecked}
+    kind="Answer"
+    sources={data.sources}
+    index={{ href: "/answers", label: "All answers" }}
+    groups={[
+      {
+        heading: "Terms used here",
+        items: terms.map(t => ({
+          href: termUrl(t),
+          title: t.data.term,
+          note: t.data.definition,
+          linkTitle: `What ${t.data.term} means, in the glossary`,
+        })),
+      },
+      {
+        heading: "Tools mentioned",
+        items: tools.map(t => ({
+          href: toolUrl(t),
+          title: t.data.name,
+          linkTitle: `${t.data.name} on Uriel Papa's Stack page`,
+        })),
+      },
+      {
+        heading: "Go deeper",
+        items: deeper
+          ? [{ href: postUrl(deeper), title: deeper.data.title }]
+          : [],
+      },
+      {
+        heading: "Related questions",
+        items: related.map(a => ({
+          href: answerUrl(a),
+          title: a.data.question,
+        })),
+      },
+    ]}
+  >
+    <p class="text-lg font-medium">{data.answer}</p>
+    <Content components={mdxComponents} />
+  </ShortArticle>
+</Layout>

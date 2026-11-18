@@ -6,7 +6,13 @@ import PostCard from "@/components/PostCard.astro";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import { SHOW_DRAFTS } from "@/config";
 import {
+  answerUrl,
   getAllBlogEntries,
+  getAnswers,
+  getReleases,
+  getTerms,
+  releaseUrl,
+  termUrl,
   getHubs,
   getNotes,
   getProjects,
@@ -35,6 +41,44 @@ const eventNotes = blog.filter(p => p.data.frame === "event-note");
 const projects = (await getProjects())
   .filter(p => (p.data.hubs as string[]).includes(hub.id))
   .slice(0, 3);
+
+// Short pages for this hub: newest 10 of each, with a link to the full list.
+const SHORT_LIMIT = 10;
+const hubAnswers = (await getAnswers()).filter(a => a.data.hub === hub.id);
+const hubTerms = (await getTerms()).filter(t => t.data.hub === hub.id);
+const hubReleases = (await getReleases()).filter(r => r.data.hub === hub.id);
+const shortBlocks = [
+  {
+    id: "answers",
+    heading: "Answers",
+    total: hubAnswers.length,
+    all: { href: "/answers", label: "All answers" },
+    items: hubAnswers.slice(0, SHORT_LIMIT).map(a => ({
+      href: answerUrl(a),
+      title: a.data.question,
+    })),
+  },
+  {
+    id: "glossary",
+    heading: "Glossary",
+    total: hubTerms.length,
+    all: { href: "/glossary", label: "The full glossary" },
+    items: hubTerms.slice(0, SHORT_LIMIT).map(t => ({
+      href: termUrl(t),
+      title: t.data.term,
+    })),
+  },
+  {
+    id: "releases",
+    heading: "Latest releases",
+    total: hubReleases.length,
+    all: { href: "/releases", label: "All release notes" },
+    items: hubReleases.slice(0, SHORT_LIMIT).map(r => ({
+      href: releaseUrl(r),
+      title: r.data.title,
+    })),
+  },
+].filter(b => b.items.length > 0);
 
 const picks = await getEntries(hub.data.startHere.map(s => s.post));
 const startHere = hub.data.startHere
@@ -169,6 +213,31 @@ const schema = [
           </ul>
         </section>
       )
+    }
+
+    {
+      shortBlocks.map(b => (
+        <section class="max-w-read mt-10" aria-labelledby={`short-${b.id}`}>
+          <h2 id={`short-${b.id}`} class="h2 mb-4">
+            {b.heading}
+          </h2>
+          <ul class="space-y-2">
+            {b.items.map(i => (
+              <li>
+                <a href={i.href} title={i.title}>
+                  {i.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="meta mt-3">
+            <a href={b.all.href} title={b.all.label}>
+              {b.all.label}
+            </a>
+            {b.total > b.items.length && ` (${b.total} on this topic)`}
+          </p>
+        </section>
+      ))
     }
 
     {

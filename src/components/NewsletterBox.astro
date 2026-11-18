@@ -30,8 +30,8 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
 >
   <h2 id={`${id}-h`} class="h3">{heading}</h2>
   <p class="mt-1">
-    One email {NEWSLETTER.frequency} with {NEWSLETTER.what}. No spam,
-    unsubscribe any time.
+    One email {NEWSLETTER.frequency}: {NEWSLETTER.what}, so you keep up with AI,
+    automation and SEO without checking the site.
   </p>
   <form
     method="post"
@@ -50,10 +50,17 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
         required
         autocomplete="email"
         placeholder="you@example.com"
+        aria-describedby={`${id}-help`}
         class="border-foreground bg-background min-h-11 flex-1 rounded-lg border px-3 py-2"
       />
       <button type="submit" class="btn">Subscribe</button>
     </div>
+    <p id={`${id}-help`} class="meta mt-2">
+      No spam. Unsubscribe any time. By subscribing you agree to the <a
+        href="/privacy"
+        title="How urielpapa.com handles your email address">privacy policy</a
+      >.
+    </p>
     <!-- Honeypot: people never see or fill this -->
     <input
       type="text"
@@ -82,12 +89,13 @@ const id = `nl-${from.replace(/[^a-z0-9]/gi, "")}`;
   >
   </p>
   <p class="meta mt-2">
-    Prefer a feed? <a href="/rss.xml">Follow by RSS</a>. <a href="/newsletter"
+    Prefer a feed? <a href="/rss.xml" title="Follow new posts by RSS feed"
+      >Follow by RSS</a
+    >. <a
+      href="/newsletter"
+      title="What Uriel Papa's newsletter covers and how often it goes out"
       >About the newsletter</a
     >.
-  </p>
-  <p class="meta mt-1">
-    By subscribing you agree to the <a href="/privacy">privacy policy</a>.
   </p>
 </section>
 

@@ -22,6 +22,15 @@ const CSP = [
 
 const extra = [
   {
+    // www plus a trailing slash goes to the final URL in one hop, instead of
+    // www → apex and then a second hop to drop the slash. Search engines
+    // follow a limited number of hops, so every redirect stays a single one.
+    src: "^/(.+?)/+$",
+    has: [{ type: "host", value: "www.urielpapa.com" }],
+    headers: { Location: "https://urielpapa.com/$1" },
+    status: 308,
+  },
+  {
     src: "^/(.*)$",
     has: [{ type: "host", value: "www.urielpapa.com" }],
     headers: { Location: "https://urielpapa.com/$1" },
@@ -100,7 +109,8 @@ writeFileSync(
 if (!VPS) {
   const file = ".vercel/output/config.json";
   const config = JSON.parse(readFileSync(file, "utf-8"));
-  const marker = JSON.stringify(extra[1].src);
+  // Re-running the script must not add the routes twice; the Markdown route is unique to this list.
+  const marker = JSON.stringify(extra.find(r => r.src.includes("\\.md$")).src);
   if (!config.routes.some(r => JSON.stringify(r.src) === marker)) {
     config.routes.unshift(...extra);
     writeFileSync(file, JSON.stringify(config, null, "\t"));

@@ -1,6 +1,12 @@
 import type { APIRoute } from "astro";
 import { MACRO, SITE, SOCIALS } from "@/config";
 import {
+  answerUrl,
+  getAnswers,
+  getReleases,
+  getTerms,
+  releaseUrl,
+  termUrl,
   getAllBlogEntries,
   getHubs,
   getNotes,
@@ -19,6 +25,11 @@ export const GET: APIRoute = async () => {
   const notes = (await getNotes()).filter(n => !n.data.draft).slice(0, 10);
   const projects = (await getProjects()).filter(p => !p.data.draft);
   const url = (p: string) => new URL(p, SITE.url).href;
+  const answers = (await getAnswers()).filter(a => !a.data.draft).slice(0, 30);
+  const terms = (await getTerms()).filter(t => !t.data.draft);
+  const releases = (await getReleases())
+    .filter(r => !r.data.draft)
+    .slice(0, 15);
 
   const lines = [
     `# ${SITE.name}`,
@@ -61,6 +72,39 @@ export const GET: APIRoute = async () => {
           ...notes.map(
             n =>
               `- [${n.data.title}](${url(noteUrl(n))}): ${n.data.description}`
+          ),
+        ]
+      : []),
+    ...(answers.length
+      ? [
+          "",
+          "## Answers",
+          "",
+          `- [All answers](${url("/answers")}): one question per page, answered first, with sources`,
+          ...answers.map(
+            a =>
+              `- [${a.data.question}](${url(answerUrl(a))}): ${a.data.answer}`
+          ),
+        ]
+      : []),
+    ...(terms.length
+      ? [
+          "",
+          "## Glossary",
+          "",
+          `- [Glossary](${url("/glossary")}): every term, A to Z`,
+          ...terms.map(
+            t => `- [${t.data.term}](${url(termUrl(t))}): ${t.data.definition}`
+          ),
+        ]
+      : []),
+    ...(releases.length
+      ? [
+          "",
+          "## Latest release notes",
+          "",
+          ...releases.map(
+            r => `- [${r.data.title}](${url(releaseUrl(r))}): ${r.data.upgrade}`
           ),
         ]
       : []),
