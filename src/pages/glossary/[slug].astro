@@ -63,7 +63,7 @@ const schema = [
     "@type": "Article",
     "@id": `${url}#article`,
     mainEntityOfPage: { "@id": `${url}#page` },
-    headline: `What is ${data.term}?`,
+    headline: data.heading ?? `What is ${data.term}?`,
     description: data.description,
     image: abs("/og.png"),
     datePublished: isoDateTime(data.published),
@@ -78,7 +78,7 @@ const schema = [
   },
   breadcrumbNode(crumbs),
 ];
-const heading = `What is ${data.term}?`;
+const heading = data.heading ?? `What is ${data.term}?`;
 ---
 
 <Layout

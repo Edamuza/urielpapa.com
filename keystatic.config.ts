@@ -385,6 +385,7 @@ export default config({
       columns: ["term", "hub"],
       schema: {
         term: fields.slug({ name: { label: "Term", validation: { length: { min: 2, max: 60 } } } }),
+        heading: fields.text({ label: "Heading (H1), as people ask it", description: "For example \"What is a tokenizer?\". Leave empty for \"What is <term>?\"." }),
         aka: fields.array(fields.text({ label: "Other name" }), { label: "Also called", itemLabel: p => p.value }),
         seoTitle: fields.text({ label: "SEO title (optional, 60 max)", validation: { length: { max: 60 } } }),
         description: fields.text({ label: "Meta description", multiline: true, validation: { length: { min: 120, max: 170 } } }),

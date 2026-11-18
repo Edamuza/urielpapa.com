@@ -261,6 +261,15 @@ const glossary = defineCollection({
   }),
   schema: z.object({
     term: z.string().max(60),
+    // The H1, as people ask it: "What is a tokenizer?". Defaults to "What is <term>?".
+    heading: z.preprocess(
+      v => v || undefined,
+      z
+        .string()
+        .max(70)
+        .refine(h => h.trim().endsWith("?"), "The heading must end with ?")
+        .optional()
+    ),
     aka: z.array(z.string()).default([]),
     seoTitle: z.string().max(60).optional(),
     description: z
