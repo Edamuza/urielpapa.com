@@ -1,0 +1,90 @@
+---
+title: "OpenAI API Now Costs Up to 40% Less If Your Request Can Wait"
+seoTitle: "OpenAI API: Up to 40% Off If You Can Wait"
+description: >-
+  OpenAI added 2-hour and 8-hour completion windows to the Responses API on
+  November 18, 2026, at 30% and 40% below Standard token rates. Who should use them.
+dek: >-
+  Reports, product descriptions and other jobs that can wait a few hours now cost
+  less per token on GPT-6.2 Sol and Astra. It is a public beta.
+hub: ai
+frame: news-take
+takeaways:
+  - >-
+    On November 18, 2026, OpenAI put 2-hour and 8-hour completion windows for the
+    Responses API background mode into public beta.
+  - >-
+    Token rates are 30% below Standard for the 2-hour window and 40% below for the
+    8-hour window, on GPT-6.2 Astra, GPT-6.2 Sol, GPT-6.1 Terra and GPT-6 Luna.
+  - >-
+    The windows need Standard processing and share the Batch and background rate
+    limit with Batch API jobs.
+businessImpact:
+  - >-
+    Small teams paying for the OpenAI API can cut the cost of overnight and bulk
+    jobs by changing one setting.
+  - >-
+    Anything a customer is waiting on, like a chatbot reply, should stay on the
+    normal window.
+sourceUrl: https://developers.openai.com/api/docs/guides/background
+published: 2026-11-19
+related:
+  - gpt-6-sol-luna
+  - what-is-tokenization
+projects: []
+stack:
+  - gpt
+faq: []
+event: {}
+syndication: []
+draft: false
+---
+
+If you pay for the OpenAI API, jobs that can wait a few hours now cost less. On November 18, 2026, OpenAI added 2-hour and 8-hour completion windows to background mode in the Responses API, at 30% and 40% below Standard token rates. For a small team running reports, product descriptions or data clean-ups, that is a quick saving.
+
+This take is part of my [AI, in Depth](/topics/ai "AI, in Depth articles") writing. My take on [GPT-6 Sol and Luna](/news/gpt-6-sol-luna "GPT-6 Sol and Luna: OpenAI's cheaper GPT-6 models in the API") covers the model prices these discounts start from, and [what tokenization is](/blog/what-is-tokenization "What tokenization is and how AI pricing works") explains how token prices add up.
+
+## What happened?
+
+OpenAI's [background mode guide](https://developers.openai.com/api/docs/guides/background "OpenAI's background mode guide") now lists three completion windows: `soonest`, the default with no discount, `2h` at "30% below Standard", and `8h` at "40% below Standard". The guide says "Discounted completion windows are in public beta on GPT-6.2 Astra, GPT-6.2 Sol, GPT-6.1 Terra, and GPT-6 Luna."
+
+![A glass hourglass in a brass frame on a wooden table, with white sand running into the lower bulb and sunlight striping the table](../../assets/images/content/openai-api-completion-window-discount-1.jpg "A glass hourglass in a brass frame on a wooden table, with white sand running into the lower bulb and sunlight striping the table")
+
+*Requests that can wait 2 or 8 hours now cost 30% to 40% less per token. Photo: [John Morgan](https://commons.wikimedia.org/wiki/File:Hourglass_with_sand.jpg "John Morgan's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+[OpenAI Developers announced it](https://x.com/OpenAIDevs/status/2123188195202617408 "OpenAI Developers' post on discounted completion windows") on X:
+
+<SocialPost platform="x" url="https://x.com/OpenAIDevs/status/2123188195202617408" author="OpenAI Developers" handle="OpenAIDevs" date="2026-11-18" text={"Not every workflow requires an immediate response.\n\nFor single- or multi-turn workflows that can wait, save up to 40% per token than Standard on GPT-6.2 Astra or GPT-6.2 Sol.\n\nIn Responses API background mode, choose a 2h or 8h target for the first response. These discounted windows are now in public beta."} media={[{"type":"video","src":"https://pbs.twimg.com/amplify_video_thumb/2123188140005560320/img/K4VWAqeU3sdAeVNK.jpg","alt":"Opening frame of OpenAI's video: the words Background M, typing out Background mode, in black on a white screen","width":1920,"height":1080}]} />
+
+## What changed?
+
+OpenAI's [pricing page](https://developers.openai.com/api/docs/pricing "OpenAI API pricing") lists Standard rates per million tokens of US$2 input and US$10 output for GPT-6.2 Sol, and US$8 input and US$40 output for GPT-6.2 Astra. By my own calculation from those rates, the 8-hour window brings Sol to US$1.20 input and US$6 output, and Astra to US$4.80 and US$24.
+
+The guide sets a few conditions:
+
+- **Standard processing only:** "Set `service_tier` to `default` to select Standard."
+- **Follow-ups count too:** "The discount applies to model token rates on each eligible request, including follow-ups."
+- **Shared limits:** 2h and 8h requests "share the Batch/Background Rate Limit with Batch API jobs."
+- **Storage:** background mode "temporarily stores response data even when you set `store` to `false` or use Zero Data Retention."
+
+![The Makati skyline at night under a purple sky with streaking clouds, its lit towers rising above dark trees](../../assets/images/content/openai-api-completion-window-discount-2.jpg "The Makati skyline at night under a purple sky with streaking clouds, its lit towers rising above dark trees")
+
+*With the 8-hour window, a job sent in the evening can be ready by morning. Photo: [Benson Kua](https://www.flickr.com/photos/91545223@N00/6102243999 "Benson Kua's photo on Flickr"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
+
+## What does it mean for businesses and founders?
+
+My read is that this rewards sorting your AI work by urgency. A customer chat needs an answer now. A nightly sales summary, a batch of Shopee or Lazada product descriptions, or tagging last month's leads can wait until morning, and now pays less for waiting.
+
+Two cautions. It is a beta, so test it on one job before moving everything. And check the storage note if you handle customer data under the Data Privacy Act, because background mode keeps response data for a while even with storage turned off.
+
+## What should you do now?
+
+1. **List your API jobs** and mark which ones nobody waits on.
+2. **Move one of them** to background mode with `completion_window` set to `8h`.
+3. **Compare a week of costs** on your usage dashboard.
+4. **Keep live chat on the default window.**
+
+## Where can you learn more?
+
+- [OpenAI's background mode guide](https://developers.openai.com/api/docs/guides/background "OpenAI's background mode guide") - Windows, discounts and limits.
+- [OpenAI API pricing](https://developers.openai.com/api/docs/pricing "OpenAI API pricing") - Standard token rates per model.

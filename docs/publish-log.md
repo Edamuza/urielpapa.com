@@ -36,3 +36,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-16 | news | published | shopify-stores-poppy-ai-agents |
 - 2026-11-17 | news | skipped | - | No strong story with a Philippine or small-business action; Google Business Profile typed hours is not confirmed for the Philippines and the fuel price cut had no primary source.
 - 2026-11-18 | news | published | apache-mod-http2-flaw-update |
+- 2026-11-19 | news | published | openai-api-completion-window-discount |
