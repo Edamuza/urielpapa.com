@@ -2,7 +2,14 @@
 import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
-import { CONTACT, SITE, SOCIALS, WORK_WITH_ME_OFFER } from "@/config";
+import {
+  BOOKING_URL,
+  CONTACT,
+  SITE,
+  SOCIALS,
+  WORK_QUESTIONS,
+  WORK_WITH_ME_OFFER,
+} from "@/config";
 import SocialIcon from "@/components/SocialIcon.astro";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
@@ -44,8 +51,13 @@ const field =
     </p>
     <p class="mt-3">{CONTACT.kindOfWork}</p>
     <p class="border-foreground mt-6 rounded-lg border p-4">
-      <strong>{WORK_WITH_ME_OFFER}.</strong> Pick "Work together", tell me the problem
-      and when you're free, and I'll reply to set a time.
+      <strong>{WORK_WITH_ME_OFFER}.</strong> Pick "Work together" and answer a few
+      quick questions about your business or the role.{" "}
+      {
+        BOOKING_URL
+          ? "After you send it, pick a time on my calendar."
+          : "I'll reply to set a time."
+      }
     </p>
 
     <form
@@ -129,19 +141,169 @@ const field =
         </p>
       </fieldset>
 
-      <div class="call-field">
-        <label for="c-call" class="font-semibold"
-          >Good times for a 15-minute call <span class="meta">(optional)</span
-          ></label
-        >
-        <input
-          id="c-call"
-          name="callTimes"
-          type="text"
-          maxlength="300"
-          placeholder="e.g. weekdays after 2 PM, Philippine time"
-          class={field}
-        />
+      {
+        /* Business questions, only when "Work together" is picked (CSS :has). */
+      }
+      <div class="work-fields space-y-5">
+        <fieldset>
+          <legend class="font-semibold">Who are you?</legend>
+          <div class="mt-2 grid gap-2 sm:grid-cols-2">
+            {
+              (["client", "employer"] as const).map((k, i) => (
+                <label class="border-border has-[:checked]:border-foreground flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2">
+                  <input
+                    type="radio"
+                    name="workKind"
+                    value={k}
+                    checked={i === 0}
+                    class="size-4 accent-current"
+                  />
+                  {WORK_QUESTIONS[k].label}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="client-fields grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="c-company" class="font-semibold">Business name</label>
+            <input
+              id="c-company"
+              name="company"
+              type="text"
+              maxlength="160"
+              autocomplete="organization"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-site" class="font-semibold"
+              >Website <span class="meta">(optional)</span></label
+            >
+            <input
+              id="c-site"
+              name="site"
+              type="url"
+              maxlength="300"
+              placeholder="https://"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-industry" class="font-semibold">Industry</label>
+            <input
+              id="c-industry"
+              name="industry"
+              type="text"
+              maxlength="120"
+              placeholder="e.g. clinic, restaurant, law firm"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-need" class="font-semibold">What do you need?</label>
+            <select id="c-need" name="need" class={field}>
+              {WORK_QUESTIONS.client.needs.map(o => <option>{o}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="c-budget" class="font-semibold">Budget</label>
+            <select id="c-budget" name="budget" class={field}>
+              {WORK_QUESTIONS.client.budgets.map(o => <option>{o}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="c-timeline" class="font-semibold"
+              >When do you need it?</label
+            >
+            <select id="c-timeline" name="timeline" class={field}>
+              {WORK_QUESTIONS.client.timelines.map(o => <option>{o}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div class="employer-fields grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="c-employer" class="font-semibold">Company</label>
+            <input
+              id="c-employer"
+              name="employer"
+              type="text"
+              maxlength="160"
+              autocomplete="organization"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-role" class="font-semibold">Role title</label>
+            <input
+              id="c-role"
+              name="role"
+              type="text"
+              maxlength="160"
+              placeholder="e.g. AI automation engineer"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-type" class="font-semibold">Employment type</label>
+            <select id="c-type" name="employmentType" class={field}>
+              {WORK_QUESTIONS.employer.types.map(o => <option>{o}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="c-setup" class="font-semibold">Work setup</label>
+            <select id="c-setup" name="workSetup" class={field}>
+              {WORK_QUESTIONS.employer.setups.map(o => <option>{o}</option>)}
+            </select>
+          </div>
+          <div>
+            <label for="c-salary" class="font-semibold"
+              >Salary range <span class="meta">(optional)</span></label
+            >
+            <input
+              id="c-salary"
+              name="salary"
+              type="text"
+              maxlength="120"
+              placeholder="e.g. ₱80k to ₱120k a month"
+              class={field}
+            />
+          </div>
+          <div>
+            <label for="c-post" class="font-semibold"
+              >Job post link <span class="meta">(optional)</span></label
+            >
+            <input
+              id="c-post"
+              name="jobPost"
+              type="url"
+              maxlength="300"
+              placeholder="https://"
+              class={field}
+            />
+          </div>
+        </div>
+
+        {
+          !BOOKING_URL && (
+            <div>
+              <label for="c-call" class="font-semibold">
+                Good times for a 15-minute call{" "}
+                <span class="meta">(optional)</span>
+              </label>
+              <input
+                id="c-call"
+                name="callTimes"
+                type="text"
+                maxlength="300"
+                placeholder="e.g. weekdays after 2 PM, Philippine time"
+                class={field}
+              />
+            </div>
+          )
+        }
       </div>
 
       <div>
@@ -155,6 +317,7 @@ const field =
           required
           minlength="10"
           maxlength="5000"
+          placeholder="What's the problem, and what have you tried so far?"
           class={field}
           aria-describedby="c-message-err"></textarea>
         <p
@@ -197,9 +360,9 @@ const field =
         >
         </p>
         <p class="meta mt-3">
-          Your name, email, message and any call times are sent to my inbox and
-          used only to reply to you. Nothing is added to a mailing list. By
-          sending this you agree to the <a
+          Your name, email, message and answers are sent to my inbox and used
+          only to reply to you. Nothing is added to a mailing list. By sending
+          this you agree to the <a
             href="/privacy"
             title="How urielpapa.com handles what you send">privacy policy</a
           >.
@@ -326,11 +489,18 @@ const field =
 </script>
 
 <style>
-  /* The call times field only shows when "Work together" is picked. */
-  .call-field {
+  /* The business questions only show when "Work together" is picked, and
+     only the set for the kind of sender picked under "Who are you?". */
+  .work-fields,
+  .client-fields,
+  .employer-fields {
     display: none;
   }
-  form:has(input[name="topic"][value="work"]:checked) .call-field {
+  form:has(input[name="topic"][value="work"]:checked) .work-fields {
     display: block;
+  }
+  form:has(input[name="workKind"][value="client"]:checked) .client-fields,
+  form:has(input[name="workKind"][value="employer"]:checked) .employer-fields {
+    display: grid;
   }
 </style>

@@ -40,14 +40,44 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const message = String(form.get("message") ?? "")
     .trim()
     .slice(0, 5000);
-  // Only asked when "Work together" is picked: when the sender is free for the
-  // free 15-minute discovery call. Optional.
-  const callTimes =
-    topicKey === "work"
-      ? String(form.get("callTimes") ?? "")
-          .trim()
-          .slice(0, 300)
-      : "";
+  // Business questions, only asked when "Work together" is picked: one set
+  // for a business with a project, one for an employer hiring for a role,
+  // plus good call times when there is no booking page. All optional.
+  const field = (key: string, max = 300) =>
+    String(form.get(key) ?? "")
+      // eslint-disable-next-line no-control-regex -- one line per answer
+      .replace(/[\x00-\x1f\x7f]/g, " ")
+      .trim()
+      .slice(0, max);
+  const workKind = topicKey === "work" ? field("workKind") : "";
+  const answers: [string, string][] =
+    workKind === "client"
+      ? [
+          ["Sender", "Business with a project"],
+          ["Business", field("company", 160)],
+          ["Website", field("site")],
+          ["Industry", field("industry", 120)],
+          ["Needs", field("need", 120)],
+          ["Budget", field("budget", 120)],
+          ["Timeline", field("timeline", 120)],
+        ]
+      : workKind === "employer"
+        ? [
+            ["Sender", "Employer hiring for a role"],
+            ["Company", field("employer", 160)],
+            ["Role", field("role", 160)],
+            ["Employment type", field("employmentType", 120)],
+            ["Work setup", field("workSetup", 120)],
+            ["Salary range", field("salary", 120)],
+            ["Job post", field("jobPost")],
+          ]
+        : [];
+  if (topicKey === "work")
+    answers.push(["Good times for a call", field("callTimes")]);
+  const answerText = answers
+    .filter(([, v]) => v)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join("\n");
 
   const errors: Record<string, string> = {};
   if (!name) errors.name = "Please enter your name.";
@@ -97,9 +127,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       from: CONTACT_FROM_EMAIL,
       to: [CONTACT_TO_EMAIL],
       reply_to: email,
-      subject: `[urielpapa.com] ${topic}: ${name}`,
+      subject: `[urielpapa.com] ${topic}${
+        workKind === "employer"
+          ? " (hiring)"
+          : workKind === "client"
+            ? " (project)"
+            : ""
+      }: ${name}`,
       text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}${
-        callTimes ? `\nGood times for a call: ${callTimes}` : ""
+        answerText ? `\n${answerText}` : ""
       }\n\n${message}`,
     }),
     signal: AbortSignal.timeout(8000),

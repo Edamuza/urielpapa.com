@@ -136,6 +136,52 @@ export const WORK_WITH_ME_OFFER =
   "Free 15-minute discovery call, no obligation";
 
 /**
+ * Google Calendar booking page for the discovery call (an appointment schedule).
+ * Paste the embed link from Google Calendar: open the schedule, Share, Website
+ * embed, and copy the src of the iframe. It looks like
+ * https://calendar.google.com/calendar/appointments/schedules/AcZ...?gv=true
+ * While it is empty, the form asks for good call times instead.
+ */
+export const BOOKING_URL = "";
+
+/**
+ * Business questions on the contact form when "Work together" is picked.
+ * "client" is a business that needs a project; "employer" is hiring for a role.
+ * The option lists can be edited freely; the form and the email follow them.
+ */
+export const WORK_QUESTIONS = {
+  client: {
+    label: "A business that needs a project",
+    needs: [
+      "A website or landing page",
+      "Custom software or a web app",
+      "AI automation or a chatbot",
+      "SEO or AI search (GEO)",
+      "Ads and lead generation",
+      "Not sure yet",
+    ],
+    budgets: [
+      "Under ₱50,000",
+      "₱50,000 to ₱150,000",
+      "₱150,000 to ₱500,000",
+      "Over ₱500,000",
+      "Not sure yet",
+    ],
+    timelines: [
+      "As soon as possible",
+      "In 1 to 3 months",
+      "In 3 months or more",
+      "Just exploring",
+    ],
+  },
+  employer: {
+    label: "An employer hiring for a role",
+    types: ["Full-time", "Part-time", "Contract or freelance"],
+    setups: ["Remote", "Hybrid", "On-site"],
+  },
+};
+
+/**
  * Client results for the home page's results strip, next to "Work with me".
  * Only real, sourced numbers: each one links to the page that tells the story.
  * Never add an estimate or an example figure here.
