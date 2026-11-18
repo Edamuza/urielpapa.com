@@ -20,6 +20,7 @@ const isActive = (href: string) =>
 <a
   href="#main-content"
   class="bg-accent text-accent-foreground absolute start-4 -top-full z-[60] rounded px-3 py-2 no-underline focus:top-12"
+  title="Skip the menu and go to the main content"
 >
   Skip to content
 </a>
@@ -77,7 +78,7 @@ const isActive = (href: string) =>
                 isActive("/contact") &&
                   "bg-[var(--foreground)] text-[var(--background)]",
               ]}
-              title="Work with Uriel Papa: send a message about your project"
+              title="Work with Uriel Papa: book a free 15-minute discovery call"
               data-event="work_with_me_click"
               data-event-from="header"
             >
@@ -174,7 +175,7 @@ const isActive = (href: string) =>
             <a
               href={WORK_WITH_ME_HREF}
               class="btn btn-filled mt-5 w-full"
-              title="Work with Uriel Papa: send a message about your project"
+              title="Work with Uriel Papa: book a free 15-minute discovery call"
               data-event="work_with_me_click"
               data-event-from="menu"
             >

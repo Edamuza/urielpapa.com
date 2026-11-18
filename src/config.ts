@@ -130,6 +130,53 @@ export const MENU = [
 /** Where every "Work with me" link goes: the contact form with "Work together" picked. */
 export const WORK_WITH_ME_HREF = "/contact#work";
 
+/** The first step a "Work with me" click leads to (approved by Uriel, Nov 2026).
+ * Shown under every "Work with me" button and at the top of the contact form. */
+export const WORK_WITH_ME_OFFER =
+  "Free 15-minute discovery call, no obligation";
+
+/**
+ * Client results for the home page's results strip, next to "Work with me".
+ * Only real, sourced numbers: each one links to the page that tells the story.
+ * Never add an estimate or an example figure here.
+ */
+export const RESULTS: {
+  value: string;
+  text: string;
+  href: string;
+  title: string;
+}[] = [
+  {
+    value: "33 lead conversations",
+    text: "in the first 5 days of Meta ads on about US$8 a day, about US$1 each",
+    href: "/blog/organic-content-vs-paid-ads",
+    title: "Read how a small Meta ads budget brought in 33 lead conversations",
+  },
+  {
+    value: "4 modules, 1 login",
+    text: "HR and payroll, CRM, projects and accounting in one ERP, built with my team in under 3 months",
+    href: "/projects/vite-seo-erp",
+    title: "Read the case study of the ERP Uriel Papa built in under 3 months",
+  },
+  {
+    value: "Replies at any hour",
+    text: "an AI chatbot on Messenger and Instagram that answers inquiries, books consultations and logs leads",
+    href: "/blog/n8n-messenger-instagram-chatbot",
+    title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
+  },
+];
+
+/**
+ * Short client quotes for the results strip. Empty until Uriel adds real ones
+ * with the client's permission; the strip shows no quote while it is empty.
+ */
+export const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  role: string;
+  href?: string;
+}[] = [];
+
 /** "Start here" picks in the Writing page's side rail (post slugs). */
 export const START_HERE = [
   "laravel-vs-nextjs",

@@ -1,0 +1,75 @@
+---
+// Results strip on the home page, right under the hero: real client results
+// (each linked to the story behind it), short client quotes once Uriel adds
+// them, and one quiet link to the free discovery call. Nothing here is an
+// example figure: the numbers come from RESULTS and TESTIMONIALS in config.ts.
+import { RESULTS, TESTIMONIALS, WORK_WITH_ME_HREF } from "@/config";
+
+type Props = { from: string };
+const { from } = Astro.props;
+---
+
+{
+  RESULTS.length > 0 && (
+    <section class="border-border border-b py-10" aria-labelledby="results-h">
+      <h2 id="results-h" class="label-caps text-muted-foreground mb-5">
+        Results for businesses
+      </h2>
+      <ul class="grid gap-x-6 gap-y-6 sm:grid-cols-3">
+        {RESULTS.map(r => (
+          <li class="border-border rounded-lg border">
+            <a
+              href={r.href}
+              title={r.title}
+              class="group block h-full p-4 no-underline"
+            >
+              <span class="font-display block text-xl leading-tight font-bold sm:text-2xl">
+                {r.value}
+              </span>
+              <span class="mt-1 block">{r.text}</span>
+              <span class="meta mt-2 block group-hover:underline">
+                Read how →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      {TESTIMONIALS.length > 0 && (
+        <ul class="mt-6 grid gap-6 sm:grid-cols-2">
+          {TESTIMONIALS.map(t => (
+            <li>
+              <figure class="border-foreground border-s-2 ps-4">
+                <blockquote class="text-lg">“{t.quote}”</blockquote>
+                <figcaption class="meta mt-2">
+                  {t.href ? (
+                    <a href={t.href} title={`${t.name}, ${t.role}`}>
+                      {t.name}
+                    </a>
+                  ) : (
+                    t.name
+                  )}
+                  , {t.role}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p class="mt-6 font-semibold">
+        Want results like these?{" "}
+        <a
+          href={WORK_WITH_ME_HREF}
+          title="Book a free 15-minute discovery call with Uriel Papa"
+          data-event="work_with_me_click"
+          data-event-from={from}
+          class="whitespace-nowrap"
+        >
+          Book a free 15-minute call →
+        </a>
+      </p>
+      <p class="meta mt-1">
+        No obligation. I read and answer every message myself.
+      </p>
+    </section>
+  )
+}

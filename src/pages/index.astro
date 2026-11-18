@@ -8,7 +8,14 @@ import SectionHeader from "@/components/SectionHeader.astro";
 import { Image } from "astro:assets";
 import NewsletterBox from "@/components/NewsletterBox.astro";
 import ProjectTile from "@/components/ProjectTile.astro";
-import { CAREER_START, PROOF, SITE, WORK_WITH_ME_HREF } from "@/config";
+import ResultsStrip from "@/components/ResultsStrip.astro";
+import {
+  CAREER_START,
+  PROOF,
+  SITE,
+  WORK_WITH_ME_HREF,
+  WORK_WITH_ME_OFFER,
+} from "@/config";
 import { HUBS } from "@/data/hubs";
 import {
   formatDate,
@@ -91,6 +98,7 @@ const [city, country] = SITE.location.split(", ");
           <a
             href={postUrl(latestNews)}
             class="min-w-0 flex-1 truncate font-semibold"
+            title={`Read the latest news take: ${latestNews.data.title}`}
           >
             {latestNews.data.title}
           </a>
@@ -150,15 +158,20 @@ const [city, country] = SITE.location.split(", ");
         <p class="hero-actions mt-6 flex flex-wrap gap-3">
           <a
             href={WORK_WITH_ME_HREF}
-            class="btn btn-filled"
-            title="Work with Uriel Papa on a project or in a role"
-            >Work with me</a
+            class="btn btn-filled btn-primary"
+            title="Work with Uriel Papa: book a free 15-minute discovery call"
+            data-event="work_with_me_click"
+            data-event-from="home-hero"
+            aria-describedby="hero-offer">Work with me</a
           >
           <a
             href="/projects"
             class="btn"
             title="See the projects Uriel Papa has built">See my projects</a
           >
+        </p>
+        <p id="hero-offer" class="hero-offer meta mt-2">
+          {WORK_WITH_ME_OFFER}.
         </p>
       </div>
       {
@@ -199,6 +212,8 @@ const [city, country] = SITE.location.split(", ");
         </figcaption>
       </figure>
     </section>
+
+    <ResultsStrip from="home-results" />
 
     <section class="border-border border-b py-10" aria-labelledby="proof-h">
       <h2 id="proof-h" class="label-caps text-muted-foreground mb-5">
@@ -428,7 +443,11 @@ const [city, country] = SITE.location.split(", ");
             <p>Short notes and quick tips will show up here.</p>
           )
         }
-        <p class="mt-4"><a href="/notes">All notes →</a></p>
+        <p class="mt-4">
+          <a href="/notes" title="All of Uriel Papa's short notes and tips"
+            >All notes →</a
+          >
+        </p>
       </section>
 
       <section aria-labelledby="events-h">
@@ -450,7 +469,13 @@ const [city, country] = SITE.location.split(", ");
             <p>Notes from the seminars and trainings I attend.</p>
           )
         }
-        <p class="mt-4"><a href="/events">All events →</a></p>
+        <p class="mt-4">
+          <a
+            href="/events"
+            title="Uriel Papa's notes from seminars, expos and events"
+            >All events →</a
+          >
+        </p>
       </section>
     </div>
 
@@ -467,13 +492,17 @@ const [city, country] = SITE.location.split(", ");
         </p>
         <a
           href={WORK_WITH_ME_HREF}
-          class="btn border-accent-foreground bg-accent-foreground text-accent mt-5"
-          title="Work with Uriel Papa: send a message about your project"
+          class="btn btn-primary border-accent-foreground bg-accent-foreground text-accent mt-5"
+          title="Work with Uriel Papa: book a free 15-minute discovery call"
           data-event="work_with_me_click"
           data-event-from="home"
+          aria-describedby="work-offer"
         >
           Work with me →
         </a>
+        <p id="work-offer" class="mt-2 text-sm opacity-85">
+          {WORK_WITH_ME_OFFER}.
+        </p>
       </section>
     </div>
   </div>
@@ -613,6 +642,9 @@ const [city, country] = SITE.location.split(", ");
     .hero-actions {
       order: 3;
       margin-top: 1rem;
+    }
+    .hero-offer {
+      order: 3;
     }
     .hero-lead {
       order: 4;

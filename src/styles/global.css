@@ -126,6 +126,12 @@
   @apply bg-accent text-accent-foreground border-accent;
 }
 
+/* The commercial call to action ("Work with me"): a little taller and wider
+   than other buttons, so it reads as the main step next to secondary ones. */
+@utility btn-primary {
+  @apply min-h-12 px-6 text-lg;
+}
+
 :target {
   scroll-margin-block: 1.5rem;
 }
