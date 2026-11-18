@@ -1,5 +1,6 @@
 ---
 term: Tokenizer
+heading: What is a tokenizer?
 aka: []
 seoTitle: "What Is a Tokenizer? Definition and Example"
 description: >-
