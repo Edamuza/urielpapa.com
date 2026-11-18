@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import PostCard from "@/components/PostCard.astro";
-import { BOOKING_URL, CONTACT, WORK_WITH_ME_OFFER } from "@/config";
+import { CONTACT } from "@/config";
 import { getPosts, postUrl } from "@/utils/content";
 
 const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
@@ -13,43 +13,23 @@ const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
     <p class="mt-4 text-lg">
       It went straight to my inbox. {CONTACT.replyTime}
     </p>
-    {
-      BOOKING_URL && (
-        <section
-          id="book"
-          class="border-foreground mt-8 rounded-lg border p-4 sm:p-5"
-          aria-labelledby="book-h"
-          hidden
-          data-booking
-        >
-          <h2 id="book-h" class="h3">
-            Pick a time for your free 15-minute call
-          </h2>
-          <p class="mt-1">
-            {WORK_WITH_ME_OFFER}. Choose a slot below and you'll get a Google
-            Calendar invite with the meeting link.
-          </p>
-          <iframe
-            data-src={BOOKING_URL}
-            title="Book a free 15-minute discovery call with Uriel Papa on Google Calendar"
-            class="border-border mt-4 h-[640px] w-full rounded-lg border bg-white"
-            loading="lazy"
-          />
-          <p class="meta mt-2">
-            Calendar not loading?{" "}
-            <a
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener"
-              title="Open Uriel Papa's Google Calendar booking page in a new tab"
-            >
-              Open the booking page
-            </a>
-            .
-          </p>
-        </section>
-      )
-    }
+    <section
+      class="border-foreground mt-8 rounded-lg border p-4 sm:p-5"
+      aria-labelledby="booked-h"
+      hidden
+      data-booked
+    >
+      <h2 id="booked-h" class="h3">Your free 15-minute call is booked</h2>
+      <p class="mt-1">
+        <strong data-booked-time></strong>. A Google Calendar invite with the
+        Meet link is on its way to your inbox. If the time stops working, reply
+        to the invite and we'll find another.
+      </p>
+    </section>
+    <p class="mt-6" hidden data-booked-failed>
+      I couldn't book the time you picked automatically, but I have your request
+      and will reply to confirm a time.
+    </p>
     {
       latest.length > 0 && (
         <section class="mt-10">
@@ -76,12 +56,22 @@ const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
 </Layout>
 
 <script>
-  // Only "Work together" messages get the booking step. The iframe loads
-  // when it is shown, so other visitors never load Google Calendar.
-  const booking = document.querySelector<HTMLElement>("[data-booking]");
-  if (booking && new URLSearchParams(location.search).get("topic") === "work") {
-    const frame = booking.querySelector<HTMLIFrameElement>("iframe");
-    if (frame?.dataset.src) frame.src = frame.dataset.src;
-    booking.hidden = false;
+  // ?booked=<ISO time> after a call was booked from the contact form; the time
+  // shows in the visitor's own time zone.
+  const booked = new URLSearchParams(location.search).get("booked");
+  if (booked === "failed") {
+    document.querySelector<HTMLElement>("[data-booked-failed]")!.hidden = false;
+  } else if (booked && !Number.isNaN(Date.parse(booked))) {
+    const box = document.querySelector<HTMLElement>("[data-booked]")!;
+    box.querySelector("[data-booked-time]")!.textContent =
+      new Intl.DateTimeFormat(undefined, {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        hour: "numeric",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }).format(new Date(booked));
+    box.hidden = false;
   }
 </script>

@@ -13,7 +13,7 @@ const CSP = [
   "img-src 'self' data: https://i.ytimg.com https://pbs.twimg.com https://abs.twimg.com https://*.cdninstagram.com https://websitelaunches.com https://*.google-analytics.com https://*.googletagmanager.com https://*.plerdy.com https://*.clarity.ms https://c.bing.com",
   "font-src 'self'",
   "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://challenges.cloudflare.com https://*.plerdy.com wss://a.plerdy.com https://*.clarity.ms https://c.bing.com",
-  "frame-src https://www.youtube-nocookie.com https://calendar.google.com https://challenges.cloudflare.com https://platform.twitter.com https://syndication.twitter.com https://www.threads.net https://www.threads.com",
+  "frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com https://platform.twitter.com https://syndication.twitter.com https://www.threads.net https://www.threads.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",

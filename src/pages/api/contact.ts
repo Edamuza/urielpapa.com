@@ -4,6 +4,12 @@ import {
   CONTACT_TO_EMAIL,
   RESEND_API_KEY,
 } from "astro:env/server";
+import {
+  bookCall,
+  calendarEnabled,
+  formatSlot,
+  isBookable,
+} from "@/lib/calendar";
 import { EMAIL_RE, rateLimited, reply, verifyTurnstile } from "@/lib/forms";
 
 export const prerender = false;
@@ -117,6 +123,37 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
   }
 
+  // The free discovery call: book the slot picked on the form straight into
+  // Uriel's Google Calendar (with a Meet link and an invite to the sender).
+  const slot = topicKey === "work" ? field("slot", 40) : "";
+  let booked = "";
+  let bookingNote = "";
+  if (slot && calendarEnabled) {
+    const free = await isBookable(slot).catch(() => null);
+    if (free === false) {
+      const taken = "That time was just taken. Please pick another one.";
+      return reply(request, 409, { message: taken, errors: { slot: taken } });
+    }
+    const when = `${formatSlot(slot)} (Philippine time)`;
+    const business = field("company", 160) || field("employer", 160);
+    try {
+      if (free === null) throw new Error("free/busy check failed");
+      const event = await bookCall({
+        start: slot,
+        name,
+        email,
+        summary: `Discovery call: ${name}${business ? ` (${business})` : ""}`,
+        description: `Booked from urielpapa.com/contact\n\n${
+          answerText ? `${answerText}\n\n` : ""
+        }${message}`,
+      });
+      booked = slot;
+      bookingNote = `Booked call: ${when}${event.meet ? `\nMeet: ${event.meet}` : ""}`;
+    } catch {
+      bookingNote = `Requested call: ${when}. Booking it failed, so set it up by hand.`;
+    }
+  }
+
   const sent = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -135,23 +172,31 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             : ""
       }: ${name}`,
       text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}${
-        answerText ? `\n${answerText}` : ""
-      }\n\n${message}`,
+        bookingNote ? `\n${bookingNote}` : ""
+      }${answerText ? `\n${answerText}` : ""}\n\n${message}`,
     }),
     signal: AbortSignal.timeout(8000),
   })
     .then(res => res.ok)
     .catch(() => false); // timeout or network error
-  if (!sent) {
+  // A booked call already sent its calendar invite, so that counts as delivered.
+  if (!sent && !booked) {
     return reply(request, 502, {
       message: `Your message couldn't be sent right now. Please email ${CONTACT_TO_EMAIL} directly.`,
     });
   }
 
+  const redirect = `/contact/thanks?topic=${topicKey}${
+    booked
+      ? `&booked=${encodeURIComponent(booked)}`
+      : slot
+        ? "&booked=failed"
+        : ""
+  }`;
   return reply(
     request,
     200,
-    { message: "Thanks, your message is on its way." },
-    `/contact/thanks?topic=${topicKey}`
+    { message: "Thanks, your message is on its way.", redirect },
+    redirect
   );
 };

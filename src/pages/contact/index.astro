@@ -3,7 +3,6 @@ import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import {
-  BOOKING_URL,
   CONTACT,
   SITE,
   SOCIALS,
@@ -53,11 +52,7 @@ const field =
     <p class="border-foreground mt-6 rounded-lg border p-4">
       <strong>{WORK_WITH_ME_OFFER}.</strong> Pick "Work together" and answer a few
       quick questions about your business or the role.{" "}
-      {
-        BOOKING_URL
-          ? "After you send it, pick a time on my calendar."
-          : "I'll reply to set a time."
-      }
+      Then pick a time, and the call goes straight into my calendar.
     </p>
 
     <form
@@ -287,23 +282,50 @@ const field =
         </div>
 
         {
-          !BOOKING_URL && (
-            <div>
-              <label for="c-call" class="font-semibold">
-                Good times for a 15-minute call{" "}
-                <span class="meta">(optional)</span>
-              </label>
-              <input
-                id="c-call"
-                name="callTimes"
-                type="text"
-                maxlength="300"
-                placeholder="e.g. weekdays after 2 PM, Philippine time"
-                class={field}
-              />
-            </div>
-          )
+          /* Free slots from Uriel's Google Calendar, filled in by the script
+            below from /api/slots. Picking one books the call on send. */
         }
+        <fieldset data-booking hidden aria-describedby="c-slot-tz c-slot-err">
+          <legend class="font-semibold">
+            Pick a time for your free 15-minute call{" "}
+            <span class="meta">(optional)</span>
+          </legend>
+          <p id="c-slot-tz" class="meta mt-1" data-slot-tz></p>
+          <div
+            class="mt-3 flex gap-2 overflow-x-auto pb-1"
+            role="group"
+            aria-label="Day"
+            data-slot-days
+          >
+          </div>
+          <div
+            class="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4"
+            data-slot-times
+          >
+          </div>
+          <p class="mt-2 text-sm" aria-live="polite" data-slot-picked></p>
+          <p
+            id="c-slot-err"
+            class="mt-1 text-sm font-semibold"
+            data-error-for="slot"
+          >
+          </p>
+        </fieldset>
+
+        <div data-call-times>
+          <label for="c-call" class="font-semibold">
+            Good times for a 15-minute call{" "}
+            <span class="meta">(optional)</span>
+          </label>
+          <input
+            id="c-call"
+            name="callTimes"
+            type="text"
+            maxlength="300"
+            placeholder="e.g. weekdays after 2 PM, Philippine time"
+            class={field}
+          />
+        </div>
       </div>
 
       <div>
@@ -463,6 +485,7 @@ const field =
       const body = (await res.json().catch(() => ({}))) as {
         message?: string;
         errors?: Record<string, string>;
+        redirect?: string;
       };
       if (!res.ok) {
         if (body.errors) showErrors(body.errors);
@@ -472,7 +495,9 @@ const field =
         );
       }
       track("contact_submit", { topic: String(data.get("topic") ?? "") });
-      location.href = `/contact/thanks?topic=${encodeURIComponent(String(data.get("topic") ?? ""))}`;
+      location.href =
+        body.redirect ??
+        `/contact/thanks?topic=${encodeURIComponent(String(data.get("topic") ?? ""))}`;
     } catch (err) {
       if (status)
         status.textContent =
@@ -485,6 +510,89 @@ const field =
       ).turnstile;
       if (widget) turnstile?.reset(widget);
     }
+  });
+
+  // Discovery-call slots: loaded once, the first time "Work together" is
+  // picked. Times show in the visitor's own time zone.
+  const booking = document.querySelector<HTMLElement>("[data-booking]");
+  const callTimes = document.querySelector<HTMLElement>("[data-call-times]");
+  let slotsLoaded = false;
+  async function loadSlots() {
+    if (slotsLoaded || !booking || !form) return;
+    const work = form.querySelector<HTMLInputElement>(
+      'input[name=topic][value="work"]'
+    );
+    if (!work?.checked) return;
+    slotsLoaded = true;
+    const res = await fetch("/api/slots").catch(() => null);
+    const data = (await res?.json().catch(() => null)) as {
+      enabled?: boolean;
+      slots?: string[];
+    } | null;
+    if (!data?.enabled || !data.slots?.length) return;
+
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const dayFmt = new Intl.DateTimeFormat(undefined, {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+    const timeFmt = new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    const byDay = new Map<string, string[]>();
+    for (const iso of data.slots) {
+      const key = dayFmt.format(new Date(iso));
+      byDay.set(key, [...(byDay.get(key) ?? []), iso]);
+    }
+
+    const days = booking.querySelector<HTMLElement>("[data-slot-days]")!;
+    const times = booking.querySelector<HTMLElement>("[data-slot-times]")!;
+    const picked = booking.querySelector<HTMLElement>("[data-slot-picked]")!;
+    booking.querySelector("[data-slot-tz]")!.textContent =
+      `Times are in your time zone (${zone}). You'll get a Google Calendar invite with a Meet link.`;
+
+    // Every slot is one radio input; a day button shows only that day's slots.
+    for (const [day, list] of byDay) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className =
+        "border-border aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background min-h-11 shrink-0 rounded-lg border px-3 text-sm font-medium whitespace-nowrap";
+      button.textContent = day;
+      button.setAttribute("aria-pressed", "false");
+      button.addEventListener("click", () => showDay(day));
+      days.append(button);
+      for (const iso of list) {
+        const label = document.createElement("label");
+        label.dataset.day = day;
+        label.className =
+          "border-border has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-background has-[:focus-visible]:outline-accent flex min-h-11 cursor-pointer items-center justify-center rounded-lg border text-sm font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2";
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "slot";
+        input.value = iso;
+        input.className = "sr-only";
+        input.addEventListener("change", () => {
+          picked.textContent = `Your call: ${day}, ${timeFmt.format(new Date(iso))}`;
+        });
+        label.append(input, timeFmt.format(new Date(iso)));
+        times.append(label);
+      }
+    }
+    function showDay(day: string) {
+      for (const b of days.querySelectorAll("button"))
+        b.setAttribute("aria-pressed", String(b.textContent === day));
+      for (const l of times.querySelectorAll<HTMLElement>("label"))
+        l.hidden = l.dataset.day !== day;
+    }
+    showDay(byDay.keys().next().value!);
+    booking.hidden = false;
+    if (callTimes) callTimes.hidden = true;
+  }
+  loadSlots();
+  form?.addEventListener("change", e => {
+    if ((e.target as HTMLInputElement).name === "topic") loadSlots();
   });
 </script>
 

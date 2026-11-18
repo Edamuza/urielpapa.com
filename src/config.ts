@@ -136,13 +136,30 @@ export const WORK_WITH_ME_OFFER =
   "Free 15-minute discovery call, no obligation";
 
 /**
- * Google Calendar booking page for the discovery call (an appointment schedule).
- * Paste the embed link from Google Calendar: open the schedule, Share, Website
- * embed, and copy the src of the iframe. It looks like
- * https://calendar.google.com/calendar/appointments/schedules/AcZ...?gv=true
- * While it is empty, the form asks for good call times instead.
+ * Booking for the free discovery call: the contact form shows free slots from
+ * Uriel's Google Calendar and books the one picked (with a Google Meet link and
+ * an invite to the visitor). Needs the GOOGLE_CALENDAR_* secrets; without them
+ * the form asks for good call times instead. Hours are Philippine time.
  */
-export const BOOKING_URL = "";
+export const BOOKING = {
+  timeZone: "Asia/Manila",
+  /** Philippine time has no daylight saving, so a fixed offset is safe. */
+  utcOffset: "+08:00",
+  minutes: 15,
+  /** Free time kept before and after each call. */
+  bufferMinutes: 15,
+  /** 0 = Sunday … 6 = Saturday. */
+  days: [1, 2, 3, 4, 5],
+  /** Start times run from the first hour to before the last, as [hour, minute]. */
+  hours: [
+    [9, 0],
+    [17, 0],
+  ] as [number, number][],
+  /** Earliest booking, in hours from now. */
+  leadHours: 12,
+  /** How far ahead people can book. */
+  daysAhead: 14,
+};
 
 /**
  * Business questions on the contact form when "Work together" is picked.
