@@ -283,150 +283,203 @@ const field =
 
         {
           /* Free slots from Uriel's Google Calendar, filled in by the script
-            below from /api/slots. Picking one books the call on send. */
+            below from /api/slots. The card opens a pop-up picker; the slot
+            radios stay inside this form, so the picked time is sent with it. */
         }
         <fieldset
           data-booking
           hidden
-          aria-describedby="c-slot-tz c-slot-err"
-          class="border-border min-w-0 rounded-2xl border p-4 sm:p-6"
+          aria-describedby="c-slot-err"
+          class="border-border min-w-0 rounded-2xl border p-4 sm:p-5"
         >
-          <legend class="sr-only">
-            Pick a time for your free 15-minute call (optional)
-          </legend>
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p class="h3" aria-hidden="true">Book your free call</p>
-              <p class="meta mt-0.5">
-                Optional. Pick a time and it goes straight into my calendar.
+          <legend class="sr-only">Free 15-minute call (optional)</legend>
+          <div class="flex items-start gap-4">
+            <span
+              class="bg-foreground text-background grid size-11 shrink-0 place-items-center rounded-full"
+              ><svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                class="size-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
+                  d="M16 3v4M8 3v4M3 10h18"></path></svg
+              ></span
+            >
+            <div class="min-w-0 flex-1" aria-live="polite">
+              <p class="font-semibold" data-slot-title>
+                Book your free 15-minute call
+              </p>
+              <p class="meta" data-slot-picked>
+                Optional. Pick a time and it goes straight into my calendar,
+                with a Google Meet link.
               </p>
             </div>
-            <ul class="flex flex-wrap gap-2 text-sm" aria-label="Call details">
-              <li
-                class="border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1"
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  class="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  ><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"
-                  ></path></svg
-                >
-                15 min
-              </li>
-              <li
-                class="border-border inline-flex items-center gap-1.5 rounded-full border px-3 py-1"
-              >
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  class="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  ><rect x="3" y="6" width="12" height="12" rx="2"></rect><path
-                    d="m15 10 6-3v10l-6-3"></path></svg
-                >
-                Google Meet
-              </li>
-            </ul>
           </div>
-
-          <div class="mt-5 flex items-center justify-between gap-2">
-            <p class="label-caps text-muted-foreground" id="c-slot-day-label">
-              1. Pick a day
-            </p>
-            <div class="flex gap-1">
-              <button
-                type="button"
-                class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
-                aria-label="Earlier days"
-                data-slot-prev
-                ><svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  class="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg
-                ></button
-              >
-              <button
-                type="button"
-                class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
-                aria-label="Later days"
-                data-slot-next
-                ><svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  class="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg
-                ></button
-              >
-            </div>
-          </div>
-          <div
-            class="slot-days -mx-1 mt-2 flex snap-x gap-2 overflow-x-auto scroll-smooth px-1 pt-1 pb-2"
-            role="group"
-            aria-labelledby="c-slot-day-label"
-            data-slot-days
-          >
-          </div>
-
-          <p class="label-caps text-muted-foreground mt-4">2. Pick a time</p>
-          <div class="mt-2 space-y-4" data-slot-times></div>
-
-          <div
-            class="border-border data-picked:border-foreground mt-5 flex items-center gap-3 rounded-xl border border-dashed p-3 text-sm data-picked:border-solid"
-            data-slot-summary
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 24 24"
-              class="size-5 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
-                d="M16 3v4M8 3v4M3 10h18"></path></svg
-            >
-            <p class="min-w-0 flex-1" aria-live="polite" data-slot-picked>
-              No time picked yet. You can also just send a message.
-            </p>
+          <div class="mt-4 flex flex-wrap gap-2">
             <button
               type="button"
-              class="shrink-0 text-sm font-semibold underline underline-offset-3"
-              hidden
-              data-slot-clear>Clear</button
+              class="btn btn-filled"
+              aria-haspopup="dialog"
+              data-slot-open>Pick a time</button
+            >
+            <button type="button" class="btn" hidden data-slot-clear
+              >Remove time</button
             >
           </div>
           <p
-            id="c-slot-tz"
-            class="meta mt-3 flex items-start gap-1.5"
-            data-slot-tz
-          >
-          </p>
-          <p
             id="c-slot-err"
-            class="mt-1 text-sm font-semibold"
+            class="mt-2 text-sm font-semibold empty:hidden"
             data-error-for="slot"
           >
           </p>
+
+          <dialog
+            aria-labelledby="c-slot-heading"
+            class="bg-background text-foreground m-0 mt-auto max-h-[92dvh] w-full max-w-none rounded-t-2xl p-0 shadow-2xl backdrop:bg-black/60 sm:m-auto sm:max-h-[88dvh] sm:max-w-xl sm:rounded-2xl"
+            data-slot-dialog
+          >
+            <div class="flex max-h-[inherit] flex-col">
+              <div
+                class="border-border flex items-start justify-between gap-3 border-b p-4 sm:px-6"
+              >
+                <div>
+                  <h2 id="c-slot-heading" class="h3">Pick a time</h2>
+                  <p class="meta mt-1 flex flex-wrap gap-x-3">
+                    <span class="inline-flex items-center gap-1"
+                      ><svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        class="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><circle cx="12" cy="12" r="9"></circle><path
+                          d="M12 7v5l3 2"></path></svg
+                      >
+                      15 min</span
+                    >
+                    <span class="inline-flex items-center gap-1"
+                      ><svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        class="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><rect x="3" y="6" width="12" height="12" rx="2"
+                        ></rect><path d="m15 10 6-3v10l-6-3"></path></svg
+                      >
+                      Google Meet</span
+                    >
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="border-border grid size-10 shrink-0 place-items-center rounded-full border"
+                  aria-label="Close"
+                  data-slot-close
+                  ><svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    class="size-5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><path d="M18 6 6 18M6 6l12 12"></path></svg
+                  ></button
+                >
+              </div>
+
+              <div
+                class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:px-6"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <p
+                    class="label-caps text-muted-foreground"
+                    id="c-slot-day-label"
+                  >
+                    1. Pick a day
+                  </p>
+                  <div class="flex gap-1">
+                    <button
+                      type="button"
+                      class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
+                      aria-label="Earlier days"
+                      data-slot-prev
+                      ><svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        class="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m15 6-6 6 6 6"></path></svg
+                      ></button
+                    >
+                    <button
+                      type="button"
+                      class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
+                      aria-label="Later days"
+                      data-slot-next
+                      ><svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        class="size-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="m9 6 6 6-6 6"></path></svg
+                      ></button
+                    >
+                  </div>
+                </div>
+                <div
+                  class="slot-days -mx-1 mt-2 flex snap-x scroll-px-1 gap-2 overflow-x-auto scroll-smooth px-1 pt-1 pb-2"
+                  role="group"
+                  aria-labelledby="c-slot-day-label"
+                  data-slot-days
+                >
+                </div>
+                <p class="label-caps text-muted-foreground mt-4">
+                  2. Pick a time
+                </p>
+                <div class="mt-2 space-y-4" data-slot-times></div>
+                <p class="meta mt-4" data-slot-tz></p>
+              </div>
+
+              <div
+                class="border-border flex items-center gap-3 border-t p-4 sm:px-6"
+              >
+                <p
+                  class="min-w-0 flex-1 text-sm"
+                  aria-live="polite"
+                  data-slot-choice
+                >
+                  Pick a day and a time.
+                </p>
+                <button
+                  type="button"
+                  class="btn btn-filled shrink-0 disabled:opacity-40"
+                  disabled
+                  data-slot-confirm>Confirm time</button
+                >
+              </div>
+            </div>
+          </dialog>
         </fieldset>
 
         <div data-call-times>
@@ -663,17 +716,40 @@ const field =
       byDay.set(key, [...(byDay.get(key) ?? []), at]);
     }
 
-    const days = booking.querySelector<HTMLElement>("[data-slot-days]")!;
-    const times = booking.querySelector<HTMLElement>("[data-slot-times]")!;
-    const picked = booking.querySelector<HTMLElement>("[data-slot-picked]")!;
-    const summary = booking.querySelector<HTMLElement>("[data-slot-summary]")!;
-    const clear =
-      booking.querySelector<HTMLButtonElement>("[data-slot-clear]")!;
-    const prev = booking.querySelector<HTMLButtonElement>("[data-slot-prev]")!;
-    const next = booking.querySelector<HTMLButtonElement>("[data-slot-next]")!;
-    booking.querySelector("[data-slot-tz]")!.textContent =
+    const q = <T extends HTMLElement>(sel: string) =>
+      booking.querySelector<T>(sel)!;
+    const dialog = q<HTMLDialogElement>("[data-slot-dialog]");
+    const days = q("[data-slot-days]");
+    const times = q("[data-slot-times]");
+    const title = q("[data-slot-title]");
+    const picked = q("[data-slot-picked]");
+    const choice = q("[data-slot-choice]");
+    const open = q<HTMLButtonElement>("[data-slot-open]");
+    const clear = q<HTMLButtonElement>("[data-slot-clear]");
+    const confirm = q<HTMLButtonElement>("[data-slot-confirm]");
+    const prev = q<HTMLButtonElement>("[data-slot-prev]");
+    const next = q<HTMLButtonElement>("[data-slot-next]");
+    q("[data-slot-tz]").textContent =
       `Times are in your time zone (${zone.replace(/_/g, " ")}). Google Calendar sends you the invite with the Meet link.`;
-    const empty = picked.textContent;
+    const empty = {
+      title: title.textContent,
+      picked: picked.textContent,
+      choice: choice.textContent,
+    };
+    const radios = () => [
+      ...times.querySelectorAll<HTMLInputElement>("input[name=slot]"),
+    ];
+    const describe = (iso: string) => {
+      const at = new Date(iso);
+      const end = new Date(at.getTime() + minutes * 60_000);
+      return {
+        day: longDay.format(at),
+        time: `${timeFmt.format(at)} to ${timeFmt.format(end)}`,
+      };
+    };
+    // The time confirmed in the pop-up; closing it any other way puts the
+    // radios back to this.
+    let confirmed = "";
 
     // One tile per day; each day has a panel of radio "chips", grouped into
     // morning and afternoon. Only the chosen day's panel shows.
@@ -729,17 +805,12 @@ const field =
           input.value = at.toISOString();
           input.className = "sr-only";
           input.addEventListener("change", () => {
-            const end = new Date(at.getTime() + minutes * 60_000);
-            picked.innerHTML = "";
+            const { day, time } = describe(input.value);
+            choice.innerHTML = "";
             const strong = document.createElement("strong");
-            strong.textContent = longDay.format(at);
-            picked.append(
-              strong,
-              document.createElement("br"),
-              `${timeFmt.format(at)} to ${timeFmt.format(end)}, Google Meet`
-            );
-            summary.dataset.picked = "";
-            clear.hidden = false;
+            strong.textContent = day;
+            choice.append(strong, document.createElement("br"), time);
+            confirm.disabled = false;
           });
           label.append(input, timeFmt.format(at));
           grid.append(label);
@@ -750,12 +821,50 @@ const field =
       times.append(panel);
     }
 
+    function setConfirmed(iso: string) {
+      confirmed = iso;
+      for (const r of radios()) r.checked = r.value === iso;
+      clear.hidden = !iso;
+      open.textContent = iso ? "Change time" : "Pick a time";
+      if (!iso) {
+        title.textContent = empty.title;
+        picked.textContent = empty.picked;
+        return;
+      }
+      const { day, time } = describe(iso);
+      title.textContent = day;
+      picked.textContent = `${time} on Google Meet. It gets booked when you send this form.`;
+    }
+    open.addEventListener("click", () => {
+      choice.textContent = confirmed
+        ? `${describe(confirmed).day}, ${describe(confirmed).time}`
+        : empty.choice;
+      confirm.disabled = !confirmed;
+      dialog.showModal();
+      const day = confirmed
+        ? radios()
+            .find(r => r.value === confirmed)
+            ?.closest<HTMLElement>("[data-day]")?.dataset.day
+        : undefined;
+      showDay(day ?? byDay.keys().next().value!, true);
+      arrows();
+    });
+    confirm.addEventListener("click", () => {
+      setConfirmed(radios().find(r => r.checked)?.value ?? "");
+      dialog.close();
+      open.focus();
+    });
     clear.addEventListener("click", () => {
-      for (const r of times.querySelectorAll<HTMLInputElement>("input"))
-        r.checked = false;
-      picked.textContent = empty;
-      delete summary.dataset.picked;
-      clear.hidden = true;
+      setConfirmed("");
+      open.focus();
+    });
+    q("[data-slot-close]").addEventListener("click", () => dialog.close());
+    // A click on the dimmed backdrop lands on the dialog itself.
+    dialog.addEventListener("click", e => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      for (const r of radios()) r.checked = r.value === confirmed;
     });
     const tiles = [...days.querySelectorAll<HTMLButtonElement>("button")];
     const step = () => days.clientWidth * 0.8;
@@ -802,6 +911,10 @@ const field =
   }
   form:has(input[name="topic"][value="work"]:checked) .work-fields {
     display: block;
+  }
+  /* No page scrolling behind the open time picker. */
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
   }
   /* The day strip scrolls sideways without a bar; the arrows move it. */
   .slot-days {
