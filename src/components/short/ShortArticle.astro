@@ -1,0 +1,125 @@
+---
+/**
+ * Shared frame for the short page types: answers, glossary terms and release
+ * notes (docs/content-500.md). Every page shows its sources, links up to its
+ * topic hub and across to related pages, so none of them is an orphan.
+ */
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import HubChip from "@/components/HubChip.astro";
+import ShareLinks from "@/components/ShareLinks.astro";
+import { SITE } from "@/config";
+import { hubName } from "@/data/hubs";
+import { formatDate, isoDate } from "@/utils/content";
+import type { Crumb } from "@/utils/schema";
+
+export type LinkGroup = {
+  heading: string;
+  items: { href: string; title: string; note?: string; linkTitle?: string }[];
+};
+
+type Props = {
+  crumbs: Crumb[];
+  heading: string;
+  hub: string;
+  url: string;
+  published: Date;
+  /** "Last checked" date for answers and terms. */
+  checked?: Date;
+  /** Short line under the heading, e.g. "Glossary term" or "Release note". */
+  kind: string;
+  sources: { title: string; url: string }[];
+  groups?: LinkGroup[];
+  /** Index page for "All answers", "All terms" and so on. */
+  index: { href: string; label: string };
+};
+
+const {
+  crumbs,
+  heading,
+  hub,
+  url,
+  published,
+  checked,
+  kind,
+  sources,
+  groups = [],
+  index,
+} = Astro.props;
+const shown = groups.filter(g => g.items.length > 0);
+---
+
+<article class="app-layout max-w-read pt-8" data-pagefind-body>
+  <Breadcrumbs crumbs={crumbs} />
+  <p class="meta mb-2">{kind}</p>
+  <h1 class="h1">{heading}</h1>
+  <p class="meta mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+    <HubChip hub={hub} />
+    <span
+      >By <a href="/about" rel="author" title={`About ${SITE.name}`}
+        >{SITE.name}</a
+      ></span
+    >
+    <span
+      >Published <time datetime={isoDate(published)}
+        >{formatDate(published)}</time
+      ></span
+    >
+    {
+      checked && (
+        <span>
+          Last checked{" "}
+          <time datetime={isoDate(checked)}>{formatDate(checked)}</time>
+        </span>
+      )
+    }
+  </p>
+
+  <div class="app-prose mt-6"><slot /></div>
+
+  {
+    sources.length > 0 && (
+      <section class="mt-10" aria-labelledby="sources-h">
+        <h2 id="sources-h" class="h3 mb-3">
+          Sources
+        </h2>
+        <ol class="list-decimal space-y-1 pl-5 text-[0.95rem]">
+          {sources.map(s => (
+            <li>
+              <a href={s.url} rel="noopener" title={`Source: ${s.title}`}>
+                {s.title}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    shown.map((g, n) => (
+      <section class="mt-8" aria-labelledby={`links-${n}`}>
+        <h2 id={`links-${n}`} class="h3 mb-3">
+          {g.heading}
+        </h2>
+        <ul class="space-y-2">
+          {g.items.map(i => (
+            <li>
+              <a href={i.href} title={i.linkTitle ?? i.title}>
+                {i.title}
+              </a>
+              {i.note && <span>: {i.note}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <p class="mt-8">
+    More in <a
+      href={`/topics/${hub}`}
+      title={`Everything on ${hubName(hub)} on this site`}>{hubName(hub)}</a
+    > · <a href={index.href} title={index.label}>{index.label}</a>
+  </p>
+  <ShareLinks url={url} title={heading} />
+</article>

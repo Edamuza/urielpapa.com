@@ -56,6 +56,9 @@ const LISTING_LASTMOD: [RegExp, Date | undefined][] = [
   [/^\/events$/, newest(e => e.path.startsWith("/events/"))],
   [/^\/notes$/, newest(e => e.path.startsWith("/notes/"))],
   [/^\/projects$/, newest(e => e.path.startsWith("/projects/"))],
+  [/^\/answers(\/page\/\d+)?$/, newest(e => e.path.startsWith("/answers/"))],
+  [/^\/glossary$/, newest(e => e.path.startsWith("/glossary/"))],
+  [/^\/releases(\/page\/\d+)?$/, newest(e => e.path.startsWith("/releases/"))],
 ];
 for (const hub of new Set(PUBLISHED.map(e => e.hub).filter(Boolean))) {
   LISTING_LASTMOD.push([
@@ -124,6 +127,12 @@ export default defineConfig({
     react(),
     keystatic(),
     sitemap({
+      // Extra sitemaps per short page type (src/pages/sitemap-[type].xml.ts), so
+      // Search Console can show indexing per type (docs/content-500.md). Their
+      // pages also stay in sitemap-0.xml, which Bing has on file by that name.
+      customSitemaps: ["answers", "glossary", "releases"].map(
+        t => `${SITE_URL}/sitemap-${t}.xml`
+      ),
       filter: page => {
         const path = new URL(page).pathname.replace(/\/$/, "");
         return !SITEMAP_EXCLUDE.some(p => path === p || path.startsWith(p));

@@ -1,0 +1,97 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import { getTerms, termUrl } from "@/utils/content";
+import { abs, breadcrumbNode, collectionNode } from "@/utils/schema";
+
+const terms = await getTerms();
+const title = "Glossary: AI, Automation, SEO and Tech Terms Explained";
+const intro =
+  "Plain definitions of the terms I use on this site, each with a real example and links to where it comes up.";
+const description =
+  "A glossary by Uriel Papa: plain definitions of AI, automation, SEO, GEO, AEO, web development and business terms, each with an example and sources.";
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Glossary", href: "/glossary" },
+];
+
+const letterOf = (term: string) => {
+  const c = term.trim().charAt(0).toUpperCase();
+  return /[A-Z]/.test(c) ? c : "#";
+};
+const letters = new Map<string, typeof terms>();
+for (const t of terms) {
+  const l = letterOf(t.data.term);
+  letters.set(l, [...(letters.get(l) ?? []), t]);
+}
+
+const schema = [
+  collectionNode({
+    path: "/glossary",
+    name: title,
+    description: intro,
+    items: terms.map(t => ({ name: t.data.term, href: termUrl(t) })),
+  }),
+  {
+    "@type": "DefinedTermSet",
+    "@id": `${abs("/glossary")}#set`,
+    name: "Uriel Papa's glossary",
+    url: abs("/glossary"),
+    hasDefinedTerm: terms.map(t => ({ "@id": `${abs(termUrl(t))}#term` })),
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout title={title} description={description} schema={schema}>
+  <div class="app-layout max-w-read pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title="Glossary" intro={intro} />
+    {
+      terms.length === 0 ? (
+        <p>The first terms are on the way.</p>
+      ) : (
+        <>
+          <nav aria-label="Jump to a letter" class="mb-8">
+            <ul class="flex flex-wrap gap-2">
+              {[...letters.keys()].map(l => (
+                <li>
+                  <a
+                    href={`#letter-${l === "#" ? "num" : l}`}
+                    title={`Terms starting with ${l}`}
+                    class="font-mono"
+                  >
+                    {l}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          {[...letters].map(([l, list]) => (
+            <section
+              class="mb-8"
+              aria-labelledby={`letter-${l === "#" ? "num" : l}`}
+            >
+              <h2 id={`letter-${l === "#" ? "num" : l}`} class="h2 mb-3">
+                {l}
+              </h2>
+              <dl class="divide-border divide-y">
+                {list.map(t => (
+                  <div class="py-3">
+                    <dt class="font-semibold">
+                      <a href={termUrl(t)} title={`What ${t.data.term} means`}>
+                        {t.data.term}
+                      </a>
+                    </dt>
+                    <dd class="text-[0.95rem]">{t.data.definition}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ))}
+        </>
+      )
+    }
+  </div>
+</Layout>

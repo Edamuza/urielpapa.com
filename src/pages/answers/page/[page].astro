@@ -1,0 +1,13 @@
+---
+import ShortListPage from "@/components/listings/ShortListPage.astro";
+import { getAnswers } from "@/utils/content";
+import { laterPages } from "@/utils/pagination";
+
+export async function getStaticPaths() {
+  return laterPages((await getAnswers()).length);
+}
+
+const { page } = Astro.props;
+---
+
+<ShortListPage kind="answers" page={page} />

@@ -9,6 +9,7 @@ import {
   getProjects,
   postUrl,
   projectUrl,
+  toolUrl,
 } from "@/utils/content";
 import { breadcrumbNode, collectionNode } from "@/utils/schema";
 
@@ -38,7 +39,7 @@ const schema = [
     path: "/stack",
     name: title,
     description,
-    items: items.map(i => ({ name: i.data.name, href: `/stack#${i.id}` })),
+    items: items.map(i => ({ name: i.data.name, href: toolUrl(i) })),
   }),
   breadcrumbNode(crumbs),
 ];
@@ -66,7 +67,14 @@ const schema = [
                   return (
                     <div id={i.id} class="py-3">
                       <dt class="font-semibold">
-                        {i.data.url ? (
+                        {i.data.about ? (
+                          <a
+                            href={toolUrl(i)}
+                            title={`${i.data.name}: how I use it, cost and alternatives`}
+                          >
+                            {i.data.name}
+                          </a>
+                        ) : i.data.url ? (
                           <a href={i.data.url} rel="noopener">
                             {i.data.name}
                           </a>

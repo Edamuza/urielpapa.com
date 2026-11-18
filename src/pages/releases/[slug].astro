@@ -1,0 +1,140 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import ShortArticle from "@/components/short/ShortArticle.astro";
+import { mdxComponents } from "@/components/mdx";
+import { SITE } from "@/config";
+import {
+  formatDate,
+  getReleases,
+  isoDate,
+  isoDateTime,
+  releaseUrl,
+  toolUrl,
+  type Release,
+} from "@/utils/content";
+import { abs, breadcrumbNode, PERSON_ID, WEBSITE_ID } from "@/utils/schema";
+import { hubName } from "@/data/hubs";
+
+export async function getStaticPaths() {
+  const releases = await getReleases();
+  return releases.map(release => ({
+    params: { slug: release.id },
+    props: { release, all: releases },
+  }));
+}
+
+type Props = { release: Release; all: Release[] };
+const { release, all } = Astro.props;
+const { data } = release;
+const { Content } = await render(release);
+const url = abs(releaseUrl(release));
+const tool = await getEntry(data.tool);
+if (!tool) throw new Error(`${release.id}: unknown tool ${data.tool.id}`);
+
+// The tool's version history: the previous note, then any later ones.
+const previous = data.previous ? await getEntry(data.previous) : undefined;
+const sameTool = all.filter(
+  r => r.id !== release.id && r.data.tool.id === tool.id
+);
+const later = sameTool.filter(
+  r => r.data.releasedOn.getTime() > data.releasedOn.getTime()
+);
+const history = [
+  ...later.slice(-2),
+  ...(previous && !previous.data.draft ? [previous] : []),
+  ...sameTool.filter(r => !later.includes(r) && r.id !== previous?.id),
+].slice(0, 5);
+const otherTools = all
+  .filter(r => r.data.tool.id !== tool.id && r.data.hub === data.hub)
+  .slice(0, 3);
+
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name: "Releases", href: "/releases" },
+  { name: data.title, href: releaseUrl(release) },
+];
+const schema = [
+  {
+    "@type": "TechArticle",
+    "@id": `${url}#article`,
+    mainEntityOfPage: { "@id": `${url}#page` },
+    headline: data.title,
+    description: data.description,
+    image: abs("/og.png"),
+    datePublished: isoDateTime(data.published),
+    author: { "@id": PERSON_ID },
+    publisher: { "@id": PERSON_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    articleSection: hubName(data.hub),
+    inLanguage: SITE.lang,
+    about: {
+      "@type": "SoftwareApplication",
+      name: tool.data.name,
+      softwareVersion: data.version,
+      ...(tool.data.url && { url: tool.data.url }),
+    },
+    citation: [data.sourceUrl, ...data.sources.map(s => s.url)],
+  },
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={data.seoTitle ?? data.title}
+  description={data.description}
+  ogType="article"
+  publishedTime={data.published}
+  schema={schema}
+  draft={data.draft}
+>
+  <ShortArticle
+    crumbs={crumbs}
+    heading={data.title}
+    hub={data.hub}
+    url={url}
+    published={data.published}
+    kind={`Release note · ${tool.data.name} ${data.version}`}
+    sources={[
+      {
+        title: `${tool.data.name} ${data.version} release notes`,
+        url: data.sourceUrl,
+      },
+      ...data.sources.filter(s => s.url !== data.sourceUrl),
+    ]}
+    index={{ href: "/releases", label: "All release notes" }}
+    groups={[
+      {
+        heading: `More on ${tool.data.name}`,
+        items: [
+          {
+            href: toolUrl(tool),
+            title: tool.data.about
+              ? `${tool.data.name}: how I use it, cost and alternatives`
+              : `${tool.data.name} on my Stack page`,
+          },
+          ...history.map(r => ({
+            href: releaseUrl(r),
+            title: r.data.title,
+            note: `released ${formatDate(r.data.releasedOn)}`,
+          })),
+        ],
+      },
+      {
+        heading: "Other recent releases",
+        items: otherTools.map(r => ({
+          href: releaseUrl(r),
+          title: r.data.title,
+        })),
+      },
+    ]}
+  >
+    <p class="text-lg font-medium">
+      Released <time datetime={isoDate(data.releasedOn)}
+        >{formatDate(data.releasedOn)}</time
+      >. <strong>Should you upgrade?</strong>{" "}
+      {data.upgrade}
+    </p>
+    <Content components={mdxComponents} />
+  </ShortArticle>
+</Layout>

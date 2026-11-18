@@ -1,0 +1,139 @@
+---
+/**
+ * Paginated listing for the short page types that grow every day: answers
+ * (/answers) and release notes (/releases). Glossary terms are A to Z on one page.
+ */
+import Layout from "@/layouts/Layout.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import HubChip from "@/components/HubChip.astro";
+import Pagination from "@/components/Pagination.astro";
+import { HUBS } from "@/data/hubs";
+import {
+  answerUrl,
+  formatDate,
+  getAnswers,
+  getReleases,
+  isoDate,
+  releaseUrl,
+} from "@/utils/content";
+import { breadcrumbNode, collectionNode } from "@/utils/schema";
+import { pageCount, pageHref, pageItems } from "@/utils/pagination";
+
+type Props = { kind: "answers" | "releases"; page: number };
+const { kind, page } = Astro.props;
+
+type Row = {
+  href: string;
+  title: string;
+  summary: string;
+  hub: string;
+  date: Date;
+  dateLabel: string;
+};
+const rows: Row[] =
+  kind === "answers"
+    ? (await getAnswers()).map(a => ({
+        href: answerUrl(a),
+        title: a.data.question,
+        summary: a.data.answer,
+        hub: a.data.hub,
+        date: a.data.published,
+        dateLabel: "Published",
+      }))
+    : (await getReleases()).map(r => ({
+        href: releaseUrl(r),
+        title: r.data.title,
+        summary: r.data.upgrade,
+        hub: r.data.hub,
+        date: r.data.releasedOn,
+        dateLabel: "Released",
+      }));
+
+const base = `/${kind}`;
+const pages = pageCount(rows.length);
+const items = pageItems(rows, page);
+const path = pageHref(base, page);
+const pageLabel = page > 1 ? `Page ${page} of ${pages}` : "";
+const name = kind === "answers" ? "Answers" : "Release Notes";
+const title =
+  kind === "answers"
+    ? "Answers: Short, Sourced Answers to Real Questions"
+    : "Release Notes for the Tools I Use";
+const intro =
+  kind === "answers"
+    ? "One question per page, answered first and sourced: AI, automation, SEO, tech stacks, marketing and doing business in the Philippines."
+    : "What changed in each new version of the tools on my Stack page, and whether a small team should upgrade now.";
+const heading = page > 1 ? `${name}: Page ${page}` : name;
+const crumbs = [
+  { name: "Home", href: "/" },
+  { name, href: base },
+  ...(page > 1 ? [{ name: `Page ${page}`, href: path }] : []),
+];
+const description =
+  kind === "answers"
+    ? "Short answers by Uriel Papa to questions people search for about AI, automation, SEO, GEO, tech stacks and Philippine business, each with sources."
+    : "Release notes by Uriel Papa on new versions of Astro, Next.js, n8n, Claude and other tools: what changed and whether to upgrade now.";
+const schema = [
+  collectionNode({
+    path,
+    name: pageLabel ? `${title}, ${pageLabel.toLowerCase()}` : title,
+    description: intro,
+    items: items.map(i => ({ name: i.title, href: i.href })),
+  }),
+  breadcrumbNode(crumbs),
+];
+---
+
+<Layout
+  title={pageLabel ? `${name} (${pageLabel})` : title}
+  description={pageLabel ? `${description} ${pageLabel}.` : description}
+  schema={schema}
+>
+  <div class="app-layout pt-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <PageIntro title={heading} intro={intro}>
+      {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
+    </PageIntro>
+    <div class="max-w-read">
+      <ul class="mb-6 flex flex-wrap gap-2" aria-label="Browse by topic">
+        {
+          HUBS.map(h => (
+            <li>
+              <HubChip hub={h.id} />
+            </li>
+          ))
+        }
+      </ul>
+      {
+        items.length === 0 ? (
+          <p>
+            The first {kind === "answers" ? "answers" : "release notes"} are on
+            the way.
+          </p>
+        ) : (
+          <ul>
+            {items.map(i => (
+              <li class="border-border border-b py-4 last:border-b-0">
+                <h2 class="text-lg leading-snug font-semibold">
+                  <a href={i.href} title={`Read: ${i.title}`}>
+                    {i.title}
+                  </a>
+                </h2>
+                <p class="mt-1 text-[0.95rem]">{i.summary}</p>
+                <p class="meta mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <HubChip hub={i.hub} />
+                  <span>
+                    {i.dateLabel}{" "}
+                    <time datetime={isoDate(i.date)}>{formatDate(i.date)}</time>
+                  </span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <Pagination base={base} page={page} pages={pages} label={name} />
+    </div>
+  </div>
+</Layout>
