@@ -144,6 +144,8 @@ export const RESULTS: {
   /** What the number is about: "Leads", "Money", "Time" or "Service". */
   kind: string;
   value: string;
+  /** A few words under the number on phones, where the cards sit two by two. */
+  short: string;
   text: string;
   href: string;
   title: string;
@@ -151,14 +153,16 @@ export const RESULTS: {
   {
     kind: "Leads",
     value: "33 lead conversations",
+    short: "in 5 days of Meta ads, about US$1 each",
     text: "in the first 5 days of Meta ads on about US$8 a day, about US$1 each",
     href: "/blog/organic-content-vs-paid-ads",
     title: "Read how a small Meta ads budget brought in 33 lead conversations",
   },
   {
     kind: "Money",
-    value: "US$550 + ₱2,178 a month",
-    text: "what per-seat HR, CRM and project tools would cost a 22-person team at list prices, replaced by one ERP built in under 3 months",
+    value: "US$550 + ₱2,178",
+    short: "a month in tool fees, replaced by one ERP",
+    text: "a month: what per-seat HR, CRM and project tools would cost a 22-person team at list prices, replaced by one ERP built in under 3 months",
     href: "/projects/vite-seo-erp",
     title:
       "Read the ERP case study and the per-seat tool costs it was built to replace",
@@ -166,6 +170,7 @@ export const RESULTS: {
   {
     kind: "Time",
     value: "12 messages in 40 seconds",
+    short: "sorted by an AI inbox agent in testing",
     text: "sorted by an AI inbox agent that drafts the replies for a person to approve, in testing on sample café messages",
     href: "/projects/inboxpilot",
     title:
@@ -174,6 +179,7 @@ export const RESULTS: {
   {
     kind: "Service",
     value: "Replies at any hour",
+    short: "an AI chatbot on Messenger and Instagram",
     text: "an AI chatbot on Messenger and Instagram that answers inquiries, books consultations and logs leads",
     href: "/blog/n8n-messenger-instagram-chatbot",
     title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
