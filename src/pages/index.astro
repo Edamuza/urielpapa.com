@@ -213,8 +213,6 @@ const [city, country] = SITE.location.split(", ");
       </figure>
     </section>
 
-    <ResultsStrip from="home-results" />
-
     <section class="border-border border-b py-10" aria-labelledby="proof-h">
       <h2 id="proof-h" class="label-caps text-muted-foreground mb-5">
         Proof of work
@@ -238,6 +236,8 @@ const [city, country] = SITE.location.split(", ");
         }
       </ul>
     </section>
+
+    <ResultsStrip from="home-results" />
 
     {
       projects.length > 0 && (
