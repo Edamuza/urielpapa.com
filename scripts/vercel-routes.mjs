@@ -1,9 +1,10 @@
 // Adds response headers and the www → apex redirect to Vercel's build output.
 // Runs after `astro build`; Vercel ignores vercel.json routes for prebuilt output.
+// On the VPS (DEPLOY_TARGET=vps) Nginx sets the same headers and redirect
+// (deploy/nginx/urielpapa.com.conf; keep the two in step), so this only writes
+// the build stamp there.
 import { readFileSync, writeFileSync } from "node:fs";
-
-const file = ".vercel/output/config.json";
-const config = JSON.parse(readFileSync(file, "utf-8"));
+import { STATIC_DIR, VPS } from "./lib/output.mjs";
 
 const CSP = [
   "default-src 'self'",
@@ -89,15 +90,19 @@ const extra = [
 ];
 
 // A stamp that changes on every build, even a redeploy of the same commit.
+const sha =
+  process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? "local";
 writeFileSync(
-  ".vercel/output/static/deploy-version.json",
-  JSON.stringify({
-    build: `${process.env.VERCEL_GIT_COMMIT_SHA ?? "local"}-${Date.now()}`,
-  }) + "\n",
+  `${STATIC_DIR}/deploy-version.json`,
+  JSON.stringify({ build: `${sha}-${Date.now()}` }) + "\n",
 );
 
-const marker = JSON.stringify(extra[1].src);
-if (!config.routes.some(r => JSON.stringify(r.src) === marker)) {
-  config.routes.unshift(...extra);
-  writeFileSync(file, JSON.stringify(config, null, "\t"));
+if (!VPS) {
+  const file = ".vercel/output/config.json";
+  const config = JSON.parse(readFileSync(file, "utf-8"));
+  const marker = JSON.stringify(extra[1].src);
+  if (!config.routes.some(r => JSON.stringify(r.src) === marker)) {
+    config.routes.unshift(...extra);
+    writeFileSync(file, JSON.stringify(config, null, "\t"));
+  }
 }

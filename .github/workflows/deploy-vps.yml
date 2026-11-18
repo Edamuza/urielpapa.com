@@ -1,0 +1,98 @@
+name: Deploy to VPS
+
+# Builds the site for the Node adapter and ships it to the Contabo VPS
+# (deploy/README.md). The VPS never builds: it receives a ready release with
+# its production node_modules, and deploy/activate.sh switches to it and
+# rolls back if the server does not come up. A failed build changes nothing.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time, in push order.
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy
+    # Off until the repository variable VPS_HOST is set.
+    if: vars.VPS_HOST != ''
+    runs-on: ubuntu-24.04 # same Ubuntu as the VPS, so native modules match
+    timeout-minutes: 20
+    env:
+      DEPLOY_TARGET: vps
+      # Public values are baked into the pages at build time.
+      PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+      PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+      PUBLIC_BING_SITE_VERIFICATION: ${{ vars.PUBLIC_BING_SITE_VERIFICATION }}
+      PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+      PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: ${{ vars.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}
+      RELEASE: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+      TARGET: urielpapa@${{ vars.VPS_HOST }}
+
+    steps:
+      - name: "☁️ Checkout repository"
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0 # IndexNow diffs against the previous release
+
+      - name: "📦 Install pnpm"
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - name: Use Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22" # matches the VPS
+          check-latest: true # Astro needs 22.23.4 or newer
+          cache: "pnpm"
+
+      - name: "📦 Install dependencies"
+        run: pnpm install --frozen-lockfile
+
+      - name: "🚀 Build the site"
+        run: pnpm run build
+
+      - name: "📦 Bundle the release"
+        run: |
+          mkdir release
+          cp -R dist/client dist/server deploy/activate.sh \
+            package.json pnpm-lock.yaml pnpm-workspace.yaml release/
+          cd release
+          # A flat node_modules with no symlinks, so rsync copies it as is.
+          pnpm install --prod --frozen-lockfile --config.node-linker=hoisted
+
+      - name: "🔑 SSH setup"
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+      - name: Find the live release
+        id: prev
+        run: |
+          live=$(ssh "$TARGET" 'basename "$(readlink -f /srv/urielpapa.com/current)" 2>/dev/null' || true)
+          echo "sha=${live%%-*}" >> "$GITHUB_OUTPUT"
+
+      - name: "🚚 Upload"
+        # Unchanged files are hard-linked from the live release, so only changes travel.
+        run: |
+          rsync -a --delete --link-dest=/srv/urielpapa.com/current/ \
+            release/ "$TARGET:/srv/urielpapa.com/releases/$RELEASE/"
+
+      - name: "🔁 Activate"
+        run: ssh "$TARGET" "bash /srv/urielpapa.com/releases/$RELEASE/activate.sh $RELEASE"
+
+      # Only once the VPS is production (repository variable PRODUCTION_HOST=vps);
+      # until then indexnow.yml submits after Vercel deploys.
+      - name: "📣 Submit to IndexNow"
+        if: vars.PRODUCTION_HOST == 'vps' && steps.prev.outputs.sha != '' && steps.prev.outputs.sha != github.sha
+        run: node scripts/indexnow.mjs "${{ steps.prev.outputs.sha }}" "${{ github.sha }}"

@@ -5,8 +5,9 @@
 /* eslint-disable no-console -- a build check; its output is the build log. */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { STATIC_DIR } from "./lib/output.mjs";
 
-const ROOT = ".vercel/output/static";
+const ROOT = STATIC_DIR;
 
 function* htmlFiles(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
