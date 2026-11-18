@@ -31,6 +31,7 @@ To preview drafts in a build (for example a Vercel preview deployment), set `PUB
 | `src/styles/theme.css`                                                              | Black and white tokens for light and dark mode                                                                                                                                                                            |
 | `src/pages/api/`                                                                    | The only server routes: contact form and newsletter signup                                                                                                                                                                |
 | `scripts/vercel-routes.mjs`                                                         | Adds the www → apex redirect and the headers for `.md` copies to Vercel's build output                                                                                                                                    |
+| `deploy/`                                                                           | VPS hosting: Nginx vhost, systemd unit, server setup and release activation scripts (`deploy/README.md`)                                                                                                                  |
 
 MDX bodies can use two components without importing them:
 
@@ -49,6 +50,8 @@ Short note, tip or warning.
 ```
 
 ## Deploy on Vercel
+
+> The site is moving to a VPS (Nginx + the Astro Node server, deployed from GitHub Actions). See [`deploy/README.md`](deploy/README.md) for the setup and the cutover checklist. Until the cutover, Vercel stays production and this section still applies.
 
 1. Import the repository in Vercel. The Astro preset and `pnpm build` are detected.
 2. Add the domain `urielpapa.com` (and `www.urielpapa.com`, which redirects to the apex).

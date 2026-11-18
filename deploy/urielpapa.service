@@ -1,0 +1,37 @@
+# The Astro Node server for urielpapa.com's on-demand routes (deploy/README.md).
+# Nginx serves the prebuilt pages itself and proxies only /api, /dashboard,
+# /keystatic and /preview here. Installed as /etc/systemd/system/urielpapa.service.
+[Unit]
+Description=urielpapa.com Astro server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=urielpapa
+Group=urielpapa
+WorkingDirectory=/srv/urielpapa.com/current
+ExecStart=/usr/bin/node server/entry.mjs
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=4321
+# Server secrets (Resend, Turnstile, dashboard, Keystatic): root-owned, 0640.
+EnvironmentFile=/etc/urielpapa.com/env
+Restart=always
+RestartSec=2
+
+# The server only reads its release and talks to the network.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target

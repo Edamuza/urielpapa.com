@@ -23,7 +23,10 @@ permissions:
 jobs:
   submit:
     name: Submit changed URLs
+    # Once the VPS is production (repository variable PRODUCTION_HOST=vps),
+    # deploy-vps.yml submits instead.
     if: >-
+      vars.PRODUCTION_HOST != 'vps' &&
       github.event.context == 'Vercel' &&
       github.event.state == 'success' &&
       contains(github.event.branches.*.name, 'main')

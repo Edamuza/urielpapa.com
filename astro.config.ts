@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
 import keystatic from "@keystatic/astro";
 import { unified } from "@astrojs/markdown-remark";
@@ -23,6 +24,9 @@ import { rehypeImageSizes } from "./src/utils/rehype/imageSizes";
 import { contentEntries } from "./scripts/content-urls.mjs";
 
 const SITE_URL = "https://urielpapa.com";
+
+/** DEPLOY_TARGET=vps builds for the Node server on the VPS (deploy/README.md); otherwise Vercel. */
+const VPS = process.env.DEPLOY_TARGET === "vps";
 
 /** Pages kept out of the sitemap (schema-and-technical.md §3, "Routes for machines"). */
 const SITEMAP_EXCLUDE = [
@@ -115,13 +119,22 @@ function localFont(
 export default defineConfig({
   site: SITE_URL,
   trailingSlash: "never",
-  // Static pages on Vercel's CDN; only /api/*, /keystatic and /preview/* run on demand.
+  // Static pages from the CDN (Vercel) or Nginx (VPS); only /api/*, /dashboard,
+  // /keystatic and /preview/* run on demand.
   output: "static",
   // The stylesheet is about 10 KB compressed, so inlining it saves a
   // render-blocking request on every first visit.
   build: { inlineStylesheets: "always" },
   // The dashboard's search refresh inspects every page in Search Console, which takes a while.
-  adapter: vercel({ maxDuration: 60 }),
+  adapter: VPS ? node({ mode: "standalone" }) : vercel({ maxDuration: 60 }),
+  // Behind Nginx the server sees plain http on 127.0.0.1. Trusting Nginx's
+  // X-Forwarded-Host/Proto for this host gives request.url the public https
+  // origin, which the POST origin check and the dashboard's same-origin check need.
+  ...(VPS && {
+    security: {
+      allowedDomains: [{ hostname: "urielpapa.com", protocol: "https" }],
+    },
+  }),
   integrations: [
     mdx(),
     react(),
