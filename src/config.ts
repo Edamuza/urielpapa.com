@@ -141,24 +141,38 @@ export const WORK_WITH_ME_OFFER =
  * Never add an estimate or an example figure here.
  */
 export const RESULTS: {
+  /** What the number is about: "Leads", "Money", "Time" or "Service". */
+  kind: string;
   value: string;
   text: string;
   href: string;
   title: string;
 }[] = [
   {
+    kind: "Leads",
     value: "33 lead conversations",
     text: "in the first 5 days of Meta ads on about US$8 a day, about US$1 each",
     href: "/blog/organic-content-vs-paid-ads",
     title: "Read how a small Meta ads budget brought in 33 lead conversations",
   },
   {
-    value: "4 modules, 1 login",
-    text: "HR and payroll, CRM, projects and accounting in one ERP, built with my team in under 3 months",
+    kind: "Money",
+    value: "US$550 + ₱2,178 a month",
+    text: "what per-seat HR, CRM and project tools would cost a 22-person team at list prices, replaced by one ERP built in under 3 months",
     href: "/projects/vite-seo-erp",
-    title: "Read the case study of the ERP Uriel Papa built in under 3 months",
+    title:
+      "Read the ERP case study and the per-seat tool costs it was built to replace",
   },
   {
+    kind: "Time",
+    value: "12 messages in 40 seconds",
+    text: "sorted by an AI inbox agent that drafts the replies for a person to approve, in testing on sample café messages",
+    href: "/projects/inboxpilot",
+    title:
+      "Read the InboxPilot case study: an AI inbox agent with human approval",
+  },
+  {
+    kind: "Service",
     value: "Replies at any hour",
     text: "an AI chatbot on Messenger and Instagram that answers inquiries, books consultations and logs leads",
     href: "/blog/n8n-messenger-instagram-chatbot",

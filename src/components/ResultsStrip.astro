@@ -15,7 +15,7 @@ const { from } = Astro.props;
       <h2 id="results-h" class="label-caps text-muted-foreground mb-5">
         Results for businesses
       </h2>
-      <ul class="grid gap-x-6 gap-y-6 sm:grid-cols-3">
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {RESULTS.map(r => (
           <li class="border-border rounded-lg border">
             <a
@@ -23,7 +23,10 @@ const { from } = Astro.props;
               title={r.title}
               class="group block h-full p-4 no-underline"
             >
-              <span class="font-display block text-xl leading-tight font-bold sm:text-2xl">
+              <span class="label-caps text-muted-foreground block">
+                {r.kind}
+              </span>
+              <span class="font-display mt-1 block text-xl leading-tight font-bold">
                 {r.value}
               </span>
               <span class="mt-1 block">{r.text}</span>
