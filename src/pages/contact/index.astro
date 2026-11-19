@@ -22,6 +22,20 @@ const topics = [
   { value: "question", label: "Question about a post" },
   { value: "other", label: "Something else" },
 ];
+const steps = [
+  {
+    title: "Tell me about it",
+    text: 'Pick "Work together" and answer a few quick questions about your business or the role.',
+  },
+  {
+    title: "Pick a time",
+    text: "Choose a free 15-minute slot. The call goes straight into my calendar.",
+  },
+  {
+    title: "Get the invite",
+    text: "Google Calendar sends you the invite with the Meet link.",
+  },
+];
 const schema = [
   {
     "@type": "ContactPage",
@@ -32,8 +46,6 @@ const schema = [
   },
   breadcrumbNode(crumbs),
 ];
-const field =
-  "border-foreground bg-background mt-1 block min-h-11 w-full rounded-lg border px-3 py-2";
 ---
 
 <Layout
@@ -41,550 +53,441 @@ const field =
   description="Contact Uriel Papa to work together, invite Uriel to speak at an event, or ask about something on the site. Every message is read and answered."
   schema={schema}
 >
-  <div class="app-layout max-w-read pt-8">
+  <div class="contact app-layout pt-8 pb-8">
     <Breadcrumbs crumbs={crumbs} />
-    <h1 class="h1">Contact</h1>
-    <p class="mt-4 text-lg">
-      I read every message. Write if you'd like to work together, invite me to
-      speak, or ask about something I wrote.
-    </p>
-    <p class="mt-3">{CONTACT.kindOfWork}</p>
-    <p class="border-foreground mt-6 rounded-lg border p-4">
-      <strong>{WORK_WITH_ME_OFFER}.</strong> Pick "Work together" and answer a few
-      quick questions about your business or the role.{" "}
-      Then pick a time, and the call goes straight into my calendar.
-    </p>
 
-    <form
-      id="contact-form"
-      method="post"
-      action="/api/contact"
-      class="mt-8 space-y-5"
-      novalidate
-    >
-      <div class="grid gap-5 sm:grid-cols-2">
-        <div>
-          <label for="c-name" class="font-semibold"
-            >Name <span aria-hidden="true">*</span></label
-          >
-          <input
-            id="c-name"
-            name="name"
-            type="text"
-            required
-            maxlength="120"
-            autocomplete="name"
-            class={field}
-            aria-describedby="c-name-err"
-          />
-          <p
-            id="c-name-err"
-            class="mt-1 text-sm font-semibold"
-            data-error-for="name"
-          >
+    <div class="contact-grid">
+      <aside class="contact-aside">
+        <div class="contact-intro">
+          <h1 class="h1">Contact</h1>
+          <p class="mt-4 text-lg">
+            I read every message. Write if you'd like to work together, invite
+            me to speak, or ask about something I wrote.
           </p>
+          <p class="text-muted-foreground mt-3">{CONTACT.kindOfWork}</p>
+
+          <section class="contact-offer" aria-labelledby="c-offer-h">
+            <h2 id="c-offer-h" class="contact-offer__title">
+              {WORK_WITH_ME_OFFER}
+            </h2>
+            <ol class="steps">
+              {
+                steps.map(s => (
+                  <li>
+                    <p class="font-semibold">{s.title}</p>
+                    <p class="meta mt-0.5">{s.text}</p>
+                  </li>
+                ))
+              }
+            </ol>
+          </section>
         </div>
-        <div>
-          <label for="c-email" class="font-semibold"
-            >Email <span aria-hidden="true">*</span></label
-          >
-          <input
-            id="c-email"
-            name="email"
-            type="email"
-            required
-            maxlength="200"
-            autocomplete="email"
-            class={field}
-            aria-describedby="c-email-err"
-          />
-          <p
-            id="c-email-err"
-            class="mt-1 text-sm font-semibold"
-            data-error-for="email"
-          >
+
+        <div class="contact-alt">
+          <p>
+            Prefer email? Write to <a
+              href={`mailto:${SITE.email}`}
+              title="Email Uriel Papa">{SITE.email}</a
+            >
           </p>
-        </div>
-      </div>
-
-      <fieldset aria-describedby="c-topic-err">
-        <legend class="font-semibold"
-          >What's this about? <span aria-hidden="true">*</span></legend
-        >
-        <div class="mt-2 grid gap-2 sm:grid-cols-2">
-          {
-            topics.map((t, i) => (
-              <label class="border-border has-[:checked]:border-foreground flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2">
-                <input
-                  type="radio"
-                  name="topic"
-                  value={t.value}
-                  required
-                  checked={i === 0}
-                  class="size-4 accent-current"
-                />
-                {t.label}
-              </label>
-            ))
-          }
-        </div>
-        <p
-          id="c-topic-err"
-          class="mt-1 text-sm font-semibold"
-          data-error-for="topic"
-        >
-        </p>
-      </fieldset>
-
-      {
-        /* Business questions, only when "Work together" is picked (CSS :has). */
-      }
-      <div class="work-fields space-y-5">
-        <fieldset>
-          <legend class="font-semibold">Who are you?</legend>
-          <div class="mt-2 grid gap-2 sm:grid-cols-2">
+          <ul class="contact-socials" aria-label="Uriel Papa elsewhere">
             {
-              (["client", "employer"] as const).map((k, i) => (
-                <label class="border-border has-[:checked]:border-foreground flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border px-3 py-2">
+              SOCIALS.map(s => (
+                <li>
+                  <a
+                    href={s.url}
+                    rel="me noopener"
+                    class="inline-flex items-center gap-1.5"
+                    title={`Uriel Papa on ${s.label}`}
+                  >
+                    <SocialIcon name={s.name} />
+                    {s.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+
+      <form
+        id="contact-form"
+        method="post"
+        action="/api/contact"
+        class="contact-form"
+        novalidate
+      >
+        <fieldset class="form-section" aria-describedby="c-topic-err">
+          <legend class="section-title">What's this about?</legend>
+          <div class="choice-grid">
+            {
+              topics.map((t, i) => (
+                <label class="choice">
                   <input
                     type="radio"
-                    name="workKind"
-                    value={k}
+                    name="topic"
+                    value={t.value}
+                    required
                     checked={i === 0}
-                    class="size-4 accent-current"
                   />
-                  {WORK_QUESTIONS[k].label}
+                  {t.label}
                 </label>
               ))
             }
           </div>
+          <p id="c-topic-err" class="field-error" data-error-for="topic"></p>
         </fieldset>
 
-        <div class="client-fields grid gap-5 sm:grid-cols-2">
-          <div>
-            <label for="c-company" class="font-semibold">Business name</label>
-            <input
-              id="c-company"
-              name="company"
-              type="text"
-              maxlength="160"
-              autocomplete="organization"
-              class={field}
-            />
+        <fieldset class="form-section">
+          <legend class="section-title">About you</legend>
+          <div class="field-grid">
+            <div>
+              <label for="c-name" class="field-label">Name</label>
+              <input
+                id="c-name"
+                name="name"
+                type="text"
+                required
+                maxlength="120"
+                autocomplete="name"
+                class="field"
+                aria-describedby="c-name-err"
+              />
+              <p id="c-name-err" class="field-error" data-error-for="name"></p>
+            </div>
+            <div>
+              <label for="c-email" class="field-label">Email</label>
+              <input
+                id="c-email"
+                name="email"
+                type="email"
+                required
+                maxlength="200"
+                autocomplete="email"
+                inputmode="email"
+                spellcheck="false"
+                class="field"
+                aria-describedby="c-email-err"
+              />
+              <p id="c-email-err" class="field-error" data-error-for="email">
+              </p>
+            </div>
           </div>
-          <div>
-            <label for="c-site" class="font-semibold"
-              >Website <span class="meta">(optional)</span></label
-            >
-            <input
-              id="c-site"
-              name="site"
-              type="url"
-              maxlength="300"
-              placeholder="https://"
-              class={field}
-            />
-          </div>
-          <div>
-            <label for="c-industry" class="font-semibold">Industry</label>
-            <input
-              id="c-industry"
-              name="industry"
-              type="text"
-              maxlength="120"
-              placeholder="e.g. clinic, restaurant, law firm"
-              class={field}
-            />
-          </div>
-          <div>
-            <label for="c-need" class="font-semibold">What do you need?</label>
-            <select id="c-need" name="need" class={field}>
-              {WORK_QUESTIONS.client.needs.map(o => <option>{o}</option>)}
-            </select>
-          </div>
-          <div>
-            <label for="c-budget" class="font-semibold">Budget</label>
-            <select id="c-budget" name="budget" class={field}>
-              {WORK_QUESTIONS.client.budgets.map(o => <option>{o}</option>)}
-            </select>
-          </div>
-          <div>
-            <label for="c-timeline" class="font-semibold"
-              >When do you need it?</label
-            >
-            <select id="c-timeline" name="timeline" class={field}>
-              {WORK_QUESTIONS.client.timelines.map(o => <option>{o}</option>)}
-            </select>
-          </div>
-        </div>
+        </fieldset>
 
-        <div class="employer-fields grid gap-5 sm:grid-cols-2">
-          <div>
-            <label for="c-employer" class="font-semibold">Company</label>
-            <input
-              id="c-employer"
-              name="employer"
-              type="text"
-              maxlength="160"
-              autocomplete="organization"
-              class={field}
-            />
+        {
+          /* Business questions, only when "Work together" is picked (CSS :has),
+           and only the set for the kind of sender picked. */
+        }
+        <fieldset class="form-section work-only" aria-describedby="c-work-note">
+          <legend class="section-title">A few quick questions</legend>
+          <p id="c-work-note" class="section-note">
+            All optional. They help me come to the call prepared.
+          </p>
+
+          <fieldset class="mt-5">
+            <legend class="field-label">Who's writing?</legend>
+            <div class="choice-grid">
+              {
+                (["client", "employer"] as const).map((k, i) => (
+                  <label class="choice">
+                    <input
+                      type="radio"
+                      name="workKind"
+                      value={k}
+                      checked={i === 0}
+                    />
+                    {WORK_QUESTIONS[k].label}
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="client-fields field-grid mt-5">
+            <div>
+              <label for="c-company" class="field-label">Business name</label>
+              <input
+                id="c-company"
+                name="company"
+                type="text"
+                maxlength="160"
+                autocomplete="organization"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-site" class="field-label">Website</label>
+              <input
+                id="c-site"
+                name="site"
+                type="url"
+                maxlength="300"
+                placeholder="https://"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-industry" class="field-label">Industry</label>
+              <input
+                id="c-industry"
+                name="industry"
+                type="text"
+                maxlength="120"
+                placeholder="e.g. clinic, restaurant, law firm"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-need" class="field-label">What do you need?</label>
+              <select id="c-need" name="need" class="field">
+                {WORK_QUESTIONS.client.needs.map(o => <option>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="c-budget" class="field-label">Budget</label>
+              <select id="c-budget" name="budget" class="field">
+                {WORK_QUESTIONS.client.budgets.map(o => <option>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="c-timeline" class="field-label"
+                >When do you need it?</label
+              >
+              <select id="c-timeline" name="timeline" class="field">
+                {WORK_QUESTIONS.client.timelines.map(o => <option>{o}</option>)}
+              </select>
+            </div>
           </div>
-          <div>
-            <label for="c-role" class="font-semibold">Role title</label>
-            <input
-              id="c-role"
-              name="role"
-              type="text"
-              maxlength="160"
-              placeholder="e.g. AI automation engineer"
-              class={field}
-            />
+
+          <div class="employer-fields field-grid mt-5">
+            <div>
+              <label for="c-employer" class="field-label">Company</label>
+              <input
+                id="c-employer"
+                name="employer"
+                type="text"
+                maxlength="160"
+                autocomplete="organization"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-role" class="field-label">Role title</label>
+              <input
+                id="c-role"
+                name="role"
+                type="text"
+                maxlength="160"
+                placeholder="e.g. AI automation engineer"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-type" class="field-label">Employment type</label>
+              <select id="c-type" name="employmentType" class="field">
+                {WORK_QUESTIONS.employer.types.map(o => <option>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="c-setup" class="field-label">Work setup</label>
+              <select id="c-setup" name="workSetup" class="field">
+                {WORK_QUESTIONS.employer.setups.map(o => <option>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="c-salary" class="field-label">Salary range</label>
+              <input
+                id="c-salary"
+                name="salary"
+                type="text"
+                maxlength="120"
+                placeholder="e.g. ₱80k to ₱120k a month"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-post" class="field-label">Job post link</label>
+              <input
+                id="c-post"
+                name="jobPost"
+                type="url"
+                maxlength="300"
+                placeholder="https://"
+                class="field"
+              />
+            </div>
           </div>
-          <div>
-            <label for="c-type" class="font-semibold">Employment type</label>
-            <select id="c-type" name="employmentType" class={field}>
-              {WORK_QUESTIONS.employer.types.map(o => <option>{o}</option>)}
-            </select>
-          </div>
-          <div>
-            <label for="c-setup" class="font-semibold">Work setup</label>
-            <select id="c-setup" name="workSetup" class={field}>
-              {WORK_QUESTIONS.employer.setups.map(o => <option>{o}</option>)}
-            </select>
-          </div>
-          <div>
-            <label for="c-salary" class="font-semibold"
-              >Salary range <span class="meta">(optional)</span></label
-            >
-            <input
-              id="c-salary"
-              name="salary"
-              type="text"
-              maxlength="120"
-              placeholder="e.g. ₱80k to ₱120k a month"
-              class={field}
-            />
-          </div>
-          <div>
-            <label for="c-post" class="font-semibold"
-              >Job post link <span class="meta">(optional)</span></label
-            >
-            <input
-              id="c-post"
-              name="jobPost"
-              type="url"
-              maxlength="300"
-              placeholder="https://"
-              class={field}
-            />
-          </div>
+        </fieldset>
+
+        <div class="form-section">
+          <label for="c-message" class="section-title block">Your message</label
+          >
+          <textarea
+            id="c-message"
+            name="message"
+            rows="6"
+            required
+            minlength="10"
+            maxlength="5000"
+            placeholder="What's the problem, and what have you tried so far?"
+            class="field"
+            aria-describedby="c-message-err"></textarea>
+          <p id="c-message-err" class="field-error" data-error-for="message">
+          </p>
         </div>
 
         {
-          /* Free slots from Uriel's Google Calendar, filled in by the script
-            below from /api/slots. The card opens a pop-up picker; the slot
-            radios stay inside this form, so the picked time is sent with it. */
+          /* The free discovery call. Free slots from Uriel's Google Calendar are
+           filled in by the script below from /api/slots; the slot radios stay
+           inside this form, so the picked time is sent with it. Without slots
+           (or without JavaScript) it asks for good call times instead. */
         }
         <fieldset
+          class="form-section work-only booking"
           data-booking
-          hidden
-          aria-describedby="c-slot-err"
-          class="border-border min-w-0 rounded-2xl border p-4 sm:p-5"
+          data-state="off"
+          aria-describedby="c-slot-note c-slot-err"
         >
-          <legend class="sr-only">Free 15-minute call (optional)</legend>
-          <div class="flex items-start gap-4">
-            <span
-              class="bg-foreground text-background grid size-11 shrink-0 place-items-center rounded-full"
-              ><svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                class="size-5"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
-                  d="M16 3v4M8 3v4M3 10h18"></path></svg
-              ></span
+          <legend class="section-title">Your free 15-minute call</legend>
+          <p id="c-slot-note" class="section-note booking-meta">
+            <span class="inline-flex items-center gap-1.5"
+              ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                ><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"
+                ></path></svg
+              >15 min</span
             >
-            <div class="min-w-0 flex-1" aria-live="polite">
-              <p class="font-semibold" data-slot-title>
-                Book your free 15-minute call
-              </p>
-              <p class="meta" data-slot-picked>
-                Optional. Pick a time and it goes straight into my calendar,
-                with a Google Meet link.
-              </p>
-            </div>
-          </div>
-          <div class="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              class="btn btn-filled"
-              aria-haspopup="dialog"
-              data-slot-open>Pick a time</button
+            <span class="inline-flex items-center gap-1.5"
+              ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                ><rect x="3" y="6" width="12" height="12" rx="2"></rect><path
+                  d="m15 10 6-3v10l-6-3"></path></svg
+              >Google Meet</span
             >
-            <button type="button" class="btn" hidden data-slot-clear
-              >Remove time</button
-            >
-          </div>
-          <p
-            id="c-slot-err"
-            class="mt-2 text-sm font-semibold empty:hidden"
-            data-error-for="slot"
-          >
+            <span>Optional</span>
           </p>
 
-          <dialog
-            aria-labelledby="c-slot-heading"
-            class="bg-background text-foreground m-0 mt-auto max-h-[92dvh] w-full max-w-none rounded-t-2xl p-0 shadow-2xl backdrop:bg-black/60 sm:m-auto sm:max-h-[88dvh] sm:max-w-xl sm:rounded-2xl"
-            data-slot-dialog
-          >
-            <div class="flex max-h-[inherit] flex-col">
-              <div
-                class="border-border flex items-start justify-between gap-3 border-b p-4 sm:px-6"
-              >
-                <div>
-                  <h2 id="c-slot-heading" class="h3">Pick a time</h2>
-                  <p class="meta mt-1 flex flex-wrap gap-x-3">
-                    <span class="inline-flex items-center gap-1"
-                      ><svg
-                        aria-hidden="true"
-                        viewBox="0 0 24 24"
-                        class="size-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><circle cx="12" cy="12" r="9"></circle><path
-                          d="M12 7v5l3 2"></path></svg
-                      >
-                      15 min</span
-                    >
-                    <span class="inline-flex items-center gap-1"
-                      ><svg
-                        aria-hidden="true"
-                        viewBox="0 0 24 24"
-                        class="size-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><rect x="3" y="6" width="12" height="12" rx="2"
-                        ></rect><path d="m15 10 6-3v10l-6-3"></path></svg
-                      >
-                      Google Meet</span
-                    >
-                  </p>
-                </div>
+          <div class="picker" data-picker>
+            <div class="picker-head">
+              <p class="field-label" id="c-slot-day-label">Day</p>
+              <div class="flex gap-1.5">
                 <button
                   type="button"
-                  class="border-border grid size-10 shrink-0 place-items-center rounded-full border"
-                  aria-label="Close"
-                  data-slot-close
-                  ><svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    class="size-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    ><path d="M18 6 6 18M6 6l12 12"></path></svg
+                  class="icon-btn"
+                  aria-label="Earlier days"
+                  data-slot-prev
+                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                    ><path d="m15 6-6 6 6 6"></path></svg
+                  ></button
+                >
+                <button
+                  type="button"
+                  class="icon-btn"
+                  aria-label="Later days"
+                  data-slot-next
+                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                    ><path d="m9 6 6 6-6 6"></path></svg
                   ></button
                 >
               </div>
-
-              <div
-                class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:px-6"
-              >
-                <div class="flex items-center justify-between gap-2">
-                  <p
-                    class="label-caps text-muted-foreground"
-                    id="c-slot-day-label"
-                  >
-                    1. Pick a day
-                  </p>
-                  <div class="flex gap-1">
-                    <button
-                      type="button"
-                      class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
-                      aria-label="Earlier days"
-                      data-slot-prev
-                      ><svg
-                        aria-hidden="true"
-                        viewBox="0 0 24 24"
-                        class="size-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="m15 6-6 6 6 6"></path></svg
-                      ></button
-                    >
-                    <button
-                      type="button"
-                      class="border-border grid size-9 place-items-center rounded-full border disabled:opacity-30"
-                      aria-label="Later days"
-                      data-slot-next
-                      ><svg
-                        aria-hidden="true"
-                        viewBox="0 0 24 24"
-                        class="size-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="m9 6 6 6-6 6"></path></svg
-                      ></button
-                    >
-                  </div>
-                </div>
-                <div
-                  class="slot-days -mx-1 mt-2 flex snap-x scroll-px-1 gap-2 overflow-x-auto scroll-smooth px-1 pt-1 pb-2"
-                  role="group"
-                  aria-labelledby="c-slot-day-label"
-                  data-slot-days
-                >
-                </div>
-                <p class="label-caps text-muted-foreground mt-4">
-                  2. Pick a time
-                </p>
-                <div class="mt-2 space-y-4" data-slot-times></div>
-                <p class="meta mt-4" data-slot-tz></p>
-              </div>
-
-              <div
-                class="border-border flex items-center gap-3 border-t p-4 sm:px-6"
-              >
-                <p
-                  class="min-w-0 flex-1 text-sm"
-                  aria-live="polite"
-                  data-slot-choice
-                >
-                  Pick a day and a time.
-                </p>
-                <button
-                  type="button"
-                  class="btn btn-filled shrink-0 disabled:opacity-40"
-                  disabled
-                  data-slot-confirm>Confirm time</button
-                >
+            </div>
+            <div
+              class="slot-days"
+              role="group"
+              aria-labelledby="c-slot-day-label"
+              data-slot-days
+            >
+              {
+                Array.from({ length: 6 }, () => (
+                  <span class="day-tile skeleton" aria-hidden="true" />
+                ))
+              }
+            </div>
+            <p class="field-label mt-5" id="c-slot-time-label">Time</p>
+            <div
+              class="slot-times"
+              role="group"
+              aria-labelledby="c-slot-time-label"
+              data-slot-times
+            >
+              <div class="time-grid" aria-hidden="true">
+                {
+                  Array.from({ length: 8 }, () => (
+                    <span class="time-chip skeleton" />
+                  ))
+                }
               </div>
             </div>
-          </dialog>
+            <p class="meta mt-4" data-slot-tz></p>
+
+            <div class="picked" data-slot-picked hidden>
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
+                  d="M16 3v4M8 3v4M3 10h18"></path></svg
+              >
+              <p class="min-w-0 flex-1" data-slot-picked-text></p>
+              <button type="button" class="text-btn" data-slot-clear
+                >Remove time</button
+              >
+            </div>
+          </div>
+
+          <div class="call-times" data-call-times>
+            <label for="c-call" class="field-label">Good times for a call</label
+            >
+            <input
+              id="c-call"
+              name="callTimes"
+              type="text"
+              maxlength="300"
+              placeholder="e.g. weekdays after 2 PM, Philippine time"
+              class="field"
+            />
+          </div>
+          <p id="c-slot-err" class="field-error" data-error-for="slot"></p>
         </fieldset>
 
-        <div data-call-times>
-          <label for="c-call" class="font-semibold">
-            Good times for a 15-minute call{" "}
-            <span class="meta">(optional)</span>
-          </label>
+        <!-- Honeypot: hidden from people, often filled by bots -->
+        <div class="hidden" aria-hidden="true">
+          <label for="c-website">Leave this empty</label>
           <input
-            id="c-call"
-            name="callTimes"
+            id="c-website"
+            name="website"
             type="text"
-            maxlength="300"
-            placeholder="e.g. weekdays after 2 PM, Philippine time"
-            class={field}
+            tabindex="-1"
+            autocomplete="off"
           />
         </div>
-      </div>
 
-      <div>
-        <label for="c-message" class="font-semibold"
-          >Message <span aria-hidden="true">*</span></label
-        >
-        <textarea
-          id="c-message"
-          name="message"
-          rows="5"
-          required
-          minlength="10"
-          maxlength="5000"
-          placeholder="What's the problem, and what have you tried so far?"
-          class={field}
-          aria-describedby="c-message-err"></textarea>
-        <p
-          id="c-message-err"
-          class="mt-1 text-sm font-semibold"
-          data-error-for="message"
-        >
-        </p>
-      </div>
-
-      <!-- Honeypot: hidden from people, often filled by bots -->
-      <div class="hidden" aria-hidden="true">
-        <label for="c-website">Leave this empty</label>
-        <input
-          id="c-website"
-          name="website"
-          type="text"
-          tabindex="-1"
-          autocomplete="off"
-        />
-      </div>
-
-      {
-        PUBLIC_TURNSTILE_SITE_KEY && (
-          <div
-            class="cf-turnstile"
-            data-sitekey={PUBLIC_TURNSTILE_SITE_KEY}
-            data-theme="auto"
-          />
-        )
-      }
-
-      <div>
-        <button type="submit" class="btn btn-filled">Send message</button>
-        <p
-          class="mt-3 font-semibold"
-          role="alert"
-          aria-live="assertive"
-          id="form-status"
-        >
-        </p>
-        <p class="meta mt-3">
-          Your name, email, message and answers are sent to my inbox and used
-          only to reply to you. Nothing is added to a mailing list. By sending
-          this you agree to the <a
-            href="/privacy"
-            title="How urielpapa.com handles what you send">privacy policy</a
-          >.
-        </p>
-      </div>
-    </form>
-
-    <div class="border-border mt-10 border-t pt-6">
-      <p>
-        Or email <a href={`mailto:${SITE.email}`} title="Email Uriel Papa"
-          >{SITE.email}</a
-        >{
-          SOCIALS.map(s => (
-            <>
-              {" "}
-              ·{" "}
-              <a
-                href={s.url}
-                rel="me noopener"
-                class="inline-flex items-center gap-1"
-                title={`Uriel Papa on ${s.label}`}
-              >
-                <SocialIcon name={s.name} />
-                {s.label}
-              </a>
-            </>
-          ))
-        }
-      </p>
-      <p class="meta mt-2">{CONTACT.replyTime}</p>
+        <div class="form-footer">
+          {
+            PUBLIC_TURNSTILE_SITE_KEY && (
+              <div
+                class="cf-turnstile mb-5"
+                data-sitekey={PUBLIC_TURNSTILE_SITE_KEY}
+                data-theme="auto"
+              />
+            )
+          }
+          <button type="submit" class="btn btn-filled btn-primary submit-btn"
+            >Send message</button
+          >
+          <p
+            class="form-status"
+            role="alert"
+            aria-live="assertive"
+            id="form-status"
+          >
+          </p>
+          <p class="meta mt-4">
+            {CONTACT.replyTime} Your name, email, message and answers are sent to
+            my inbox and used only to reply to you. Nothing is added to a mailing
+            list. By sending this you agree to the <a
+              href="/privacy"
+              title="How urielpapa.com handles what you send">privacy policy</a
+            >.
+          </p>
+        </div>
+      </form>
     </div>
   </div>
 </Layout>
@@ -595,8 +498,22 @@ const field =
 
   loadTurnstileOnInteraction();
 
-  const form = document.querySelector<HTMLFormElement>("#contact-form");
-  const status = document.querySelector<HTMLElement>("#form-status");
+  const form = document.querySelector<HTMLFormElement>("#contact-form")!;
+  const status = document.querySelector<HTMLElement>("#form-status")!;
+  const submit = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+  const isWork = () =>
+    form.querySelector<HTMLInputElement>('input[name=topic][value="work"]')!
+      .checked;
+  const pickedSlot = () =>
+    form.querySelector<HTMLInputElement>("input[name=slot]:checked");
+
+  // The button says what will happen: a plain message, or a message plus a
+  // booked call.
+  function updateSubmit() {
+    if (submit.disabled) return;
+    submit.textContent =
+      isWork() && pickedSlot() ? "Send and book my call" : "Send message";
+  }
 
   // #work (from every "Work with me" link) or #speaking preselects the topic. A fragment
   // keeps one crawlable URL for this page; ?topic= still works for links shared before.
@@ -604,48 +521,89 @@ const field =
     const topic =
       location.hash.slice(1) ||
       new URLSearchParams(location.search).get("topic");
-    if (!topic || !form) return;
+    if (!topic) return;
     const radio = form.querySelector<HTMLInputElement>(
       `input[name=topic][value="${CSS.escape(topic)}"]`
     );
     if (radio) radio.checked = true;
+    loadSlots();
+    updateSubmit();
   }
-  preselectTopic();
   // The footer's "Work with me" link only changes the hash when you're already here.
   window.addEventListener("hashchange", preselectTopic);
 
-  function showErrors(errors: Record<string, string>) {
-    for (const el of form?.querySelectorAll<HTMLElement>("[data-error-for]") ??
-      []) {
-      const name = el.dataset.errorFor!;
-      el.textContent = errors[name] ?? "";
-      const input = form?.querySelector<HTMLElement>(`[name=${name}]`);
-      input?.setAttribute("aria-invalid", errors[name] ? "true" : "false");
-    }
-    const first = Object.keys(errors)[0];
-    if (first) form?.querySelector<HTMLElement>(`[name=${first}]`)?.focus();
+  // The three required fields, checked when you leave them (only once
+  // something is typed) and cleared as soon as they're right.
+  const rules: Record<string, (el: HTMLInputElement) => string> = {
+    name: el => (el.value.trim() ? "" : "Please enter your name."),
+    email: el =>
+      el.value.trim() && el.checkValidity()
+        ? ""
+        : "Please enter a valid email address.",
+    message: el =>
+      el.value.trim().length >= 10
+        ? ""
+        : "Please write a little more (at least 10 characters).",
+  };
+  function setError(name: string, text: string) {
+    const out = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+    if (out) out.textContent = text;
+    if (name !== "slot")
+      form
+        .querySelector(`[name="${name}"]`)
+        ?.setAttribute("aria-invalid", text ? "true" : "false");
+  }
+  for (const [name, rule] of Object.entries(rules)) {
+    const el = form.querySelector<HTMLInputElement>(`[name="${name}"]`)!;
+    el.addEventListener("blur", () => {
+      if (el.value.trim()) setError(name, rule(el));
+    });
+    el.addEventListener("input", () => {
+      if (el.getAttribute("aria-invalid") === "true" && !rule(el))
+        setError(name, "");
+    });
   }
 
-  form?.addEventListener("submit", async e => {
+  function showErrors(errors: Record<string, string>) {
+    for (const el of form.querySelectorAll<HTMLElement>("[data-error-for]"))
+      setError(el.dataset.errorFor!, errors[el.dataset.errorFor!] ?? "");
+    // A time that was just taken leaves the picker, so it can't be sent again.
+    if (errors.slot) {
+      pickedSlot()?.closest("label")?.remove();
+      afterSlotChange();
+    }
+    const first = Object.keys(errors)[0];
+    if (!first) return;
+    const target =
+      first === "slot"
+        ? form.querySelector<HTMLElement>(
+            "[data-slot-times] > div:not([hidden]) input, [data-slot-days] button"
+          )
+        : form.querySelector<HTMLElement>(`[name="${first}"]`);
+    target?.focus();
+  }
+
+  form.addEventListener("submit", async e => {
     e.preventDefault();
-    const data = new FormData(form);
     const errors: Record<string, string> = {};
-    if (!String(data.get("name") ?? "").trim())
-      errors.name = "Please enter your name.";
-    const email = form.querySelector<HTMLInputElement>("[name=email]");
-    if (!email?.value.trim() || !email.checkValidity())
-      errors.email = "Please enter a valid email address.";
-    if (String(data.get("message") ?? "").trim().length < 10)
-      errors.message = "Please write a little more (at least 10 characters).";
+    for (const [name, rule] of Object.entries(rules)) {
+      const text = rule(
+        form.querySelector<HTMLInputElement>(`[name="${name}"]`)!
+      );
+      if (text) errors[name] = text;
+    }
     showErrors(errors);
     if (Object.keys(errors).length) {
-      if (status) status.textContent = "Please fix the highlighted fields.";
+      status.textContent = "Please fix the highlighted fields.";
       return;
     }
 
-    const button = form.querySelector<HTMLButtonElement>("button[type=submit]");
-    if (button) button.disabled = true;
-    if (status) status.textContent = "Sending…";
+    const data = new FormData(form);
+    const label = submit.textContent;
+    submit.disabled = true;
+    submit.setAttribute("aria-busy", "true");
+    submit.textContent = pickedSlot() && isWork() ? "Booking…" : "Sending…";
+    status.textContent = "";
     try {
       const res = await fetch(form.action, {
         method: "POST",
@@ -669,10 +627,12 @@ const field =
         body.redirect ??
         `/contact/thanks?topic=${encodeURIComponent(String(data.get("topic") ?? ""))}`;
     } catch (err) {
-      if (status)
-        status.textContent =
-          err instanceof Error ? err.message : "Something went wrong.";
-      if (button) button.disabled = false;
+      status.textContent =
+        err instanceof Error ? err.message : "Something went wrong.";
+      submit.disabled = false;
+      submit.removeAttribute("aria-busy");
+      submit.textContent = label;
+      updateSubmit();
       // Turnstile tokens are single-use, so get a fresh one for the next try.
       const widget = form.querySelector(".cf-turnstile");
       const turnstile = (
@@ -683,23 +643,60 @@ const field =
   });
 
   // Discovery-call slots: loaded once, the first time "Work together" is
-  // picked. Times show in the visitor's own time zone.
-  const booking = document.querySelector<HTMLElement>("[data-booking]");
-  const callTimes = document.querySelector<HTMLElement>("[data-call-times]");
-  let slotsLoaded = false;
+  // picked, and shown inline. Times show in the visitor's own time zone.
+  const booking = form.querySelector<HTMLElement>("[data-booking]")!;
+  const q = <T extends HTMLElement = HTMLElement>(sel: string) =>
+    booking.querySelector<T>(sel)!;
+  const days = q("[data-slot-days]");
+  const times = q("[data-slot-times]");
+  const picked = q("[data-slot-picked]");
+  const pickedText = q("[data-slot-picked-text]");
+  const prev = q<HTMLButtonElement>("[data-slot-prev]");
+  const next = q<HTMLButtonElement>("[data-slot-next]");
+  let describe: (iso: string) => string = () => "";
+
+  function afterSlotChange() {
+    const slot = pickedSlot();
+    picked.hidden = !slot;
+    if (slot) pickedText.textContent = describe(slot.value);
+    setError("slot", "");
+    updateSubmit();
+  }
+
+  function showDay(key: string) {
+    for (const t of days.querySelectorAll<HTMLButtonElement>("button")) {
+      const on = t.dataset.day === key;
+      t.setAttribute("aria-pressed", String(on));
+      // Bring the tile into the strip's view without scrolling the page.
+      const left = t.offsetLeft;
+      if (on && left < days.scrollLeft) days.scrollLeft = left - 4;
+      else if (on && left + t.offsetWidth > days.scrollLeft + days.clientWidth)
+        days.scrollLeft = left + t.offsetWidth - days.clientWidth + 4;
+    }
+    for (const p of times.querySelectorAll<HTMLElement>(":scope > div"))
+      p.hidden = p.dataset.day !== key;
+  }
+  const arrows = () => {
+    prev.disabled = days.scrollLeft < 8;
+    next.disabled = days.scrollLeft + days.clientWidth >= days.scrollWidth - 8;
+  };
+
+  let slotsAsked = false;
   async function loadSlots() {
-    if (slotsLoaded || !booking || !form) return;
-    const work = form.querySelector<HTMLInputElement>(
-      'input[name=topic][value="work"]'
-    );
-    if (!work?.checked) return;
-    slotsLoaded = true;
-    const res = await fetch("/api/slots").catch(() => null);
-    const data = (await res?.json().catch(() => null)) as {
+    if (slotsAsked || !isWork()) return;
+    slotsAsked = true;
+    booking.dataset.state = "loading";
+    const data = (await fetch("/api/slots")
+      .then(r => r.json())
+      .catch(() => null)) as {
       enabled?: boolean;
+      minutes?: number;
       slots?: string[];
     } | null;
-    if (!data?.enabled || !data.slots?.length) return;
+    if (!data?.enabled || !data.slots?.length) {
+      booking.dataset.state = "off";
+      return;
+    }
 
     const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const fmt = (o: Intl.DateTimeFormatOptions) =>
@@ -708,7 +705,12 @@ const field =
     const longDay = fmt({ weekday: "long", month: "long", day: "numeric" });
     const timeFmt = fmt({ hour: "numeric", minute: "2-digit" });
     const hourFmt = fmt({ hour: "numeric", hourCycle: "h23" });
-    const minutes = (data as { minutes?: number }).minutes ?? 15;
+    const minutes = data.minutes ?? 15;
+    describe = iso => {
+      const at = new Date(iso);
+      const end = new Date(at.getTime() + minutes * 60_000);
+      return `${longDay.format(at)}, ${timeFmt.format(at)} to ${timeFmt.format(end)}`;
+    };
     const byDay = new Map<string, Date[]>();
     for (const iso of data.slots) {
       const at = new Date(iso);
@@ -716,157 +718,73 @@ const field =
       byDay.set(key, [...(byDay.get(key) ?? []), at]);
     }
 
-    const q = <T extends HTMLElement>(sel: string) =>
-      booking.querySelector<T>(sel)!;
-    const dialog = q<HTMLDialogElement>("[data-slot-dialog]");
-    const days = q("[data-slot-days]");
-    const times = q("[data-slot-times]");
-    const title = q("[data-slot-title]");
-    const picked = q("[data-slot-picked]");
-    const choice = q("[data-slot-choice]");
-    const open = q<HTMLButtonElement>("[data-slot-open]");
-    const clear = q<HTMLButtonElement>("[data-slot-clear]");
-    const confirm = q<HTMLButtonElement>("[data-slot-confirm]");
-    const prev = q<HTMLButtonElement>("[data-slot-prev]");
-    const next = q<HTMLButtonElement>("[data-slot-next]");
-    q("[data-slot-tz]").textContent =
-      `Times are in your time zone (${zone.replace(/_/g, " ")}). Google Calendar sends you the invite with the Meet link.`;
-    const empty = {
-      title: title.textContent,
-      picked: picked.textContent,
-      choice: choice.textContent,
-    };
-    const radios = () => [
-      ...times.querySelectorAll<HTMLInputElement>("input[name=slot]"),
-    ];
-    const describe = (iso: string) => {
-      const at = new Date(iso);
-      const end = new Date(at.getTime() + minutes * 60_000);
-      return {
-        day: longDay.format(at),
-        time: `${timeFmt.format(at)} to ${timeFmt.format(end)}`,
-      };
-    };
-    // The time confirmed in the pop-up; closing it any other way puts the
-    // radios back to this.
-    let confirmed = "";
-
-    // One tile per day; each day has a panel of radio "chips", grouped into
+    days.replaceChildren();
+    times.replaceChildren();
+    // One tile per day; each day has a panel of radio chips, grouped into
     // morning and afternoon. Only the chosen day's panel shows.
     for (const [key, list] of byDay) {
       const first = list[0];
       const tile = document.createElement("button");
       tile.type = "button";
+      tile.className = "day-tile";
       tile.dataset.day = key;
       tile.setAttribute("aria-pressed", "false");
       tile.setAttribute(
         "aria-label",
         `${longDay.format(first)}, ${list.length} times free`
       );
-      tile.className =
-        "border-border hover:border-foreground aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-background flex w-[4.75rem] shrink-0 snap-start flex-col items-center rounded-xl border px-2 py-2.5 transition-colors";
-      const part = (o: Intl.DateTimeFormatOptions, cls: string) => {
+      for (const [o, cls] of [
+        [{ weekday: "short" }, "day-tile__dow"],
+        [{ day: "numeric" }, "day-tile__num"],
+        [{ month: "short" }, "day-tile__mon"],
+      ] as const) {
         const span = document.createElement("span");
         span.className = cls;
         span.textContent = fmt(o).format(first);
         tile.append(span);
-      };
-      part({ weekday: "short" }, "label-caps opacity-70");
-      part(
-        { day: "numeric" },
-        "text-2xl leading-tight font-semibold font-[family-name:var(--ff-display)]"
-      );
-      part({ month: "short" }, "text-xs opacity-70");
-      tile.addEventListener("click", () => showDay(key, true));
+      }
+      tile.addEventListener("click", () => showDay(key));
       days.append(tile);
 
       const panel = document.createElement("div");
       panel.dataset.day = key;
-      panel.className = "space-y-4";
+      panel.className = "time-panel";
       const groups: [string, Date[]][] = [
         ["Morning", list.filter(d => Number(hourFmt.format(d)) < 12)],
         ["Afternoon", list.filter(d => Number(hourFmt.format(d)) >= 12)],
       ];
       for (const [name, group] of groups) {
         if (!group.length) continue;
-        const section = document.createElement("div");
         const heading = document.createElement("p");
-        heading.className = "meta mb-2";
+        heading.className = "time-group";
         heading.textContent = name;
         const grid = document.createElement("div");
-        grid.className = "grid grid-cols-3 gap-2 sm:grid-cols-4";
+        grid.className = "time-grid";
         for (const at of group) {
           const label = document.createElement("label");
-          label.className =
-            "border-border hover:border-foreground has-[:checked]:border-foreground has-[:checked]:bg-foreground has-[:checked]:text-background has-[:focus-visible]:outline-accent flex min-h-11 cursor-pointer items-center justify-center rounded-lg border text-sm font-medium tabular-nums transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2";
+          label.className = "time-chip";
           const input = document.createElement("input");
           input.type = "radio";
           input.name = "slot";
           input.value = at.toISOString();
           input.className = "sr-only";
-          input.addEventListener("change", () => {
-            const { day, time } = describe(input.value);
-            choice.innerHTML = "";
-            const strong = document.createElement("strong");
-            strong.textContent = day;
-            choice.append(strong, document.createElement("br"), time);
-            confirm.disabled = false;
-          });
+          input.addEventListener("change", afterSlotChange);
           label.append(input, timeFmt.format(at));
           grid.append(label);
         }
-        section.append(heading, grid);
-        panel.append(section);
+        panel.append(heading, grid);
       }
       times.append(panel);
     }
 
-    function setConfirmed(iso: string) {
-      confirmed = iso;
-      for (const r of radios()) r.checked = r.value === iso;
-      clear.hidden = !iso;
-      open.textContent = iso ? "Change time" : "Pick a time";
-      if (!iso) {
-        title.textContent = empty.title;
-        picked.textContent = empty.picked;
-        return;
-      }
-      const { day, time } = describe(iso);
-      title.textContent = day;
-      picked.textContent = `${time} on Google Meet. It gets booked when you send this form.`;
-    }
-    open.addEventListener("click", () => {
-      choice.textContent = confirmed
-        ? `${describe(confirmed).day}, ${describe(confirmed).time}`
-        : empty.choice;
-      confirm.disabled = !confirmed;
-      dialog.showModal();
-      const day = confirmed
-        ? radios()
-            .find(r => r.value === confirmed)
-            ?.closest<HTMLElement>("[data-day]")?.dataset.day
-        : undefined;
-      showDay(day ?? byDay.keys().next().value!, true);
-      arrows();
+    q("[data-slot-tz]").textContent =
+      `Times are in your time zone (${zone.replace(/_/g, " ")}). It gets booked when you send this form.`;
+    q("[data-slot-clear]").addEventListener("click", () => {
+      const slot = pickedSlot();
+      if (slot) slot.checked = false;
+      afterSlotChange();
+      days.querySelector<HTMLElement>("[aria-pressed=true]")?.focus();
     });
-    confirm.addEventListener("click", () => {
-      setConfirmed(radios().find(r => r.checked)?.value ?? "");
-      dialog.close();
-      open.focus();
-    });
-    clear.addEventListener("click", () => {
-      setConfirmed("");
-      open.focus();
-    });
-    q("[data-slot-close]").addEventListener("click", () => dialog.close());
-    // A click on the dimmed backdrop lands on the dialog itself.
-    dialog.addEventListener("click", e => {
-      if (e.target === dialog) dialog.close();
-    });
-    dialog.addEventListener("close", () => {
-      for (const r of radios()) r.checked = r.value === confirmed;
-    });
-    const tiles = [...days.querySelectorAll<HTMLButtonElement>("button")];
     const step = () => days.clientWidth * 0.8;
     prev.addEventListener("click", () =>
       days.scrollBy({ left: -step(), behavior: "smooth" })
@@ -874,57 +792,538 @@ const field =
     next.addEventListener("click", () =>
       days.scrollBy({ left: step(), behavior: "smooth" })
     );
-    const arrows = () => {
-      prev.disabled = days.scrollLeft < 8;
-      next.disabled =
-        days.scrollLeft + days.clientWidth >= days.scrollWidth - 8;
-    };
     days.addEventListener("scroll", arrows, { passive: true });
-    function showDay(key: string, focusTile = false) {
-      for (const t of tiles) {
-        const on = t.dataset.day === key;
-        t.setAttribute("aria-pressed", String(on));
-        if (on && focusTile)
-          t.scrollIntoView({ block: "nearest", inline: "nearest" });
-      }
-      for (const p of times.querySelectorAll<HTMLElement>(":scope > div"))
-        p.hidden = p.dataset.day !== key;
-    }
+    booking.dataset.state = "ready";
     showDay(byDay.keys().next().value!);
-    booking.hidden = false;
+    days.scrollLeft = 0;
     arrows();
-    if (callTimes) callTimes.hidden = true;
   }
+
+  preselectTopic();
   loadSlots();
-  form?.addEventListener("change", e => {
+  form.addEventListener("change", e => {
     if ((e.target as HTMLInputElement).name === "topic") loadSlots();
+    updateSubmit();
   });
 </script>
 
-<style>
-  /* The business questions only show when "Work together" is picked, and
-     only the set for the kind of sender picked under "Who are you?". */
-  .work-fields,
+<style is:global>
+  /* Contact page (ux-ui-spec.md §5.9). Hairlines for structure; inputs get a
+     darker edge so their boundary passes 3:1 in both themes. */
+  .contact {
+    --field-border: color-mix(
+      in oklab,
+      var(--foreground) 48%,
+      var(--background)
+    );
+    --choice-border: color-mix(
+      in oklab,
+      var(--foreground) 22%,
+      var(--background)
+    );
+    --chosen-bg: color-mix(in oklab, var(--foreground) 5%, var(--background));
+    caret-color: var(--foreground);
+    color-scheme: light;
+  }
+  /* Native radios, selects and their menus follow the theme. */
+  [data-theme="dark"] .contact {
+    color-scheme: dark;
+  }
+  .contact ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
+
+  /* Phones: intro, form, then other ways to reach me. Wide screens: the intro
+     and the other ways stay in view beside the form. */
+  .contact-grid {
+    display: grid;
+    grid-template-areas: "intro" "form" "alt";
+    row-gap: 2.5rem;
+  }
+  .contact-aside {
+    display: contents;
+  }
+  .contact-intro {
+    grid-area: intro;
+  }
+  .contact-form {
+    grid-area: form;
+    min-width: 0;
+  }
+  .contact-alt {
+    grid-area: alt;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 21rem) minmax(0, 38rem);
+      grid-template-areas: "intro form" "intro alt";
+      grid-template-rows: auto 1fr;
+      justify-content: space-between;
+      column-gap: 4rem;
+      row-gap: 0;
+    }
+    .contact-intro {
+      align-self: start;
+    }
+    .contact-form {
+      padding-top: 0.75rem;
+    }
+    .contact-alt {
+      margin-top: 2.5rem;
+    }
+  }
+  /* The intro stays beside the form while it scrolls, when it fits. */
+  @media (min-width: 64rem) and (min-height: 50rem) {
+    .contact-intro {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+
+  .contact-offer {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+  }
+  .contact-offer__title {
+    font-family: var(--ff-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  /* What happens next, joined by a thin line. */
+  .steps {
+    counter-reset: step;
+    margin-top: 1.25rem;
+  }
+  .steps li {
+    position: relative;
+    padding-left: 2.75rem;
+    padding-bottom: 1.25rem;
+  }
+  .steps li:last-child {
+    padding-bottom: 0;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    border: 1px solid var(--field-border);
+    border-radius: 999px;
+    background: var(--background);
+    font-family: var(--ff-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 0.9375rem;
+    top: 2.125rem;
+    bottom: 0.25rem;
+    width: 1px;
+    background: var(--border);
+  }
+  .contact-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* Form sections, separated by hairlines. */
+  .form-section {
+    min-width: 0;
+    padding-block: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .form-section:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  /* A floated legend leaves the fieldset's border notch, so the hairline
+     above the section stays whole. */
+  legend.section-title {
+    float: left;
+    width: 100%;
+  }
+  legend.section-title + * {
+    clear: both;
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    padding: 0;
+  }
+  .section-note {
+    margin-top: -0.625rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+  .field-label {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0;
+  }
+  .field-grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .field-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 2.875rem;
+    margin-top: 0.375rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--field-border);
+    border-radius: 0.625rem;
+    background: var(--background);
+    color: var(--foreground);
+    transition:
+      border-color 150ms ease-out,
+      box-shadow 150ms ease-out;
+  }
+  textarea.field {
+    min-height: 9rem;
+    resize: vertical;
+    line-height: 1.55;
+  }
+  .field::placeholder {
+    color: var(--muted-foreground);
+  }
+  .field:hover {
+    border-color: var(--foreground);
+  }
+  .field:focus-visible {
+    border-color: var(--foreground);
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--foreground);
+    box-shadow: inset 0 0 0 1px var(--foreground);
+  }
+
+  .field-error {
+    display: flex;
+    gap: 0.375rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .field-error:empty {
+    display: none;
+  }
+  .field-error::before {
+    content: "";
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.2rem;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 8v5M12 16.5v.01'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  /* Radio choices drawn as quiet cards. */
+  .choice-grid {
+    display: grid;
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+  }
+  @media (min-width: 30rem) {
+    .choice-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--choice-border);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    line-height: 1.35;
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out,
+      box-shadow 150ms ease-out;
+  }
+  .choice:hover {
+    border-color: var(--field-border);
+  }
+  .choice:has(:checked) {
+    border-color: var(--foreground);
+    background: var(--chosen-bg);
+    box-shadow: inset 0 0 0 1px var(--foreground);
+  }
+  .choice input {
+    flex: none;
+    width: 1.0625rem;
+    height: 1.0625rem;
+    accent-color: var(--foreground);
+  }
+
+  /* Only the questions that apply: work questions and the call for "Work
+     together", and the set for the kind of sender picked. */
+  .work-only,
   .client-fields,
   .employer-fields {
     display: none;
   }
-  form:has(input[name="topic"][value="work"]:checked) .work-fields {
+  form:has(input[name="topic"][value="work"]:checked) .work-only {
     display: block;
+    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  /* No page scrolling behind the open time picker. */
-  :global(html:has(dialog[open])) {
-    overflow: hidden;
+  form:has(input[name="workKind"][value="client"]:checked) .client-fields,
+  form:has(input[name="workKind"][value="employer"]:checked) .employer-fields {
+    display: grid;
   }
-  /* The day strip scrolls sideways without a bar; the arrows move it. */
+  @keyframes contact-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* The call picker. */
+  .booking-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+  .icon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .booking[data-state="off"] .picker,
+  .booking:not([data-state="off"]) .call-times {
+    display: none;
+  }
+  .picker {
+    margin-top: 1.5rem;
+  }
+  .picker-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--choice-border);
+    border-radius: 999px;
+    transition:
+      border-color 150ms ease-out,
+      opacity 150ms ease-out;
+  }
+  .icon-btn:hover:not(:disabled) {
+    border-color: var(--foreground);
+  }
+  .icon-btn:disabled {
+    opacity: 0.3;
+  }
+  .booking[data-state="loading"] .icon-btn {
+    visibility: hidden;
+  }
   .slot-days {
+    position: relative;
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.625rem -0.25rem 0;
+    padding: 0.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.25rem;
+    scroll-behavior: smooth;
     scrollbar-width: none;
   }
   .slot-days::-webkit-scrollbar {
     display: none;
   }
-  form:has(input[name="workKind"][value="client"]:checked) .client-fields,
-  form:has(input[name="workKind"][value="employer"]:checked) .employer-fields {
+  .day-tile {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    width: 4.5rem;
+    height: 5.25rem;
+    justify-content: center;
+    border: 1px solid var(--choice-border);
+    border-radius: 0.875rem;
+    scroll-snap-align: start;
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .day-tile:hover {
+    border-color: var(--field-border);
+  }
+  .day-tile[aria-pressed="true"] {
+    border-color: var(--foreground);
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .day-tile__dow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .day-tile__num {
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+  }
+  .day-tile__mon {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+  .slot-times {
+    margin-top: 0.625rem;
+  }
+  .time-panel > * + .time-group {
+    margin-top: 1.25rem;
+  }
+  .time-group {
+    margin-bottom: 0.5rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+  .time-grid {
     display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  @media (min-width: 40rem) {
+    .time-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .time-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    border: 1px solid var(--choice-border);
+    border-radius: 0.625rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .time-chip:hover {
+    border-color: var(--field-border);
+  }
+  .time-chip:has(:checked) {
+    border-color: var(--foreground);
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .time-chip:has(:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .skeleton {
+    border-color: transparent;
+    background: var(--muted);
+    animation: contact-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes contact-pulse {
+    50% {
+      opacity: 0.55;
+    }
+  }
+  .picked {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--foreground);
+    border-radius: 0.75rem;
+    background: var(--chosen-bg);
+    font-weight: 600;
+    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .picked[hidden] {
+    display: none;
+  }
+  .text-btn {
+    flex: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .text-btn:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .form-footer {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .submit-btn {
+    width: 100%;
+    transition: opacity 150ms ease-out;
+  }
+  @media (min-width: 40rem) {
+    .submit-btn {
+      width: auto;
+      min-width: 15rem;
+    }
+  }
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .form-status {
+    margin-top: 0.75rem;
+    font-weight: 600;
+  }
+  .form-status:empty {
+    display: none;
   }
 </style>
