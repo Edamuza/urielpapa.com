@@ -8,7 +8,7 @@ syndication: []
 draft: false
 ---
 
-Most pages on this site send no JavaScript to your browser at all. They are plain HTML and CSS, built ahead of time.
+The content of every page on this site is plain HTML and CSS, built ahead of time. The JavaScript that does load is small: a few lines for the theme and the menu, and analytics that wait for your first scroll or tap.
 
 I built urielpapa.com with Astro, a framework made for content sites. Astro renders every page to static HTML at build time, so a post is ready to read the moment it arrives. Nothing has to download, run and then draw the page.
 

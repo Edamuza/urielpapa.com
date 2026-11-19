@@ -12,8 +12,8 @@ frame: best-of
 takeaways:
   - >-
     Claude Duet, opened as a research preview on October 21, 2026, is a
-    proactive Claude agent with a waitlist for Pro and Max subscribers in the
-    US only.
+    proactive Claude agent with a waitlist for Pro, Max and Ultra subscribers
+    in the US only.
   - >-
     Gemini 4 Argon reached Google AI Pro and Ultra subscribers on October 13,
     2026, with a chat-to-tasks toggle and connections to more than 40 apps.
@@ -24,6 +24,10 @@ takeaways:
     Vercel Labs' agent-browser is an Apache-2.0 command-line tool, with about
     41,100 GitHub stars, that lets AI agents drive a real browser.
 published: 2026-10-28
+updated: 2026-11-19
+updateNote: >-
+  Added the Ultra plan to Claude Duet's access and updated Executor's install
+  steps for its new default branch.
 related:
   - gemini-4-argon
   - anthropic-claude-agent-unsanctioned-actions
@@ -36,8 +40,8 @@ faq:
   - q: Can I use Claude Duet in the Philippines?
     a: >-
       Not yet, as of October 28, 2026. Anthropic opened the Claude Duet waitlist
-      to Pro and Max subscribers in the US first and has not given a date for
-      other countries.
+      to Pro, Max and Ultra subscribers in the US first and has not given a
+      date for other countries.
   - q: Do I need to code to use these tools?
     a: >-
       Claude Duet and Gemini 4 Argon need no code, only a paid plan. Executor,
@@ -76,7 +80,7 @@ Two of the biggest AI companies launched assistants this month that keep working
 - **What it is:** a research preview, opened on October 21, 2026, of "a new app where Claude works as a proactive agent," according to [Anthropic's Claude Duet announcement](https://claude.com/resources/articles/claude-duet). It checks what needs your attention and finishes tasks you assign.
 - **Who it is for:** Anthropic says it was built for "professionals and small business owners," and early testers used it for invoices, customer support and marketing.
 - **Safety:** it can use more than 6,000 connectors and plugins, but before it sends a message, pays, signs or deletes anything it "waits for your approval."
-- **Access and cost:** included in Pro and Max plans, by waitlist, for US subscribers first, on iOS, Android and claude.ai. It shares your plan's usage limits.
+- **Access and cost:** included in Pro, Max and Ultra plans, by waitlist, for US subscribers first, on iOS, Android and claude.ai. It shares your plan's usage limits.
 
 I found it through [TestingCatalog's post on Threads](https://www.threads.com/@testingcatalog/post/DexJcPEjSw-). The approval step matters, as I wrote in [my take on Claude agents taking unsanctioned actions](/news/anthropic-claude-agent-unsanctioned-actions).
 
@@ -101,7 +105,7 @@ Two of the most useful finds were free, open-source tools that solve problems ev
 - **What it is:** "The missing integration layer for AI agents," per the [Executor repository on GitHub](https://github.com/UsefulSoftwareCo/executor). You set up each integration once, with its login and rules, and any MCP-compatible agent can then use it.
 - **What it connects:** MCP servers, OpenAPI specs, GraphQL APIs and Google Discovery APIs.
 - **Control:** each tool is set to allowed, needs approval, or blocked. A paused run continues with `executor resume`.
-- **How to start:** it needs Node.js 20 or later. Run `npm install -g executor`, then `executor install` and `executor web`. Docker, a Cloudflare Worker and a hosted free tier are also listed.
+- **How to start:** as of November 2026, Executor 2 is the repo's default branch, and its README installs with `curl -fsSL https://executor.sh/docs/install.sh | sh`, then `executor`. A hosted version and a Docker image are also listed. The Executor 1 steps from October, `npm install -g executor`, then `executor install` and `executor web` on Node.js 20 or later, are on the [Executor 1 main branch](https://github.com/UsefulSoftwareCo/executor/tree/main).
 - **License and size:** MIT, with about 4,300 stars in October 2026.
 
 I found it through a [post by @mlworkz on Threads](https://www.threads.com/@mlworkz/post/Deqf-TiE2yE). If you run agents for several clients, setting up each tool once is a real time saver.
@@ -134,7 +138,7 @@ The five tools split into ready-made assistants, building blocks for agents, and
 
 | Tool | Type | Cost as of October 2026 | Works in the Philippines today | Needs code |
 | --- | --- | --- | --- | --- |
-| Claude Duet | Proactive assistant | Pro or Max plan | No, US waitlist first | No |
+| Claude Duet | Proactive assistant | Pro, Max or Ultra plan | No, US waitlist first | No |
 | Gemini 4 Argon | Model and assistant | Google AI Pro or Ultra | Not stated | No |
 | Executor | Agent tool hub | Free, MIT | Yes, self-hosted | Yes |
 | agent-browser | Browser tool for agents | Free, Apache-2.0 | Yes | Yes |

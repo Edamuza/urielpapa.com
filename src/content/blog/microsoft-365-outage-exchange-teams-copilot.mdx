@@ -36,6 +36,10 @@ businessImpact:
     ChatGPT and Claude, may fail until the connection is back.
 sourceUrl: https://status.cloud.microsoft/
 published: 2026-11-13
+updated: 2026-11-19
+updateNote: >-
+  Added a dated note that the outage ended on November 13 and on the root cause
+  in Microsoft's preliminary report.
 related: []
 projects: []
 stack: []
@@ -103,6 +107,8 @@ That recovery did not hold. At 00:06 UTC (8:06 a.m. in Manila), Microsoft said t
 <SocialPost platform="x" url="https://x.com/MSFT365Status/status/2121031935010951521" author="Microsoft 365 Status" handle="MSFT365Status" date="2026-11-13" text={"The servers we returned to service can become unresponsive again once they receive traffic; we're analyzing diagnostic data to determine what's triggering the behavior. In parallel, we're temporarily limiting which types of traffic can reach the affected infrastructure in some locations. Additionally, we're rebuilding a subset of affected servers using a previous configuration to validate if this prevents them from becoming unresponsive. More info under EX1550543 and MO1550821 in the Microsoft 365 admin center, as well as http://status.cloud.microsoft if the admin center is not available to you."} />
 
 Downdetector reports have dropped from the peak but not gone away. [Tom's Guide](https://www.tomsguide.com/news/live/microsoft-outlook-down-live-updates-outage-11-12-26 "Tom's Guide live updates on the November 12 Microsoft 365 outage") still counted about 30,000 Outlook reports at 7:50 p.m. Eastern Time on November 12 (8:50 a.m. in Manila).
+
+Update, November 19, 2026: Microsoft confirmed that active customer impact ended at 11:10 a.m. Eastern Time on November 13, after nearly 24 hours, [BleepingComputer reports](https://bleepingcomputer.com/news/microsoft/microsoft-says-months-old-bug-caused-global-microsoft-365-outage "BleepingComputer on Microsoft's preliminary root cause for the November 12 Microsoft 365 outage"). Microsoft's preliminary report blames a software bug introduced in July in an update for its networking gateway servers, extra traffic after a Teams failover, and gateway capacity already offline from an unrelated issue.
 
 ## What does it mean for small businesses and founders?
 

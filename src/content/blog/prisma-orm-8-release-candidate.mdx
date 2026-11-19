@@ -38,6 +38,11 @@ stack:
 faq: []
 event: {}
 syndication: []
+updated: 2026-11-19
+updateNote: >-
+  Corrected the CLI version the release status page listed in mid-October and
+  added a note that Prisma ORM 8 missed its October target and is still a
+  release candidate.
 draft: false
 ---
 Prisma ORM 8, a near-total rewrite of the popular TypeScript database toolkit, is now what `npm install prisma@latest` installs, even though Prisma still calls it a release candidate. It drops the Rust engine and the generated client, changes how migrations work and does not yet support MySQL. Any Prisma 7 project that installs "latest" without a version pin can end up with the wrong CLI.
@@ -46,7 +51,9 @@ I have used Prisma on PostgreSQL for the [client quotation portal](/projects/quo
 
 ## What happened?
 
-Prisma's [August 28, 2026 changelog](https://www.prisma.io/changelog/2026-08-28) says that `npm install prisma@latest` installs Prisma 8, and that Prisma 7 stays supported under the `prisma@prev` tag. As of October 2026, the official [release status page](https://www.prisma.io/docs/orm/release-status) describes Prisma ORM 8 as a release candidate, lists the CLI at 8.0.0-rc.25, and says general availability is expected in October 2026. On October 12, the team published [a post on the 330 issues Prisma ORM 8 closes](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues).
+Prisma's [August 28, 2026 changelog](https://www.prisma.io/changelog/2026-08-28) says that `npm install prisma@latest` installs Prisma 8, and that Prisma 7 stays supported under the `prisma@prev` tag. As of October 2026, the official [release status page](https://www.prisma.io/docs/orm/release-status) describes Prisma ORM 8 as a release candidate, listed the CLI at 8.0.0-rc.22 when this post went up, and says general availability is expected in October 2026. On October 12, the team published [a post on the 330 issues Prisma ORM 8 closes](https://www.prisma.io/blog/prisma-orm-8-closes-330-most-requested-issues).
+
+Update, November 19, 2026: Prisma ORM 8 is still a release candidate. On November 13, Prisma removed the October date from its [release status page](https://www.prisma.io/docs/orm/release-status), which now says Prisma ORM 8 "has not reached general availability yet." Prisma's [supported databases page for Prisma ORM 8](https://www.prisma.io/docs/orm/supported-databases) now lists MySQL as an early preview, while SQL Server is still coming soon.
 
 ![A rainbow light spectrum on a wall from sunlight passing through a prism](../../assets/images/content/prisma-orm-8-release-candidate-1.jpg "A rainbow light spectrum on a wall from sunlight passing through a prism")
 

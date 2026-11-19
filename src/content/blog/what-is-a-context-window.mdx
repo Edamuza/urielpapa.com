@@ -16,7 +16,7 @@ takeaways:
     one request, including the system prompt, documents, chat history and the
     model's own reply.
   - >-
-    As of October 2026, Claude Opus 5.5, OpenAI's GPT-6.1 Sol and Google's
+    As of November 2026, Claude Opus 5.5, OpenAI's GPT-6.2 Sol and Google's
     Gemini 4 Argon each have a context window of about 1 million tokens.
   - >-
     When the input alone is larger than the context window, Anthropic's API
@@ -31,6 +31,10 @@ takeaways:
     request, and memory features store notes outside the model and load them
     back into the context.
 published: 2026-10-22
+updated: 2026-11-19
+updateNote: >-
+  Replaced GPT-6.1 Sol with GPT-6.2 Sol, OpenAI's current Sol model, and
+  updated its knowledge cutoff to June 1, 2026.
 related:
   - what-is-tokenization
   - n8n-messenger-instagram-chatbot
@@ -92,13 +96,13 @@ For an exact number, count with the provider's own token counter before you send
 
 ## How big are context windows today?
 
-Context windows from the three big providers are now about 1 million tokens. These are the figures from each provider's official model pages, as of October 2026:
+Context windows from the three big providers are now about 1 million tokens. These are the figures from each provider's official model pages, as of November 2026:
 
 | Model | Provider | Context window | Max output per request |
 | --- | --- | --- | --- |
 | Claude Opus 5.5 | Anthropic | 1M tokens | 128K tokens |
 | Claude Sonnet 5.5 | Anthropic | 1M tokens | 128K tokens |
-| [GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) | OpenAI | 1,050,000 tokens | 128,000 tokens |
+| [GPT-6.2 Sol](https://developers.openai.com/api/docs/models/gpt-6.2-sol) | OpenAI | 1,050,000 tokens | 128,000 tokens |
 | [Gemini 4 Argon](https://ai.google.dev/gemini-api/docs/models/gemini-4-argon) | Google | 1,048,576 tokens | 65,536 tokens by default |
 
 The output cap is a separate limit inside the window. A model can stop at its output limit even when the window still has room. Google says Gemini 4 shares one window across input, thinking and output. Earlier Gemini 3 and 2.5 models used separate budgets of 1M input and 64K output tokens.
@@ -118,7 +122,7 @@ The last two explain why a long chat seems to forget what you said at the start.
 
 ## Is a bigger context window always better?
 
-A bigger context window is a ceiling, not a target, because filling it has three costs. The first is money. Every token you send is billed as input on every request, and some models charge more for long prompts. OpenAI prices GPT-6.1 Sol prompts above 272K input tokens at twice the input rate and 1.5 times the output rate for the whole request. Anthropic bills its 1M-token models at standard rates, except Claude Haiku 5.5, where prompts over 100,000 tokens cost more. Both rules apply as of October 2026. Prompt caching lowers the price of repeated tokens, but Anthropic notes that cached tokens still take up space in the window.
+A bigger context window is a ceiling, not a target, because filling it has three costs. The first is money. Every token you send is billed as input on every request, and some models charge more for long prompts. OpenAI prices GPT-6.2 Sol prompts above 272K input tokens at twice the input rate and 1.5 times the output rate for the whole request. Anthropic bills its 1M-token models at standard rates, except Claude Haiku 5.5, where prompts over 100,000 tokens cost more. Both rules apply as of November 2026. Prompt caching lowers the price of repeated tokens, but Anthropic notes that cached tokens still take up space in the window.
 
 The second is speed. Google's long context guide says longer inputs generally increase the time to the first token of the reply.
 
@@ -152,7 +156,7 @@ A context window, memory and training data are three different places where a mo
 
 *A context window is not memory: anything outside it is gone once the request ends. Photo: [Veeblefetzer](https://commons.wikimedia.org/wiki/File:168_pin_and_184_pin_DIMM.jpg "Veeblefetzer's photo on Wikimedia Commons"), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/ "Creative Commons Attribution 4.0 license").*
 
-Training data stops at a cutoff. Anthropic lists June 2026 for its current Claude models, and OpenAI lists April 30, 2026 for GPT-6.1 Sol. Anything newer has to come in through the context window, for example from a web search or a document you attach.
+Training data stops at a cutoff. Anthropic lists June 2026 for its current Claude models, and OpenAI lists June 1, 2026 for GPT-6.2 Sol. Anything newer has to come in through the context window, for example from a web search or a document you attach.
 
 Memory features still work through the context window. Anthropic's [memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool) lets Claude save files that persist between sessions, then read the relevant ones back in when a task needs them. My chatbot's Google Sheet log works the same way on a small scale. A model only "remembers" what is loaded into its context window for the current request.
 
