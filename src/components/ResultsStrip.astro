@@ -15,9 +15,10 @@ const { from } = Astro.props;
       <h2 id="results-h" class="label-caps text-muted-foreground mb-5">
         Results for businesses
       </h2>
-      {/* Phones: a 2×2 grid of compact cards (number and a short line); from
-          sm up the cards show the full sentence. */}
-      <ul class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+      {/* Phones: a 2-column grid of compact cards (number and a short line);
+          from sm up the cards show the full sentence, three across on wide
+          screens. */}
+      <ul class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
         {RESULTS.map(r => (
           <li class="result-card border-border bg-muted/50 hover:border-foreground rounded-xl border transition-colors duration-150">
             <a
