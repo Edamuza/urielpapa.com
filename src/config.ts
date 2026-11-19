@@ -241,9 +241,9 @@ export const RESULTS: {
   },
   {
     kind: "Money",
-    value: "About ₱25,000 a month",
+    value: "About US$390 a month",
     short: "saved by replacing per-seat tools",
-    text: "saved by replacing per-seat HR, CRM and project tools with one ERP, built in under 3 months",
+    text: "in tool fees (about ₱25,000) saved by replacing per-seat HR, CRM and project tools with one ERP, built in under 3 months",
     href: "/projects/vite-seo-erp",
     title: "Read the ERP case study and the tool fees it replaced",
   },
