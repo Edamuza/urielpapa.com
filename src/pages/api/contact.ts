@@ -10,9 +10,13 @@ import {
   formatSlot,
   isBookable,
 } from "@/lib/calendar";
+import { SITE } from "@/config";
 import { EMAIL_RE, rateLimited, reply, verifyTurnstile } from "@/lib/forms";
 
 export const prerender = false;
+
+/** A post picked in the form's "Which post?" search: a blog, news or event page. */
+const POST_PATH = /^\/(blog|news|events)\/[\w-]+$/;
 
 const TOPICS: Record<string, string> = {
   work: "Work together",
@@ -46,9 +50,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const message = String(form.get("message") ?? "")
     .trim()
     .slice(0, 5000);
-  // Business questions, only asked when "Work together" is picked: one set
-  // for a business with a project, one for an employer hiring for a role,
-  // plus good call times when there is no booking page. All optional.
+  // Topic questions, all optional: for "Work together", one set for a
+  // business with a project and one for an employer hiring for a role; for
+  // "Speaking or event", the event; for "Question about a post", the post.
+  // Plus good call times when there is no booking page.
   const field = (key: string, max = 300) =>
     String(form.get(key) ?? "")
       // eslint-disable-next-line no-control-regex -- one line per answer
@@ -77,9 +82,27 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             ["Salary range", field("salary", 120)],
             ["Job post", field("jobPost")],
           ]
-        : [];
-  if (topicKey === "work")
-    answers.push(["Good times for a call", field("callTimes")]);
+        : topicKey === "speaking"
+          ? [
+              ["Event", field("eventName", 160)],
+              ["Event date", field("eventDate", 20)],
+              ["Format", field("eventFormat", 60)],
+              ["Location", field("eventLocation", 160)],
+            ]
+          : topicKey === "question"
+            ? [
+                ["Post", field("post", 300)],
+                [
+                  "Link",
+                  POST_PATH.test(field("postUrl"))
+                    ? new URL(field("postUrl"), SITE.url).href
+                    : "",
+                ],
+              ]
+            : [];
+  // Work and speaking messages can book the free call.
+  const callTopic = topicKey === "work" || topicKey === "speaking";
+  if (callTopic) answers.push(["Good times for a call", field("callTimes")]);
   const answerText = answers
     .filter(([, v]) => v)
     .map(([k, v]) => `${k}: ${v}`)
@@ -125,7 +148,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   // The free discovery call: book the slot picked on the form straight into
   // Uriel's Google Calendar (with a Meet link and an invite to the sender).
-  const slot = topicKey === "work" ? field("slot", 40) : "";
+  const slot = callTopic ? field("slot", 40) : "";
   let booked = "";
   let bookingNote = "";
   if (slot && calendarEnabled) {
@@ -135,14 +158,18 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return reply(request, 409, { message: taken, errors: { slot: taken } });
     }
     const when = `${formatSlot(slot)} (Philippine time)`;
-    const business = field("company", 160) || field("employer", 160);
+    const business =
+      topicKey === "speaking"
+        ? field("eventName", 160)
+        : field("company", 160) || field("employer", 160);
+    const kind = topicKey === "speaking" ? "Speaking call" : "Discovery call";
     try {
       if (free === null) throw new Error("free/busy check failed");
       const event = await bookCall({
         start: slot,
         name,
         email,
-        summary: `Discovery call: ${name}${business ? ` (${business})` : ""}`,
+        summary: `${kind}: ${name}${business ? ` (${business})` : ""}`,
         description: `Booked from urielpapa.com/contact\n\n${
           answerText ? `${answerText}\n\n` : ""
         }${message}`,

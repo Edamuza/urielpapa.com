@@ -200,11 +200,13 @@ export const WORK_QUESTIONS = {
 
 /**
  * Client results for the home page's results strip, next to "Work with me".
- * Only real, sourced numbers: each one links to the page that tells the story.
- * Never add an estimate or an example figure here.
+ * Only real, sourced numbers: each one links to a page that states the same
+ * figure. Never add an estimate or an example figure here. Ordered like a
+ * business funnel: getting leads, closing them, serving them, then money
+ * saved, time saved and new revenue.
  */
 export const RESULTS: {
-  /** What the number is about: "Leads", "Money", "Time" or "Service". */
+  /** What the number is about: "Leads", "Sales", "Service", "Money", "Time" or "Revenue". */
   kind: string;
   value: string;
   /** A few words under the number on phones, where the cards sit two by two. */
@@ -222,30 +224,44 @@ export const RESULTS: {
     title: "Read how a small Meta ads budget brought in 33 lead conversations",
   },
   {
-    kind: "Money",
-    value: "US$550 + ₱2,178",
-    short: "a month in tool fees, replaced by one ERP",
-    text: "a month: what per-seat HR, CRM and project tools would cost a 22-person team at list prices, replaced by one ERP built in under 3 months",
-    href: "/projects/vite-seo-erp",
-    title:
-      "Read the ERP case study and the per-seat tool costs it was built to replace",
-  },
-  {
-    kind: "Time",
-    value: "12 messages in 40 seconds",
-    short: "sorted by an AI inbox agent in testing",
-    text: "sorted by an AI inbox agent that drafts the replies for a person to approve, in testing on sample café messages",
-    href: "/projects/inboxpilot",
-    title:
-      "Read the InboxPilot case study: an AI inbox agent with human approval",
+    kind: "Sales",
+    value: "15% to 30% close rate",
+    short: "with a new sales process",
+    text: "across 40 consultations, with a sales process I designed: service packages, a fit-check form and standard proposals",
+    href: "/blog/closing-my-agency",
+    title: "Read the story of the agency Uriel Papa built and closed",
   },
   {
     kind: "Service",
-    value: "Replies at any hour",
-    short: "an AI chatbot on Messenger and Instagram",
-    text: "an AI chatbot on Messenger and Instagram that answers inquiries, books consultations and logs leads",
+    value: "120 inquiries a month",
+    short: "answered by an AI chatbot",
+    text: "answered by an AI chatbot on Messenger and Instagram that also books consultations and logs leads",
     href: "/blog/n8n-messenger-instagram-chatbot",
     title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
+  },
+  {
+    kind: "Money",
+    value: "About US$390 a month",
+    short: "saved by replacing per-seat tools",
+    text: "in tool fees (about ₱25,000) saved by replacing per-seat HR, CRM and project tools with one ERP, built in under 3 months",
+    href: "/projects/vite-seo-erp",
+    title: "Read the ERP case study and the tool fees it replaced",
+  },
+  {
+    kind: "Time",
+    value: "2 hours to 10 minutes",
+    short: "for a client site SEO audit",
+    text: "for a client site SEO audit, with in-house WordPress plugins that also stop posts missing SEO basics",
+    href: "/projects/wordpress-seo-plugins",
+    title: "Read the WordPress SEO plugin suite case study",
+  },
+  {
+    kind: "Revenue",
+    value: "150 NFC cards sold",
+    short: "in the first 2 months on sale",
+    text: "in the first 2 months of a new product line, sold on TikTok Shop and to business owners around Makati",
+    href: "/projects/nfc-card-platform",
+    title: "Read the NFC business card platform case study",
   },
 ];
 
@@ -307,3 +323,11 @@ export const PROOF = [
 
 /** Show drafts with a "Draft" banner (preview builds only, never production). */
 export const SHOW_DRAFTS = import.meta.env.DEV || PUBLIC_SHOW_DRAFTS === true;
+
+/**
+ * Event questions on the contact form when "Speaking or event" is picked.
+ * All optional; the email lists whatever is filled in.
+ */
+export const SPEAKING_QUESTIONS = {
+  formats: ["In person", "Online", "Hybrid", "Not decided yet"],
+};

@@ -1,7 +1,7 @@
 ---
 title: VITE SEO Digital Advertising ERP
 seoTitle: "VITE SEO ERP: HR, CRM, Projects and Accounting"
-updated: 2026-11-03
+updated: 2026-11-20
 description: An internal ERP that put HR and payroll, CRM, project management and accounting behind one login, built on Laravel and Next.js in under 3 months.
 summary: >-
   VITE SEO Digital Advertising, the agency I founded and have since closed, ran its people, leads, projects and books in separate places, paid per-seat fees for HR, CRM and project tools, and computed payroll by hand. With the in-house team, I led and co-developed one ERP that put HRIS, CRM, project management and accounting behind a single login with role-based access. The first MVP shipped in under 2 weeks, and the full platform reached 115 pages, 144 data models and 5,241 automated tests in under 3 months.
@@ -154,12 +154,13 @@ The suite grew to 5,241 automated tests, and we ran all of them before every dep
 - 115 pages and 144 data models.
 - 5,241 automated tests.
 - Built in under 3 months, from July to October 2026.
+- About ₱25,000 (about US$390) a month in per-seat HR, CRM and project tool fees we stopped paying.
 
 Staff clocked in through the HRIS, sales worked leads and messages in the CRM, and projects ran in the PMS. At each payroll cutoff, payroll posted straight into the accounting books instead of being typed in again.
 
 ## Limitations of the ERP and this study
 
-- **The cost comparison is an estimate.** It uses list prices for 22 seats as of November 2026, not what we actually paid before the ERP. It also leaves out the build cost in team time, so it cannot show a payback period.
+- **The cost comparison is an estimate.** It uses list prices for 22 seats as of November 2026, not what we actually paid before the ERP. What we actually stopped paying came to about ₱25,000 a month, or about US$390 at the [BSP weighted average of ₱63.633 per US dollar on November 19, 2026](https://taxcalculator.com.ph/exchange-rates/usd-to-php). Both figures leave out the build cost in team time, so neither can show a payback period.
 - **Payroll accuracy was not measured.** This page records how payroll worked, not how many corrections it saved. The error and license figures do not come from Philippine small businesses.
 - **The rules keep changing.** Rates and tax tables change by circular, so someone has to update the rules and their tests each time. The BIR's [RMC No. 98-2026](https://bir-cdn.bir.gov.ph/BIR/pdf/RMC%20No.%2098-2026%20redacted.pdf), dated September 22, 2026, says invoices made in Word, Excel, Google Docs or Google Sheets are not valid e-invoices. This page does not show whether the accounting module met those rules. I explain the rules in [my note on BIR e-invoicing](/news/bir-rmc-98-2026-e-invoicing).
 - **Two codebases cost upkeep.** Running Laravel and Next.js means two deployments and two sets of dependencies to keep updated.
