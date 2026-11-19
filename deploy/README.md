@@ -35,6 +35,7 @@ Vercel keeps serving the site until the nameservers change, so nothing below cau
 1. **Server secrets.** Copy the values from Vercel (Settings → Environment Variables; "Sensitive" ones can't be read back, so take them from where they were made) into `/etc/urielpapa.com/env` as `KEY=value` lines. Wrap the service-account JSON in single quotes on one line. Then run `systemctl restart urielpapa`.
    - Contact form: `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, and optionally `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL`.
    - Newsletter: `BUTTONDOWN_API_KEY`.
+   - Call booking: `GOOGLE_CALENDAR_CLIENT_ID`, `GOOGLE_CALENDAR_CLIENT_SECRET`, `GOOGLE_CALENDAR_REFRESH_TOKEN` and optionally `GOOGLE_CALENDAR_ID` (see `docs/call-booking.md`).
    - Dashboard sign-in: `DASHBOARD_GOOGLE_CLIENT_ID`, `DASHBOARD_GOOGLE_CLIENT_SECRET`, `DASHBOARD_EMAILS` and `DASHBOARD_PASSWORD`.
    - Dashboard refresh: `GSC_SERVICE_ACCOUNT_JSON`, `BING_WEBMASTER_API_KEY`, `GITHUB_DATA_TOKEN` and `CLARITY_API_TOKEN`.
    - Keystatic: `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET` and `KEYSTATIC_SECRET`.

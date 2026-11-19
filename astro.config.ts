@@ -262,6 +262,28 @@ export default defineConfig({
         default: "urielpapa.com <contact@urielpapa.com>",
       }),
       /** Fallback password for the private /dashboard page, used only while Google sign-in (below) is not set up. With neither, the page is a 404 in production. */
+      /** Discovery-call booking (src/lib/calendar.ts): an OAuth client and a
+       * refresh token for Uriel's Google account, from scripts/google-calendar-token.mjs. */
+      GOOGLE_CALENDAR_CLIENT_ID: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      GOOGLE_CALENDAR_CLIENT_SECRET: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      GOOGLE_CALENDAR_REFRESH_TOKEN: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
+      }),
+      GOOGLE_CALENDAR_ID: envField.string({
+        access: "secret",
+        context: "server",
+        default: "primary",
+      }),
       DASHBOARD_PASSWORD: envField.string({
         access: "secret",
         context: "server",

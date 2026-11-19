@@ -13,6 +13,23 @@ const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
     <p class="mt-4 text-lg">
       It went straight to my inbox. {CONTACT.replyTime}
     </p>
+    <section
+      class="border-foreground mt-8 rounded-lg border p-4 sm:p-5"
+      aria-labelledby="booked-h"
+      hidden
+      data-booked
+    >
+      <h2 id="booked-h" class="h3">Your free 15-minute call is booked</h2>
+      <p class="mt-1">
+        <strong data-booked-time></strong>. A Google Calendar invite with the
+        Meet link is on its way to your inbox. If the time stops working, reply
+        to the invite and we'll find another.
+      </p>
+    </section>
+    <p class="mt-6" hidden data-booked-failed>
+      I couldn't book the time you picked automatically, but I have your request
+      and will reply to confirm a time.
+    </p>
     {
       latest.length > 0 && (
         <section class="mt-10">
@@ -30,6 +47,31 @@ const latest = (await getPosts()).filter(p => !p.data.draft).slice(0, 3);
         </section>
       )
     }
-    <p class="mt-8"><a href="/">Back to the home page</a></p>
+    <p class="mt-8">
+      <a href="/" title="Back to Uriel Papa's home page"
+        >Back to the home page</a
+      >
+    </p>
   </div>
 </Layout>
+
+<script>
+  // ?booked=<ISO time> after a call was booked from the contact form; the time
+  // shows in the visitor's own time zone.
+  const booked = new URLSearchParams(location.search).get("booked");
+  if (booked === "failed") {
+    document.querySelector<HTMLElement>("[data-booked-failed]")!.hidden = false;
+  } else if (booked && !Number.isNaN(Date.parse(booked))) {
+    const box = document.querySelector<HTMLElement>("[data-booked]")!;
+    box.querySelector("[data-booked-time]")!.textContent =
+      new Intl.DateTimeFormat(undefined, {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        hour: "numeric",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }).format(new Date(booked));
+    box.hidden = false;
+  }
+</script>

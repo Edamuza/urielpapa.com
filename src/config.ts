@@ -136,6 +136,69 @@ export const WORK_WITH_ME_OFFER =
   "Free 15-minute discovery call, no obligation";
 
 /**
+ * Booking for the free discovery call: the contact form shows free slots from
+ * Uriel's Google Calendar and books the one picked (with a Google Meet link and
+ * an invite to the visitor). Needs the GOOGLE_CALENDAR_* secrets; without them
+ * the form asks for good call times instead. Hours are Philippine time.
+ */
+export const BOOKING = {
+  timeZone: "Asia/Manila",
+  /** Philippine time has no daylight saving, so a fixed offset is safe. */
+  utcOffset: "+08:00",
+  minutes: 15,
+  /** Free time kept before and after each call. */
+  bufferMinutes: 15,
+  /** 0 = Sunday … 6 = Saturday. */
+  days: [1, 2, 3, 4, 5],
+  /** Start times run from the first hour to before the last, as [hour, minute]. */
+  hours: [
+    [9, 0],
+    [17, 0],
+  ] as [number, number][],
+  /** Earliest booking, in hours from now. */
+  leadHours: 12,
+  /** How far ahead people can book. */
+  daysAhead: 14,
+};
+
+/**
+ * Business questions on the contact form when "Work together" is picked.
+ * "client" is a business that needs a project; "employer" is hiring for a role.
+ * The option lists can be edited freely; the form and the email follow them.
+ */
+export const WORK_QUESTIONS = {
+  client: {
+    label: "A business that needs a project",
+    needs: [
+      "A website or landing page",
+      "Custom software or a web app",
+      "AI automation or a chatbot",
+      "SEO or AI search (GEO)",
+      "Ads and lead generation",
+      "Not sure yet",
+    ],
+    budgets: [
+      "Under ₱50,000",
+      "₱50,000 to ₱150,000",
+      "₱150,000 to ₱500,000",
+      "Over ₱500,000",
+      "Not sure yet",
+    ],
+    timelines: [
+      "As soon as possible",
+      "In 1 to 3 months",
+      "In 3 months or more",
+      "Just exploring",
+    ],
+  },
+  employer: {
+    label: "An employer hiring for a role",
+    types: ["Full-time", "Part-time", "Contract or freelance"],
+    setups: ["Remote", "Hybrid", "On-site"],
+  },
+};
+
+/**
  * Client results for the home page's results strip, next to "Work with me".
  * Only real, sourced numbers: each one links to the page that tells the story.
  * Never add an estimate or an example figure here.

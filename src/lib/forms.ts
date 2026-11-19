@@ -23,7 +23,7 @@ export function htmlMessage(title: string, message: string, status = 200) {
 export function reply(
   request: Request,
   status: number,
-  body: { message: string; errors?: Record<string, string> },
+  body: { message: string; errors?: Record<string, string>; redirect?: string },
   redirect?: string
 ) {
   if (wantsJson(request)) {
