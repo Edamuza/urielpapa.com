@@ -307,3 +307,11 @@ export const PROOF = [
 
 /** Show drafts with a "Draft" banner (preview builds only, never production). */
 export const SHOW_DRAFTS = import.meta.env.DEV || PUBLIC_SHOW_DRAFTS === true;
+
+/**
+ * Event questions on the contact form when "Speaking or event" is picked.
+ * All optional; the email lists whatever is filled in.
+ */
+export const SPEAKING_QUESTIONS = {
+  formats: ["In person", "Online", "Hybrid", "Not decided yet"],
+};

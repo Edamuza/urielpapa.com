@@ -7,6 +7,7 @@ import {
   SITE,
   SOCIALS,
   WORK_QUESTIONS,
+  SPEAKING_QUESTIONS,
   WORK_WITH_ME_OFFER,
 } from "@/config";
 import SocialIcon from "@/components/SocialIcon.astro";
@@ -25,7 +26,7 @@ const topics = [
 const steps = [
   {
     title: "Tell me about it",
-    text: 'Pick "Work together" and answer a few quick questions about your business or the role.',
+    text: 'Pick "Work together" or "Speaking or event" and answer a few quick questions.',
   },
   {
     title: "Pick a time",
@@ -320,6 +321,118 @@ const schema = [
           </div>
         </fieldset>
 
+        <fieldset
+          class="form-section speaking-only"
+          aria-describedby="c-event-note"
+        >
+          <legend class="section-title">About the event</legend>
+          <p id="c-event-note" class="section-note">
+            All optional. Share what you know so far.
+          </p>
+          <div class="field-grid mt-5">
+            <div>
+              <label for="c-event" class="field-label">Event name</label>
+              <input
+                id="c-event"
+                name="eventName"
+                type="text"
+                maxlength="160"
+                class="field"
+              />
+            </div>
+            <div>
+              <label for="c-event-date" class="field-label">Event date</label>
+              <input
+                id="c-event-date"
+                name="eventDate"
+                type="date"
+                class="field"
+                data-event-date
+              />
+            </div>
+            <div>
+              <label for="c-event-format" class="field-label">Format</label>
+              <select id="c-event-format" name="eventFormat" class="field">
+                {SPEAKING_QUESTIONS.formats.map(o => <option>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label for="c-event-place" class="field-label">Location</label>
+              <input
+                id="c-event-place"
+                name="eventLocation"
+                type="text"
+                maxlength="160"
+                placeholder="City and venue, or the platform"
+                class="field"
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        {
+          /* "Question about a post": search every post and news take by title
+           (list from /contact/posts.json). Without JavaScript the box is a
+           plain text field, sent as typed. */
+        }
+        <div class="form-section question-only" data-post-search>
+          <label for="c-post-search" class="section-title block"
+            >Which post?</label
+          >
+          <p class="section-note" id="c-post-note">
+            Search by title, or leave it blank.
+          </p>
+          <div class="post-search" data-post-box>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              class="icon post-search__icon"
+              ><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"
+              ></path></svg
+            >
+            <input
+              id="c-post-search"
+              name="post"
+              type="text"
+              maxlength="300"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Search posts and news"
+              class="field post-search__input"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="c-post-list"
+              aria-describedby="c-post-note"
+            />
+            <ul
+              id="c-post-list"
+              class="post-list"
+              role="listbox"
+              aria-label="Matching posts"
+              hidden
+            >
+            </ul>
+          </div>
+          <p class="meta mt-2" aria-live="polite" data-post-empty></p>
+          <input type="hidden" name="postUrl" />
+          <div class="post-picked" data-post-picked hidden>
+            <div class="min-w-0 flex-1">
+              <p class="meta" data-post-picked-kind></p>
+              <a
+                class="font-semibold"
+                href="/blog"
+                title="Open the post in a new tab"
+                target="_blank"
+                rel="noopener"
+                data-post-picked-link></a>
+            </div>
+            <button type="button" class="text-btn" data-post-change
+              >Change</button
+            >
+          </div>
+        </div>
+
         <div class="form-section">
           <label for="c-message" class="section-title block">Your message</label
           >
@@ -331,6 +444,10 @@ const schema = [
             minlength="10"
             maxlength="5000"
             placeholder="What's the problem, and what have you tried so far?"
+            data-placeholder-work="What's the problem, and what have you tried so far?"
+            data-placeholder-speaking="Tell me about the event, the audience and what you'd like me to talk about."
+            data-placeholder-question="What would you like to ask or talk about?"
+            data-placeholder-other="What's on your mind?"
             class="field"
             aria-describedby="c-message-err"></textarea>
           <p id="c-message-err" class="field-error" data-error-for="message">
@@ -344,7 +461,7 @@ const schema = [
            (or without JavaScript) it asks for good call times instead. */
         }
         <fieldset
-          class="form-section work-only booking"
+          class="form-section call-only booking"
           data-booking
           data-state="off"
           aria-describedby="c-slot-note c-slot-err"
@@ -501,19 +618,33 @@ const schema = [
   const form = document.querySelector<HTMLFormElement>("#contact-form")!;
   const status = document.querySelector<HTMLElement>("#form-status")!;
   const submit = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
-  const isWork = () =>
-    form.querySelector<HTMLInputElement>('input[name=topic][value="work"]')!
-      .checked;
+  const topic = () =>
+    form.querySelector<HTMLInputElement>("input[name=topic]:checked")?.value ??
+    "";
+  // "Work together" and "Speaking or event" can book the free call.
+  const isWork = () => topic() === "work" || topic() === "speaking";
   const pickedSlot = () =>
     form.querySelector<HTMLInputElement>("input[name=slot]:checked");
 
   // The button says what will happen: a plain message, or a message plus a
-  // booked call.
+  // booked call. The message prompt fits the topic.
+  const message = form.querySelector<HTMLTextAreaElement>("[name=message]")!;
   function updateSubmit() {
+    message.placeholder =
+      message.dataset[
+        `placeholder${topic().replace(/^./, c => c.toUpperCase())}`
+      ] ?? message.dataset.placeholderOther!;
     if (submit.disabled) return;
     submit.textContent =
       isWork() && pickedSlot() ? "Send and book my call" : "Send message";
   }
+
+  // An event can't be in the past.
+  const eventDate = form.querySelector<HTMLInputElement>("[data-event-date]")!;
+  const today = new Date();
+  eventDate.min = new Date(today.getTime() - today.getTimezoneOffset() * 60_000)
+    .toISOString()
+    .slice(0, 10);
 
   // #work (from every "Work with me" link) or #speaking preselects the topic. A fragment
   // keeps one crawlable URL for this page; ?topic= still works for links shared before.
@@ -799,7 +930,138 @@ const schema = [
     arrows();
   }
 
+  // "Which post?": a search box over every post and news take. The list is
+  // fetched once, the first time the box is used.
+  type Entry = { title: string; url: string; kind: string; date: string };
+  const postSection = form.querySelector<HTMLElement>("[data-post-search]")!;
+  const postBox = postSection.querySelector<HTMLElement>("[data-post-box]")!;
+  const postInput =
+    postSection.querySelector<HTMLInputElement>("#c-post-search")!;
+  const postList = postSection.querySelector<HTMLUListElement>("#c-post-list")!;
+  const postEmpty =
+    postSection.querySelector<HTMLElement>("[data-post-empty]")!;
+  const postUrlInput = form.querySelector<HTMLInputElement>("[name=postUrl]")!;
+  const postPicked =
+    postSection.querySelector<HTMLElement>("[data-post-picked]")!;
+  const postLink = postSection.querySelector<HTMLAnchorElement>(
+    "[data-post-picked-link]"
+  )!;
+  const dateFmt = new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  let entries: Entry[] | null = null;
+  let matches: Entry[] = [];
+  let active = -1;
+  const loadEntries = async () => {
+    entries ??= await fetch("/contact/posts.json")
+      .then(r => r.json() as Promise<Entry[]>)
+      .catch(() => []);
+    return entries;
+  };
+  const meta = (e: Entry) =>
+    `${e.kind} · ${dateFmt.format(new Date(`${e.date}T12:00:00`))}`;
+
+  function closeList() {
+    postList.hidden = true;
+    postInput.setAttribute("aria-expanded", "false");
+    postInput.removeAttribute("aria-activedescendant");
+    active = -1;
+  }
+  function setActive(i: number) {
+    active = i;
+    const items = [...postList.children] as HTMLElement[];
+    items.forEach((li, n) => li.setAttribute("aria-selected", String(n === i)));
+    if (items[i]) {
+      postInput.setAttribute("aria-activedescendant", items[i].id);
+      items[i].scrollIntoView({ block: "nearest" });
+    } else postInput.removeAttribute("aria-activedescendant");
+  }
+  async function search() {
+    const all = await loadEntries();
+    const words = postInput.value.toLowerCase().split(/\s+/).filter(Boolean);
+    matches = (
+      words.length
+        ? all.filter(e => words.every(w => e.title.toLowerCase().includes(w)))
+        : all
+    ).slice(0, 8);
+    postList.replaceChildren(
+      ...matches.map((e, i) => {
+        const li = document.createElement("li");
+        li.id = `c-post-opt-${i}`;
+        li.role = "option";
+        li.className = "post-option";
+        li.setAttribute("aria-selected", "false");
+        const t = document.createElement("span");
+        t.className = "post-option__title";
+        t.textContent = e.title;
+        const m = document.createElement("span");
+        m.className = "post-option__meta";
+        m.textContent = meta(e);
+        li.append(t, m);
+        // mousedown, so the box doesn't lose focus and close first.
+        li.addEventListener("mousedown", ev => {
+          ev.preventDefault();
+          pick(e);
+        });
+        return li;
+      })
+    );
+    postEmpty.textContent =
+      words.length && !matches.length
+        ? "No post matches that. Tell me which one in your message."
+        : "";
+    postList.hidden = !matches.length;
+    postInput.setAttribute("aria-expanded", String(!postList.hidden));
+    setActive(-1);
+  }
+  function pick(e: Entry) {
+    postInput.value = e.title;
+    postUrlInput.value = e.url;
+    postLink.textContent = e.title;
+    postLink.href = e.url;
+    postSection.querySelector("[data-post-picked-kind]")!.textContent = meta(e);
+    closeList();
+    postBox.hidden = true;
+    postPicked.hidden = false;
+    postEmpty.textContent = "";
+    message.focus();
+  }
+  postInput.addEventListener("focus", search);
+  postInput.addEventListener("input", () => {
+    postUrlInput.value = "";
+    search();
+  });
+  postInput.addEventListener("blur", closeList);
+  postInput.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (postList.hidden) return void search();
+      const n = matches.length;
+      setActive(
+        e.key === "ArrowDown" ? (active + 1) % n : (active - 1 + n) % n
+      );
+    } else if (e.key === "Enter" && !postList.hidden && matches[active]) {
+      e.preventDefault();
+      pick(matches[active]);
+    } else if (e.key === "Escape" && !postList.hidden) {
+      e.preventDefault();
+      closeList();
+    }
+  });
+  postSection
+    .querySelector("[data-post-change]")!
+    .addEventListener("click", () => {
+      postPicked.hidden = true;
+      postBox.hidden = false;
+      postInput.value = "";
+      postUrlInput.value = "";
+      postInput.focus();
+    });
+
   preselectTopic();
+  updateSubmit();
   loadSlots();
   form.addEventListener("change", e => {
     if ((e.target as HTMLInputElement).name === "topic") loadSlots();
@@ -1087,16 +1349,94 @@ const schema = [
     accent-color: var(--foreground);
   }
 
-  /* Only the questions that apply: work questions and the call for "Work
-     together", and the set for the kind of sender picked. */
+  /* Only the questions that apply: work questions for "Work together" (the
+     set for the kind of sender picked), event questions for "Speaking or
+     event", the post search for "Question about a post", and the call for
+     work and speaking. */
   .work-only,
+  .speaking-only,
+  .question-only,
+  .call-only,
   .client-fields,
   .employer-fields {
     display: none;
   }
-  form:has(input[name="topic"][value="work"]:checked) .work-only {
+  form:has(input[name="topic"][value="work"]:checked) .work-only,
+  form:has(input[name="topic"][value="speaking"]:checked) .speaking-only,
+  form:has(input[name="topic"][value="question"]:checked) .question-only,
+  form:has(input[name="topic"][value="work"]:checked) .call-only,
+  form:has(input[name="topic"][value="speaking"]:checked) .call-only {
     display: block;
     animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* The post search and its list of matches. */
+  .post-search {
+    position: relative;
+  }
+  .post-search[hidden] {
+    display: none;
+  }
+  .post-search__icon {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    margin-top: 0.1875rem;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    pointer-events: none;
+  }
+  .post-search__input {
+    padding-left: 2.5rem;
+  }
+  .post-list {
+    position: absolute;
+    z-index: 20;
+    inset: calc(100% + 0.375rem) 0 auto;
+    max-height: 20rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.375rem;
+    border: 1px solid var(--choice-border);
+    border-radius: 0.75rem;
+    background: var(--background);
+    box-shadow:
+      0 12px 32px -8px rgb(0 0 0 / 0.18),
+      0 2px 6px rgb(0 0 0 / 0.06);
+  }
+  .post-option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  .post-option:hover,
+  .post-option[aria-selected="true"] {
+    background: var(--muted);
+  }
+  .post-option__title {
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .post-option__meta {
+    color: var(--muted-foreground);
+    font-size: 0.8125rem;
+  }
+  .post-picked {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.375rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--foreground);
+    border-radius: 0.75rem;
+    background: var(--chosen-bg);
+    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .post-picked[hidden] {
+    display: none;
   }
   form:has(input[name="workKind"][value="client"]:checked) .client-fields,
   form:has(input[name="workKind"][value="employer"]:checked) .employer-fields {
