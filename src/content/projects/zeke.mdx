@@ -1,7 +1,7 @@
 ---
 title: Zeke
 seoTitle: "Zeke: Open-Source Mac Update and Security Center"
-updated: 2026-11-10
+updated: 2026-11-19
 description: An open-source update and security center for macOS that checks every app, tool and library on a Mac, flags known vulnerabilities and updates on your schedule.
 summary: >-
   My Mac had apps, Homebrew packages, npm tools for several Node installs, Ruby gems and Python packages, each with its own updater and none of them telling me the whole story. I built Zeke, a local-first update and security center that lists all of it in one place, says honestly what's current, what's new and what it can't tell, checks for known vulnerabilities, and updates on a schedule I control. It runs on the Python that ships with macOS, with no account, no cloud and no telemetry.
@@ -46,9 +46,9 @@ The tools I depend on most are also the ones that need patching fastest. In Sept
 
 **The default update check skips apps.** Homebrew's [command reference](https://docs.brew.sh/Manpage) says `brew outdated` only includes casks marked `auto_updates true` when you add `--greedy`. Those are apps that update themselves, so a plain check can call them current when they aren't. Zeke always runs the greedy check.
 
-**An empty scan isn't a clean bill of health.** Homebrew's own [vulnerability scanning guide](https://docs.brew.sh/Homebrew-Vulnerability-Management) says `brew vulns` checks formulae only, "not casks or every package installed by other tools". It also warns that no findings doesn't mean a device is free of vulnerabilities. That's why Zeke shows what each check covered and never shows a "secure" badge.
+**An empty scan isn't a clean bill of health.** Homebrew's own [vulnerability scanning guide](https://docs.brew.sh/Homebrew-Vulnerability-Management) says `brew vulns` checks formulae: "it does not scan casks or every package installed by other tools." It also warns that no findings doesn't mean a device is free of vulnerabilities. That's why Zeke shows what each check covered and never shows a "secure" badge.
 
-**Self-updating apps need to be open.** Sparkle, the updater many Mac apps use, [downloads and installs updates in the background](https://sparkle-project.github.io/documentation/customization/) and checks once a day by default. An app you rarely open rarely gets that chance, which is why Zeke can open it for a moment and let its own updater work.
+**Self-updating apps need to be open.** Sparkle, the updater many Mac apps use, checks for updates once a day by default when automatic checks are on. It [can download and install updates silently in the background](https://sparkle-project.github.io/documentation/customization/), but only when the app turns that setting on, and it's off by default. An app you rarely open rarely gets that chance, which is why Zeke can open it for a moment and let its own updater work.
 
 ## Why Zeke stays small, local and honest
 

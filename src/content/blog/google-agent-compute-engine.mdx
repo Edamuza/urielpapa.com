@@ -15,7 +15,8 @@ takeaways:
     gives each Gemini agent its own secure, fast-booting computer.
   - >-
     Agent Compute Engine reaches customers as a preview in the coming months;
-    the open-source Agent Substrate for GKE is available now.
+    the open-source Agent Substrate for GKE is available now for non-production
+    work.
   - >-
     Google also announced agent governance tools, including token and cost
     controls, model routing and governance for local agents like Claude Code.
@@ -28,6 +29,10 @@ businessImpact:
     AI bill.
 sourceUrl: https://cloud.google.com/blog/topics/ai-infrastructure/introducing-agent-compute-engine-and-expanded-agent-governance
 published: 2026-10-26
+updated: 2026-11-19
+updateNote: >-
+  Clarified that Agent Substrate on GKE is available now for non-production
+  workloads, with production use through an allowlist.
 related:
   - opencode-mcp-oauth-rce
 projects: []
@@ -62,7 +67,7 @@ These points come from [Google Cloud's announcement](https://cloud.google.com/bl
 * **A computer per agent.** Each agent gets a small virtual machine (a microVM) that boots quickly and pauses when idle.
 * **Isolation and short-lived credentials.** Each microVM runs under its agent's own identity with short-lived credentials, and service credentials are added outside the microVM.
 * **Its own disk.** Each microVM keeps its workspace and context on its own Hyperdisk.
-* **Preview later, open source now.** Agent Compute Engine will be in preview "in the coming months." The open-source Agent Substrate runs on GKE today.
+* **Preview later, open source now.** Agent Compute Engine will be in preview "in the coming months." The open-source Agent Substrate runs on GKE today, but [only for non-production workloads](https://itbrief.com.au/story/google-launches-open-source-agent-substrate-on-gke "IT Brief on the launch of Agent Substrate on GKE") until a customer is allowlisted for production use.
 * **Governance tools.** New Agent Gateway features in preview include token and cost governance and model routing policies. Governance for local agents such as Claude Code and Antigravity CLI is "in preview soon."
 
 ![Google's first production server rack from 1999 at the Computer History Museum](../../assets/images/content/google-agent-compute-engine-2.jpg "Google's first production server rack from 1999 at the Computer History Museum")

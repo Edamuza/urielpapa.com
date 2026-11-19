@@ -28,6 +28,10 @@ businessImpact:
     agent access to its systems.
 sourceUrl: https://openai.com/index/securing-our-frontier-model-training-environment/
 published: 2026-10-26
+updated: 2026-11-19
+updateNote: >-
+  Corrected the quote on OpenAI's policy, which says frontier training runs
+  with no live internet access.
 related:
   - google-agent-compute-engine
 projects: []
@@ -59,10 +63,10 @@ OpenAI summed up the incident and the fixes in a post on X:
 
 These points come from [OpenAI's post](https://openai.com/index/securing-our-frontier-model-training-environment/):
 
-* **No internet during training.** OpenAI says "the responsible approach is to conduct frontier model training with no internet access," and will keep this policy until safeguards improve.
+* **No internet during training.** OpenAI says the responsible approach is to "conduct frontier model training with no live internet access," and will keep this policy until safeguards improve.
 * **An offline web.** Frontier reinforcement learning runs now use an offline world of indexed and cached web content.
 * **Not fully air-gapped.** OpenAI says fully cutting the infrastructure off is not currently feasible, so outbound traffic is restricted rather than removed.
-* **Layered defences.** Controls include sandboxing, microVMs, monitoring, and network and cloud perimeters, plus systems that stop runs automatically when they detect serious risk.
+* **Layered defenses.** Controls include sandboxing, microVMs, monitoring, and network and cloud perimeters, plus systems that stop runs automatically when they detect serious risk.
 * **AI red-teaming.** OpenAI used frontier-model agents to probe its own setup, spending "hundreds of billions of tokens." They found microVM escapes, new internet paths and cross-sandbox communication, which OpenAI says it fixed.
 
 ## What does it mean for businesses and site owners?

@@ -45,7 +45,7 @@ Public data shows that WordPress is where much of this work happens, and that th
 
 ### WordPress share and common technical SEO issues
 
-**WordPress runs a large share of the web.** As of November 2, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 39.5% of all websites. That is a 58.2% share among sites that use a content management system W3Techs tracks.
+**WordPress runs a large share of the web.** As of November 19, 2026, [W3Techs' CMS usage survey](https://w3techs.com/technologies/overview/content_management) reports that WordPress is used by 38.5% of all websites. That is a 57.4% share among sites that use a content management system W3Techs tracks.
 
 **The everyday mistakes are widespread.** In 2023, [Ahrefs studied 1,002,165 domains to find the most common technical SEO issues](https://ahrefs.com/blog/site-audit-study/). Each figure is the share of domains where the issue appeared on at least one page. These are the ones closest to the suite's checks:
 
@@ -92,7 +92,7 @@ The guard required an SEO title, a meta description and schema. Those are the th
 
 **Scan before every client report.** Pew's data shows that pages disappear over time, so a link that worked at launch can break later. One check at publish time is not enough for links. The diagnostic scanner ran before each client report, covering content, headings, indexability, images and broken links, plus spreadsheet exports.
 
-**Map internal links as a graph.** Google asks for a link to every page you care about from at least one other page. Finding the pages that nothing links to means looking at every link on a site at once, which is what a graph shows. The content graph showed how pages link to each other.
+**Map internal links as a graph.** Google asks for a link to every page you care about from at least one other page. Finding the pages that nothing links to means counting the links that point to every page. The content graph plugin showed each page's inbound and outbound internal link counts, from its content and schema, right in the WordPress admin lists.
 
 **Import in bulk.** Drafts arrived as DOCX files, and schema came in CSV files. Bulk importers cut out copying each draft and each schema file into WordPress by hand.
 
@@ -116,7 +116,7 @@ Site audit tools are strong at finding problems across a live site. The suite ha
 With the agency's in-house team, I led and co-developed five plugins, about 11,700 lines of code in total:
 
 - **An SEO diagnostic scanner** with content, heading, indexability, image and broken-link checks, plus spreadsheet exports.
-- **An internal-link content graph** that shows how pages link to each other.
+- **An internal-link content graph** that counts each page's inbound and outbound internal links in the admin lists.
 - **A publish guard** that requires an SEO title, a meta description and schema before a post can go out.
 - **Bulk importers** for DOCX drafts and for schema CSV files.
 
@@ -133,7 +133,7 @@ Each plugin in the suite sits at a different point in the publishing cycle:
 | --- | --- | --- |
 | Drafting | Bulk importers | Bring DOCX drafts and schema CSV files into WordPress |
 | Publishing | Publish guard | Stops a post that lacks an SEO title, a meta description or schema |
-| Site structure | Content graph | Shows how pages link to each other, including pages with no internal links |
+| Site structure | Content graph | Counts inbound and outbound internal links per page, so pages with no internal links stand out |
 | Reporting | Diagnostic scanner | Checks content, headings, indexability, images and broken links, with spreadsheet exports |
 
 The guard handles the mistakes that can be blocked at the door. The scanner and the graph handle the ones that only appear across the whole site, such as broken links and pages nothing points to.
@@ -166,7 +166,7 @@ The same goes for meta descriptions. A 2020 Ahrefs analysis found that [Google r
 
 ## Sources
 
-1. [Usage Statistics and Market Share of Content Management Systems, November 2026](https://w3techs.com/technologies/overview/content_management), W3Techs, November 2, 2026.
+1. [Usage Statistics and Market Share of Content Management Systems, November 2026](https://w3techs.com/technologies/overview/content_management), W3Techs, November 19, 2026.
 2. [We Studied Over 1 Million Domains to Find the Most Common Technical SEO Issues](https://ahrefs.com/blog/site-audit-study/), Ahrefs (Patrick Stox), August 31, 2023.
 3. [When Online Content Disappears](https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/), Pew Research Center, May 17, 2024.
 4. [Block Search Indexing with noindex](https://developers.google.com/search/docs/crawling-indexing/block-indexing), Google Search Central, accessed November 2026.
