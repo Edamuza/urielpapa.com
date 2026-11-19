@@ -1,10 +1,10 @@
 ---
 title: TravelEase
 seoTitle: "TravelEase: Tagaytay Trip Planning Portal"
-updated: 2026-11-03
+updated: 2026-11-19
 description: A tourism portal for Tagaytay where travelers plan trips together, find local businesses on a map and read reviews. My capstone thesis, live at travelease.app.
 summary: >-
-  Planning a trip to Tagaytay as a group means juggling chats, maps and review sites, and in 2022 the PSA found that 97.9% of Filipino domestic travelers planned their own trips. For our capstone thesis, I led development of TravelEase, a tourism portal where travelers plan trips together, find local businesses on an interactive map, and read reviews and travel blogs, with local government approval of business registrations. I contributed about two-thirds of the project's 316 commits, and it shipped with 411 automated tests and is live at travelease.app.
+  Planning a trip to Tagaytay as a group means juggling chats, maps and review sites, and in 2022 the PSA found that 97.9% of Filipino domestic travelers planned their own trips. For our capstone thesis, I led development of TravelEase, a tourism portal where travelers plan trips together, find local businesses on an interactive map, and read reviews and travel blogs, with local government approval of business registrations. I contributed about two-thirds of the project's 321 commits, and it shipped with 411 automated tests and is live at travelease.app.
 outcome: A live tourism portal for Tagaytay with five user roles and 411 automated tests.
 period: October 2025 to April 2026
 year: 2026
@@ -111,7 +111,7 @@ Each part of TravelEase lines up with one of those findings. The table maps what
 ## What we built: the TravelEase features
 
 - **Collaborative travel plans** with admin, editor and viewer roles, so a group can plan one trip together.
-- **A business directory** in 8 categories, with local government approval of business registrations.
+- **A business directory** in 9 categories, with local government approval of business registrations.
 - **An interactive map** with routing, plus traffic and weather information.
 - **Reviews and travel blogs** for each place.
 - **Five user roles** across travelers, businesses and administrators.
@@ -129,14 +129,14 @@ The screenshots below come from the app running on localhost in November 2026, f
 TravelEase connects three kinds of users, travelers, businesses and administrators, across five user roles.
 
 - **Planning:** a travel plan belongs to a group. Admin, editor and viewer roles decide who manages the plan, who changes it and who only reads it. Everyone works from the same plan.
-- **Listing:** a business registers in one of 8 categories. The registration waits for local government approval, and only approved businesses go live in the directory.
+- **Listing:** a business registers in one of 9 categories. The registration waits for local government approval, and only approved businesses go live in the directory.
 - **Finding:** travelers find local businesses on the interactive map, built with Leaflet, and get routing plus traffic and weather information.
 - **Deciding:** each place has its own reviews and travel blogs.
 - **Staying fast:** Redis caches busy pages and rate-limits requests.
 
 ## How we built and tested TravelEase
 
-TravelEase was our capstone thesis, built from October 2025 to April 2026. I was the development lead. The project has 316 commits, and about two-thirds of them are mine. It has 411 automated tests in Vitest.
+TravelEase was our capstone thesis, built from October 2025 to April 2026. I was the development lead. The project has 321 commits, and about two-thirds of them are mine. It has 411 automated tests in Vitest.
 
 - **Front end:** React 19, TypeScript, Vite, TanStack Query, Tailwind CSS 4 and Leaflet for the map.
 - **Back end:** Node.js and Express, with Prisma on PostgreSQL and Supabase Auth for sign-in.
@@ -152,8 +152,8 @@ The stack still needs care after the defense. The [Prisma ORM 8 release candidat
 
 - Live at [travelease.app](https://travelease.app).
 - 411 automated tests in Vitest.
-- 316 commits in the project, about two-thirds of them mine.
-- A business directory in 8 categories and five user roles.
+- 321 commits in the project, about two-thirds of them mine.
+- A business directory in 9 categories and five user roles.
 
 ## Limitations of TravelEase
 

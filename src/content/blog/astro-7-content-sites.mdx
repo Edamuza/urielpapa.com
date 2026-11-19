@@ -88,7 +88,7 @@ For a business, the practical questions are build time, hosting cost and how muc
 
 ## What did I notice building this site on Astro 7?
 
-This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. [Most pages ship no JavaScript](/notes/this-site-ships-no-javascript-by-default), with small islands for the theme toggle, search, code copy buttons and form enhancement.
+This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. [Every page is static HTML with very little JavaScript](/notes/this-site-ships-no-javascript-by-default): small islands for the theme toggle, menu, search, code copy buttons and form enhancement, plus analytics that load after your first interaction.
 
 One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
 
