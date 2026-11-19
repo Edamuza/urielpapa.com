@@ -17,7 +17,7 @@ takeaways:
     run, however many steps it has.
   - >-
     As of October 2026, a workflow with a trigger and three actions that runs
-    1,000 times a month costs $89 a month on Zapier, $9 on Make and $20 on n8n
+    1,000 times a month costs $89 a month on Zapier, $9 on Make and €20 on n8n
     Cloud, billed annually.
   - >-
     n8n is the only one of the three you can self-host, and its free Community
@@ -29,6 +29,11 @@ takeaways:
     Self-hosted n8n has no execution limit, so the bill is the server it runs on
     plus the time to maintain it.
 published: 2026-10-22
+updated: 2026-11-19
+updateNote: >-
+  Corrected Zapier's plan name to Professional, its tier above 20,000 tasks, the
+  Agents activity allowance, Make's app count and n8n's euro pricing, as of
+  November 2026.
 related:
   - n8n-messenger-instagram-chatbot
   - what-is-tokenization
@@ -42,7 +47,7 @@ faq:
       The self-hosted Community edition is free, but you pay for the server it
       runs on and you maintain it. Features such as SSO, projects, sharing and
       Git version control need a paid Business or Enterprise license. n8n Cloud
-      starts at $20 a month, billed annually.
+      starts at €20 a month, billed annually.
   - q: Do AI steps cost extra on these tools?
     a: >-
       Usually, yes. On Make, AI Agents use Make's AI Provider and consume credits
@@ -69,16 +74,16 @@ The short verdict:
 - **Lowest hosted price, with visual branching:** Make.
 - **A developer on the team, or many steps per run:** n8n.
 
-Here is how the three compare as of October 2026, from the [Zapier pricing page](https://zapier.com/pricing), the [Make pricing page](https://www.make.com/en/pricing), the [n8n pricing page](https://n8n.io/pricing/) and [n8n's integrations directory](https://n8n.io/integrations/). Prices are in US dollars, billed annually.
+Here is how the three compare as of October 2026, from the [Zapier pricing page](https://zapier.com/pricing), the [Make pricing page](https://www.make.com/en/pricing), the [n8n pricing page](https://n8n.io/pricing/) and [n8n's integrations directory](https://n8n.io/integrations/). Zapier and Make prices are in US dollars, and n8n lists its Cloud prices in euros. All are billed annually.
 
 | Compared on | Zapier | Make | n8n |
 | --- | --- | --- | --- |
-| Entry paid price | Pro, $19.99/mo for 750 tasks | Core, $9/mo for 10,000 credits | Starter, $20/mo for 2,500 executions (Cloud) |
+| Entry paid price | Professional, $19.99/mo for 750 tasks | Core, $9/mo for 10,000 credits | Starter, €20/mo for 2,500 executions (Cloud) |
 | Free option | 100 tasks/mo, two-step Zaps only | 1,000 credits/mo | Self-hosted Community edition |
 | What counts as one run unit | A task: each successful action step | A credit: most module actions, including the trigger | An execution: one full workflow run |
 | Self-hosting | No | No | Yes |
-| Integrations claimed | 9,000+ apps | 3,500+ apps | 2,000+ integrations |
-| AI features | Agents, Copilot, chatbots, MCP | AI Agents, Maia assistant | AI Agent node, MCP, Assistant |
+| Integrations claimed | 9,000+ apps | 3,000+ apps | 2,000+ integrations |
+| AI features | Agents and Chatbots (separate plans), Copilot, MCP | AI Agents, Maia assistant | AI Agent node, MCP, Assistant |
 | Learning curve | Lowest | Medium | Highest, especially self-hosted |
 | Best for | Non-technical teams | Budget-conscious teams | Teams with a developer |
 
@@ -94,9 +99,9 @@ Take a workflow with a trigger and three actions. For example, a form entry crea
 
 | Monthly volume | Zapier | Make | n8n Cloud |
 | --- | --- | --- | --- |
-| 1,000 runs, trigger + 3 actions | 3,000 tasks: Pro, $89 | 4,000 credits: Core, $9 | 1,000 executions: Starter, $20 |
-| 1,000 runs, trigger + 9 actions | 9,000 tasks: Pro, $129 | 10,000 credits: Core, $9 | 1,000 executions: Starter, $20 |
-| 10,000 runs, trigger + 3 actions | 30,000 tasks: Pro, $289 | 40,000 credits: Core, $29 | 10,000 executions: Pro, $50 |
+| 1,000 runs, trigger + 3 actions | 3,000 tasks: Professional, $89 | 4,000 credits: Core, $9 | 1,000 executions: Starter, €20 |
+| 1,000 runs, trigger + 9 actions | 9,000 tasks: Professional, $129 | 10,000 credits: Core, $9 | 1,000 executions: Starter, €20 |
+| 10,000 runs, trigger + 3 actions | 30,000 tasks: Professional, 50,000-task tier, $289 | 40,000 credits: Core, $29 | 10,000 executions: Pro, €50 |
 
 Zapier's bill grows with both runs and steps, while n8n's grows only with runs. Make stays cheapest among the hosted plans at these volumes. A self-hosted n8n bill is the server itself. A chatbot workflow like mine runs as one execution per message, however many nodes it has.
 
@@ -122,7 +127,7 @@ n8n has a similar visual editor, plus code steps in JavaScript or Python and raw
 
 ## How do their AI and agent features compare?
 
-All three tools now let you add AI models and agents to a workflow, but they bill for AI differently. Zapier offers Zapier Agents, chatbots and MCP on every plan, and AI by Zapier steps from the Pro plan. Agent activities have their own monthly allowance, 1,500 on Pro, and do not use tasks.
+All three tools now let you add AI models and agents to a workflow, but they bill for AI differently. Zapier sells Agents and Chatbots as separate plans with free tiers, and its [pricing page](https://zapier.com/pricing) says MCP is available to all accounts. Agent activities are billed on the Agents plan, not your Zap tasks: as of November 2026, Agents Free includes 400 activities a month and Agents Pro includes 1,500 for $33.33 a month, billed annually.
 
 Make AI Agents are available on all plans and use Make's AI Provider, which turns tokens into credits. Make's [credits documentation](https://help.make.com/credits) gives an example: the Small agent tier, GPT-5 nano, uses 1 credit per 18,080 input tokens. With your own OpenAI, Claude or Gemini connection, you pay the provider for tokens and Make for operations. Tokens drive most AI cost, as I explain in [what tokenization is](/blog/what-is-tokenization).
 
@@ -130,7 +135,7 @@ n8n includes an AI Agent node, an MCP server trigger and client, and human appro
 
 ## How many apps does each tool connect to?
 
-Zapier claims the largest library, with more than 9,000 apps on its pricing page. Make lists more than 3,500 apps, and n8n's integrations page lists more than 2,000. Each vendor counts integrations differently, so treat these numbers as a rough guide rather than a fair ranking.
+Zapier claims the largest library, with more than 9,000 apps on its pricing page. Make's pricing page says more than 3,000 native apps as of November 2026, and n8n's integrations page lists more than 2,000. Each vendor counts integrations differently, so treat these numbers as a rough guide rather than a fair ranking.
 
 The real test is whether your specific apps have ready-made steps, and whether the tool can call any other API. All three can. Zapier includes webhooks and premium apps on its paid plans. Make supports custom apps for any service with a public API. n8n includes custom HTTP and GraphQL requests on every plan.
 
@@ -142,7 +147,7 @@ The right choice depends on who builds the workflows and how much they run. Here
 
 - **A non-technical owner with a few simple workflows:** choose Zapier. It is the fastest to learn and connects the most apps, and at low volume the higher price per task matters less.
 - **A budget-conscious team without a developer:** choose Make. It costs $9 a month for 10,000 credits, billed annually, and its canvas handles branching well.
-- **A budget-conscious team with a developer:** choose n8n. Start on n8n Cloud at $20 a month, or self-host the Community edition and pay only for the server.
+- **A budget-conscious team with a developer:** choose n8n. Start on n8n Cloud at €20 a month, or self-host the Community edition and pay only for the server.
 - **High-volume workflows with many steps:** choose n8n. One execution covers every step, so long workflows do not multiply the bill.
 - **Strict data location rules:** choose self-hosted n8n, or Make with an EU data center.
 

@@ -28,6 +28,11 @@ takeaways:
     urielpapa.com generates its llms.txt at build time from its topics and
     latest published entries, so the file never goes out of date.
 published: 2026-10-22
+updated: 2026-11-19
+updateNote: >-
+  Updated the spec details for version 2 of the llms.txt proposal, which drops
+  the special meaning of the Optional section, and the sections this site's
+  llms.txt now lists.
 related:
   - geo-and-aeo-fundamentals
   - how-to-check-if-chatgpt-cites-your-site
@@ -49,7 +54,7 @@ faq:
   - q: Should the links in llms.txt point to HTML pages or Markdown files?
     a: >-
       The proposal prefers clean Markdown versions of pages, at the same URL
-      plus .md. Links to HTML pages still work, since AI tools can read HTML,
+      with .md added or in place of the file extension. Links to HTML pages still work, since AI tools can read HTML,
       but Markdown copies are shorter and cheaper for a model to load.
 event: {}
 syndication: []
@@ -81,7 +86,7 @@ An llms.txt file follows a fixed order, and only the first part is required. The
 3. **Optional paragraphs or lists** with more detail, using any Markdown except headings.
 4. **H2 sections of links**, each item written as `[name](url)` with an optional note after a colon.
 
-An H2 named "Optional" has a special meaning: its links are secondary, and a tool short on space can skip them. A minimal file looks like this:
+An H2 named "Optional" is, by convention, for secondary links that a tool short on space can skip. Version 2 of the proposal, from August 2026, keeps the convention but no longer gives the section a special meaning for tools, as the [llms.txt changes page on GitHub](https://github.com/AnswerDotAI/llms-txt/blob/main/nbs/changes.qmd) explains. A minimal file looks like this:
 
 ```markdown
 # Example Company
@@ -98,7 +103,7 @@ An H2 named "Optional" has a special meaning: its links are secondary, and a too
 - [Changelog](https://example.com/changelog.md)
 ```
 
-The spec also suggests a clean Markdown copy of each page at the same URL plus .md. A separate file, llms-full.txt, is not in the spec. Documentation platforms such as Mintlify generate it to combine a whole docs site into one file, and Anthropic's [llms.txt for its developer docs](https://platform.claude.com/llms.txt) has an llms-full.txt companion that was about 46 MB in October 2026.
+The spec also suggests a clean Markdown copy of each page at the same URL, with .md added or in place of the file extension. A separate file, llms-full.txt, is not in the spec. Documentation platforms such as Mintlify generate it to combine a whole docs site into one file, and Anthropic's [llms.txt for its developer docs](https://platform.claude.com/llms.txt) has an llms-full.txt companion that was about 46 MB in October 2026.
 
 ## Who actually reads llms.txt today?
 
@@ -149,7 +154,7 @@ For a local business, a portfolio or a small blog, llms.txt is optional. Spend t
 
 ## What does the llms.txt on urielpapa.com contain?
 
-urielpapa.com does not keep a hand-written llms.txt. An Astro route builds the file from the site's content every time the site is built. It writes my name as the H1, the site summary as the blockquote, and a line noting that every post has a Markdown copy. Then it lists the About, Projects and Contact pages and my profiles, every topic page with its summary, and the 20 newest published entries in the blog collection, which includes news takes and event notes. It ends with up to 10 notes and an "Optional" section linking the RSS feed and the sitemap. Drafts are never listed.
+urielpapa.com does not keep a hand-written llms.txt. An Astro route builds the file from the site's content every time the site is built. It writes my name as the H1, the site summary as the blockquote, and a line noting that every post has a Markdown copy. Then it lists the About, Projects and Contact pages and my profiles, every project, every topic page with its summary, and the 20 newest published entries in the blog collection, which includes news takes and event notes. After those come up to 10 notes, up to 30 answers, the glossary and up to 15 release notes, and it ends with an "Optional" section linking the RSS feed and the sitemap. Drafts are never listed.
 
 An excerpt from the live file on 22 October 2026, with lines left out where marked:
 

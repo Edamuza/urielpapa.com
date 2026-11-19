@@ -30,6 +30,10 @@ takeaways:
 businessImpact: []
 sourceUrl: https://blog.railway.com/p/security-disclosure-wednesday-october-21st
 published: 2026-10-22
+updated: 2026-11-19
+updateNote: >-
+  Added a dated note on Railway's November 10 incident report, including how
+  the attacker got in, the 100,000-workspace upper bound and sealed variables.
 related:
   - n8n-messenger-instagram-chatbot
   - laravel-vs-nextjs
@@ -41,13 +45,14 @@ faq:
     a: >-
       Not confirmed. Sealed variables cannot be read back through Railway's UI,
       API or CLI, but the disclosure does not say whether they were in scope,
-      so GitGuardian recommends rotating them too. I would treat them like
-      every other secret until Railway says otherwise.
+      so GitGuardian recommends rotating them too. Railway's November 10
+      incident report says the stored histories of 353 builds were read, sealed
+      variables included, so treat them like every other secret.
   - q: Do I need to move off Railway because of this?
     a: >-
       Not necessarily. The urgent job is rotating secrets and checking logs,
-      which you would need to do wherever you moved. Decide on hosting later,
-      once Railway publishes how the attacker got in and what it changed.
+      which you would need to do wherever you moved. Decide on hosting after
+      reading Railway's November 10 incident report on how the attacker got in.
 event: {}
 syndication: []
 draft: false
@@ -94,6 +99,8 @@ Railway's initial analysis suggests the impact "may be limited to a subset of us
 *Environment variables hold an app's secrets, such as API keys and database passwords. Photo: [Mynameismael](https://commons.wikimedia.org/wiki/File:Virtual_Private_Server.png "Mynameismael's photo on Wikimedia Commons"), [CC0](https://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons CC0 1.0 public domain dedication").*
 
 Railway has not said how many accounts are in that subset, how the attacker got in or how the decryption happened. Sealed variables are another open question. [Railway's variables docs](https://docs.railway.com/guides/variables) say a sealed value is never shown in the UI and cannot be retrieved through the API or CLI. GitGuardian's [analysis of the incident](https://blog.gitguardian.com/railway-october-2026-incident-environment-variables/) notes the disclosure does not say whether sealed variables were in scope, and recommends rotating them as well. Until Railway answers these questions, every Railway user should act as if affected.
+
+Update, November 19, 2026: [Railway's November 10 incident report](https://blog.railway.com/p/incident-report-october-security-incident "Railway's incident report on the October 2026 security incident") says the attacker got in through a previously unknown flaw in its build infrastructure, then reached a longer-lived cloud credential and used it to decrypt some variables on October 21. It puts the upper bound at about 100,000 workspaces, or 1.85%, says the stored histories of 353 builds were read, sealed variables included, and estimates about US$740,000 in unauthorized AI token spend.
 
 ## How serious is it?
 

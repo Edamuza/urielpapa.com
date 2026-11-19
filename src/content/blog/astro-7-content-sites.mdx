@@ -20,14 +20,17 @@ takeaways:
   - >-
     Astro 7 changes the defaults for Markdown and HTML: a new Rust-based
     Markdown processor called Sätteri, and a stricter compiler that reports
-    invalid HTML instead of quietly fixing it.
+    unclosed tags as errors instead of quietly fixing them.
   - >-
     This site, urielpapa.com, is built on Astro 7, so these notes come from a
     working build.
 businessImpact: []
 sourceUrl: https://astro.build/blog/astro-7/
 published: 2026-10-14
-updated: 2026-10-19
+updated: 2026-11-19
+updateNote: >-
+  Corrected the compiler change: unclosed tags now fail the build, while
+  invalid HTML nesting is passed through as-is rather than reported as an error.
 related:
   - laravel-vs-nextjs
   - n8n-messenger-instagram-chatbot
@@ -61,7 +64,7 @@ Astro 7 is mostly a speed and tooling release. These are the main changes from t
 * **Faster builds.** Astro 7 runs on Vite 8, which uses the Rolldown bundler, and the `.astro` compiler is rewritten in Rust. The Astro team reports builds 15 to 61 percent faster in its own benchmarks.
 * **A new default Markdown processor.** Markdown and MDX now go through Sätteri, a Rust-based processor. Sites that rely on remark or rehype plugins can keep the older unified pipeline through `@astrojs/markdown-remark`.
 * **Caching and routing become stable.** Route caching is stable, with experimental cache providers for Netlify, Vercel and Cloudflare. A new `src/fetch.ts` entry point gives control over the request pipeline.
-* **Breaking changes.** The new compiler reports unclosed tags and invalid HTML nesting as errors instead of fixing them silently. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
+* **Breaking changes.** The new compiler reports unclosed tags as errors instead of fixing them silently, and it passes invalid HTML nesting through as-is, leaving the browser to handle it, as the [upgrade guide's compiler section](https://docs.astro.build/en/guides/upgrade-to/v7/) explains. Whitespace between inline elements now collapses by default, so a space you rely on may need an explicit `{" "}`. Astro DB (`@astrojs/db`) is removed.
 
 ![A text editor window full of code on a computer screen](../../assets/images/content/astro-7-content-sites-2.jpg "A text editor window full of code on a computer screen")
 
@@ -79,13 +82,13 @@ Astro's core idea is that most pages on a content site do not need JavaScript in
 
 *Content sites depend on pages that load fast for readers. Photo: [Jaokov](https://commons.wikimedia.org/wiki/File:A_student_reading_from_a_laptop.jpg "Jaokov's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
-Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with sloppy HTML now fail the build until they are fixed.
+Astro 7 keeps that model and makes it cheaper to run. Faster builds matter most for content sites, because every new post or edit triggers a rebuild, so a site with hundreds of pages spends less time waiting on each deploy. Stable route caching helps pages that are rendered on demand, such as a search page or a form handler, without turning a static site into a server app. The stricter compiler is the one change that can cost time on an upgrade, because old templates with unclosed tags now fail the build until they are fixed.
 
 For a business, the practical questions are build time, hosting cost and how much upkeep a site needs between major versions. In my view, Astro 7 helps with the first two and asks for some care with the third. On this site, the Astro step of a production build takes about 16 seconds for around 30 pages, so build time is not something I think about. A mostly static site also stays cheap to host, because static pages are served from a CDN and only a few routes run on demand. Upkeep is where I plan ahead: each major version brings breaking changes, so I upgrade on a branch soon after a release instead of skipping versions and doing it all at once later.
 
 ## What did I notice building this site on Astro 7?
 
-This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. [Most pages ship no JavaScript](/notes/this-site-ships-no-javascript-by-default), with small islands for the theme toggle, search, code copy buttons and form enhancement.
+This site uses Astro 7 with static pages, content collections for posts, notes, projects and topic hubs, Tailwind CSS for styling and Keystatic as a git-based CMS. [Every page is static HTML with very little JavaScript](/notes/this-site-ships-no-javascript-by-default): small islands for the theme toggle, menu, search, code copy buttons and form enhancement, plus analytics that load after your first interaction.
 
 One concrete example of the Markdown change: this site uses a rehype plugin for callout boxes, so it opts back into the unified pipeline through `@astrojs/markdown-remark`, exactly as the upgrade guide describes.
 

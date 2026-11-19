@@ -22,7 +22,7 @@ sources:
   - title: n8n release notes
     url: https://docs.n8n.io/release-notes/
 published: 2026-11-18
-lastChecked: 2026-11-18
+lastChecked: 2026-11-19
 draft: false
 ---
 
@@ -45,7 +45,7 @@ n8n Cloud is the paid, hosted version. n8n's [pricing page](https://n8n.io/prici
 | Business   | 667 euros       | 40,000                      | Self-hosted only, 6 projects   |
 | Enterprise | By quote        | Custom                      | Contact sales                  |
 
-Every plan includes unlimited users and workflows. n8n counts executions, not steps, so a workflow with 20 nodes still counts as one run. Since n8n 2.38, runs of error workflows no longer count toward the quota on any plan, according to the [release notes](https://docs.n8n.io/release-notes/ "n8n's official release notes").
+Every plan includes unlimited users and workflows. n8n counts executions, not steps, so a workflow with 20 nodes still counts as one run. Runs of error workflows no longer count toward the quota on any plan: on Cloud since n8n 2.38, and on self-hosted Business and Enterprise since 2.28, according to [n8n's changelog entry on error workflow executions](https://docs.n8n.io/release-notes/ "n8n's changelog and release notes").
 
 ## Which should a small business pick?
 

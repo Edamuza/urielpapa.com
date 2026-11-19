@@ -37,7 +37,10 @@ businessImpact:
     Output tokens usually cost more than input tokens, so short, structured
     replies save money.
 published: 2026-10-02
-updated: 2026-10-19
+updated: 2026-11-19
+updateNote: >-
+  Updated the OpenAI row of the price table to gpt-6.2-sol, OpenAI's current
+  Sol model, and rechecked the table's prices in November 2026.
 related:
   - n8n-messenger-instagram-chatbot
   - geo-and-aeo-fundamentals
@@ -121,12 +124,12 @@ Providers charge per token, usually quoted per million tokens, with one price fo
 
 *Like a token you pay with at a venue, an AI token is the unit a model reads and bills you in. Photo: [Pittigrilli](https://commons.wikimedia.org/wiki/File:Deposit_token_%28Pfandmarke%29_from_%27Munich_Beach_Resort%27_beach_club_in_Munich,_Germany.jpg "Pittigrilli's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
 
-These are the standard API prices for one mid-range model from each of the three big providers, checked on October 17, 2026:
+These are the standard API prices for one mid-range model from each of the three big providers, checked on November 19, 2026:
 
 | Model                               | Input per 1M tokens | Output per 1M tokens | Cached input per 1M tokens | Source                                                                        |
 | ----------------------------------- | ------------------- | -------------------- | -------------------------- | ----------------------------------------------------------------------------- |
 | Claude Sonnet 5.5                   | US$2.00             | US$10.00             | US$0.10                    | [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing) |
-| OpenAI gpt-6.1-sol                  | US$2.00             | US$10.00             | US$0.10                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
+| OpenAI gpt-6.2-sol                  | US$2.00             | US$10.00             | US$0.10                    | [OpenAI pricing](https://developers.openai.com/api/docs/pricing)              |
 | Gemini 3.1 Pro Preview (up to 200K) | US$2.00             | US$12.00             | US$0.20, plus storage      | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing)           |
 
 Output costs five to six times as much as input on all three, which is why long replies drive most of a bill. Prices change often, so check the source pages before you budget.

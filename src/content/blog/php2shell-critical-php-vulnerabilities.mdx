@@ -24,10 +24,15 @@ takeaways:
     and 8.1.
   - >-
     CISA said on October 21, 2026 that it had not observed exploitation yet,
-    but a proof-of-concept video leaked a day before the patch.
+    but a proof-of-concept video leaked a day before the patch. CISA added
+    both flaws to its Known Exploited Vulnerabilities catalog on October 26.
 businessImpact: []
 sourceUrl: https://www.php.net/archive/2026.php#2026-10-21-5
 published: 2026-10-22
+updated: 2026-11-19
+updateNote: >-
+  Added a dated note that CISA put both php2shell flaws in its Known Exploited
+  Vulnerabilities catalog on October 26, 2026.
 related:
   - laravel-vs-nextjs
   - n8n-messenger-instagram-chatbot
@@ -87,6 +92,8 @@ Both flaws carry a CVSS v4.0 score of 9.2, which is critical. The PHP Foundation
 *The two flaws can let an attacker run code on a web server without logging in. Photo: [Victor Grigas](https://commons.wikimedia.org/wiki/File:Wikimedia_Foundation_Servers-8055_35.jpg "Victor Grigas's photo on Wikimedia Commons"), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/ "Creative Commons Attribution-ShareAlike 3.0 license").*
 
 On exploitation, the sources are careful. [CISA's alert](https://www.cisa.gov/news-events/alerts/2026/10/21/critical-vulnerabilities-php-require-immediate-patching) of October 21 says it "has not observed exploitation of these vulnerabilities as of the time of publication." The PHP security team said it found no functional exploits at release. But the leaked video sped up work on proofs of concept, and [Qualys's post](https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities), updated October 22, says Cloudflare has reported attack traffic aimed at these flaws. Attack traffic is not proof of a break-in, but it means people are trying.
+
+Update, November 19, 2026: CISA added both flaws to its [Known Exploited Vulnerabilities catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-109618 "CISA's Known Exploited Vulnerabilities catalog entry for CVE-2026-109618") on October 26, 2026, as the [CVE record for CVE-2026-109618](https://www.cve.org/CVERecord?id=CVE-2026-109618 "CVE record for CVE-2026-109618, with CISA's exploitation data") now shows. CISA lists a flaw there when it has evidence of active exploitation.
 
 Cloudflare's CTO, Dane Knecht, posted about those early attacks and the free WAF rules on X:
 
