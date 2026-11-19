@@ -2,29 +2,297 @@
 import Layout from "@/layouts/Layout.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import SocialIcon from "@/components/SocialIcon.astro";
-import WorkWithMe from "@/components/WorkWithMe.astro";
-import { SITE, SOCIALS } from "@/config";
+import StackMarquee from "@/components/StackMarquee.astro";
+import CertificationList from "@/components/CertificationList.astro";
+import { SITE, SOCIALS, WORK_WITH_ME_HREF } from "@/config";
 import { HUBS } from "@/data/hubs";
 import events from "@/data/events.json";
-import CertificationList from "@/components/CertificationList.astro";
-import { getHubs } from "@/utils/content";
+import { BUILD_TOOLS, GROW_TOOLS } from "@/data/tech-stack";
+import { getHubs, getProjects, projectUrl } from "@/utils/content";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
 const hubs = await getHubs();
-// The line on the portrait: job title, city and country.
-const [city, country] = SITE.location.split(", ");
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
 ];
 
-const proof = [
-  "Led and co-developed an ERP with 115 pages, 144 data models and 5,241 automated tests in under 3 months.",
-  "Led and co-developed 5 WordPress SEO plugins, about 11,700 lines of code.",
-  "Contributed about two-thirds of TravelEase's 316 commits; the project has 411 automated tests.",
-  "Ran Meta ads at about US$8 a day that started 33 inbound conversations in 5 days, about US$1 each.",
-  "Built a multi-agent Claude Code pipeline that audits a production codebase in under 6 minutes.",
+// Everything below comes from the site and Uriel's resume (November 2026).
+
+const method = [
+  {
+    word: "See",
+    line: "the problem",
+    proof: [
+      "A client fit-check form and consultation playbook that qualify leads before a call.",
+      "A 23-page semantic SEO master plan built from Search Console, GA4, Bing Webmaster and Google Trends data.",
+      "12 SOPs, plus the job descriptions and contracts the team worked from.",
+    ],
+  },
+  {
+    word: "Build",
+    line: "the solution",
+    proof: [
+      "An ERP with 115 pages, 144 data models and 5,241 automated tests, in under 3 months.",
+      "An NFC card platform with 497 tests and a client quotation portal with 174.",
+      "A multi-agent Claude Code pipeline that audits a production codebase in under 6 minutes.",
+    ],
+  },
+  {
+    word: "Grow",
+    line: "the business",
+    proof: [
+      "Close rate from 15% to 30% across 40 consultations.",
+      "33 lead conversations in 5 days of Meta ads, about US$1 each.",
+      "150 NFC cards sold in their first 2 months, and clients' organic clicks up about 40%.",
+    ],
+  },
 ];
+
+/** A photo from Uriel's own library, served from public/images/about at
+ * 640 and 1280 wide (AVIF and WebP, metadata stripped). Captions say only
+ * what the photo itself shows, or when and where it was taken. */
+type Photo = {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+};
+/** One stop on a year's timeline, in month order. A stop with no `what` is
+ * a photo moment: pictures from that month, placed where they happened. */
+type Entry = {
+  when: string;
+  what?: string;
+  note?: string;
+  photos?: Photo[];
+};
+type Chapter = {
+  year: string;
+  lead?: string[];
+  entries: Entry[];
+};
+const photo = (
+  src: string,
+  width: number,
+  height: number,
+  alt: string,
+  caption: string
+): Photo => ({ src: `/images/about/${src}`, width, height, alt, caption });
+const years: Chapter[] = [
+  {
+    year: "2023",
+    entries: [
+      {
+        when: "Feb",
+        what: "Marketing specialist, part-time",
+        note: "Grew a car repair shop finder's Facebook page to 2,000 followers and signed up 50 shops.",
+      },
+      {
+        when: "Oct",
+        what: "WordPress developer, freelance",
+        note: "Built client sites for international marketing and advertising agencies.",
+      },
+    ],
+  },
+  {
+    year: "2024",
+    entries: [
+      {
+        when: "Jun",
+        what: "Team leader",
+        note: "Led 8 developers, SEO specialists, a writer and a designer.",
+      },
+      {
+        when: "Nov",
+        what: "Project manager",
+        note: "Ran 10 client projects and delivered 95% on time.",
+      },
+      {
+        when: "Dec",
+        photos: [
+          photo(
+            "2024-12-group",
+            1280,
+            853,
+            "Uriel Papa with a group of twelve people outdoors at night under string lights",
+            "December 2024."
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    year: "2025",
+    lead: [
+      "I founded VITE SEO Digital Advertising in March 2025, still an undergraduate. It grew to up to 22 people across sales, development, marketing and SEO.",
+    ],
+    entries: [
+      {
+        when: "Mar",
+        what: "Founded VITE SEO Digital Advertising",
+        note: "At 21. Onboarded and trained 15 hires and wrote 12 SOPs.",
+      },
+      {
+        when: "May",
+        photos: [
+          photo(
+            "2025-05-office",
+            1280,
+            720,
+            "Uriel Papa in a black suit and sunglasses in an office with blue cubicles and balloons",
+            "May 2025."
+          ),
+          photo(
+            "2025-05-mirror",
+            1280,
+            1707,
+            "Uriel Papa in a black shirt taking a mirror photo against a dark green wall",
+            "Pasay, May 2025."
+          ),
+        ],
+      },
+      {
+        when: "Nov",
+        what: "Philippine SME Business Expo",
+        note: "Attended, and wrote up what I learned about how small businesses adopt technology.",
+        photos: [
+          photo(
+            "2025-11-sme-expo",
+            1280,
+            1707,
+            "Uriel Papa wearing a Philippine SME Business Expo badge in a crowded exhibition hall",
+            "At the expo, November 2025."
+          ),
+        ],
+      },
+    ],
+  },
+  {
+    year: "2026",
+    entries: [
+      {
+        when: "Feb",
+        what: "Speakerscon",
+        note: "Attended The Premier Branding and Marketing Conference of 2026.",
+        photos: [
+          photo(
+            "2026-02-speakerscon",
+            1280,
+            1707,
+            "Uriel Papa in a grey suit holding a briefcase in front of the Speakerscon welcome backdrop",
+            "At Speakerscon, February 2026."
+          ),
+        ],
+      },
+      {
+        when: "Feb",
+        photos: [
+          photo(
+            "2026-02-talk",
+            1280,
+            720,
+            "Uriel Papa standing and speaking to a seated group in a café",
+            "February 2026. Photo by Bruce Dan Reyes."
+          ),
+          photo(
+            "2026-02-group",
+            1280,
+            720,
+            "Uriel Papa in a group of about twenty people around café tables",
+            "Makati, February 2026."
+          ),
+          photo(
+            "2026-02-microsoft",
+            1280,
+            1707,
+            "Uriel Papa in a black blazer in front of a Microsoft sign and a gold slatted wall",
+            "Microsoft's office in Makati, February 2026."
+          ),
+        ],
+      },
+      {
+        when: "May",
+        photos: [
+          photo(
+            "2026-05-certificates",
+            1280,
+            960,
+            "Uriel Papa with four others holding green certificate folders under a university welcome sign",
+            "Manila, May 2026."
+          ),
+        ],
+      },
+      {
+        when: "Jul",
+        what: "Built the company's own ERP",
+        note: "With the in-house team: HR and payroll, CRM, projects and accounting behind one login.",
+      },
+      {
+        when: "Jul",
+        photos: [
+          photo(
+            "2026-07-taguig",
+            1280,
+            1707,
+            "Uriel Papa standing beside a colleague in an office",
+            "Taguig, July 2026."
+          ),
+        ],
+      },
+      {
+        when: "Aug",
+        what: "Graduated cum laude",
+        note: "BS Information Systems, Technological University of the Philippines.",
+        photos: [
+          photo(
+            "2026-06-graduation",
+            1280,
+            1920,
+            "Uriel Papa's graduation portrait in a black toga with a gold hood",
+            "Graduation portrait."
+          ),
+        ],
+      },
+      {
+        when: "Oct",
+        what: "AppBuildersPH Hackathon",
+        note: "Co-developed Tell Liora, an offline maternal-care app.",
+      },
+    ],
+  },
+];
+
+const BUILDS = [
+  "vite-seo-erp",
+  "nfc-card-platform",
+  "quotation-portal",
+  "wordpress-seo-plugins",
+  "travelease",
+  "tell-liora",
+  "archive-downloader",
+];
+const projects = (await getProjects())
+  .filter(p => BUILDS.includes(p.id))
+  .sort((a, b) => BUILDS.indexOf(a.id) - BUILDS.indexOf(b.id));
+
+// The result each build is known for. `figure` is set in large type; builds
+// without a number carry a short `text` instead.
+const results: Record<
+  string,
+  { pre?: string; figure?: string; label?: string; text?: string }
+> = {
+  "vite-seo-erp": { pre: "About", figure: "US$390", label: "a month saved" },
+  "nfc-card-platform": { figure: "150", label: "cards sold in 2 months" },
+  "quotation-portal": { figure: "174", label: "automated tests" },
+  "wordpress-seo-plugins": {
+    figure: "10 min",
+    label: "for a site audit, down from 2 hours",
+  },
+  travelease: { figure: "411", label: "automated tests" },
+  "tell-liora": { text: "AppBuildersPH Hackathon 2026" },
+  "archive-downloader": { text: "Wayback pages to WordPress" },
+};
 
 const schema = [
   {
@@ -44,271 +312,1007 @@ const schema = [
   ogType="profile"
   schema={schema}
 >
-  <div class="app-layout max-w-read pt-8">
-    <Breadcrumbs crumbs={crumbs} />
-    <h1 class="h1">About {SITE.name}</h1>
-
-    {
-      /* The same floating cut-out portrait as the home page on phones: a
-        giant name behind it and the name and title over its bottom-left. */
-    }
-    <figure class="about-portrait">
-      <span class="about-portrait__bigname" aria-hidden="true">Uriel Papa</span>
-      <div class="about-portrait__float">
-        <picture class="contents">
-          <source
-            type="image/avif"
-            srcset="/images/uriel-papa-portrait-320.avif 320w, /images/uriel-papa-portrait-480.avif 480w, /images/uriel-papa-portrait-560.avif 560w, /images/uriel-papa-portrait-800.avif 800w, /images/uriel-papa-portrait.avif 1200w"
-            sizes="290px"
-          />
-          <img
-            src="/images/uriel-papa-portrait.webp"
-            srcset="/images/uriel-papa-portrait-320.webp 320w, /images/uriel-papa-portrait-480.webp 480w, /images/uriel-papa-portrait-560.webp 560w, /images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
-            sizes="290px"
-            width="1200"
-            height="1787"
-            alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
-            title="Uriel Papa"
-            loading="eager"
-            fetchpriority="high"
-            decoding="async"
-            class="about-portrait__img"
-          />
-        </picture>
-      </div>
-      <figcaption>
-        <span class="block font-semibold">{SITE.name}</span>
-        <span class="text-muted-foreground block text-sm"
-          >{SITE.jobTitle}&nbsp;· {city}{country && `, ${country}`}</span
-        >
-      </figcaption>
-    </figure>
-
-    <div class="mt-8 space-y-4 text-lg">
-      <p>
-        <strong
-          >I'm Uriel Papa, a builder and founder in the Philippines.</strong
-        >{" "}
-        I built my own company, a digital agency I founded at 21, and grew it to a
-        team of up to 22. In my blood I'm a builder and founder. The agency closed
-        after financial losses, and I'm rebuilding myself and sharing the journey
-        here: what I've learned and the mistakes I've made as a founder. I graduated
-        cum laude with a BS in Information Systems from the Technological University
-        of the Philippines in 2026.
-      </p>
-      <p>
-        This site is where I share what I learn: how AI and large language
-        models work, the automations I build, how technology affects business
-        and society, how search is changing, what's new in tech stacks,
-        marketing basics, and what I've learned as a founder.
-      </p>
+  <div class="about-page">
+    <div class="app-layout pt-8">
+      <Breadcrumbs crumbs={crumbs} />
     </div>
 
-    <section class="mt-10" aria-labelledby="now-h">
-      <h2 id="now-h" class="h2 mb-3">What I do now</h2>
-      <p>
-        I'm {SITE.name}, a {SITE.jobTitle.toLowerCase()} in the Philippines. I build
-        software and automations, and I write here about AI, automation, tech stacks,
-        SEO, GEO and AEO, marketing and the founder's journey. My work includes leading
-        and co-developing an ERP with 115 pages and 5,241 automated tests in under
-        3 months, AI chatbots and outreach workflows on n8n, and 5 WordPress SEO plugins.
-        In August 2026 I graduated cum laude in Information Systems from the Technological
-        University of the Philippines, and in October I co-developed Tell Liora at
-        the AppBuildersPH Hackathon 2026. Now I'm deciding what comes next: a job,
-        freelance work, or building a business again. For what I'm working on this
-        month, see <a href="/now">Now</a>; for the tools I use, see <a
-          href="/stack">Stack</a
-        >.
-      </p>
-      <p class="mt-4">
-        More detail on the systems themselves is on the <a href="/projects"
-          >Projects</a
-        > page.
-      </p>
-    </section>
+    <section class="app-layout hero" aria-labelledby="about-h">
+      <figure class="portrait">
+        <div class="plate">
+          <picture class="contents">
+            <source
+              type="image/avif"
+              srcset="/images/uriel-papa-portrait-320.avif 320w, /images/uriel-papa-portrait-480.avif 480w, /images/uriel-papa-portrait-560.avif 560w, /images/uriel-papa-portrait-800.avif 800w, /images/uriel-papa-portrait.avif 1200w"
+              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 560px, 118vw"
+            />
+            <img
+              src="/images/uriel-papa-portrait.webp"
+              srcset="/images/uriel-papa-portrait-320.webp 320w, /images/uriel-papa-portrait-480.webp 480w, /images/uriel-papa-portrait-560.webp 560w, /images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
+              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 560px, 118vw"
+              width="1200"
+              height="1787"
+              alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
+              title="Uriel Papa"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+              class="plate__img"
+            />
+          </picture>
+        </div>
+        <figcaption class="portrait__caption">{SITE.name}, 2026</figcaption>
+      </figure>
 
-    <section class="mt-10" aria-labelledby="proof-h">
-      <h2 id="proof-h" class="h2 mb-4">In numbers</h2>
-      <ul class="list-disc space-y-2 ps-5">{proof.map(p => <li>{p}</li>)}</ul>
-    </section>
-
-    <section class="mt-10" aria-labelledby="write-h">
-      <h2 id="write-h" class="h2 mb-4">What I write about</h2>
-      <ul class="space-y-2">
-        {
-          HUBS.map(h => (
-            <li>
-              <a href={`/topics/${h.id}`} class="font-semibold">
-                {h.name}
-              </a>
-              : {hubs.find(e => e.id === h.id)?.data.summary}
-            </li>
-          ))
-        }
-      </ul>
-      <p class="mt-4">
-        I also write <a href="/news">takes on tech news</a> and <a
-          href="/events">notes from seminars and trainings</a
-        >.
-      </p>
-    </section>
-
-    <section class="mt-10" aria-labelledby="ev-h">
-      <h2 id="ev-h" class="h2 mb-4">Seminars, training and sponsorships</h2>
-      <ul class="list-disc space-y-1 ps-5">
-        {
-          events.attended.map(e => (
-            <li>
-              {e.name}, {e.organizer} ({e.dateLabel})
-            </li>
-          ))
-        }
-      </ul>
-      {
-        events.sponsored.map(e => (
-          <p class="mt-4">
-            I was also a {e.role.toLowerCase()} of{" "}
-            <a
-              href={e.sponsorsUrl}
-              title={`See Uriel Papa on the ${e.name} sponsors page`}
-              rel="noopener"
-            >
-              {e.name}
-            </a>{" "}
-            in {e.city} ({e.dateLabel}), supporting the WordPress community I
-            built my first client websites in.
+      <div class="ident">
+        <div class="ident__top">
+          <h1 id="about-h" class="ident__name">{SITE.name}</h1>
+          <p class="ident__role">{SITE.jobTitle}&nbsp;· {SITE.location}</p>
+        </div>
+        <div class="ident__body">
+          <p class="ident__creed">
+            <span>I see the problem.</span>
+            <span>I build the solution.</span>
+            <span>I grow the business.</span>
           </p>
-        ))
-      }
+          <p class="ident__intro">
+            I founded an agency at 21 and grew it to a team of up to 22. It
+            closed after financial losses in 2026, the same year I graduated cum
+            laude, and now I'm deciding what to build next.
+          </p>
+          <a
+            href="#story"
+            class="ident__cue"
+            title="Jump to Uriel Papa's story"
+          >
+            Read the story
+            <svg viewBox="0 0 12 16" aria-hidden="true">
+              <path d="M6 1v13M1.5 9.5 6 14l4.5-4.5"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
     </section>
 
-    <section class="mt-10" aria-labelledby="cert-h">
-      <h2 id="cert-h" class="h2 mb-4">Certifications</h2>
-      <CertificationList />
+    <section class="stack" aria-labelledby="stack-h">
+      <div class="app-layout stack__head">
+        <h2 id="stack-h" class="sec-h">What I build with</h2>
+        <p class="stack__intro">
+          The languages, frameworks, AI models and tools I've shipped with, from
+          code to search. <a
+            href="/stack"
+            title="How Uriel Papa uses each tool on the Stack page"
+            >How I use each one</a
+          >.
+        </p>
+      </div>
+      <StackMarquee
+        rows={[
+          { label: "Languages, frameworks and data", tools: BUILD_TOOLS },
+          {
+            label: "AI, automation, search and hosting",
+            tools: GROW_TOOLS,
+            reverse: true,
+          },
+        ]}
+      />
     </section>
 
-    <section class="mt-10" aria-labelledby="lang-h">
-      <h2 id="lang-h" class="h2 mb-3">Languages</h2>
-      <p>Filipino (native) and English (professional working proficiency).</p>
-    </section>
+    <div class="app-layout">
+      <section class="sec" id="story" aria-labelledby="story-h">
+        <h2 id="story-h" class="sec-h">My story</h2>
+        <ol class="years">
+          {
+            years.map(y => (
+              <>
+                {y.year === "2025" && (
+                  <li class="interlude">
+                    <figure class="print">
+                      <img
+                        src="/images/uriel-papa.jpg"
+                        width="480"
+                        height="480"
+                        alt="Uriel Papa outdoors in black-framed glasses, with palm trees and a school building behind him"
+                        title="Uriel Papa, off the clock"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <figcaption>Off the clock.</figcaption>
+                    </figure>
+                    <p class="interlude__line">
+                      I started the agency with the clients who followed me from
+                      freelance work.
+                    </p>
+                  </li>
+                )}
+                <li class="year">
+                  <p class="year__num">{y.year}</p>
+                  <div class="year__body">
+                    {y.lead && (
+                      <div class="year__lead">
+                        {y.lead.map(l => (
+                          <p>{l}</p>
+                        ))}
+                        <p>
+                          Before it closed, we built 12 WordPress sites for
+                          clients like Noyona Cosmetics and Icamen Legal, and{" "}
+                          <a
+                            href="/blog/n8n-messenger-instagram-chatbot"
+                            title="How to Build an AI Chatbot for Messenger and Instagram with n8n"
+                          >
+                            an AI chatbot that answers 120 inquiries a month
+                          </a>
+                          . The sales process I designed took our close rate
+                          from 15% to 30%.
+                        </p>
+                      </div>
+                    )}
+                    <ol class="year__entries">
+                      {y.entries.map(e => (
+                        <li class:list={[!e.what && "year__moment"]}>
+                          {e.what ? (
+                            <p class="year__what">
+                              <span>{e.what}</span>
+                              <span class="year__when">{e.when}</span>
+                            </p>
+                          ) : (
+                            <p class="year__when year__when--alone">{e.when}</p>
+                          )}
+                          {e.note && <p class="year__note">{e.note}</p>}
+                          {e.photos && (
+                            <ul
+                              class="snaps"
+                              aria-label={`Photos from ${e.when} ${y.year}`}
+                            >
+                              {e.photos.map(ph => (
+                                <li
+                                  class="snap"
+                                  style={`--ar: ${ph.width / ph.height}`}
+                                >
+                                  <figure>
+                                    <picture>
+                                      <source
+                                        type="image/avif"
+                                        srcset={`${ph.src}-640.avif 640w, ${ph.src}-1280.avif ${ph.width}w`}
+                                        sizes="(min-width: 64rem) 420px, 90vw"
+                                      />
+                                      <img
+                                        src={`${ph.src}-640.webp`}
+                                        srcset={`${ph.src}-640.webp 640w, ${ph.src}-1280.webp ${ph.width}w`}
+                                        sizes="(min-width: 64rem) 420px, 90vw"
+                                        width={ph.width}
+                                        height={ph.height}
+                                        alt={ph.alt}
+                                        title={ph.caption.replace(/\.$/, "")}
+                                        loading="lazy"
+                                        decoding="async"
+                                      />
+                                    </picture>
+                                    <figcaption>{ph.caption}</figcaption>
+                                  </figure>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                    {y.year === "2026" && (
+                      <p class="year__close">
+                        The agency closed after financial losses. I'm
+                        rebuilding, and writing down what I learned:{" "}
+                        <a
+                          href="/blog/closing-my-agency"
+                          title="What Losing My Agency Taught Me as a Founder"
+                        >
+                          What Losing My Agency Taught Me as a Founder
+                        </a>
+                        .
+                      </p>
+                    )}
+                  </div>
+                </li>
+              </>
+            ))
+          }
+        </ol>
+      </section>
 
-    <section class="mt-10" aria-labelledby="reach-h">
-      <h2 id="reach-h" class="h2 mb-3">How to reach me</h2>
-      <p>
-        Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or use the <a
-          href="/contact">contact form</a
-        >. I'm also on:
-      </p>
-      <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-1">
-        {
-          SOCIALS.map(s => (
-            <li>
-              <a
-                href={s.url}
-                rel="me noopener"
-                class="inline-flex items-center gap-1.5"
-              >
-                <SocialIcon name={s.name} />
-                {s.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+      <section class="sec" aria-labelledby="work-h">
+        <div class="work__head">
+          <h2 id="work-h" class="sec-h">What I've built</h2>
+          <a
+            href="/projects"
+            class="work__all"
+            title="All of Uriel Papa's projects">All projects</a
+          >
+        </div>
+        <ul class="work">
+          {
+            projects.map((p, i) => {
+              const r = results[p.id];
+              return (
+                <li>
+                  <a
+                    href={projectUrl(p)}
+                    title={`Read the ${p.data.title} case study`}
+                    class:list={["work__row", i === 0 && "work__row--lead"]}
+                  >
+                    <p class="work__result">
+                      {r?.figure ? (
+                        <>
+                          {r.pre && <span class="work__pre">{r.pre} </span>}
+                          <span class="work__figure">{r.figure}</span>
+                          <span class="work__label"> {r.label}</span>
+                        </>
+                      ) : (
+                        <span class="work__text">{r?.text}</span>
+                      )}
+                    </p>
+                    <div class="work__about">
+                      <h3 class="work__title">{p.data.title}</h3>
+                      <p class="work__outcome">{p.data.outcome}</p>
+                    </div>
+                    <span class="work__year">{p.data.year}</span>
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </section>
 
-    <WorkWithMe text="Want to work together?" from="about" />
+      <section class="sec" aria-labelledby="method-h">
+        <h2 id="method-h" class="sec-h">How I work</h2>
+        <ol class="method">
+          {
+            method.map(m => (
+              <li>
+                <h3 class="method__word">
+                  {m.word} <span>{m.line}</span>
+                </h3>
+                <ul class="method__proof">
+                  {m.proof.map(p => (
+                    <li>{p}</li>
+                  ))}
+                </ul>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section class="sec more" aria-label="Writing, training and languages">
+        <div>
+          <h2 class="sub-h">What I write about</h2>
+          <ul class="more__list">
+            {
+              HUBS.map(h => (
+                <li>
+                  <a
+                    href={`/topics/${h.id}`}
+                    class="more__link"
+                    title={`Uriel Papa's writing on ${h.name}`}
+                  >
+                    {h.name}
+                  </a>
+                  <p class="more__note">
+                    {hubs.find(e => e.id === h.id)?.data.summary}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="more__also">
+            Also <a href="/news" title="Uriel Papa's takes on tech news"
+              >takes on tech news</a
+            > and <a
+              href="/events"
+              title="Uriel Papa's notes from seminars and trainings"
+              >notes from seminars</a
+            >.
+          </p>
+        </div>
+        <div>
+          <h2 class="sub-h">Seminars and training</h2>
+          <ul class="more__list">
+            {
+              events.attended.map(e => (
+                <li>
+                  <span class="font-semibold">{e.name}</span>
+                  <p class="more__note">
+                    {e.organizer} · {e.dateLabel}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+          {
+            events.sponsored.map(e => (
+              <p class="more__also">
+                Also a {e.role.toLowerCase()} of{" "}
+                <a
+                  href={e.sponsorsUrl}
+                  title={`See Uriel Papa on the ${e.name} sponsors page`}
+                  rel="noopener"
+                >
+                  {e.name}
+                </a>{" "}
+                in {e.city}, supporting the WordPress community I built my first
+                client sites in.
+              </p>
+            ))
+          }
+          <h2 class="sub-h sub-h--next">Languages</h2>
+          <p class="more__lang">
+            Filipino (native) and English (professional working proficiency).
+          </p>
+        </div>
+        <div class="more__certs">
+          <h2 class="sub-h">Certifications</h2>
+          <CertificationList />
+        </div>
+      </section>
+
+      <section class="close" aria-labelledby="close-h">
+        <h2 id="close-h" class="close__title">Have a problem worth solving?</h2>
+        <p class="close__line">
+          Tell me about it. The call goes straight into my calendar.
+        </p>
+        <div class="close__actions">
+          <a
+            href={WORK_WITH_ME_HREF}
+            class="btn btn-filled btn-primary"
+            title="Book a free 15-minute discovery call with Uriel Papa"
+            data-event="work_with_me_click"
+            data-event-from="about">Book a free 15-minute call</a
+          >
+          <a
+            href={`mailto:${SITE.email}`}
+            class="close__mail"
+            title="Email Uriel Papa">{SITE.email}</a
+          >
+        </div>
+        <ul class="close__socials">
+          {
+            SOCIALS.map(s => (
+              <li>
+                <a
+                  href={s.url}
+                  rel="me noopener"
+                  class="close__social"
+                  title={`Uriel Papa on ${s.label}`}
+                >
+                  <SocialIcon name={s.name} />
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
   </div>
 </Layout>
 
 <style>
-  /* Floating portrait: soft shadow, a gentle 6s bob that stops for reduced
-     motion, and the jacket fading out at the bottom under the caption. No
-     light outline or glow, so no white shows around it in dark mode. */
-  .about-portrait {
-    --portrait-h: clamp(300px, 52svh, 430px);
-    --portrait-shadow: rgb(0 0 0 / 0.18);
-    position: relative;
-    isolation: isolate;
-    margin: 1.25rem 0 0;
-    overflow-x: clip;
+  /* About page: a portrait-led profile. Strict black and white plus the
+     photos' own colour; the page's tokens alias the site's semantic ones. */
+  .about-page {
+    --ink: var(--foreground);
+    --paper: var(--background);
+    --rule: var(--border);
+    --rule-strong: var(--foreground);
+    --quiet: var(--muted-foreground);
+    --tile: var(--muted);
+
+    --print: var(--paper);
+    --print-shade: color-mix(in oklab, var(--ink) 24%, transparent);
+
+    --step--1: 0.875rem;
+    --step-0: 1rem;
+    --step-1: 1.1875rem;
+    --step-2: clamp(1.3125rem, 1.2rem + 0.6vw, 1.625rem);
+    --step-3: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+    --step-4: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+    --step-5: clamp(3rem, 2rem + 4.5vw, 5.25rem);
+    --step-6: clamp(3.5rem, 2rem + 7vw, 6rem);
+
+    --space-section: clamp(2.5rem, 5vw, 4rem);
+    --space-head: clamp(1.125rem, 2vw, 1.5rem);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    color: var(--ink);
   }
-  :global([data-theme="dark"]) .about-portrait {
-    --portrait-shadow: rgb(0 0 0 / 0.6);
+  :global([data-theme="dark"]) .about-page {
+    --print: var(--tile);
+    --print-shade: transparent;
   }
-  .about-portrait__float {
-    position: relative;
-    z-index: 1;
-    width: fit-content;
-    margin-inline: auto;
-    animation: about-float 6s ease-in-out infinite;
-    filter: drop-shadow(0 24px 40px var(--portrait-shadow));
+  .about-page :global(::selection) {
+    background: var(--ink);
+    color: var(--paper);
   }
-  .about-portrait__img {
-    display: block;
-    width: auto;
-    height: var(--portrait-h);
-    mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+
+  /* The breadcrumb and certificate links come from shared components; the
+     padding makes them 44px tall here without moving anything. */
+  .about-page :global(nav[aria-label="Breadcrumb"] a),
+  .more__certs :global(p a) {
+    display: inline-block;
+    margin-block: -0.75rem;
+    padding-block: 0.75rem;
   }
-  @keyframes about-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-12px);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .about-portrait__float {
-      animation: none;
-    }
-  }
-  /* Giant "URIEL PAPA" behind the portrait: faint grey in light mode, a white
-     outline (no fill) in dark mode. */
-  .about-portrait__bigname {
-    position: absolute;
-    top: 6%;
-    left: 0;
-    right: 0;
-    z-index: 0;
-    width: min-content;
-    margin-inline: auto;
+
+  .sec-h {
     font-family: var(--ff-display);
-    font-weight: 800;
-    font-size: min(29vw, calc(var(--portrait-h) * 0.4));
-    line-height: 0.82;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    text-align: center;
-    color: var(--foreground);
-    opacity: 0.1;
-    pointer-events: none;
-    user-select: none;
+    font-size: var(--step-3);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
   }
-  :global([data-theme="dark"]) .about-portrait__bigname {
-    /* An outline drawn with shadows rather than text-stroke, which would also
-       trace the font's overlapping inner contours. */
-    --o: rgb(255 255 255 / 0.5);
-    color: var(--background);
-    text-shadow:
-      1px 0 var(--o),
-      -1px 0 var(--o),
-      0 1px var(--o),
-      0 -1px var(--o),
-      1px 1px var(--o),
-      -1px -1px var(--o),
-      1px -1px var(--o),
-      -1px 1px var(--o);
-    opacity: 1;
+  .sub-h {
+    font-family: var(--ff-display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
   }
-  .about-portrait figcaption {
+  .sec {
+    padding-top: var(--space-section);
+  }
+  .sec > .sec-h {
+    margin-bottom: var(--space-head);
+  }
+
+  /* Hero: the portrait plate leads; the identity sits beside it on wide
+     screens and under it on phones. */
+  .hero {
+    --plate-h: clamp(22rem, 66svh, 36rem);
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: var(--space-section);
+  }
+  .portrait {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+  /* The plate reserves its own box, so the image never moves the layout. On
+     phones it runs to both screen edges. */
+  .plate {
+    position: relative;
+    height: var(--plate-h);
+    margin-inline: -1rem;
+    overflow: hidden;
+    /* No backdrop: the cut-out sits straight on the page and stands on a
+       hairline, cropped below the chest. */
+    border-bottom: 1px solid var(--rule);
+  }
+  .plate__img {
     position: absolute;
-    z-index: 2;
-    left: 0;
-    bottom: 0.25rem;
+    top: 7%;
+    left: 50%;
+    width: min(118%, calc(var(--plate-h) * 0.86));
+    max-width: none;
+    height: auto;
+    transform: translateX(-50%);
   }
-  .about-portrait figcaption > span:first-child {
-    font-size: 1.25rem;
+  .portrait__caption {
+    color: var(--quiet);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  @media (min-width: 40rem) {
+    .plate {
+      margin-inline: -1.5rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    /* The photo takes the narrower column; the identity sits beside it,
+       aligned to the photo's base. */
+    .hero {
+      --plate-h: clamp(24rem, 64svh, 36rem);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      align-items: end;
+      gap: clamp(2.5rem, 5vw, 4.5rem);
+    }
+    .plate {
+      margin-inline: 0;
+    }
+  }
+  /* The one authored motion: the plate rises into view from its base. The
+     photo is fully opaque throughout, and the still state is the default. */
+  @media (prefers-reduced-motion: no-preference) {
+    .plate {
+      animation: plate-rise 700ms var(--ease-out) both;
+    }
+  }
+  @keyframes plate-rise {
+    from {
+      clip-path: inset(100% 0 0 0);
+    }
+    to {
+      clip-path: inset(0);
+    }
+  }
+
+  .ident {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .ident__name {
+    font-family: var(--ff-display);
+    font-size: var(--step-6);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+  .ident__role {
+    margin-top: 0.75rem;
+    color: var(--quiet);
+    font-size: var(--step-1);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .ident__creed {
+    display: grid;
+    font-family: var(--ff-display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+  .ident__intro {
+    max-width: 34rem;
+    margin-top: 1rem;
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+  .ident__cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+  .ident__cue svg {
+    width: 0.75rem;
+    height: 1rem;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 220ms var(--ease-out);
+  }
+  .ident__cue:hover svg {
+    transform: translateY(3px);
+  }
+  @media (min-width: 64rem) {
+    .ident {
+      gap: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
+
+  /* What I build with: a full-width breather on the tile tone. */
+  .stack {
+    padding-block: var(--space-section);
+    background: var(--tile);
+    overflow: hidden;
+  }
+  .stack__head {
+    display: grid;
+    gap: 0.75rem 3rem;
+    margin-bottom: var(--space-head);
+  }
+  @media (min-width: 64rem) {
+    .stack__head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+      align-items: end;
+    }
+  }
+  .stack__intro {
+    color: var(--quiet);
+  }
+  .stack__intro a {
+    color: var(--ink);
+  }
+
+  /* My story: each year is a chapter, a large numeral in a rail with its
+     entries ruled beside it. */
+  .year,
+  .interlude {
+    display: grid;
+    gap: 0.75rem 3rem;
+  }
+  .year {
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .year + .year,
+  .interlude + .year {
+    margin-top: clamp(1.25rem, 3vw, 2rem);
+  }
+  @media (min-width: 48rem) {
+    .year,
+    .interlude {
+      grid-template-columns: 14rem minmax(0, 1fr);
+    }
+  }
+  .year__num {
+    font-family: var(--ff-display);
+    font-size: var(--step-5);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 48rem) {
+    .year__num {
+      position: sticky;
+      top: 7.5rem;
+      align-self: start;
+    }
+  }
+  .year__lead {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 36rem;
+    padding-bottom: 1rem;
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+  .year__entries > li {
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .year__entries > li:first-child {
+    padding-top: 0.25rem;
+  }
+  .year__lead + .year__entries > li:first-child {
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .year__what {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--ff-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .year__when {
+    flex: none;
+    color: var(--quiet);
+    font-family: var(--ff-body);
+    font-size: var(--step--1);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .year__note {
+    max-width: 34rem;
+    margin-top: 0.25rem;
+    color: var(--quiet);
+    line-height: 1.55;
+  }
+  .year__close {
+    max-width: 30rem;
+    padding-top: 1.25rem;
+    font-family: var(--ff-display);
+    font-size: var(--step-2);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  /* Each chapter's photos: a justified strip. Every photo keeps its own
+     shape, and photos in the same row share one height (each grows in
+     proportion to its aspect ratio). */
+  .snaps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 0.875rem;
+  }
+  /* A photo-only stop: just the month above its pictures. */
+  .year__when--alone {
+    display: block;
+    text-align: right;
+  }
+  .year__moment .snaps {
+    padding-top: 0.5rem;
+  }
+  .snaps::after {
+    content: "";
+    flex: 999 1 0;
+  }
+  .snap {
+    flex: var(--ar) 1 calc(var(--ar) * var(--snap-h, 7.5rem));
+    min-width: 0;
+  }
+  .snap figure {
+    margin: 0;
+  }
+  .snap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--tile);
+  }
+  .snap figcaption {
+    padding-top: 0.375rem;
+    color: var(--quiet);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  @media (min-width: 48rem) {
+    .snaps {
+      --snap-h: 12.5rem;
+    }
+  }
+
+  /* Between the chapters: the candid photo as a small print, at its own
+     size, never stretched. */
+  .interlude {
+    align-items: end;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .print {
+    width: min(100%, 13.75rem);
+    max-width: 240px;
+    margin: 0;
+    padding: 0.5rem 0.5rem 0;
+    border: 1px solid var(--rule);
+    background: var(--print);
+    box-shadow: 0 14px 28px -16px var(--print-shade);
+    transform: rotate(-1.5deg);
+  }
+  .print img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .print figcaption {
+    padding-block: 0.5rem;
+    color: var(--quiet);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  .interlude__line {
+    max-width: 22ch;
+    font-family: var(--ff-display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+  }
+
+  /* What I've built: a ruled index where each build leads with its result. */
+  .work__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 1rem;
+    margin-bottom: var(--space-head);
+  }
+  .work__all {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+  }
+  .work {
+    border-top: 1px solid var(--rule-strong);
+  }
+  .work__row {
+    display: grid;
+    gap: 0.625rem 2.5rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    transition: background-color 200ms var(--ease-out);
+  }
+  @media (min-width: 48rem) {
+    .work__row {
+      grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) 3rem;
+      align-items: start;
+    }
+    .work__row--lead {
+      grid-template-columns: minmax(0, 24rem) minmax(0, 1fr) 3rem;
+      padding-block: 1.75rem;
+    }
+  }
+  @media (hover: hover) {
+    .work__row:hover {
+      background: var(--tile);
+    }
+    .work__row:hover .work__title {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+  }
+  .work__result {
+    display: grid;
+    line-height: 1.3;
+  }
+  .work__figure {
+    font-family: var(--ff-display);
+    font-size: var(--step-4);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .work__row--lead .work__figure {
+    font-size: var(--step-5);
+    letter-spacing: -0.04em;
+  }
+  .work__pre,
+  .work__label {
+    color: var(--quiet);
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+  .work__label {
+    margin-top: 0.375rem;
+  }
+  .work__text {
+    font-family: var(--ff-display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .work__title {
+    font-family: var(--ff-display);
+    font-size: var(--step-1);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .work__outcome {
+    max-width: 34rem;
+    margin-top: 0.25rem;
+    color: var(--quiet);
+    line-height: 1.5;
+  }
+  .work__year {
+    color: var(--quiet);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 48rem) {
+    .work__year {
+      padding-top: 0.2rem;
+      text-align: right;
+    }
+  }
+
+  /* How I work: three short columns, the verb leading each. */
+  .method {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+  }
+  @media (min-width: 56rem) {
+    .method {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .method > li {
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .method__word {
+    font-family: var(--ff-display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .method__word span {
+    color: var(--quiet);
+    font-weight: 500;
+  }
+  .method__proof {
+    margin-top: 0.5rem;
+  }
+  .method__proof li {
+    padding-block: 0.625rem;
+    line-height: 1.5;
+  }
+  .method__proof li + li {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* Writing, training, languages and certificates: the compact section. */
+  .more {
+    display: grid;
+    gap: 2.5rem;
+  }
+  @media (min-width: 48rem) {
+    .more {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 4rem;
+    }
+    .more__certs {
+      grid-column: 1 / -1;
+    }
+  }
+  .more__list {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  /* Padding makes the topic links 44px tall without spreading the list. */
+  .more__link {
+    display: inline-block;
+    margin-block: -0.5rem -0.375rem;
+    padding-block: 0.5rem;
+    font-weight: 600;
+  }
+  .more__note {
+    margin-top: 0.125rem;
+    color: var(--quiet);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+  .more__also {
+    margin-top: 1rem;
+  }
+  .sub-h--next {
+    margin-top: 2rem;
+  }
+  .more__lang {
+    margin-top: 0.5rem;
+  }
+  .more__certs .sub-h {
+    margin-bottom: 1rem;
+  }
+
+  /* The close: one large question and the page's only call to action. */
+  .close {
+    margin-top: var(--space-section);
+    padding-block: clamp(2rem, 4vw, 3rem) 1rem;
+    border-top: 1px solid var(--rule-strong);
+  }
+  .close__title {
+    max-width: 14ch;
+    font-family: var(--ff-display);
+    font-size: var(--step-5);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .close__line {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    font-size: var(--step-1);
+  }
+  .close__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .close__mail,
+  .close__social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+  }
+  .close__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    margin-top: 1rem;
+    font-size: var(--step--1);
   }
 </style>

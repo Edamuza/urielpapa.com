@@ -1,0 +1,128 @@
+---
+/**
+ * An endless, slowly drifting strip of tool logos and names (About page).
+ * Each row is drawn twice so the loop has no seam; the copy is hidden from
+ * screen readers. Hovering or focusing a row pauses it. With reduced motion
+ * the rows stand still and wrap instead.
+ */
+import type { StackTool } from "@/data/tech-stack";
+
+type Props = {
+  rows: { label: string; tools: StackTool[]; reverse?: boolean }[];
+};
+const { rows } = Astro.props;
+---
+
+<div class="marquee">
+  {
+    rows.map(row => (
+      <div
+        class:list={["marquee__row", row.reverse && "marquee__row--reverse"]}
+        style={`--marquee-count: ${row.tools.length}`}
+      >
+        {[false, true].map(copy => (
+          <ul
+            class="marquee__track"
+            aria-label={copy ? undefined : row.label}
+            aria-hidden={copy ? "true" : undefined}
+          >
+            {row.tools.map(t => (
+              <li class="marquee__item">
+                <svg
+                  role="img"
+                  viewBox="0 0 24 24"
+                  class="marquee__logo"
+                  aria-hidden="true"
+                >
+                  <path d={t.path} />
+                </svg>
+                <span>{t.name}</span>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .marquee {
+    display: grid;
+    gap: 0.5rem;
+    /* Fade the strip in and out at both edges. */
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 7%,
+      #000 93%,
+      transparent
+    );
+  }
+  .marquee__row {
+    display: flex;
+    width: max-content;
+    /* About 2.6s per tool keeps every row at the same unhurried pace. */
+    --marquee-duration: calc(var(--marquee-count) * 2.6s);
+  }
+  .marquee__track {
+    display: flex;
+    flex: none;
+    gap: 2.75rem;
+    padding-right: 2.75rem;
+    animation: marquee var(--marquee-duration) linear infinite;
+  }
+  .marquee__row--reverse .marquee__track {
+    animation-direction: reverse;
+  }
+  .marquee__row:hover .marquee__track,
+  .marquee__row:focus-within .marquee__track {
+    animation-play-state: paused;
+  }
+  /* Plain logo-and-name marks, no pills: the strip is a breather between
+     dense sections. */
+  .marquee__item {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.625rem;
+    height: 3rem;
+    font-family: var(--ff-display);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    color: color-mix(in oklab, var(--foreground) 78%, transparent);
+    transition: color 200ms ease-out;
+  }
+  .marquee__item:hover {
+    color: var(--foreground);
+  }
+  .marquee__logo {
+    width: 1.375rem;
+    height: 1.375rem;
+    fill: currentColor;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  /* Reduced motion: no drift, one wrapped set, no fade. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+    }
+    .marquee__row {
+      width: auto;
+    }
+    .marquee__track {
+      flex-wrap: wrap;
+      flex: 1;
+      gap: 0 2rem;
+      animation: none;
+    }
+    .marquee__track[aria-hidden] {
+      display: none;
+    }
+  }
+</style>
