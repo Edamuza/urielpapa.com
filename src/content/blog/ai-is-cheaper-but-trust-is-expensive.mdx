@@ -1,0 +1,226 @@
+---
+title: AI Is Cheaper Now, So Why Is a Customer Chatbot Still Risky?
+seoTitle: Why a Cheap AI Chatbot Is Still Risky for Your Business
+description: >-
+  AI costs a fraction of what it did in 2022, but chatbots still guess and the
+  business pays for wrong answers. Why that happens, and how to use AI safely.
+dek: >-
+  Running AI costs less every year. But one wrong price or refund promise from
+  a chatbot can cost you a customer, and a tribunal has already ruled it's your
+  promise. Here's
+  why, and the safeguards I build in.
+hub: ai
+frame: why
+takeaways:
+  - >-
+    Stanford's 2025 AI Index found the cost of querying a GPT-3.5-level model
+    fell from US$20 to US$0.07 per million tokens between November 2022 and
+    October 2024.
+  - >-
+    A September 2025 paper by researchers at OpenAI and Georgia Tech argues that
+    language models hallucinate because training and evaluation reward guessing
+    over admitting uncertainty.
+  - >-
+    In Moffatt v. Air Canada (February 14, 2024), a Canadian tribunal held the
+    airline responsible for its website chatbot's wrong bereavement-fare advice
+    and ordered it to pay CA$812.02.
+  - >-
+    OWASP's 2025 Top 10 for LLM applications lists excessive agency as a risk
+    and recommends a human approve high-impact actions before an AI agent takes
+    them.
+  - >-
+    A safer customer-facing AI checks real data with tool calls, can't promise
+    prices or refunds on its own, logs every step, and hands hard chats to a
+    person.
+businessImpact:
+  - >-
+    The AI bill is rarely the expensive part. A wrong refund, price or booking
+    promise costs more than months of tokens.
+  - >-
+    A business answers for what its chatbot tells customers, so the safeguards
+    belong in the design from day one.
+  - >-
+    Human approval on anything that touches money keeps the fast triage and
+    drafting, while a person catches the riskiest mistakes.
+published: 2026-11-20
+related:
+  - n8n-messenger-instagram-chatbot
+  - what-is-tokenization
+projects:
+  - inboxpilot
+  - job-client-crm
+stack:
+  - gemini
+  - n8n
+faq:
+  - q: Can I just tell the chatbot not to make things up?
+    a: >-
+      Instructions help, but they aren't enough on their own. Research from
+      OpenAI and Georgia Tech says models are trained and graded in ways that
+      reward guessing. So the rules that cost money, like booking limits and
+      refund policy, should live in code and real data, not only in the prompt.
+  - q: Which customer questions are safe to let AI answer on its own?
+    a: >-
+      Low-risk, fact-based questions like opening hours are the best candidates,
+      as long as the answer comes from data a person keeps current. Anything that
+      changes a booking, a price or money should still go to a person for
+      approval.
+  - q: Does it matter if the correct policy is somewhere else on my website?
+    a: >-
+      In Moffatt v. Air Canada, it didn't help the airline. The tribunal said
+      Air Canada didn't explain why customers should have to double-check one
+      part of its website against another. This is general information, not
+      legal advice.
+event: {}
+syndication: []
+draft: false
+---
+AI costs far less to run than it did a few years ago. Stanford's AI Index found the cost of a GPT-3.5-level model fell more than 280-fold between November 2022 and October 2024. But a customer-facing chatbot is still risky, because the expensive part was never the tokens. Language models still guess when they don't know. And when a chatbot promises a wrong price or refund, the business has to answer for it.
+
+So the safe way to use AI with customers is simple. Make it check real data first, and keep a person on the final call for anything that touches money.
+
+I've worked on three AI systems that draft or send messages. At my old agency, I led and co-developed an [AI chatbot for Messenger and Instagram with n8n](/blog/n8n-messenger-instagram-chatbot). Then I built the [InboxPilot customer-inbox agent](/projects/inboxpilot) and a [job and client CRM](/projects/job-client-crm) that sends nothing without my approval. This post is part of my [AI, in Depth](/topics/ai) writing, and it explains the causes one by one, then what to do about them.
+
+## How much cheaper has AI become?
+
+Inference means asking a trained model a question, and its price has dropped hard since late 2022. [Stanford HAI's AI Index 2025 in 10 charts](https://hai.stanford.edu/news/ai-index-2025-state-of-ai-in-10-charts) tracks a model that scores like GPT-3.5 on the MMLU benchmark. Querying one cost US$20 per million tokens in November 2022 and US$0.07 by October 2024. The model at that price was Gemini-1.5-Flash-8B. The full [2025 AI Index report](https://hai.stanford.edu/ai-index/2025-ai-index-report) adds that hardware costs fell 30% a year and energy efficiency improved 40% a year.
+
+Today's small models are cheap too. On [Google's Gemini API pricing page](https://aistudio.google.com/docs/pricing), checked November 20, 2026, Gemini 2.5 Flash-Lite is listed at US$0.10 per million input tokens and US$0.40 per million output tokens. Prices still move both ways, though. The same page lists some newer models at prices that double on December 1, 2026.
+
+My own numbers say the same thing. The first real scoring run of my job and client CRM judged 26 jobs for about US$0.0025 in total. If tokens are new to you, my post on [what tokenization is and why it decides AI cost](/blog/what-is-tokenization) explains how the bill is counted.
+
+![Rows of black network racks with blue and grey cabling in a data center room with a raised floor](../../assets/images/content/ai-is-cheaper-but-trust-is-expensive-1.jpg "Rows of black network racks with blue and grey cabling in a data center room")
+
+*AI runs in data centers like this one, and the cost per token fell sharply from 2022 to 2024. Photo: [Carl Lender from Sunrise, USA](https://commons.wikimedia.org/wiki/File:Datacenter_Server_Racks_%2822370909788%29.jpg "Carl Lender from Sunrise, USA's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+So for most small chatbots, I think the token bill is the small part. Trust is the big one.
+
+## Why do AI chatbots still make things up?
+
+AI chatbots make things up because language models are trained and tested in a way that rewards a confident guess. Researchers at OpenAI and Georgia Tech explain this in their September 2025 paper, [Why Language Models Hallucinate](https://arxiv.org/abs/2509.04664). They write that models "sometimes guess when uncertain, producing plausible yet incorrect statements instead of admitting uncertainty."
+
+Their analogy is a student on a multiple-choice exam. If a blank answer scores zero and a guess might score a point, guessing always wins. Most AI benchmarks grade the same way, so models learn to be good test-takers. In the paper's words, the training and evaluation procedures "reward guessing over acknowledging uncertainty."
+
+Search and retrieval help, but the paper is clear they don't fix everything. It notes that studies show retrieval-augmented generation (RAG) reduces hallucinations. But grading still "rewards guessing whenever search fails to yield a confident answer."
+
+For a business, that means a chatbot can sound sure while being wrong. It doesn't know your price list changed last week. If the answer isn't in front of it, it may fill the gap with something that sounds right.
+
+## Who pays when a chatbot gives a wrong answer?
+
+The business that runs a chatbot pays for its wrong answers. That's the lesson of [Moffatt v. Air Canada, 2024 BCCRT 149](https://decisions.civilresolutionbc.ca/crt/crtd/en/525448/1/document.do), decided by British Columbia's Civil Resolution Tribunal on February 14, 2024.
+
+In November 2022, after a death in the family, Jake Moffatt used the chatbot on Air Canada's website. The chatbot suggested they could apply for a bereavement fare retroactively, within 90 days. But the airline's own "Bereavement travel" page said the policy didn't apply after travel was completed. An Air Canada representative later admitted the chatbot had provided "misleading words."
+
+Air Canada argued it couldn't be held liable for its chatbot. The tribunal called that "a remarkable submission." It wrote: "It should be obvious to Air Canada that it is responsible for all the information on its website. It makes no difference whether the information comes from a static page or a chatbot."
+
+Air Canada also argued the correct information was on another page. The tribunal said the airline didn't explain why customers should have to double-check one part of its website against another. It found Mr. Moffatt had made out their claim of negligent misrepresentation. Air Canada was ordered to pay CA$812.02, including CA$650.88 in damages.
+
+![An Air Canada Airbus A330 in Star Alliance livery taxiing at Montréal airport](../../assets/images/content/ai-is-cheaper-but-trust-is-expensive-2.jpg "An Air Canada Airbus A330 in Star Alliance livery at Montréal airport")
+
+*Air Canada had to pay a customer after its website chatbot gave wrong bereavement-fare advice. Photo: [abdallahh](https://commons.wikimedia.org/wiki/File:Air_Canada_Airbus_A330_@YUL.jpg "abdallahh's photo on Wikimedia Commons"), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/ "Creative Commons Attribution 2.0 license").*
+
+The decision doesn't say what technology the chatbot ran on, and it's a Canadian small-claims ruling. But the principle travels well. OWASP's [2025 entry on LLM misinformation](https://genai.owasp.org/llmrisk/llm092025-misinformation/) uses this same case as its example of factual inaccuracy.
+
+Honestly, the CA$812 is small. What it shows is that "the bot said it" isn't a defense.
+
+## Why is a chatbot that can take actions riskier than one that only talks?
+
+A chatbot that can act, like booking a table, issuing a refund or sending an email, turns a wrong guess into a real event. A wrong answer in a chat can still be corrected. A double-booked table or a refund already sent is harder to undo.
+
+OWASP calls this risk "Excessive Agency" in its [Top 10 for LLM Applications 2025](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/). It says the root cause is usually "excessive functionality; excessive permissions; excessive autonomy." 
+
+OWASP's fixes are practical. Give an agent only the tools it needs, and limit what each tool can do. Above all, "require a human to approve high-impact actions before they are taken."
+
+That's why AI agents need more care than chatbots that only answer questions. The more an AI can do on its own, the more one bad guess can cost. A useful rule: let the AI prepare, and let a person commit.
+
+## Why does a chatbot's information go out of date?
+
+A chatbot's information goes out of date when the business facts live inside the prompt instead of in a source someone keeps current. Prices change and promos end. The bot keeps repeating whatever it was told on setup day.
+
+I learned this with the n8n chatbot we built at VITE SEO Digital Advertising. It handled about 120 inquiries a month and did best with simple, repeated questions. But it needed a prompt update every time our packages changed. So I learned to treat the system prompt like a price list someone has to keep current. It also struggled with mixed Taglish and short messages like "how much?", where it sometimes guessed which service the person meant.
+
+Guessing the service is a small error in a chat. Put the same guess next to a price or a booking and it becomes a promise. That's the gap that grounding closes, which the next section covers.
+
+## How can a business use AI with customers safely?
+
+A business can use AI with customers safely by putting six safeguards around the model:
+
+1. Ground every answer in real data.
+2. Restrict what the bot may promise.
+3. Require human approval for actions.
+4. Log every step.
+5. Hand off to a person clearly.
+6. Test before and after launch.
+
+I'll use my own builds as examples, and I'll be clear about their limits. InboxPilot is a live demo on a fictional café's data, not a real deployment. The CRM is a personal tool, and its sending isn't switched on yet.
+
+### Ground answers in real data with tool calls
+
+Grounding means the AI looks up the answer in a trusted source before it replies, instead of answering from memory. In practice, that's a tool call or retrieval from a knowledge base a person can edit.
+
+In [InboxPilot](/projects/inboxpilot), the agent must call `search_knowledge_base` for hours, prices, delivery areas and policies, and `check_availability` for open table slots. Each draft lists the knowledge-base entries it used, so a reviewer can see where an answer came from. In one QA run on 12 fictional messages, the drafts had no invented prices, refunds or availability. One run isn't an accuracy rate, but it shows the design works.
+
+OWASP's misinformation guidance points the same way: retrieve "relevant and verified information from trusted external databases" while the answer is being written.
+
+### Restrict what the bot may promise
+
+Restricting promises means the rules that cost money live in code, not only in the prompt. A prompt is a request. Code is a wall.
+
+InboxPilot's instructions forbid refunds, discounts or availability that aren't in the knowledge base or the availability table. But the code enforces the booking rules whatever the model says. Its `propose_booking` tool rejects parties over 20, slots already taken and requests with less than 24 hours' notice.
+
+The CRM does something similar for writing. Every claim about me needs a quote from my résumé or this site. A sentence with a number found in neither my sources nor the job posting is dropped.
+
+If your bot shouldn't quote a discount, don't give it a discount it can quote.
+
+### Require human approval for actions
+
+Human approval means the AI drafts and proposes, and a person clicks approve before anything reaches a customer or changes money. It's the single safeguard I'd never skip.
+
+In InboxPilot, the agent's proposals only write pending rows. When a person approves a booking, the server checks the slot again, creates the booking and writes the audit entries. Only then does the reply count as sent. In my CRM, nothing goes out until I click Approve, and daily limits and a "stop" list still hold after I approve.
+
+Approval doesn't throw away the time savings. InboxPilot triaged 12 test messages in about 40 seconds, and that's before review time. The AI does the sorting and drafting, and the person only decides.
+
+### Log every step
+
+Logging means keeping a record of what the customer asked, what the AI looked up, what it proposed and what a person decided. When a customer disputes a reply, the log tells you what happened.
+
+InboxPilot's audit log records every tool call and human decision, and the metrics page shows approval, edit and rejection rates from that stored data. My n8n chatbot guide does the simple version: it writes the sender, channel, message and outcome of each conversation to a lead log.
+
+Customer chats are personal data, though. If you're in the Philippines, the [implementing rules of the Data Privacy Act](https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/70735) (the 2016 text) say personal data "shall not be retained longer than necessary." So log what you need, say so in your privacy notice and set a retention period.
+
+### Hand off to a person clearly
+
+A clear handoff means the bot knows when to stop and a real person picks up the conversation with its history. Good triggers are a request for a human, a complaint, anything sensitive or a question the bot can't answer from its data.
+
+My n8n chatbot guide builds the handover in from the start. The model returns a flag when it shouldn't answer. The workflow then stops replying in that conversation, emails a person with the chat so far, and tells the customer someone will follow up. The logged conversation means the customer doesn't have to repeat everything.
+
+![Hands holding a smartphone and typing in a chat app with the emoji keyboard open](../../assets/images/content/ai-is-cheaper-but-trust-is-expensive-3.jpg "Hands typing a message in a chat app on a smartphone")
+
+*When a chat gets hard, the customer should reach a real person, fast. Photo: [Helar Lukats](https://commons.wikimedia.org/wiki/File:Whatsapp_texting.jpg "Helar Lukats's photo on Wikimedia Commons"), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/ "Creative Commons Attribution-ShareAlike 4.0 license").*
+
+### Test before launch, and keep testing
+
+Testing means checking the bot against real kinds of messages before customers see it, then watching it after launch. A demo that works on easy questions tells you little.
+
+InboxPilot's QA agent tested it in a real browser and read every drafted reply against the knowledge base. The test set included a table for 4, a party of 30, a delivery outside the service area and spam. QA also checked the webhook with bad input, like a missing field and invalid JSON.
+
+For a real business, the next step is a set of real messages for each intent, scored over time. My n8n guide's test step adds off-topic questions, a request for a human and a message in another language.
+
+## Where should a small business start with customer-facing AI?
+
+A small business should start with clean data and a clear process, then add the AI. If your prices, hours and policies aren't written down in one place, a chatbot can't check them. That's also why I wrote about [why a lot of Philippine business work is still done by hand](/blog/why-philippine-businesses-still-work-by-hand): the basics come first.
+
+Start small. Let AI answer low-risk questions from data you keep current, like opening hours. Keep bookings, refunds and anything about money behind human approval. Then widen what the AI handles as your logs show it's getting things right.
+
+The same clear facts help in a second place. When customers ask ChatGPT or Gemini who to buy from, a clear website is what those answers quote. My post on [how AI search is changing how customers find Philippine businesses](/blog/ai-search-for-philippine-businesses) covers that side.
+
+AI will probably keep getting cheaper. But your customers' trust is still built one correct answer at a time, and a person still makes the final call.
+
+<Callout type="note" title="Disclaimer">
+  This post is general information, not legal, financial or professional
+  advice. AI tool prices and model behavior change fast: the prices shown are as
+  of November 20, 2026, and the AI Index cost data covers November 2022 to
+  October 2024. Moffatt v. Air Canada is a Canadian small-claims decision, and
+  my reading of the Data Privacy Act rules is not legal advice. InboxPilot was
+  tested on fictional sample data, and results will vary by business.
+</Callout>

@@ -28,6 +28,29 @@ urielpapa.com is Uriel Papa's personal site: a builder and founder in the Philip
 - Do not publish his phone number.
 - Every link carries a `title` (the build's HTML check fails without one).
 
-## Voice
+## Voice and tone
 
-First person, plain and direct, short sentences, specific numbers over adjectives. Honest about failure (the agency closed) and about limits; no hype.
+**Who's talking:** a builder sitting across the table from a business owner. He has run a team, signed the payroll and shipped the code, so he talks plainly and doesn't need to impress anyone.
+
+**Four traits**
+- **Direct.** Say the point first. Short sentences. If it fits in five words, use five.
+- **Grounded.** A real number beats an adjective. "US$390 a month saved", never "huge savings".
+- **Honest.** Own the failures (the agency closed) and the limits ("I'll tell you straight if I can help").
+- **Warm but firm.** Friendly, never soft. No begging, no hype.
+
+**Sound human, not polished (about 90%)**
+- Write like you talk: contractions, sentences that start with "So", "But", "And", "That's why", "Honestly".
+- Fragments are fine. "Real numbers. Real work."
+- Natural Filipino-English rhythm is welcome. Spelling and facts are always correct; it's the rhythm that stays loose, not the grammar.
+- Transition words carry the story: so, but, that's why, then, honestly, here's the thing, one rule though.
+
+**Never sounds like AI**
+- No em dashes. No "not just X, but Y". No three-item lists in every sentence.
+- Banned words: seamless, unlock, leverage, elevate, empower, game-changer, cutting-edge, robust, "without the hype", "in today's fast-paced world".
+- No rhetorical-question pile-ups. One question, then the answer.
+
+**Words people actually search (Google Trends, Philippines, 2026)**
+- Use: save money, save time, revenue, profit, business growth, automation, AI tools, business website, business system, Facebook ads, TikTok Shop, SEO.
+- Avoid as headline words: ROI, cost saving, sales growth, lead generation, website developer, "AI automation" on its own.
+
+**Where it applies:** the home page talks about the visitor's business and how the work helps it; the About page tells Uriel's own story.
