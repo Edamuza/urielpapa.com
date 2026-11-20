@@ -48,7 +48,7 @@ const {
 const shown = groups.filter(g => g.items.length > 0);
 ---
 
-<article class="app-layout max-w-read pt-8" data-pagefind-body>
+<article class="app-layout max-w-read page-top" data-pagefind-body>
   <Breadcrumbs crumbs={crumbs} />
   <p class="meta mb-2">{kind}</p>
   <h1 class="h1">{heading}</h1>
@@ -78,7 +78,7 @@ const shown = groups.filter(g => g.items.length > 0);
 
   {
     sources.length > 0 && (
-      <section class="mt-10" aria-labelledby="sources-h">
+      <section class="section-gap" aria-labelledby="sources-h">
         <h2 id="sources-h" class="h3 mb-3">
           Sources
         </h2>
@@ -97,7 +97,7 @@ const shown = groups.filter(g => g.items.length > 0);
 
   {
     shown.map((g, n) => (
-      <section class="mt-8" aria-labelledby={`links-${n}`}>
+      <section class="section-gap" aria-labelledby={`links-${n}`}>
         <h2 id={`links-${n}`} class="h3 mb-3">
           {g.heading}
         </h2>

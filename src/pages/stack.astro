@@ -46,7 +46,7 @@ const schema = [
 ---
 
 <Layout title={title} description={description} schema={schema}>
-  <div class="app-layout max-w-read pt-8">
+  <div class="app-layout max-w-read page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro
       title="Stack"
@@ -57,7 +57,7 @@ const schema = [
         const list = items.filter(i => i.data.group === g.id);
         return (
           list.length > 0 && (
-            <section class="mt-10" aria-labelledby={`g-${g.id}`}>
+            <section class="section-gap" aria-labelledby={`g-${g.id}`}>
               <h2 id={`g-${g.id}`} class="h2 mb-3">
                 {g.label}
               </h2>
@@ -65,7 +65,7 @@ const schema = [
                 {list.map(i => {
                   const refs = usedIn(i.id);
                   return (
-                    <div id={i.id} class="py-3">
+                    <div id={i.id} class="py-3 last:pb-0">
                       <dt class="font-semibold">
                         {i.data.about ? (
                           <a

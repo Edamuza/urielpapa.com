@@ -123,7 +123,7 @@ const [city, country] = SITE.location.split(", ");
   }
   <div class="app-layout">
     <section
-      class="hero-intro border-border border-b pt-6 pb-10 sm:py-14 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12"
+      class="hero-intro border-border border-b pt-6 pb-8 sm:py-10 lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12"
       aria-labelledby="intro-h"
     >
       <div class="hero-text max-w-3xl">
@@ -213,7 +213,7 @@ const [city, country] = SITE.location.split(", ");
       </figure>
     </section>
 
-    <section class="border-border border-b py-10" aria-labelledby="proof-h">
+    <section class="border-border border-b py-8" aria-labelledby="proof-h">
       <h2 id="proof-h" class="label-caps text-muted-foreground mb-5">
         Proof of work
       </h2>
@@ -241,7 +241,7 @@ const [city, country] = SITE.location.split(", ");
 
     {
       projects.length > 0 && (
-        <section class="py-10" aria-labelledby="projects-h">
+        <section class="py-8" aria-labelledby="projects-h">
           <SectionHeader
             id="projects-h"
             title="Projects"
@@ -279,7 +279,7 @@ const [city, country] = SITE.location.split(", ");
       )
     }
 
-    <div class="border-border with-rail border-t py-10">
+    <div class="border-border with-rail border-t py-8">
       <section aria-labelledby="latest-h" class="min-w-0">
         <SectionHeader
           id="latest-h"
@@ -423,7 +423,7 @@ const [city, country] = SITE.location.split(", ");
       </aside>
     </div>
 
-    <div class="border-border grid gap-10 border-t py-10 md:grid-cols-2">
+    <div class="border-border grid gap-8 border-t py-8 md:grid-cols-2">
       <section aria-labelledby="notes-h">
         <h2 id="notes-h" class="h2 mb-4">Recent notes</h2>
         {
@@ -479,7 +479,7 @@ const [city, country] = SITE.location.split(", ");
       </section>
     </div>
 
-    <div class="grid gap-5 pt-4 pb-14 md:grid-cols-2">
+    <div class="grid gap-5 md:grid-cols-2">
       <NewsletterBox from="home" variant="rail" />
       <section
         class="bg-accent text-accent-foreground flex flex-col items-start rounded-lg p-5 sm:p-6"

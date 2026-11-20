@@ -15,7 +15,7 @@
   html {
     font-size: 106.25%; /* 17px body */
     /* Keep anchor targets clear of the sticky quote bar and header. */
-    scroll-padding-top: 7.5rem;
+    scroll-padding-top: 6.5rem;
   }
   @media (min-width: 768px) {
     html {
@@ -78,6 +78,26 @@
 
 @utility app-layout {
   @apply max-w-app mx-auto w-full px-4 sm:px-6;
+}
+
+/* Vertical rhythm (Nov 2026 tightening). Three steps, used everywhere so the
+   same role always gets the same space:
+   - page-top: from the header rule to the breadcrumbs or the page title;
+   - section-gap / section-gap-end: between two sections of a page, about
+     twice the space under a section heading, so a heading sits closer to its
+     own content than to the section above;
+   - the footer's own top margin is the only space at the end of a page:
+     the last block of a page carries no bottom margin or padding. */
+@utility page-top {
+  padding-top: 1.5rem;
+}
+
+@utility section-gap {
+  margin-top: 2rem;
+}
+
+@utility section-gap-end {
+  margin-bottom: 2rem;
 }
 
 /* About 75 characters a line in Albert Sans (68ch ran to ~93, since "ch" is
@@ -148,10 +168,10 @@
    screens; on phones and tablets the rail drops under the list. */
 @utility with-rail {
   display: grid;
-  gap: 3rem;
+  gap: 2.5rem;
   @media (min-width: 64rem) {
     grid-template-columns: minmax(0, 1fr) 19rem;
-    gap: 3.5rem;
+    gap: 3rem;
   }
 }
 

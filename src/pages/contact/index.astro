@@ -54,7 +54,7 @@ const schema = [
   description="Contact Uriel Papa to work together, invite Uriel to speak at an event, or ask about something on the site. Every message is read and answered."
   schema={schema}
 >
-  <div class="contact app-layout pt-8 pb-8">
+  <div class="contact app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
 
     <div class="contact-grid">
@@ -484,68 +484,155 @@ const schema = [
           </p>
 
           <div class="picker" data-picker>
-            <div class="picker-head">
-              <p class="field-label" id="c-slot-day-label">Day</p>
-              <div class="flex gap-1.5">
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Earlier days"
-                  data-slot-prev
-                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                    ><path d="m15 6-6 6 6 6"></path></svg
-                  ></button
-                >
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Later days"
-                  data-slot-next
-                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                    ><path d="m9 6 6 6-6 6"></path></svg
-                  ></button
-                >
-              </div>
-            </div>
-            <div
-              class="slot-days"
-              role="group"
-              aria-labelledby="c-slot-day-label"
-              data-slot-days
+            {
+              /* The form shows one calm line: a button to choose a time, or
+               the chosen time with Change and Remove. The calendar opens in
+               a dialog; it stays inside the form, so the picked radio is
+               sent with it. */
+            }
+            <button
+              type="button"
+              class="slot-open"
+              aria-haspopup="dialog"
+              data-slot-open
+              disabled
             >
-              {
-                Array.from({ length: 6 }, () => (
-                  <span class="day-tile skeleton" aria-hidden="true" />
-                ))
-              }
-            </div>
-            <p class="field-label mt-5" id="c-slot-time-label">Time</p>
-            <div
-              class="slot-times"
-              role="group"
-              aria-labelledby="c-slot-time-label"
-              data-slot-times
-            >
-              <div class="time-grid" aria-hidden="true">
-                {
-                  Array.from({ length: 8 }, () => (
-                    <span class="time-chip skeleton" />
-                  ))
-                }
-              </div>
-            </div>
-            <p class="meta mt-4" data-slot-tz></p>
+              <span class="slot-open__icon" aria-hidden="true"
+                ><svg viewBox="0 0 24 24" class="icon"
+                  ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
+                    d="M16 3v4M8 3v4M3 10h18"></path></svg
+                ></span
+              >
+              <span class="slot-open__text">
+                <span class="slot-open__title">Choose a day and time</span>
+                <span class="slot-open__sub" data-slot-next-free
+                  >Checking my calendar…</span
+                >
+              </span>
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                ><path d="m9 6 6 6-6 6"></path></svg
+              >
+            </button>
 
             <div class="picked" data-slot-picked hidden>
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
-                  d="M16 3v4M8 3v4M3 10h18"></path></svg
+              <span class="slot-open__icon" aria-hidden="true"
+                ><svg viewBox="0 0 24 24" class="icon"
+                  ><path d="m5 12 5 5 9-10"></path></svg
+                ></span
               >
-              <p class="min-w-0 flex-1" data-slot-picked-text></p>
-              <button type="button" class="text-btn" data-slot-clear
-                >Remove time</button
-              >
+              <p class="picked__text">
+                <span class="picked__label">Your call</span>
+                <span data-slot-picked-text></span>
+              </p>
+              <div class="picked__actions">
+                <button type="button" class="text-btn" data-slot-change
+                  >Change</button
+                >
+                <button type="button" class="text-btn" data-slot-clear
+                  >Remove</button
+                >
+              </div>
             </div>
+
+            <dialog
+              class="slot-dialog"
+              aria-labelledby="c-slot-title"
+              aria-describedby="c-slot-tz"
+              data-slot-dialog
+            >
+              <div class="slot-dialog__head">
+                <div>
+                  <h2 id="c-slot-title" class="slot-dialog__title">
+                    Pick a time for your call
+                  </h2>
+                  <p class="slot-dialog__meta">
+                    15 min · Google Meet · <span id="c-slot-tz" data-slot-tz
+                    ></span>
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="icon-btn"
+                  aria-label="Close without choosing"
+                  data-slot-cancel
+                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                    ><path d="M6 6l12 12M18 6 6 18"></path></svg
+                  ></button
+                >
+              </div>
+
+              <div class="slot-dialog__body">
+                <div class="cal">
+                  <div class="cal__head">
+                    <p class="cal__month" aria-live="polite" data-cal-month></p>
+                    <div class="flex gap-1.5">
+                      <button
+                        type="button"
+                        class="icon-btn"
+                        aria-label="Previous month"
+                        data-cal-prev
+                        ><svg
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          class="icon"><path d="m15 6-6 6 6 6"></path></svg
+                        ></button
+                      >
+                      <button
+                        type="button"
+                        class="icon-btn"
+                        aria-label="Next month"
+                        data-cal-next
+                        ><svg
+                          aria-hidden="true"
+                          viewBox="0 0 24 24"
+                          class="icon"><path d="m9 6 6 6-6 6"></path></svg
+                        ></button
+                      >
+                    </div>
+                  </div>
+                  <div class="cal__dows" aria-hidden="true" data-cal-dows></div>
+                  <div
+                    class="cal__grid"
+                    role="group"
+                    aria-label="Days with free times"
+                    data-cal-grid
+                  >
+                  </div>
+                </div>
+
+                <div class="times" data-times>
+                  <p class="times__day" data-times-day></p>
+                  <div
+                    class="slot-times"
+                    role="group"
+                    aria-labelledby="c-slot-title"
+                    data-slot-times
+                  >
+                  </div>
+                </div>
+              </div>
+
+              <div class="slot-dialog__foot">
+                <p
+                  class="slot-dialog__choice"
+                  aria-live="polite"
+                  data-slot-choice
+                >
+                  Choose a day, then a time.
+                </p>
+                <div class="slot-dialog__buttons">
+                  <button type="button" class="text-btn" data-slot-cancel
+                    >Cancel</button
+                  >
+                  <button
+                    type="button"
+                    class="btn btn-filled btn-primary slot-confirm"
+                    disabled
+                    data-slot-confirm>Use this time</button
+                  >
+                </div>
+              </div>
+            </dialog>
           </div>
 
           <div class="call-times" data-call-times>
@@ -707,9 +794,7 @@ const schema = [
     if (!first) return;
     const target =
       first === "slot"
-        ? form.querySelector<HTMLElement>(
-            "[data-slot-times] > div:not([hidden]) input, [data-slot-days] button"
-          )
+        ? form.querySelector<HTMLElement>("[data-slot-open]")
         : form.querySelector<HTMLElement>(`[name="${first}"]`);
     target?.focus();
   }
@@ -773,44 +858,89 @@ const schema = [
     }
   });
 
-  // Discovery-call slots: loaded once, the first time "Work together" is
-  // picked, and shown inline. Times show in the visitor's own time zone.
+  // Discovery-call slots: loaded once, the first time "Work together" or
+  // "Speaking or event" is picked. The form shows one line; the calendar and
+  // times open in a dialog. Picking there is a draft: "Use this time" keeps
+  // it, Cancel, Escape or the close button put back what was there before.
+  // Times show in the visitor's own time zone.
   const booking = form.querySelector<HTMLElement>("[data-booking]")!;
   const q = <T extends HTMLElement = HTMLElement>(sel: string) =>
     booking.querySelector<T>(sel)!;
-  const days = q("[data-slot-days]");
-  const times = q("[data-slot-times]");
+  const dialog = q<HTMLDialogElement>("[data-slot-dialog]");
+  const openBtn = q<HTMLButtonElement>("[data-slot-open]");
+  const nextFree = q("[data-slot-next-free]");
   const picked = q("[data-slot-picked]");
   const pickedText = q("[data-slot-picked-text]");
-  const prev = q<HTMLButtonElement>("[data-slot-prev]");
-  const next = q<HTMLButtonElement>("[data-slot-next]");
+  const grid = q("[data-cal-grid]");
+  const monthLabel = q("[data-cal-month]");
+  const prevMonth = q<HTMLButtonElement>("[data-cal-prev]");
+  const nextMonth = q<HTMLButtonElement>("[data-cal-next]");
+  const times = q("[data-slot-times]");
+  const timesDay = q("[data-times-day]");
+  const choice = q("[data-slot-choice]");
+  const confirmBtn = q<HTMLButtonElement>("[data-slot-confirm]");
   let describe: (iso: string) => string = () => "";
+  let showDay: (key: string) => void = () => {};
+  let showMonth: (index: number) => void = () => {};
+  let dayOf: (iso: string) => string = () => "";
+  let before: string | null = null;
 
   function afterSlotChange() {
     const slot = pickedSlot();
     picked.hidden = !slot;
+    openBtn.hidden = !!slot;
     if (slot) pickedText.textContent = describe(slot.value);
     setError("slot", "");
     updateSubmit();
   }
-
-  function showDay(key: string) {
-    for (const t of days.querySelectorAll<HTMLButtonElement>("button")) {
-      const on = t.dataset.day === key;
-      t.setAttribute("aria-pressed", String(on));
-      // Bring the tile into the strip's view without scrolling the page.
-      const left = t.offsetLeft;
-      if (on && left < days.scrollLeft) days.scrollLeft = left - 4;
-      else if (on && left + t.offsetWidth > days.scrollLeft + days.clientWidth)
-        days.scrollLeft = left + t.offsetWidth - days.clientWidth + 4;
-    }
-    for (const p of times.querySelectorAll<HTMLElement>(":scope > div"))
-      p.hidden = p.dataset.day !== key;
+  function draftChanged() {
+    const slot = pickedSlot();
+    choice.textContent = slot
+      ? describe(slot.value)
+      : "Choose a day, then a time.";
+    confirmBtn.disabled = !slot;
   }
-  const arrows = () => {
-    prev.disabled = days.scrollLeft < 8;
-    next.disabled = days.scrollLeft + days.clientWidth >= days.scrollWidth - 8;
-  };
+  function openDialog() {
+    before = pickedSlot()?.value ?? null;
+    if (before) showDay(dayOf(before));
+    draftChanged();
+    dialog.showModal();
+    // Focus lands on the chosen day, or the first day with free times.
+    (
+      grid.querySelector<HTMLElement>("[aria-pressed=true]") ??
+      grid.querySelector<HTMLElement>("button:not(:disabled)")
+    )?.focus();
+  }
+  function restore() {
+    for (const r of form.querySelectorAll<HTMLInputElement>("input[name=slot]"))
+      r.checked = r.value === before;
+  }
+  function closeDialog(keep: boolean) {
+    if (!keep) restore();
+    dialog.close();
+    afterSlotChange();
+    (pickedSlot() ? q("[data-slot-change]") : openBtn).focus();
+  }
+  // Escape closes like Cancel.
+  dialog.addEventListener("cancel", e => {
+    e.preventDefault();
+    closeDialog(false);
+  });
+  // A click on the dimmed backdrop (the dialog element itself) closes too.
+  dialog.addEventListener("click", e => {
+    if (e.target === dialog) closeDialog(false);
+  });
+  for (const b of booking.querySelectorAll("[data-slot-cancel]"))
+    b.addEventListener("click", () => closeDialog(false));
+  confirmBtn.addEventListener("click", () => closeDialog(true));
+  openBtn.addEventListener("click", openDialog);
+  q("[data-slot-change]").addEventListener("click", openDialog);
+  q("[data-slot-clear]").addEventListener("click", () => {
+    const slot = pickedSlot();
+    if (slot) slot.checked = false;
+    afterSlotChange();
+    openBtn.focus();
+  });
 
   let slotsAsked = false;
   async function loadSlots() {
@@ -833,53 +963,62 @@ const schema = [
     const fmt = (o: Intl.DateTimeFormatOptions) =>
       new Intl.DateTimeFormat(undefined, o);
     const keyFmt = fmt({ year: "numeric", month: "2-digit", day: "2-digit" });
+    const partsOf = (d: Date) => {
+      const p = Object.fromEntries(
+        new Intl.DateTimeFormat("en-CA", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        })
+          .formatToParts(d)
+          .map(x => [x.type, Number(x.value)])
+      );
+      return { y: p.year!, m: p.month! - 1, d: p.day! };
+    };
     const longDay = fmt({ weekday: "long", month: "long", day: "numeric" });
+    const shortDay = fmt({ weekday: "short", month: "short", day: "numeric" });
     const timeFmt = fmt({ hour: "numeric", minute: "2-digit" });
     const hourFmt = fmt({ hour: "numeric", hourCycle: "h23" });
+    const monthFmt = new Intl.DateTimeFormat(undefined, {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+    const dowFmt = new Intl.DateTimeFormat(undefined, {
+      weekday: "narrow",
+      timeZone: "UTC",
+    });
     const minutes = data.minutes ?? 15;
     describe = iso => {
       const at = new Date(iso);
       const end = new Date(at.getTime() + minutes * 60_000);
       return `${longDay.format(at)}, ${timeFmt.format(at)} to ${timeFmt.format(end)}`;
     };
+    dayOf = iso => keyFmt.format(new Date(iso));
+
+    // Slots grouped by the visitor's local day.
     const byDay = new Map<string, Date[]>();
+    const dayParts = new Map<string, { y: number; m: number; d: number }>();
     for (const iso of data.slots) {
       const at = new Date(iso);
       const key = keyFmt.format(at);
       byDay.set(key, [...(byDay.get(key) ?? []), at]);
+      if (!dayParts.has(key)) dayParts.set(key, partsOf(at));
     }
+    const keyFor = new Map<string, string>(); // "y-m-d" -> day key
+    for (const [key, p] of dayParts) keyFor.set(`${p.y}-${p.m}-${p.d}`, key);
+    const months = [
+      ...new Set([...dayParts.values()].map(p => p.y * 12 + p.m)),
+    ].sort((a, b) => a - b);
 
-    days.replaceChildren();
+    // One panel of time chips per day, morning and afternoon; only the
+    // chosen day's panel shows.
     times.replaceChildren();
-    // One tile per day; each day has a panel of radio chips, grouped into
-    // morning and afternoon. Only the chosen day's panel shows.
     for (const [key, list] of byDay) {
-      const first = list[0];
-      const tile = document.createElement("button");
-      tile.type = "button";
-      tile.className = "day-tile";
-      tile.dataset.day = key;
-      tile.setAttribute("aria-pressed", "false");
-      tile.setAttribute(
-        "aria-label",
-        `${longDay.format(first)}, ${list.length} times free`
-      );
-      for (const [o, cls] of [
-        [{ weekday: "short" }, "day-tile__dow"],
-        [{ day: "numeric" }, "day-tile__num"],
-        [{ month: "short" }, "day-tile__mon"],
-      ] as const) {
-        const span = document.createElement("span");
-        span.className = cls;
-        span.textContent = fmt(o).format(first);
-        tile.append(span);
-      }
-      tile.addEventListener("click", () => showDay(key));
-      days.append(tile);
-
       const panel = document.createElement("div");
       panel.dataset.day = key;
       panel.className = "time-panel";
+      panel.hidden = true;
       const groups: [string, Date[]][] = [
         ["Morning", list.filter(d => Number(hourFmt.format(d)) < 12)],
         ["Afternoon", list.filter(d => Number(hourFmt.format(d)) >= 12)],
@@ -889,8 +1028,8 @@ const schema = [
         const heading = document.createElement("p");
         heading.className = "time-group";
         heading.textContent = name;
-        const grid = document.createElement("div");
-        grid.className = "time-grid";
+        const chips = document.createElement("div");
+        chips.className = "time-grid";
         for (const at of group) {
           const label = document.createElement("label");
           label.className = "time-chip";
@@ -899,35 +1038,127 @@ const schema = [
           input.name = "slot";
           input.value = at.toISOString();
           input.className = "sr-only";
-          input.addEventListener("change", afterSlotChange);
+          input.addEventListener("change", draftChanged);
           label.append(input, timeFmt.format(at));
-          grid.append(label);
+          chips.append(label);
         }
-        panel.append(heading, grid);
+        panel.append(heading, chips);
       }
       times.append(panel);
     }
 
-    q("[data-slot-tz]").textContent =
-      `Times are in your time zone (${zone.replace(/_/g, " ")}). It gets booked when you send this form.`;
-    q("[data-slot-clear]").addEventListener("click", () => {
-      const slot = pickedSlot();
-      if (slot) slot.checked = false;
-      afterSlotChange();
-      days.querySelector<HTMLElement>("[aria-pressed=true]")?.focus();
+    // Weekday initials, Sunday first.
+    const dows = q("[data-cal-dows]");
+    dows.replaceChildren(
+      ...Array.from({ length: 7 }, (_, i) => {
+        const s = document.createElement("span");
+        s.textContent = dowFmt.format(Date.UTC(2023, 0, 1 + i));
+        return s;
+      })
+    );
+
+    let current = 0;
+    let chosenDay = "";
+    showMonth = index => {
+      current = Math.max(0, Math.min(months.length - 1, index));
+      const y = Math.floor(months[current] / 12);
+      const m = months[current] % 12;
+      monthLabel.textContent = monthFmt.format(Date.UTC(y, m, 1));
+      prevMonth.disabled = current === 0;
+      nextMonth.disabled = current === months.length - 1;
+      const lead = new Date(Date.UTC(y, m, 1)).getUTCDay();
+      const count = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+      const cells: HTMLElement[] = [];
+      for (let i = 0; i < lead; i++) {
+        const pad = document.createElement("span");
+        pad.setAttribute("aria-hidden", "true");
+        cells.push(pad);
+      }
+      for (let d = 1; d <= count; d++) {
+        const key = keyFor.get(`${y}-${m}-${d}`);
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "cal__day";
+        b.textContent = String(d);
+        if (key) {
+          const list = byDay.get(key)!;
+          b.dataset.day = key;
+          b.setAttribute("aria-pressed", String(key === chosenDay));
+          b.setAttribute(
+            "aria-label",
+            `${longDay.format(list[0])}, ${list.length} ${list.length === 1 ? "time" : "times"} free`
+          );
+          b.addEventListener("click", () => {
+            showDay(key);
+            // On a narrow sheet the times sit below the calendar.
+            if (matchMedia("(max-width: 47.99rem)").matches)
+              q("[data-times]").scrollIntoView({
+                block: "nearest",
+                behavior: "smooth",
+              });
+          });
+        } else {
+          b.disabled = true;
+          b.setAttribute(
+            "aria-label",
+            `${fmt({ month: "long", day: "numeric", timeZone: "UTC" }).format(Date.UTC(y, m, d))}, no free times`
+          );
+        }
+        cells.push(b);
+      }
+      grid.replaceChildren(...cells);
+    };
+    showDay = key => {
+      if (!byDay.has(key)) return;
+      chosenDay = key;
+      const p = dayParts.get(key)!;
+      const idx = months.indexOf(p.y * 12 + p.m);
+      if (idx !== current || !grid.querySelector(`[data-day="${key}"]`))
+        showMonth(idx);
+      for (const b of grid.querySelectorAll<HTMLElement>("[data-day]"))
+        b.setAttribute("aria-pressed", String(b.dataset.day === key));
+      for (const panel of times.querySelectorAll<HTMLElement>(".time-panel"))
+        panel.hidden = panel.dataset.day !== key;
+      timesDay.textContent = longDay.format(byDay.get(key)![0]);
+    };
+    prevMonth.addEventListener("click", () => showMonth(current - 1));
+    nextMonth.addEventListener("click", () => showMonth(current + 1));
+
+    // Arrow keys move between days that have free times; Home and End jump
+    // to the first and last of the month.
+    grid.addEventListener("keydown", e => {
+      const all = [
+        ...grid.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
+      ];
+      const at = all.indexOf(document.activeElement as HTMLButtonElement);
+      if (at < 0) return;
+      const step: Record<string, number> = {
+        ArrowRight: 1,
+        ArrowLeft: -1,
+        ArrowDown: 1,
+        ArrowUp: -1,
+      };
+      const to =
+        e.key in step
+          ? at + step[e.key]
+          : e.key === "Home"
+            ? 0
+            : e.key === "End"
+              ? all.length - 1
+              : null;
+      if (to === null) return;
+      e.preventDefault();
+      all[Math.max(0, Math.min(all.length - 1, to))]?.focus();
     });
-    const step = () => days.clientWidth * 0.8;
-    prev.addEventListener("click", () =>
-      days.scrollBy({ left: -step(), behavior: "smooth" })
-    );
-    next.addEventListener("click", () =>
-      days.scrollBy({ left: step(), behavior: "smooth" })
-    );
-    days.addEventListener("scroll", arrows, { passive: true });
+
+    q("[data-slot-tz]").textContent = `your time (${zone.replace(/_/g, " ")})`;
+    const firstKey = byDay.keys().next().value!;
+    const firstAt = byDay.get(firstKey)![0];
+    nextFree.textContent = `Next free: ${shortDay.format(firstAt)} at ${timeFmt.format(firstAt)}. It's booked when you send this form.`;
+    showMonth(0);
+    showDay(firstKey);
+    openBtn.disabled = false;
     booking.dataset.state = "ready";
-    showDay(byDay.keys().next().value!);
-    days.scrollLeft = 0;
-    arrows();
   }
 
   // "Which post?": a search box over every post and news take. The list is
@@ -1134,14 +1365,14 @@ const schema = [
       padding-top: 0.75rem;
     }
     .contact-alt {
-      margin-top: 2.5rem;
+      margin-top: 2rem;
     }
   }
   /* The intro stays beside the form while it scrolls, when it fits. */
   @media (min-width: 64rem) and (min-height: 50rem) {
     .contact-intro {
       position: sticky;
-      top: 6.5rem;
+      top: 5.5rem;
     }
   }
 
@@ -1206,7 +1437,7 @@ const schema = [
   /* Form sections, separated by hairlines. */
   .form-section {
     min-width: 0;
-    padding-block: 2rem;
+    padding-block: 1.5rem;
     border-top: 1px solid var(--border);
   }
   .form-section:first-child {
@@ -1470,93 +1701,268 @@ const schema = [
     display: none;
   }
   .picker {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
   }
-  .picker-head {
+
+  /* The one line in the form: a wide button that opens the calendar, or the
+     chosen time with Change and Remove. */
+  .slot-open,
+  .picked {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    width: 100%;
+    min-height: 4.5rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--field-border);
+    border-radius: 0.875rem;
+    text-align: left;
+  }
+  .slot-open {
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out;
+  }
+  .slot-open:hover:not(:disabled) {
+    border-color: var(--foreground);
+    background: var(--chosen-bg);
+  }
+  .slot-open:hover:not(:disabled) > .icon:last-child {
+    transform: translateX(2px);
+  }
+  .slot-open > .icon:last-child {
+    margin-left: auto;
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slot-open:disabled {
+    cursor: progress;
+  }
+  .slot-open[hidden],
+  .picked[hidden] {
+    display: none;
+  }
+  .slot-open__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--foreground);
+    color: var(--background);
+  }
+  .slot-open:disabled .slot-open__icon {
+    background: var(--muted);
+    color: var(--muted-foreground);
+  }
+  .slot-open__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .slot-open__title {
+    font-weight: 600;
+  }
+  .slot-open__sub {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  .picked {
+    flex-wrap: wrap;
+    border-color: var(--foreground);
+    background: var(--chosen-bg);
+    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .picked__text {
+    display: grid;
+    flex: 1 1 12rem;
+    gap: 0.125rem;
+    min-width: 0;
+    font-weight: 600;
+  }
+  .picked__label {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .picked__actions {
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
+  }
+  .picked__actions .text-btn {
+    min-height: 2.75rem;
+  }
+
+  /* The dialog: a centred panel on wide screens, a sheet from the bottom on
+     phones. The page behind stays put. */
+  html:has(.slot-dialog[open]) {
+    overflow: hidden;
+  }
+  .slot-dialog {
+    width: min(100% - 2rem, 50rem);
+    max-width: none;
+    max-height: min(100dvh - 2rem, 44rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: 0 24px 64px -24px rgb(0 0 0 / 0.45);
+    overflow: hidden;
+  }
+  .slot-dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .slot-dialog::backdrop {
+    background: rgb(0 0 0 / 0.5);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .slot-dialog[open] {
+      animation: slot-in 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slot-dialog[open]::backdrop {
+      animation: slot-fade 240ms ease-out;
+    }
+  }
+  @keyframes slot-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+    }
+  }
+  @keyframes slot-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  .slot-dialog__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .slot-dialog__title {
+    font-family: var(--ff-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .slot-dialog__meta {
+    margin-top: 0.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+  .slot-dialog__body {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  @media (min-width: 48rem) {
+    .slot-dialog__body {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      overflow: hidden;
+    }
+  }
+
+  /* Month calendar. Days with free times are the only ones you can press. */
+  .cal {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+  .cal__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+    margin-bottom: 0.75rem;
   }
-  .icon-btn {
+  .cal__month {
+    font-family: var(--ff-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .cal__dows,
+  .cal__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+  .cal__dows {
+    margin-bottom: 0.25rem;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .cal__day {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border: 1px solid var(--choice-border);
+    aspect-ratio: 1;
+    min-height: 2.75rem;
     border-radius: 999px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
     transition:
-      border-color 150ms ease-out,
-      opacity 150ms ease-out;
-  }
-  .icon-btn:hover:not(:disabled) {
-    border-color: var(--foreground);
-  }
-  .icon-btn:disabled {
-    opacity: 0.3;
-  }
-  .booking[data-state="loading"] .icon-btn {
-    visibility: hidden;
-  }
-  .slot-days {
-    position: relative;
-    display: flex;
-    gap: 0.5rem;
-    margin: 0.625rem -0.25rem 0;
-    padding: 0.25rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 0.25rem;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-  }
-  .slot-days::-webkit-scrollbar {
-    display: none;
-  }
-  .day-tile {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    align-items: center;
-    width: 4.5rem;
-    height: 5.25rem;
-    justify-content: center;
-    border: 1px solid var(--choice-border);
-    border-radius: 0.875rem;
-    scroll-snap-align: start;
-    transition:
-      border-color 150ms ease-out,
       background-color 150ms ease-out,
       color 150ms ease-out;
   }
-  .day-tile:hover {
-    border-color: var(--field-border);
+  /* A free day: a small dot under the date marks it. */
+  .cal__day:not(:disabled)::after {
+    content: "";
+    position: absolute;
+    bottom: 18%;
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: currentColor;
   }
-  .day-tile[aria-pressed="true"] {
-    border-color: var(--foreground);
+  .cal__day:not(:disabled):hover {
+    background: var(--muted);
+  }
+  .cal__day[aria-pressed="true"] {
     background: var(--foreground);
     color: var(--background);
   }
-  .day-tile__dow {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.7;
+  .cal__day[aria-pressed="true"]:hover {
+    background: var(--foreground);
   }
-  .day-tile__num {
+  .cal__day:disabled {
+    color: color-mix(in oklab, var(--foreground) 32%, var(--background));
+    font-weight: 400;
+    cursor: default;
+  }
+
+  /* Times for the chosen day. */
+  .times {
+    padding: 1.25rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  @media (min-width: 48rem) {
+    .times {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border-top: 0;
+      border-left: 1px solid var(--border);
+    }
+  }
+  .times__day {
+    margin-bottom: 1rem;
     font-family: var(--ff-display);
-    font-size: 1.5rem;
+    font-size: 1.0625rem;
     font-weight: 600;
-    line-height: 1.15;
-    font-variant-numeric: tabular-nums;
   }
-  .day-tile__mon {
-    font-size: 0.75rem;
-    opacity: 0.7;
-  }
-  .slot-times {
-    margin-top: 0.625rem;
+  .time-panel[hidden] {
+    display: none;
   }
   .time-panel > * + .time-group {
     margin-top: 1.25rem;
@@ -1570,11 +1976,6 @@ const schema = [
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
-  }
-  @media (min-width: 40rem) {
-    .time-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
   }
   .time-chip {
     display: flex;
@@ -1604,30 +2005,73 @@ const schema = [
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
-  .skeleton {
-    border-color: transparent;
-    background: var(--muted);
-    animation: contact-pulse 1.4s ease-in-out infinite;
+
+  .slot-dialog__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 1rem 1.25rem 1rem 1.5rem;
+    border-top: 1px solid var(--border);
   }
-  @keyframes contact-pulse {
-    50% {
-      opacity: 0.55;
-    }
+  .slot-dialog__choice {
+    min-width: 0;
+    font-weight: 600;
   }
-  .picked {
+  .slot-dialog__buttons {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--foreground);
-    border-radius: 0.75rem;
-    background: var(--chosen-bg);
-    font-weight: 600;
-    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
+    gap: 1.25rem;
+    margin-left: auto;
   }
-  .picked[hidden] {
-    display: none;
+  .slot-confirm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Phones: a sheet that rises from the bottom edge. */
+  @media (max-width: 47.99rem) {
+    .slot-dialog {
+      width: 100%;
+      max-height: 92dvh;
+      margin: auto 0 0;
+      border-width: 1px 0 0;
+      border-radius: 1.25rem 1.25rem 0 0;
+    }
+    .slot-dialog__foot {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+    .slot-dialog__buttons {
+      width: 100%;
+    }
+    .slot-confirm {
+      flex: 1;
+    }
+    @keyframes slot-in {
+      from {
+        transform: translateY(100%);
+      }
+    }
+  }
+
+  .icon-btn {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--choice-border);
+    border-radius: 999px;
+    transition:
+      border-color 150ms ease-out,
+      opacity 150ms ease-out;
+  }
+  .icon-btn:hover:not(:disabled) {
+    border-color: var(--foreground);
+  }
+  .icon-btn:disabled {
+    opacity: 0.3;
   }
   .text-btn {
     flex: none;
@@ -1642,7 +2086,7 @@ const schema = [
   }
 
   .form-footer {
-    padding-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border);
   }
   .submit-btn {

@@ -161,7 +161,7 @@ const schema = [
   <div class="read-progress" aria-hidden="true"></div>
 
   <div
-    class="app-layout pt-8 xl:grid xl:grid-cols-[14rem_minmax(0,34rem)] xl:gap-12"
+    class="app-layout page-top xl:grid xl:grid-cols-[14rem_minmax(0,34rem)] xl:gap-12"
   >
     <div class="hidden xl:block">
       {kind === "post" && <TOC headings={headings} />}
@@ -313,7 +313,7 @@ const schema = [
     class="app-layout xl:grid xl:grid-cols-[14rem_minmax(0,34rem)] xl:gap-12"
   >
     <div class="xl:col-start-2">
-      <div class="max-w-read mt-12">
+      <div class="max-w-read section-gap">
         <AuthorBox />
         <StackChips items={data.stack} />
         <Syndication links={data.syndication} />
@@ -321,7 +321,7 @@ const schema = [
       </div>
 
       <section
-        class="max-w-read border-border mt-10 border-t pt-8"
+        class="max-w-read border-border section-gap border-t pt-6"
         aria-labelledby="keep-reading"
       >
         <h2 id="keep-reading" class="h2 mb-2">Keep reading</h2>
@@ -393,7 +393,7 @@ const schema = [
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className =
-      "bg-background border-border absolute end-2 top-2 rounded border px-2 py-0.5 text-xs font-medium";
+      "bg-background border-border absolute end-2 top-2 rounded border px-2 py-0.5 text-xs font-medium after:absolute after:-inset-2.5 after:content-['']";
     btn.textContent = "Copy";
     btn.addEventListener("click", async () => {
       await navigator.clipboard.writeText(

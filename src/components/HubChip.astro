@@ -9,7 +9,12 @@ const { hub, active = false, size = "sm" } = Astro.props;
   href={`/topics/${hub}`}
   class:list={[
     "border-foreground inline-flex items-center rounded-full border font-medium no-underline hover:underline",
-    size === "sm" ? "px-2.5 py-1 text-xs" : "px-3 py-1 text-sm",
+    // The chip stays small to look at; its tap area is at least 44px tall:
+    // the small one through an invisible ::after, the filter-bar one by
+    // growing on touch layouts.
+    size === "sm"
+      ? "relative px-2.5 py-1 text-xs after:absolute after:inset-x-0 after:-inset-y-2 after:content-['']"
+      : "px-3 py-1 text-sm max-lg:min-h-11",
     active && "bg-accent text-accent-foreground border-accent",
   ]}
   aria-current={active ? "page" : undefined}

@@ -5,7 +5,7 @@ type Props = { crumbs: Crumb[] };
 const { crumbs } = Astro.props;
 ---
 
-<nav aria-label="Breadcrumb" class="meta mb-6">
+<nav aria-label="Breadcrumb" class="meta mb-4">
   <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
     {
       crumbs.map((c, i) => (

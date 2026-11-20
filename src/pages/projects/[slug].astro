@@ -78,7 +78,7 @@ const schema = [
   schema={schema}
   draft={data.draft}
 >
-  <article class="app-layout pt-8" data-pagefind-body>
+  <article class="app-layout page-top" data-pagefind-body>
     <Breadcrumbs crumbs={crumbs} />
     <h1 class="h1 max-w-read">{data.title}</h1>
     <p class="max-w-read mt-4 text-lg">{data.summary}</p>
@@ -148,7 +148,7 @@ const schema = [
 
     {
       writtenIn.length > 0 && (
-        <section class="max-w-read mt-10" aria-labelledby="written-h">
+        <section class="max-w-read section-gap" aria-labelledby="written-h">
           <h2 id="written-h" class="h2 mb-4">
             Written about in
           </h2>

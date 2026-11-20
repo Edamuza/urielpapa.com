@@ -52,11 +52,14 @@ const siteLinks = [
 ];
 ---
 
-<footer class="app-layout mt-16">
+<!-- The footer's top margin is the only space at the end of a page (see the
+     rhythm note in global.css). On phones the three link lists share two
+     columns, and the long "Site" list runs in two columns at every width. -->
+<footer class="app-layout mt-10 sm:mt-12">
   <div
-    class="border-border grid gap-10 border-t py-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]"
+    class="border-border grid grid-cols-2 gap-x-6 gap-y-8 border-t py-8 md:grid-cols-[1.5fr_1fr_1.2fr_1fr] md:gap-x-8"
   >
-    <div class="max-w-sm">
+    <div class="col-span-2 max-w-sm md:col-span-1">
       <div class="flex items-center gap-3">
         <Avatar size={40} />
         <a
@@ -104,9 +107,9 @@ const siteLinks = [
       </ul>
     </nav>
 
-    <nav aria-label="Site">
+    <nav aria-label="Site" class="max-md:order-last max-md:col-span-2">
       <h2 class="label-caps text-muted-foreground mb-3">Site</h2>
-      <ul class="space-y-2 text-sm">
+      <ul class="columns-2 space-y-2 gap-x-6 text-sm">
         {
           siteLinks.map(l => (
             <li>
@@ -148,7 +151,7 @@ const siteLinks = [
     </div>
   </div>
   <div
-    class="border-border flex flex-wrap items-center justify-between gap-4 border-t py-6"
+    class="border-border flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t py-4"
   >
     <p class="meta flex flex-wrap items-center gap-x-4">
       <span>© {year} {SITE.name}</span>

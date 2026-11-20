@@ -90,7 +90,7 @@ const schema = [
   description={pageLabel ? `${description} ${pageLabel}.` : description}
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={heading} intro={intro}>
       {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
@@ -114,7 +114,7 @@ const schema = [
         ) : (
           <ul>
             {items.map(i => (
-              <li class="border-border border-b py-4 last:border-b-0">
+              <li class="border-border border-b py-4 last:border-b-0 last:pb-0">
                 <h2 class="text-lg leading-snug font-semibold">
                   <a href={i.href} title={`Read: ${i.title}`}>
                     {i.title}
