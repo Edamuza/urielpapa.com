@@ -147,6 +147,8 @@ The biggest variable is usually tokens: how long the system prompt is, how much 
 
 Our chatbot did best with the simple, repeated questions: what services we offered, rough package prices and how to book a call. It struggled with mixed Taglish messages and very short ones like "hm" or "how much?", where it sometimes guessed which service the person meant. It also needed a prompt update every time our packages changed, so I learned to treat the system prompt like a price list someone has to keep current.
 
+That guessing is the real risk with any customer-facing bot, even as AI gets cheaper. I go deeper on the safeguards, and on the Air Canada chatbot case, in [why a cheap AI chatbot is still risky](/blog/ai-is-cheaper-but-trust-is-expensive).
+
 ## When should a person take over?
 
 Build the handover in from the start. Have the model return a clear flag when it should not answer, then have n8n stop replying in that conversation and notify a person, for example by email or a chat message. Tell the customer that someone will follow up, and keep the logged conversation so the person does not have to ask everything again.

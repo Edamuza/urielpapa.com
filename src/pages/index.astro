@@ -84,6 +84,7 @@ const [city, country] = SITE.location.split(", ");
 ---
 
 <Layout
+  description="Uriel Papa helps businesses in the Philippines get more customers and spend less time on manual work, with business websites, business systems, AI automation and SEO, and writes about what he learns."
   webPage={{ about: { "@id": PERSON_ID }, mainEntity: { "@id": PERSON_ID } }}
 >
   {
@@ -134,26 +135,26 @@ const [city, country] = SITE.location.split(", ");
           }
           <span
             class="label-caps text-muted-foreground mb-3 block leading-normal"
-            >{SITE.name}: websites, software and AI automation for businesses in
-            the {SITE.location}</span
+            >{SITE.name}: business websites, business systems and AI automation
+            for businesses in the {SITE.location}</span
           >{" "}
           I&nbsp;see the problem. I&nbsp;build the solution. I&nbsp;grow the business.
         </h1>
         <p class="hero-lead max-w-read mt-4 text-lg sm:mt-5">
           <strong
-            >I help businesses get more customers and spend less time on manual
-            work.</strong
+            >A lot of business owners don't need another app. They need the ones
+            they have to finally work together.</strong
           >{" "}
-          I bring marketing, advertising, software and web development, and AI integration
-          together, so you work with one person from the problem to a working system:
-          a website that gets found, ads that bring in leads, software built around
-          how your team works, and AI that takes repetitive tasks off your plate.
+          That's where I come in. I build the website that gets you found, the business
+          system that replaces the spreadsheets, and the automation that gives your
+          team their hours back. So you save money, save time and watch the revenue
+          grow.
         </p>
         <a
           href="/about"
           class="see-more mt-2 inline-flex min-h-11 items-center font-semibold underline underline-offset-[3px]"
           title="Read more about Uriel Papa's background and experience"
-          >More about me</a
+          >Read my story</a
         >
         <p class="hero-actions mt-6 flex flex-wrap gap-3">
           <a
@@ -215,7 +216,7 @@ const [city, country] = SITE.location.split(", ");
 
     <section class="border-border border-b py-8" aria-labelledby="proof-h">
       <h2 id="proof-h" class="label-caps text-muted-foreground mb-5">
-        Proof of work
+        Track record
       </h2>
       <ul class="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
         {
@@ -238,21 +239,149 @@ const [city, country] = SITE.location.split(", ");
     </section>
 
     <ResultsStrip from="home-results" />
+    <section class="border-border border-b py-8" aria-labelledby="shift-h">
+      <h2 id="shift-h" class="h2">What changed, and why it matters to you</h2>
+      <p class="max-w-read text-muted-foreground mt-2">
+        Technology moved really fast these past few years. Honestly, faster than
+        many businesses can keep up with. Here's what I keep seeing.
+      </p>
+      <ul class="mt-6 grid gap-x-8 gap-y-6 md:grid-cols-3">
+        <li class="border-foreground border-t-2 pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            People now ask AI, not only Google
+          </h3>
+          <p class="mt-2">
+            Your customers ask ChatGPT, Gemini and Google's AI answers who to
+            buy from. So your website has to be clear enough for people to
+            trust, and for AI to quote.
+          </p>
+          <a
+            href="/blog/ai-search-for-philippine-businesses"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="AI Search for Philippine Businesses: What Your Website Needs"
+            >What your website needs for AI search →</a
+          >
+        </li>
+        <li class="border-foreground border-t-2 pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            AI is cheaper now. Trust is still expensive
+          </h3>
+          <p class="mt-2">
+            Running AI tools costs less every few months. But one chatbot that
+            makes up a price or a refund, and that customer is gone. That's why
+            I build AI that checks the real data first, and a person still makes
+            the final call.
+          </p>
+          <a
+            href="/blog/ai-is-cheaper-but-trust-is-expensive"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="AI Is Cheaper Now, So Why Is a Customer Chatbot Still Risky?"
+            >Why cheap AI is still risky →</a
+          >
+        </li>
+        <li class="border-foreground border-t-2 pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            A lot of work is still done by hand
+          </h3>
+          <p class="mt-2">
+            Chats, spreadsheets, payroll done manually. In the Philippines, AI
+            adoption is still behind internet access. So I always start with the
+            basics, a clear process and clean data, then the automation.
+          </p>
+          <a
+            href="/blog/why-philippine-businesses-still-work-by-hand"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="Why Philippine Businesses Still Work by Hand, and What to Fix First"
+            >What to fix before you automate →</a
+          >
+        </li>
+      </ul>
+    </section>
+    <section class="border-border border-b py-8" aria-labelledby="ai-h">
+      <h2 id="ai-h" class="h2">How I use AI tools in real work</h2>
+      <p class="max-w-read text-muted-foreground mt-2">
+        I use AI tools every day, in my own work and in what I build. One rule
+        though: AI does the repetitive work, people keep the judgment.
+      </p>
+      <ol class="mt-6 grid gap-x-8 gap-y-6 md:grid-cols-2">
+        <li class="border-border border-t pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            Answering customers, any time
+          </h3>
+          <p class="mt-2">
+            An AI chatbot on Messenger and Instagram handled 120 inquiries a
+            month. It booked the consultations and logged every lead too.
+          </p>
+          <a
+            href="/blog/n8n-messenger-instagram-chatbot"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="How to Build an AI Chatbot for Messenger and Instagram with n8n"
+            >How I built it →</a
+          >
+        </li>
+        <li class="border-border border-t pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            A café inbox, with a person in charge
+          </h3>
+          <p class="mt-2">
+            This agent checks the real data before it drafts a reply or a
+            booking. No made-up prices. And it only acts when a person says yes.
+          </p>
+          <a
+            href="/projects/inboxpilot"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="InboxPilot: a customer-inbox AI agent for a small café"
+            >See InboxPilot →</a
+          >
+        </li>
+        <li class="border-border border-t pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            Finding new clients and jobs
+          </h3>
+          <p class="mt-2">
+            My CRM runs 13 AI and automation agents. They find jobs and clients,
+            score the fit and write the email, for about US$0.0001 a job. But
+            nothing goes out until I approve it.
+          </p>
+          <a
+            href="/projects/job-client-crm"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="Job and Client Matching CRM: 13 AI and automation agents"
+            >See the CRM →</a
+          >
+        </li>
+        <li class="border-border border-t pt-3">
+          <h3 class="font-display text-lg leading-snug font-bold">
+            Building software from a spec
+          </h3>
+          <p class="mt-2">
+            I write the spec first. Then I direct AI agents to build each part
+            against it. The thinking stays mine, the typing just got faster.
+          </p>
+          <a
+            href="/projects/zeke"
+            class="meta mt-2 inline-flex min-h-11 items-center underline underline-offset-[3px]"
+            title="Zeke: an open-source update and security center for macOS"
+            >See how I built Zeke →</a
+          >
+        </li>
+      </ol>
+    </section>
 
     {
       projects.length > 0 && (
         <section class="py-8" aria-labelledby="projects-h">
           <SectionHeader
             id="projects-h"
-            title="Projects"
+            title="Working projects"
             href="/projects"
             linkText={`See all ${projects.length} →`}
             linkTitle="See all of Uriel Papa's projects and case studies"
             class="mb-2"
           />
           <p class="max-w-read text-muted-foreground mb-5">
-            Projects I built outside my agency, each with a case study on the
-            problem, the evidence and the results.
+            Built outside the agency, and they actually work. Each case study
+            shows the problem, how I built it and what changed.
           </p>
           <div class="project-carousel relative" data-carousel>
             <div class="carousel-viewport overflow-hidden py-2">
@@ -485,10 +614,11 @@ const [city, country] = SITE.location.split(", ");
         class="bg-accent text-accent-foreground flex flex-col items-start rounded-lg p-5 sm:p-6"
         aria-labelledby="work-h"
       >
-        <h2 id="work-h" class="h3">Have a problem worth solving?</h2>
+        <h2 id="work-h" class="h3">What's slowing your business down?</h2>
         <p class="mt-1 flex-1 opacity-85">
-          Web apps and business systems, AI automation and chatbots, and SEO or
-          GEO set-up. I read every message myself.
+          Tell me in a few lines. Website, business system, AI chatbot or SEO,
+          whatever it is. I read every message myself, and I'll tell you
+          straight if I can help.
         </p>
         <a
           href={WORK_WITH_ME_HREF}

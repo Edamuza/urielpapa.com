@@ -206,7 +206,7 @@ export const WORK_QUESTIONS = {
  * saved, time saved and new revenue.
  */
 export const RESULTS: {
-  /** What the number is about: "Leads", "Sales", "Service", "Money", "Time" or "Revenue". */
+  /** What the number is about: "Marketing", "Sales", "Automation", "Save money", "Save time" or "Revenue". */
   kind: string;
   value: string;
   /** A few words under the number on phones, where the cards sit two by two. */
@@ -216,42 +216,42 @@ export const RESULTS: {
   title: string;
 }[] = [
   {
-    kind: "Leads",
+    kind: "Marketing",
     value: "33 lead conversations",
     short: "in 5 days of Meta ads, about US$1 each",
-    text: "in the first 5 days of Meta ads on about US$8 a day, about US$1 each",
+    text: "from just 5 days of Meta ads. We spent around US$8 a day, so every lead cost about US$1",
     href: "/blog/organic-content-vs-paid-ads",
     title: "Read how a small Meta ads budget brought in 33 lead conversations",
   },
   {
     kind: "Sales",
     value: "15% to 30% close rate",
-    short: "with a new sales process",
-    text: "across 40 consultations, with a sales process I designed: service packages, a fit-check form and standard proposals",
+    short: "doubled with a better sales process",
+    text: "doubled across 40 consultations, just by fixing the sales process: clear service packages, a fit-check form and one standard proposal",
     href: "/blog/closing-my-agency",
     title: "Read the story of the agency Uriel Papa built and closed",
   },
   {
-    kind: "Service",
+    kind: "Automation",
     value: "120 inquiries a month",
-    short: "answered by an AI chatbot",
-    text: "answered by an AI chatbot on Messenger and Instagram that also books consultations and logs leads",
+    short: "handled by an AI chatbot",
+    text: "handled by an AI chatbot on Messenger and Instagram. It answers, books the consultation and logs the lead, so nobody has to",
     href: "/blog/n8n-messenger-instagram-chatbot",
     title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
   },
   {
-    kind: "Money",
+    kind: "Save money",
     value: "About US$390 a month",
-    short: "saved by replacing per-seat tools",
-    text: "in tool fees (about ₱25,000) saved by replacing per-seat HR, CRM and project tools with one ERP, built in under 3 months",
+    short: "back in the budget, no more per-seat tools",
+    text: "back in the budget (about ₱25,000). We dropped the per-seat HR, CRM and project tools and built one ERP instead, in under 3 months",
     href: "/projects/vite-seo-erp",
     title: "Read the ERP case study and the tool fees it replaced",
   },
   {
-    kind: "Time",
+    kind: "Save time",
     value: "2 hours to 10 minutes",
-    short: "for a client site SEO audit",
-    text: "for a client site SEO audit, with in-house WordPress plugins that also stop posts missing SEO basics",
+    short: "for every client SEO audit",
+    text: "for every client SEO audit. Our own WordPress plugins do the checking, and stop posts that miss the SEO basics",
     href: "/projects/wordpress-seo-plugins",
     title: "Read the WordPress SEO plugin suite case study",
   },
@@ -259,7 +259,7 @@ export const RESULTS: {
     kind: "Revenue",
     value: "150 NFC cards sold",
     short: "in the first 2 months on sale",
-    text: "in the first 2 months of a new product line, sold on TikTok Shop and to business owners around Makati",
+    text: "in the first 2 months of a brand-new product line. Sold on TikTok Shop and straight to business owners around Makati",
     href: "/projects/nfc-card-platform",
     title: "Read the NFC business card platform case study",
   },
@@ -303,19 +303,19 @@ export const PROOF = [
   },
   {
     value: "{projects}+ projects",
-    label: "handled, from client websites to my own products",
+    label: "I've built or led, from client websites to my own products",
     href: "/projects",
     title: "See Uriel Papa's projects and case studies",
   },
   {
     value: "50+ people",
-    label: "led across my career, from freelance teams to the company I built",
+    label: "I've led, from freelance teams to the company I built",
     href: "/about",
     title: "Read about the teams Uriel Papa has led",
   },
   {
     value: "8 events",
-    label: "business expos, seminars and a hackathon attended",
+    label: "expos, seminars and a hackathon where I keep learning",
     href: "/events",
     title: "See Uriel Papa's notes from seminars and events",
   },
