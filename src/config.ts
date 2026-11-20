@@ -209,8 +209,6 @@ export const RESULTS: {
   /** What the number is about: "Marketing", "Sales", "Automation", "Save money", "Save time" or "Revenue". */
   kind: string;
   value: string;
-  /** A few words under the number on phones, where the cards sit two by two. */
-  short: string;
   text: string;
   href: string;
   title: string;
@@ -218,7 +216,6 @@ export const RESULTS: {
   {
     kind: "Marketing",
     value: "33 lead conversations",
-    short: "in 5 days of Meta ads, about US$1 each",
     text: "from just 5 days of Meta ads. We spent around US$8 a day, so every lead cost about US$1",
     href: "/blog/organic-content-vs-paid-ads",
     title: "Read how a small Meta ads budget brought in 33 lead conversations",
@@ -226,7 +223,6 @@ export const RESULTS: {
   {
     kind: "Sales",
     value: "15% to 30% close rate",
-    short: "doubled with a better sales process",
     text: "doubled across 40 consultations, just by fixing the sales process: clear service packages, a fit-check form and one standard proposal",
     href: "/blog/closing-my-agency",
     title: "Read the story of the agency Uriel Papa built and closed",
@@ -234,7 +230,6 @@ export const RESULTS: {
   {
     kind: "Automation",
     value: "120 inquiries a month",
-    short: "handled by an AI chatbot",
     text: "handled by an AI chatbot on Messenger and Instagram. It answers, books the consultation and logs the lead, so nobody has to",
     href: "/blog/n8n-messenger-instagram-chatbot",
     title: "Read how Uriel Papa built a Messenger and Instagram lead chatbot",
@@ -242,7 +237,6 @@ export const RESULTS: {
   {
     kind: "Save money",
     value: "About US$390 a month",
-    short: "back in the budget, no more per-seat tools",
     text: "back in the budget (about ₱25,000). We dropped the per-seat HR, CRM and project tools and built one ERP instead, in under 3 months",
     href: "/projects/vite-seo-erp",
     title: "Read the ERP case study and the tool fees it replaced",
@@ -250,7 +244,6 @@ export const RESULTS: {
   {
     kind: "Save time",
     value: "2 hours to 10 minutes",
-    short: "for every client SEO audit",
     text: "for every client SEO audit. Our own WordPress plugins do the checking, and stop posts that miss the SEO basics",
     href: "/projects/wordpress-seo-plugins",
     title: "Read the WordPress SEO plugin suite case study",
@@ -258,7 +251,6 @@ export const RESULTS: {
   {
     kind: "Revenue",
     value: "150 NFC cards sold",
-    short: "in the first 2 months on sale",
     text: "in the first 2 months of a brand-new product line. Sold on TikTok Shop and straight to business owners around Makati",
     href: "/projects/nfc-card-platform",
     title: "Read the NFC business card platform case study",

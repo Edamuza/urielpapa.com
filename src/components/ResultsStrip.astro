@@ -15,34 +15,33 @@ const { from } = Astro.props;
       <h2 id="results-h" class="label-caps text-muted-foreground mb-5">
         Real numbers from real work
       </h2>
-      {/* Phones: a 2-column grid of compact cards (number and a short line);
-          from sm up the cards show the full sentence, three across on wide
-          screens. */}
-      <ul class="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+      {/* Phones and tablets: one swipeable row of cards that snaps to each
+          card, with the next one peeking in at the edge so it reads as
+          scrollable. From lg up it is the three-across grid. */}
+      <ul
+        class="results-track -mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:scroll-px-6 sm:gap-4 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0"
+        aria-label="Client results"
+      >
         {RESULTS.map(r => (
-          <li class="result-card border-border bg-muted/50 hover:border-foreground rounded-xl border transition-colors duration-150">
+          <li class="result-card border-border bg-muted/50 hover:border-foreground w-[80%] shrink-0 snap-start rounded-xl border transition-colors duration-150 sm:w-[19rem] lg:w-auto">
             <a
               href={r.href}
               title={r.title}
-              class="group flex h-full flex-col p-3.5 no-underline sm:p-5"
+              class="group flex h-full flex-col p-4 no-underline sm:p-5"
             >
-              <span class="text-muted-foreground flex items-center gap-1.5 text-[0.6875rem] font-semibold tracking-[0.08em] uppercase sm:text-xs">
+              <span class="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold tracking-[0.08em] uppercase">
                 <span
                   class="bg-foreground size-1.5 rounded-full"
                   aria-hidden="true"
                 />
                 {r.kind}
               </span>
-              <span class="font-display mt-2 block text-[1.0625rem] leading-tight font-bold sm:text-xl">
+              <span class="font-display mt-2 block text-lg leading-tight font-bold sm:text-xl">
                 {r.value}
               </span>
-              <span class="mt-1 block text-sm leading-snug sm:hidden">
-                {r.short}
-              </span>
-              <span class="mt-1 hidden sm:block">{r.text}</span>
+              <span class="mt-1 block">{r.text}</span>
               <span class="meta mt-auto flex items-center justify-between pt-3 group-hover:underline">
-                <span class="hidden sm:inline">See how it worked</span>
-                <span class="sr-only sm:hidden">See how it worked</span>
+                <span>See how it worked</span>
                 <span
                   aria-hidden="true"
                   class="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none"
@@ -93,3 +92,16 @@ const { from } = Astro.props;
     </section>
   )
 }
+
+<style>
+  /* Below lg the cards scroll sideways. The scrollbar is hidden: the next
+     card peeking in at the edge already shows there is more to swipe. */
+  @media (max-width: 1023px) {
+    .results-track {
+      scrollbar-width: none;
+    }
+    .results-track::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>
