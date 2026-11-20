@@ -109,16 +109,31 @@ const { rows } = Astro.props;
   }
   /* Reduced motion: no drift, one wrapped set, no fade. */
   @media (prefers-reduced-motion: reduce) {
+    /* The wrapped set keeps the page's width and side gutters (it used to run
+       edge to edge, so the first logo of each line sat on the screen edge). */
     .marquee {
       mask-image: none;
+      width: 100%;
+      max-width: 70rem;
+      margin-inline: auto;
+      padding-inline: 1rem;
+    }
+    @media (min-width: 40rem) {
+      .marquee {
+        padding-inline: 1.5rem;
+      }
     }
     .marquee__row {
       width: auto;
+    }
+    .marquee__item {
+      height: 2.5rem;
     }
     .marquee__track {
       flex-wrap: wrap;
       flex: 1;
       gap: 0 2rem;
+      padding-right: 0;
       animation: none;
     }
     .marquee__track[aria-hidden] {

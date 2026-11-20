@@ -131,14 +131,14 @@ const schema = [
   description={hub.data.description}
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <h1 class="h1">{hub.data.title}</h1>
     <div class="app-prose mt-4 text-lg"><Content /></div>
 
     {
       startHere.length > 0 && (
-        <section class="max-w-read mt-10" aria-labelledby="start-h">
+        <section class="max-w-read section-gap" aria-labelledby="start-h">
           <h2 id="start-h" class="h2 mb-4">
             Start here
           </h2>
@@ -156,7 +156,7 @@ const schema = [
       )
     }
 
-    <section class="max-w-read mt-10" aria-labelledby="all-h">
+    <section class="max-w-read section-gap" aria-labelledby="all-h">
       <h2 id="all-h" class="h2 mb-4">
         Guides and notes on{" "}
         {hub.data.title.replace(/^The /, "the ")}
@@ -193,7 +193,7 @@ const schema = [
 
     {
       news.length > 0 && (
-        <section class="max-w-read mt-10" aria-labelledby="news-h">
+        <section class="max-w-read section-gap" aria-labelledby="news-h">
           <h2 id="news-h" class="h2 mb-4">
             News takes on {hub.data.title.replace(/^The /, "the ")}
           </h2>
@@ -217,7 +217,10 @@ const schema = [
 
     {
       shortBlocks.map(b => (
-        <section class="max-w-read mt-10" aria-labelledby={`short-${b.id}`}>
+        <section
+          class="max-w-read section-gap"
+          aria-labelledby={`short-${b.id}`}
+        >
           <h2 id={`short-${b.id}`} class="h2 mb-4">
             {b.heading}
           </h2>
@@ -242,7 +245,7 @@ const schema = [
 
     {
       projects.length > 0 && (
-        <section class="max-w-read mt-10" aria-labelledby="proj-h">
+        <section class="max-w-read section-gap" aria-labelledby="proj-h">
           <h2 id="proj-h" class="h2 mb-4">
             Related projects
           </h2>
@@ -259,7 +262,7 @@ const schema = [
 
     {
       eventNotes.length > 0 && (
-        <section class="max-w-read mt-10" aria-labelledby="ev-h">
+        <section class="max-w-read section-gap" aria-labelledby="ev-h">
           <h2 id="ev-h" class="h2 mb-4">
             Events on this topic
           </h2>

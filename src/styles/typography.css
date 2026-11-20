@@ -7,6 +7,12 @@
 
     @apply max-w-read text-[1em] leading-[1.65];
 
+    /* The last block carries no bottom margin: the space after the text
+       belongs to whatever follows it (see the rhythm note in global.css). */
+    & > :last-child {
+      margin-bottom: 0;
+    }
+
     /* Map Tailwind Typography colours to the black and white tokens. */
     color: var(--foreground);
     --tw-prose-body: var(--foreground);

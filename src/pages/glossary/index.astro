@@ -45,7 +45,7 @@ const schema = [
 ---
 
 <Layout title={title} description={description} schema={schema}>
-  <div class="app-layout max-w-read pt-8">
+  <div class="app-layout max-w-read page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title="Glossary" intro={intro} />
     {
@@ -53,7 +53,7 @@ const schema = [
         <p>The first terms are on the way.</p>
       ) : (
         <>
-          <nav aria-label="Jump to a letter" class="mb-8">
+          <nav aria-label="Jump to a letter" class="mb-6">
             <ul class="flex flex-wrap gap-2">
               {[...letters.keys()].map(l => (
                 <li>
@@ -70,7 +70,7 @@ const schema = [
           </nav>
           {[...letters].map(([l, list]) => (
             <section
-              class="mb-8"
+              class="mb-6 last:mb-0"
               aria-labelledby={`letter-${l === "#" ? "num" : l}`}
             >
               <h2 id={`letter-${l === "#" ? "num" : l}`} class="h2 mb-3">

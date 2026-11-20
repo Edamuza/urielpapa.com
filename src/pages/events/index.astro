@@ -63,13 +63,13 @@ const schema = [
   description="Seminars, conferences and trainings Uriel Papa attended or sponsored in the Philippines, including WordCamp Philippines 2026, with notes on tech, leadership and marketing."
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro} />
 
     {
       talks.length > 0 && (
-        <section class="mb-12" aria-labelledby="talks-h">
+        <section class="section-gap-end" aria-labelledby="talks-h">
           <h2 id="talks-h" class="h2 mb-4">
             Talks I've given
           </h2>
@@ -114,7 +114,7 @@ const schema = [
 
     {
       sponsored.length > 0 && (
-        <section class="mb-12" aria-labelledby="sponsored-h">
+        <section class="section-gap-end" aria-labelledby="sponsored-h">
           <h2 id="sponsored-h" class="h2 mb-4">
             Events I sponsored
           </h2>
@@ -230,12 +230,12 @@ const schema = [
       </div>
     </section>
 
-    <section class="mt-12" aria-labelledby="cert-h">
+    <section class="section-gap" aria-labelledby="cert-h">
       <h2 id="cert-h" class="h2 mb-4">Certifications</h2>
       <CertificationList />
     </section>
 
-    <p class="max-w-read mt-10">
+    <p class="max-w-read section-gap">
       Organizing an event and want a speaker on AI, automation or SEO? <a
         href="/contact#speaking">Invite me to speak</a
       >.

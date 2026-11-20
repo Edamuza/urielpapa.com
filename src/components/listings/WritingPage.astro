@@ -56,7 +56,7 @@ const schema = [
   description={`All long posts by Uriel Papa: guides, comparisons and build stories on AI, automation, technology and business, SEO, GEO and AEO, tech stacks and marketing.${pageLabel ? ` ${pageLabel}.` : ""}`}
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro}>
       {pageLabel && <p class="meta mt-2">{pageLabel}</p>}
@@ -66,7 +66,7 @@ const schema = [
          without JavaScript and each filter has its own URL. On phones the chips
          scroll sideways in one line. -->
     <div
-      class="border-border mb-8 flex flex-col gap-3 border-y py-3 lg:flex-row lg:items-center lg:justify-between"
+      class="border-border mb-6 flex flex-col gap-3 border-y py-3 lg:flex-row lg:items-center lg:justify-between"
     >
       <nav aria-label="Browse by topic" class="min-w-0">
         <ul
@@ -75,7 +75,7 @@ const schema = [
           <li class="shrink-0">
             <a
               href="/blog"
-              class="bg-accent text-accent-foreground border-accent inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium no-underline"
+              class="bg-accent text-accent-foreground border-accent inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium no-underline max-lg:min-h-11"
               aria-current="page"
               title="All writing by Uriel Papa"
             >

@@ -78,12 +78,12 @@ const schema = [
   description="Projects Uriel Papa has built: a job and client CRM, the Zeke Mac update tool, five AI apps made in Lovable, an ERP, the TravelEase portal and more."
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro} />
     {
       featured.length > 0 && (
-        <section aria-labelledby="featured-h" class="mb-14">
+        <section aria-labelledby="featured-h" class="section-gap-end last:mb-0">
           <h2 id="featured-h" class="sr-only">
             Featured projects
           </h2>
@@ -97,7 +97,10 @@ const schema = [
     }
     {
       groups.map(g => (
-        <section aria-labelledby={`${g.id}-h`} class="mb-14">
+        <section
+          aria-labelledby={`${g.id}-h`}
+          class="section-gap-end last:mb-0"
+        >
           <div class="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
             <h2 id={`${g.id}-h`} class="h2">
               {g.heading}

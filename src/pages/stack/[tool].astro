@@ -137,7 +137,7 @@ const sections = [
       )}
   schema={schema}
 >
-  <article class="app-layout max-w-read pt-8" data-pagefind-body>
+  <article class="app-layout max-w-read page-top" data-pagefind-body>
     <Breadcrumbs crumbs={crumbs} />
     <p class="meta mb-2">Tool · {group}</p>
     <h1 class="h1">{data.name}</h1>
@@ -219,7 +219,7 @@ const sections = [
 
     {
       sections.map(s => (
-        <section class="mt-8" aria-labelledby={`tool-${s.id}`}>
+        <section class="section-gap" aria-labelledby={`tool-${s.id}`}>
           <h2 id={`tool-${s.id}`} class="h3 mb-3">
             {s.heading}
           </h2>

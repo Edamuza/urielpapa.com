@@ -313,7 +313,7 @@ const schema = [
   schema={schema}
 >
   <div class="about-page">
-    <div class="app-layout pt-8">
+    <div class="app-layout page-top">
       <Breadcrumbs crumbs={crumbs} />
     </div>
 
@@ -718,7 +718,7 @@ const schema = [
     --step-5: clamp(3rem, 2rem + 4.5vw, 5.25rem);
     --step-6: clamp(3.5rem, 2rem + 7vw, 6rem);
 
-    --space-section: clamp(2.5rem, 5vw, 4rem);
+    --space-section: clamp(2rem, 4vw, 3rem);
     --space-head: clamp(1.125rem, 2vw, 1.5rem);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -1021,7 +1021,7 @@ const schema = [
   @media (min-width: 48rem) {
     .year__num {
       position: sticky;
-      top: 7.5rem;
+      top: 6.5rem;
       align-self: start;
     }
   }
@@ -1347,7 +1347,7 @@ const schema = [
   /* The close: one large question and the page's only call to action. */
   .close {
     margin-top: var(--space-section);
-    padding-block: clamp(2rem, 4vw, 3rem) 1rem;
+    padding-block: clamp(2rem, 4vw, 3rem) 0;
     border-top: 1px solid var(--rule-strong);
   }
   .close__title {

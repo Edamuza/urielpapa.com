@@ -3,7 +3,7 @@ type Props = { title: string; intro?: string };
 const { title, intro } = Astro.props;
 ---
 
-<header class="mb-8">
+<header class="mb-6">
   <h1 class="h1">{title}</h1>
   {intro && <p class="max-w-read mt-3 text-lg">{intro}</p>}
   <slot />

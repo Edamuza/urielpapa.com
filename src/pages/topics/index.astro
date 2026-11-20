@@ -35,13 +35,13 @@ const schema = [
   description="The seven topics Uriel Papa writes about: AI in depth, automation, technology and business, SEO, GEO and AEO, tech stacks, marketing and the founder's journey."
   schema={schema}
 >
-  <div class="app-layout pt-8">
+  <div class="app-layout page-top">
     <Breadcrumbs crumbs={crumbs} />
     <PageIntro title={title} intro={intro} />
-    <ul class="max-w-read">
+    <ul class="max-w-read lg:grid lg:max-w-none lg:grid-cols-2 lg:gap-x-12">
       {
         hubs.map(h => (
-          <li class="border-border border-b py-6 first:pt-0">
+          <li class="border-border border-b py-5 max-lg:first:pt-0 lg:[&:nth-child(-n+2)]:pt-0">
             <h2 class="h2">
               <a href={`/topics/${h.id}`}>{h.data.title}</a>
             </h2>
