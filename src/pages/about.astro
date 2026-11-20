@@ -324,12 +324,12 @@ const schema = [
             <source
               type="image/avif"
               srcset="/images/uriel-papa-portrait-320.avif 320w, /images/uriel-papa-portrait-480.avif 480w, /images/uriel-papa-portrait-560.avif 560w, /images/uriel-papa-portrait-800.avif 800w, /images/uriel-papa-portrait.avif 1200w"
-              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 560px, 118vw"
+              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 440px, 300px"
             />
             <img
               src="/images/uriel-papa-portrait.webp"
               srcset="/images/uriel-papa-portrait-320.webp 320w, /images/uriel-papa-portrait-480.webp 480w, /images/uriel-papa-portrait-560.webp 560w, /images/uriel-papa-portrait-800.webp 800w, /images/uriel-papa-portrait.webp 1200w"
-              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 560px, 118vw"
+              sizes="(min-width: 64rem) 500px, (min-width: 40rem) 440px, 300px"
               width="1200"
               height="1787"
               alt="Uriel Papa smiling, wearing black-framed glasses, a dark charcoal suit and a white open-collar shirt"
@@ -764,9 +764,11 @@ const schema = [
   }
 
   /* Hero: the portrait plate leads; the identity sits beside it on wide
-     screens and under it on phones. */
+     screens and under it on phones. On phones the plate is a head-and-
+     shoulders crop, short enough that the name and role still show on the
+     first screen. */
   .hero {
-    --plate-h: clamp(22rem, 66svh, 36rem);
+    --plate-h: clamp(15rem, 42svh, 20rem);
     display: grid;
     gap: 1.5rem;
     padding-bottom: var(--space-section);
@@ -802,6 +804,9 @@ const schema = [
     line-height: 1.4;
   }
   @media (min-width: 40rem) {
+    .hero {
+      --plate-h: clamp(20rem, 50svh, 28rem);
+    }
     .plate {
       margin-inline: -1.5rem;
     }
@@ -817,6 +822,70 @@ const schema = [
     }
     .plate {
       margin-inline: 0;
+    }
+  }
+  /* Below desktop the hero reads top to bottom: name, role and creed first,
+     then the portrait, then the intro and the story link. The wrappers step
+     aside so their children can be ordered in the hero's own grid. */
+  @media (width < 64rem) {
+    .hero .ident,
+    .hero .ident__body {
+      display: contents;
+    }
+    .hero .ident__top {
+      order: 1;
+    }
+    .hero .ident__creed {
+      order: 2;
+    }
+    .hero .portrait {
+      order: 3;
+    }
+    .hero .ident__intro {
+      order: 4;
+      margin-top: 0;
+    }
+    .hero .ident__cue {
+      order: 5;
+      justify-self: center;
+      margin-top: -0.75rem;
+    }
+  }
+  /* Phones: the whole hero (name to "Read the story") fits on the first
+     screen, sized for a phone browser with its toolbars showing (100svh). Type and gaps tighten, and the plate takes whatever height is
+     left of the small viewport, within a floor and a ceiling. */
+  @media (width < 40rem) {
+    .about-page :global(nav[aria-label="Breadcrumb"]) {
+      margin-bottom: 0.75rem;
+    }
+    .hero {
+      --plate-h: clamp(9rem, calc(100svh - 27.75rem), 17rem);
+      gap: 0.75rem;
+    }
+    .hero .ident__name {
+      font-size: 2.5rem;
+    }
+    .hero .ident__role {
+      margin-top: 0.375rem;
+      font-size: var(--step--1);
+    }
+    .hero .ident__creed {
+      font-size: 1.3125rem;
+      line-height: 1.15;
+    }
+    .hero .plate__img {
+      top: 2%;
+    }
+    /* The name sits right above the photo, so its caption would repeat it. */
+    .hero .portrait__caption {
+      display: none;
+    }
+    .hero .ident__intro {
+      font-size: var(--step-0);
+      line-height: 1.5;
+    }
+    .hero .ident__cue {
+      margin-top: -0.75rem;
     }
   }
   /* The one authored motion: the plate rises into view from its base. The
