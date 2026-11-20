@@ -483,70 +483,143 @@ const schema = [
             <span>Optional</span>
           </p>
 
-          <div class="picker" data-picker>
-            <div class="picker-head">
-              <p class="field-label" id="c-slot-day-label">Day</p>
-              <div class="flex gap-1.5">
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Earlier days"
-                  data-slot-prev
-                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                    ><path d="m15 6-6 6 6 6"></path></svg
-                  ></button
-                >
-                <button
-                  type="button"
-                  class="icon-btn"
-                  aria-label="Later days"
-                  data-slot-next
-                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                    ><path d="m9 6 6 6-6 6"></path></svg
-                  ></button
-                >
-              </div>
-            </div>
-            <div
-              class="slot-days"
-              role="group"
-              aria-labelledby="c-slot-day-label"
-              data-slot-days
+          <div class="call-card" data-call-card>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              class="icon call-card__icon"
+              ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
+                d="M16 3v4M8 3v4M3 10h18"></path></svg
             >
-              {
-                Array.from({ length: 6 }, () => (
-                  <span class="day-tile skeleton" aria-hidden="true" />
-                ))
-              }
-            </div>
-            <p class="field-label mt-5" id="c-slot-time-label">Time</p>
-            <div
-              class="slot-times"
-              role="group"
-              aria-labelledby="c-slot-time-label"
-              data-slot-times
-            >
-              <div class="time-grid" aria-hidden="true">
-                {
-                  Array.from({ length: 8 }, () => (
-                    <span class="time-chip skeleton" />
-                  ))
-                }
-              </div>
-            </div>
-            <p class="meta mt-4" data-slot-tz></p>
-
-            <div class="picked" data-slot-picked hidden>
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
-                ><rect x="3" y="5" width="18" height="16" rx="2"></rect><path
-                  d="M16 3v4M8 3v4M3 10h18"></path></svg
-              >
-              <p class="min-w-0 flex-1" data-slot-picked-text></p>
-              <button type="button" class="text-btn" data-slot-clear
-                >Remove time</button
-              >
+            <div class="min-w-0 flex-1" aria-live="polite">
+              <p class="call-card__title" data-slot-summary>
+                No time picked yet
+              </p>
+              <p class="meta" data-slot-summary-note>
+                Pick a time and it goes straight into my calendar when you send
+                this form.
+              </p>
             </div>
           </div>
+          <div class="call-actions">
+            <button
+              type="button"
+              class="btn"
+              aria-haspopup="dialog"
+              disabled
+              data-slot-open>Loading times…</button
+            >
+            <button type="button" class="text-btn" hidden data-slot-clear
+              >Remove time</button
+            >
+          </div>
+
+          <dialog
+            class="slot-dialog"
+            aria-labelledby="c-slot-heading"
+            data-slot-dialog
+          >
+            <div class="slot-dialog__frame">
+              <div class="slot-dialog__head">
+                <div>
+                  <h2 id="c-slot-heading" class="slot-dialog__title">
+                    Pick a time
+                  </h2>
+                  <p class="meta booking-meta mt-1">
+                    <span class="inline-flex items-center gap-1.5"
+                      ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                        ><circle cx="12" cy="12" r="9"></circle><path
+                          d="M12 7v5l3 2"></path></svg
+                      >15 min</span
+                    >
+                    <span class="inline-flex items-center gap-1.5"
+                      ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                        ><rect x="3" y="6" width="12" height="12" rx="2"
+                        ></rect><path d="m15 10 6-3v10l-6-3"></path></svg
+                      >Google Meet</span
+                    >
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="icon-btn"
+                  aria-label="Close"
+                  data-slot-close
+                  ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                    ><path d="M18 6 6 18M6 6l12 12"></path></svg
+                  ></button
+                >
+              </div>
+              <div class="slot-dialog__body picker" data-picker>
+                <div class="picker-head">
+                  <p class="field-label" id="c-slot-day-label">Day</p>
+                  <div class="flex gap-1.5">
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      aria-label="Earlier days"
+                      data-slot-prev
+                      ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                        ><path d="m15 6-6 6 6 6"></path></svg
+                      ></button
+                    >
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      aria-label="Later days"
+                      data-slot-next
+                      ><svg aria-hidden="true" viewBox="0 0 24 24" class="icon"
+                        ><path d="m9 6 6 6-6 6"></path></svg
+                      ></button
+                    >
+                  </div>
+                </div>
+                <div
+                  class="slot-days"
+                  role="group"
+                  aria-labelledby="c-slot-day-label"
+                  data-slot-days
+                >
+                  {
+                    Array.from({ length: 6 }, () => (
+                      <span class="day-tile skeleton" aria-hidden="true" />
+                    ))
+                  }
+                </div>
+                <p class="field-label mt-5" id="c-slot-time-label">Time</p>
+                <div
+                  class="slot-times"
+                  role="group"
+                  aria-labelledby="c-slot-time-label"
+                  data-slot-times
+                >
+                  <div class="time-grid" aria-hidden="true">
+                    {
+                      Array.from({ length: 8 }, () => (
+                        <span class="time-chip skeleton" />
+                      ))
+                    }
+                  </div>
+                </div>
+                <p class="meta mt-4" data-slot-tz></p>
+              </div>
+              <div class="slot-dialog__foot">
+                <p
+                  class="min-w-0 flex-1 text-sm"
+                  aria-live="polite"
+                  data-slot-choice
+                >
+                  Pick a day and a time.
+                </p>
+                <button
+                  type="button"
+                  class="btn btn-filled"
+                  disabled
+                  data-slot-confirm>Confirm time</button
+                >
+              </div>
+            </div>
+          </dialog>
 
           <div class="call-times" data-call-times>
             <label for="c-call" class="field-label">Good times for a call</label
@@ -707,9 +780,7 @@ const schema = [
     if (!first) return;
     const target =
       first === "slot"
-        ? form.querySelector<HTMLElement>(
-            "[data-slot-times] > div:not([hidden]) input, [data-slot-days] button"
-          )
+        ? openBtn
         : form.querySelector<HTMLElement>(`[name="${first}"]`);
     target?.focus();
   }
@@ -774,25 +845,83 @@ const schema = [
   });
 
   // Discovery-call slots: loaded once, the first time "Work together" is
-  // picked, and shown inline. Times show in the visitor's own time zone.
+  // picked, and shown in a pop-up. Times show in the visitor's own time zone.
   const booking = form.querySelector<HTMLElement>("[data-booking]")!;
   const q = <T extends HTMLElement = HTMLElement>(sel: string) =>
     booking.querySelector<T>(sel)!;
   const days = q("[data-slot-days]");
   const times = q("[data-slot-times]");
-  const picked = q("[data-slot-picked]");
-  const pickedText = q("[data-slot-picked-text]");
+  const dialog = q<HTMLDialogElement>("[data-slot-dialog]");
+  const openBtn = q<HTMLButtonElement>("[data-slot-open]");
+  const clearBtn = q<HTMLButtonElement>("[data-slot-clear]");
+  const confirmBtn = q<HTMLButtonElement>("[data-slot-confirm]");
+  const choice = q("[data-slot-choice]");
+  const summary = q("[data-slot-summary]");
+  const summaryNote = q("[data-slot-summary-note]");
+  const emptySummary = [summary.textContent, summaryNote.textContent];
+  const emptyChoice = choice.textContent;
   const prev = q<HTMLButtonElement>("[data-slot-prev]");
   const next = q<HTMLButtonElement>("[data-slot-next]");
   let describe: (iso: string) => string = () => "";
 
+  // The picker opens in a pop-up. The time confirmed there is the one the
+  // form sends; closing the pop-up any other way puts the radios back to it.
+  let confirmed = "";
+  const radios = () => [
+    ...times.querySelectorAll<HTMLInputElement>("input[name=slot]"),
+  ];
   function afterSlotChange() {
     const slot = pickedSlot();
-    picked.hidden = !slot;
-    if (slot) pickedText.textContent = describe(slot.value);
+    // Inside the pop-up, a click only previews the choice.
+    if (dialog.open) {
+      choice.textContent = slot ? describe(slot.value) : emptyChoice;
+      confirmBtn.disabled = !slot;
+      return;
+    }
+    confirmed = slot?.value ?? "";
+    clearBtn.hidden = !confirmed;
+    openBtn.textContent = confirmed ? "Change time" : "Pick a time";
+    [summary.textContent, summaryNote.textContent] = confirmed
+      ? [
+          describe(confirmed),
+          "Google Meet. It gets booked when you send this form.",
+        ]
+      : emptySummary;
+    booking.toggleAttribute("data-picked", Boolean(confirmed));
     setError("slot", "");
     updateSubmit();
   }
+  dialog.addEventListener("close", () => {
+    for (const r of radios()) r.checked = r.value === confirmed;
+    afterSlotChange();
+  });
+  // A click on the dimmed backdrop lands on the dialog itself.
+  dialog.addEventListener("click", e => {
+    if (e.target === dialog) dialog.close();
+  });
+  q("[data-slot-close]").addEventListener("click", () => dialog.close());
+  confirmBtn.addEventListener("click", () => {
+    confirmed = pickedSlot()?.value ?? "";
+    dialog.close();
+    openBtn.focus();
+  });
+  openBtn.addEventListener("click", () => {
+    dialog.showModal();
+    const slot = pickedSlot();
+    choice.textContent = slot ? describe(slot.value) : emptyChoice;
+    confirmBtn.disabled = !slot;
+    const day =
+      slot?.closest<HTMLElement>("[data-day]")?.dataset.day ??
+      days.querySelector<HTMLElement>("button")?.dataset.day;
+    if (day) showDay(day);
+    arrows();
+  });
+  clearBtn.addEventListener("click", () => {
+    confirmed = "";
+    for (const r of radios()) r.checked = false;
+    afterSlotChange();
+    openBtn.focus();
+  });
 
   function showDay(key: string) {
     for (const t of days.querySelectorAll<HTMLButtonElement>("button")) {
@@ -910,12 +1039,6 @@ const schema = [
 
     q("[data-slot-tz]").textContent =
       `Times are in your time zone (${zone.replace(/_/g, " ")}). It gets booked when you send this form.`;
-    q("[data-slot-clear]").addEventListener("click", () => {
-      const slot = pickedSlot();
-      if (slot) slot.checked = false;
-      afterSlotChange();
-      days.querySelector<HTMLElement>("[aria-pressed=true]")?.focus();
-    });
     const step = () => days.clientWidth * 0.8;
     prev.addEventListener("click", () =>
       days.scrollBy({ left: -step(), behavior: "smooth" })
@@ -925,6 +1048,8 @@ const schema = [
     );
     days.addEventListener("scroll", arrows, { passive: true });
     booking.dataset.state = "ready";
+    openBtn.disabled = false;
+    openBtn.textContent = "Pick a time";
     showDay(byDay.keys().next().value!);
     days.scrollLeft = 0;
     arrows();
@@ -1465,12 +1590,124 @@ const schema = [
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .booking[data-state="off"] .picker,
+  .booking[data-state="off"] .call-card,
+  .booking[data-state="off"] .call-actions,
   .booking:not([data-state="off"]) .call-times {
     display: none;
   }
-  .picker {
-    margin-top: 1.5rem;
+  /* On the form: a card with the confirmed time and a button to the picker. */
+  .call-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border: 1px dashed var(--choice-border);
+    border-radius: 0.875rem;
+    transition:
+      border-color 150ms ease-out,
+      background-color 150ms ease-out;
+  }
+  .booking[data-picked] .call-card {
+    border-style: solid;
+    border-color: var(--foreground);
+    background: var(--chosen-bg);
+  }
+  .call-card__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.15rem;
+  }
+  .call-card__title {
+    font-weight: 600;
+  }
+  .call-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.875rem;
+  }
+  .call-actions .btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  /* The pop-up: a sheet from the bottom on phones, centred on wide screens. */
+  .slot-dialog {
+    width: 100%;
+    max-width: none;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 1.25rem 1.25rem 0 0;
+    background: var(--background);
+    color: var(--foreground);
+    box-shadow: 0 24px 64px rgb(0 0 0 / 0.3);
+  }
+  .slot-dialog[open] {
+    animation: slot-sheet-in 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .slot-dialog::backdrop {
+    background: rgb(0 0 0 / 0.55);
+  }
+  @media (min-width: 40rem) {
+    .slot-dialog {
+      max-width: 36rem;
+      max-height: 88dvh;
+      margin: auto;
+      border-radius: 1.25rem;
+    }
+  }
+  @keyframes slot-sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  html:has(.slot-dialog[open]) {
+    overflow: hidden;
+  }
+  .slot-dialog__frame {
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+  }
+  .slot-dialog__head,
+  .slot-dialog__foot {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+  .slot-dialog__head {
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .slot-dialog__foot {
+    border-top: 1px solid var(--border);
+  }
+  .slot-dialog__foot .btn:disabled {
+    opacity: 0.4;
+  }
+  .slot-dialog__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .slot-dialog__body {
+    flex: 1;
+    min-height: 0;
+    padding: 1.25rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  @media (min-width: 40rem) {
+    .slot-dialog__head,
+    .slot-dialog__foot,
+    .slot-dialog__body {
+      padding-inline: 1.5rem;
+    }
   }
   .picker-head {
     display: flex;
@@ -1613,21 +1850,6 @@ const schema = [
     50% {
       opacity: 0.55;
     }
-  }
-  .picked {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--foreground);
-    border-radius: 0.75rem;
-    background: var(--chosen-bg);
-    font-weight: 600;
-    animation: contact-reveal 260ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .picked[hidden] {
-    display: none;
   }
   .text-btn {
     flex: none;
