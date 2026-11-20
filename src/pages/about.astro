@@ -824,6 +824,33 @@ const schema = [
       margin-inline: 0;
     }
   }
+  /* Below desktop the hero reads top to bottom: name, role and creed first,
+     then the portrait, then the intro and the story link. The wrappers step
+     aside so their children can be ordered in the hero's own grid. */
+  @media (width < 64rem) {
+    .hero .ident,
+    .hero .ident__body {
+      display: contents;
+    }
+    .hero .ident__top {
+      order: 1;
+    }
+    .hero .ident__creed {
+      order: 2;
+    }
+    .hero .portrait {
+      order: 3;
+    }
+    .hero .ident__intro {
+      order: 4;
+      margin-top: 0;
+    }
+    .hero .ident__cue {
+      order: 5;
+      justify-self: start;
+      margin-top: -0.75rem;
+    }
+  }
   /* The one authored motion: the plate rises into view from its base. The
      photo is fully opaque throughout, and the still state is the default. */
   @media (prefers-reduced-motion: no-preference) {
