@@ -40,3 +40,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-20 | news | skipped | - | Weekly cap reached: 3 takes already published this week (16 to 22 Nov).
 - 2026-11-21 | news | skipped | - | Weekly cap reached: 3 takes already published this week (16 to 22 Nov).
 - 2026-11-22 | news | skipped | - | Weekly cap reached: 3 takes already published this week (16 to 22 Nov).
+- 2026-11-23 | news | published | php-session-flaw-phpaftershell |
