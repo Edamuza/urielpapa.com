@@ -1,0 +1,95 @@
+{
+  "about": "Posting strategy for scripts/social.mjs. Times are Manila (UTC+8). These are starting points; after 4-6 weeks, move the slots to the hours each platform's own analytics shows your audience is active. See docs/social-brief.md.",
+  "timezoneOffsetHours": 8,
+  "newPostWindowDays": 2,
+  "platforms": {
+    "x": {
+      "via": "buffer",
+      "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+      "times": ["08:30", "12:30", "20:00"],
+      "dailyCap": 3,
+      "weeklyCap": 14,
+      "maxChars": 280,
+      "link": "reply"
+    },
+    "linkedin": {
+      "via": "buffer",
+      "days": ["mon", "tue", "wed", "thu", "fri"],
+      "times": ["08:00", "12:00", "17:30"],
+      "dailyCap": 1,
+      "weeklyCap": 5,
+      "maxChars": 3000,
+      "link": "first-comment"
+    },
+    "threads": {
+      "via": "buffer",
+      "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+      "times": ["09:00", "19:30"],
+      "dailyCap": 2,
+      "weeklyCap": 14,
+      "maxChars": 500,
+      "link": "reply"
+    },
+    "facebook": {
+      "via": "manual",
+      "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+      "times": ["12:00", "20:00"],
+      "dailyCap": 2,
+      "weeklyCap": 10,
+      "maxChars": 5000,
+      "link": "in-text"
+    }
+  },
+  "minGapHours": 2,
+  "waves": {
+    "news": {
+      "about": "News goes stale: every platform the same day, nothing later than maxDelayDays.",
+      "leadHours": 6,
+      "maxDelayDays": 1,
+      "posts": [
+        { "platform": "x", "day": 0, "angle": 1 },
+        { "platform": "threads", "day": 0, "angle": 1 },
+        { "platform": "linkedin", "day": 0, "angle": 1 },
+        { "platform": "facebook", "day": 0, "angle": 1 }
+      ]
+    },
+    "launch": {
+      "about": "A new evergreen post: launch on X and LinkedIn, then Threads and Facebook, then fresh angles on X and Threads over nine days (one post is a week of content, not one share).",
+      "leadHours": 12,
+      "maxDelayDays": 4,
+      "posts": [
+        { "platform": "x", "day": 0, "angle": 1 },
+        { "platform": "linkedin", "day": 0, "angle": 1 },
+        { "platform": "threads", "day": 1, "angle": 1 },
+        { "platform": "facebook", "day": 1, "angle": 1 },
+        { "platform": "x", "day": 3, "angle": 2 },
+        { "platform": "threads", "day": 6, "angle": 2 },
+        { "platform": "x", "day": 9, "angle": 3 }
+      ]
+    },
+    "drip": {
+      "about": "Older evergreen posts re-shared to fill quiet days. LinkedIn is left out: its few weekly slots go to new posts.",
+      "leadHours": 12,
+      "maxDelayDays": 4,
+      "posts": [
+        { "platform": "x", "day": 0, "angle": 1 },
+        { "platform": "threads", "day": 1, "angle": 1 },
+        { "platform": "facebook", "day": 2, "angle": 1 }
+      ]
+    }
+  },
+  "drip": {
+    "perWeek": 3,
+    "horizonDays": 14,
+    "reshareAfterDays": 120,
+    "keepFreePerWeek": 3,
+    "skipFrames": [
+      "news-take",
+      "event-note"
+    ]
+  },
+  "send": {
+    "horizonDays": 2,
+    "bufferQueueLimit": 10
+  }
+}
