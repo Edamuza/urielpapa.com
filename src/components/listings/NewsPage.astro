@@ -111,7 +111,9 @@ const schema = [
                               {n.data.title}
                             </a>
                           </h3>
-                          <p class="mt-1 text-[0.95rem]">{n.data.dek}</p>
+                          <p class="max-w-read mt-1 text-[0.95rem]">
+                            {n.data.dek}
+                          </p>
                           <p class="meta mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
                             <HubChip hub={n.data.hub} />
                             {host && <span>Source: {host}</span>}
