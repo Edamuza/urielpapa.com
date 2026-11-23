@@ -1008,14 +1008,17 @@ const schema = [
 
   /* What I build with: a full-width breather on the tile tone. */
   .stack {
-    padding-block: var(--space-section);
+    padding-block: clamp(1.25rem, 3vw, 2rem);
     background: var(--tile);
     overflow: hidden;
   }
   .stack__head {
     display: grid;
-    gap: 0.75rem 3rem;
-    margin-bottom: var(--space-head);
+    gap: 0.5rem 3rem;
+    margin-bottom: 0.875rem;
+  }
+  .stack__intro {
+    font-size: var(--step--1);
   }
   @media (min-width: 64rem) {
     .stack__head {

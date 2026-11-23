@@ -49,7 +49,7 @@ const { rows } = Astro.props;
 <style>
   .marquee {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.25rem;
     /* Fade the strip in and out at both edges. */
     mask-image: linear-gradient(
       to right,
@@ -68,8 +68,8 @@ const { rows } = Astro.props;
   .marquee__track {
     display: flex;
     flex: none;
-    gap: 2.75rem;
-    padding-right: 2.75rem;
+    gap: 2rem;
+    padding-right: 2rem;
     animation: marquee var(--marquee-duration) linear infinite;
   }
   .marquee__row--reverse .marquee__track {
@@ -85,10 +85,10 @@ const { rows } = Astro.props;
     display: inline-flex;
     flex: none;
     align-items: center;
-    gap: 0.625rem;
-    height: 3rem;
+    gap: 0.5rem;
+    height: 2.375rem;
     font-family: var(--ff-display);
-    font-size: 1.1875rem;
+    font-size: 1rem;
     font-weight: 600;
     white-space: nowrap;
     color: color-mix(in oklab, var(--foreground) 78%, transparent);
@@ -98,8 +98,8 @@ const { rows } = Astro.props;
     color: var(--foreground);
   }
   .marquee__logo {
-    width: 1.375rem;
-    height: 1.375rem;
+    width: 1.125rem;
+    height: 1.125rem;
     fill: currentColor;
   }
   @keyframes marquee {
