@@ -133,8 +133,10 @@
   text-transform: uppercase;
 }
 
+/* Small supporting text. It often wraps, so it gets a 1.5 line height
+   (WCAG 1.4.8) instead of the 1.43 that text-sm carries. */
 @utility meta {
-  @apply text-muted-foreground text-sm;
+  @apply text-muted-foreground text-sm leading-normal;
 }
 
 /* Filled buttons (contact form submit, homepage About me) and outlined buttons */

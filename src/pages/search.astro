@@ -161,5 +161,40 @@ const crumbs = [
     .pagefind-ui__result-nested .pagefind-ui__result-link:before {
       font-family: system-ui;
     }
+
+    /* Pagefind sets its text in fixed pixels at 0.8 scale, which put result
+       excerpts and messages at 12.8px and the Clear button at 11.2px. These
+       put them on the site's own rem scale, so they also follow the reader's
+       browser font size. The box keeps its height. */
+    .pagefind-ui__search-input {
+      font-size: 1rem;
+    }
+    .pagefind-ui__search-clear,
+    .pagefind-ui__message {
+      font-size: 0.875rem;
+    }
+    .pagefind-ui__result-title {
+      font-size: 1.125rem;
+      line-height: 1.35;
+    }
+    /* A long unbroken word (a URL in an excerpt) must wrap, not push the
+       result wider than a phone screen. */
+    .pagefind-ui__result-inner {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .pagefind-ui__result-excerpt {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .pagefind-ui__result-nested .pagefind-ui__result-link {
+      font-size: 1rem;
+    }
+    .pagefind-ui__result-tag {
+      font-size: 0.75rem;
+    }
+    .pagefind-ui__button {
+      font-size: 1rem;
+    }
   }
 </style>

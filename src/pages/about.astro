@@ -58,6 +58,9 @@ type Photo = {
   height: number;
   alt: string;
   caption: string;
+  /** A line or two on what was happening, shown under the caption. It is
+   * trusted HTML written here, so it may hold links (each with a title). */
+  story?: string;
 };
 /** One stop on a year's timeline, in month order. A stop with no `what` is
  * a photo moment: pictures from that month, placed where they happened. */
@@ -77,8 +80,16 @@ const photo = (
   width: number,
   height: number,
   alt: string,
-  caption: string
-): Photo => ({ src: `/images/about/${src}`, width, height, alt, caption });
+  caption: string,
+  story?: string
+): Photo => ({
+  src: `/images/about/${src}`,
+  width,
+  height,
+  alt,
+  caption,
+  story,
+});
 const years: Chapter[] = [
   {
     year: "2023",
@@ -116,7 +127,9 @@ const years: Chapter[] = [
             1280,
             853,
             "Uriel Papa with a group of twelve people outdoors at night under string lights",
-            "December 2024."
+            "December 2024.",
+            // Placeholder story, written for Uriel to correct.
+            "Our first year-end get-together. Most of these people had only ever been faces on a video call until that night."
           ),
         ],
       },
@@ -140,15 +153,18 @@ const years: Chapter[] = [
             "2025-05-office",
             1280,
             720,
-            "Uriel Papa in a black suit and sunglasses in an office with blue cubicles and balloons",
-            "May 2025."
+            "Uriel Papa in a black suit and sunglasses at the opening of his agency's first office, with blue cubicles and balloons",
+            "Office opening, May 2025.",
+            "Opening day of our first office, back when we were Vercel Digital Marketing, the agency that soon became VITE SEO. We celebrated with balloons and soda."
           ),
           photo(
             "2025-05-mirror",
             1280,
             1707,
             "Uriel Papa in a black shirt taking a mirror photo against a dark green wall",
-            "Pasay, May 2025."
+            "Pasay, May 2025.",
+            // Placeholder story, written for Uriel to correct.
+            "A quiet night out after a long week of client calls. I've learned to stop and mark the small wins."
           ),
         ],
       },
@@ -162,7 +178,9 @@ const years: Chapter[] = [
             1280,
             1707,
             "Uriel Papa wearing a Philippine SME Business Expo badge in a crowded exhibition hall",
-            "At the expo, November 2025."
+            "At the expo, November 2025.",
+            // Placeholder story, written for Uriel to correct.
+            "I walked every aisle asking owners what slowed them down most. The answer was almost always the same: time."
           ),
         ],
       },
@@ -181,7 +199,9 @@ const years: Chapter[] = [
             1280,
             1707,
             "Uriel Papa in a grey suit holding a briefcase in front of the Speakerscon welcome backdrop",
-            "At Speakerscon, February 2026."
+            "At Speakerscon, February 2026.",
+            // Placeholder story, written for Uriel to correct.
+            "I came to learn how the best brands tell their story, and left with pages of notes for our clients."
           ),
         ],
       },
@@ -193,21 +213,27 @@ const years: Chapter[] = [
             1280,
             720,
             "Uriel Papa standing and speaking to a seated group in a café",
-            "February 2026. Photo by Bruce Dan Reyes."
+            "February 2026. Photo by Bruce Dan Reyes.",
+            // Placeholder story, written for Uriel to correct.
+            "My first time sharing what we'd learned with a room of business owners. I was nervous, and they were kind."
           ),
           photo(
             "2026-02-group",
             1280,
             720,
             "Uriel Papa in a group of about twenty people around café tables",
-            "Makati, February 2026."
+            "Makati, February 2026.",
+            // Placeholder story, written for Uriel to correct.
+            "Breakfast with fellow founders. Everyone at those tables was building something, and everyone was willing to help."
           ),
           photo(
             "2026-02-microsoft",
             1280,
             1707,
             "Uriel Papa in a black blazer in front of a Microsoft sign and a gold slatted wall",
-            "Microsoft's office in Makati, February 2026."
+            "Microsoft's office in Makati, February 2026.",
+            // Placeholder story, written for Uriel to correct.
+            "Walking through Microsoft's office reminded me how far good systems can take a small team."
           ),
         ],
       },
@@ -218,8 +244,9 @@ const years: Chapter[] = [
             "2026-05-certificates",
             1280,
             960,
-            "Uriel Papa with four others holding green certificate folders under a university welcome sign",
-            "Manila, May 2026."
+            "Uriel Papa with four teammates holding green certificate folders under a university welcome sign after finishing their TravelEase thesis",
+            "TravelEase thesis team, Manila, May 2026.",
+            'Finishing our thesis and capstone, <a href="/projects/travelease" title="TravelEase, a tourism portal for Tagaytay built as a capstone thesis">TravelEase</a>.'
           ),
         ],
       },
@@ -235,8 +262,9 @@ const years: Chapter[] = [
             "2026-07-taguig",
             1280,
             1707,
-            "Uriel Papa standing beside a colleague in an office",
-            "Taguig, July 2026."
+            "Uriel Papa standing beside another attendee at the first App Builders PH event, in an office in Taguig",
+            "First App Builders PH event, Taguig, July 2026.",
+            'The first <a href="https://www.appbuildersph.com/" title="App Builders PH, the community for Filipino app builders" target="_blank" rel="noopener">App Builders PH</a> event, hosted by <a href="https://bryllim.com/" title="Bryl Lim, AI and software engineer and founder of App Builders PH" target="_blank" rel="noopener">Bryl Lim</a>. A room full of Filipino builders sharing what they were making.'
           ),
         ],
       },
@@ -250,7 +278,9 @@ const years: Chapter[] = [
             1280,
             1920,
             "Uriel Papa's graduation portrait in a black toga with a gold hood",
-            "Graduation portrait."
+            "Graduation portrait.",
+            // Placeholder story, written for Uriel to correct.
+            "Four years of juggling classes and clients, finished cum laude."
           ),
         ],
       },
@@ -356,9 +386,12 @@ const schema = [
             <span>I grow the business.</span>
           </p>
           <p class="ident__intro">
-            I founded an agency at 21 and grew it to a team of up to 22. It
-            closed after financial losses in 2026, the same year I graduated cum
-            laude, and now I'm deciding what to build next.
+            Behind every business I've worked with is an owner doing too much at
+            once. I've been that owner, so I listen first, then build what
+            actually helps: a website people trust, a system your team will use,
+            or an automation that answers customers while you rest. My goal is
+            to help every business grow, and yours is part of that. Let's build
+            it together.
           </p>
           <a
             href="#story"
@@ -488,7 +521,15 @@ const schema = [
                                         decoding="async"
                                       />
                                     </picture>
-                                    <figcaption>{ph.caption}</figcaption>
+                                    <figcaption>
+                                      {ph.caption}
+                                      {ph.story && (
+                                        <span
+                                          class="snap__story"
+                                          set:html={ph.story}
+                                        />
+                                      )}
+                                    </figcaption>
                                   </figure>
                                 </li>
                               ))}
@@ -967,14 +1008,17 @@ const schema = [
 
   /* What I build with: a full-width breather on the tile tone. */
   .stack {
-    padding-block: var(--space-section);
+    padding-block: clamp(1.25rem, 3vw, 2rem);
     background: var(--tile);
     overflow: hidden;
   }
   .stack__head {
     display: grid;
-    gap: 0.75rem 3rem;
-    margin-bottom: var(--space-head);
+    gap: 0.5rem 3rem;
+    margin-bottom: 0.875rem;
+  }
+  .stack__intro {
+    font-size: var(--step--1);
   }
   @media (min-width: 64rem) {
     .stack__head {
@@ -1083,44 +1127,119 @@ const schema = [
      proportion to its aspect ratio). */
   .snaps {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.875rem;
     padding-top: 0.875rem;
+  }
+  .year__moment .snaps {
+    padding-top: 0.5rem;
   }
   /* A photo-only stop: just the month above its pictures. */
   .year__when--alone {
     display: block;
     text-align: right;
   }
-  .year__moment .snaps {
-    padding-top: 0.5rem;
-  }
-  .snaps::after {
-    content: "";
-    flex: 999 1 0;
-  }
   .snap {
-    flex: var(--ar) 1 calc(var(--ar) * var(--snap-h, 7.5rem));
     min-width: 0;
   }
+  /* Each photo is a framed print with its caption inside the frame, the
+     same paper as the interlude print, so it follows light and dark. */
   .snap figure {
+    height: 100%;
     margin: 0;
+    padding: 0.4375rem 0.4375rem 0.625rem;
+    border: 1px solid var(--rule);
+    background: var(--print);
+    box-shadow: 0 12px 24px -16px var(--print-shade);
   }
   .snap img {
     display: block;
     width: 100%;
-    height: auto;
     background: var(--tile);
   }
   .snap figcaption {
-    padding-top: 0.375rem;
+    padding: 0.5rem 0.125rem 0;
     color: var(--quiet);
     font-size: var(--step--1);
     line-height: 1.4;
   }
+  .snap__story {
+    display: block;
+    padding-top: 0.25rem;
+    color: var(--foreground);
+    line-height: 1.5;
+  }
+
+  /* Phones: a month's photos sit in one row you swipe through, every photo
+     the same height, so the story stays short instead of stacking. The
+     next print peeks in from the edge to show there is more. */
+  @media (max-width: 47.99rem) {
+    .snaps {
+      --snap-img-h: 11rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding-bottom: 1rem;
+      margin-bottom: -0.5rem;
+    }
+    .snaps::-webkit-scrollbar {
+      display: none;
+    }
+    .snap {
+      flex: 0 0 auto;
+      width: clamp(
+        12.5rem,
+        calc(var(--ar) * var(--snap-img-h) + 0.875rem),
+        82%
+      );
+      scroll-snap-align: start;
+    }
+    .snap img {
+      height: var(--snap-img-h);
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    /* A lone photo needs no swiping: the print turns sideways, photo on
+       the left and its caption beside it, about half the height. */
+    .snap:only-child {
+      width: 100%;
+    }
+    .snap:only-child figure {
+      display: grid;
+      grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr);
+      align-items: start;
+      gap: 0.75rem;
+      padding-bottom: 0.4375rem;
+    }
+    .snap:only-child img {
+      height: auto;
+      aspect-ratio: 4 / 5;
+    }
+    .snap:only-child figcaption {
+      padding-top: 0;
+    }
+  }
+
+  /* Wider screens: photos share a row at one height and wrap, each frame
+     growing in proportion to its photo. */
   @media (min-width: 48rem) {
     .snaps {
       --snap-h: 12.5rem;
+      flex-wrap: wrap;
+    }
+    .snaps::after {
+      content: "";
+      flex: 999 1 0;
+    }
+    .snap {
+      flex: var(--ar) 1 calc(var(--ar) * var(--snap-h));
+    }
+    /* A story needs room to read, so a narrow portrait widens to fit it. */
+    .snap:has(.snap__story) {
+      flex-basis: max(calc(var(--ar) * var(--snap-h)), 11rem);
+    }
+    .snap img {
+      height: auto;
     }
   }
 
