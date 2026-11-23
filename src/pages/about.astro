@@ -58,7 +58,8 @@ type Photo = {
   height: number;
   alt: string;
   caption: string;
-  /** A line or two on what was happening, shown under the caption. */
+  /** A line or two on what was happening, shown under the caption. It is
+   * trusted HTML written here, so it may hold links (each with a title). */
   story?: string;
 };
 /** One stop on a year's timeline, in month order. A stop with no `what` is
@@ -152,10 +153,9 @@ const years: Chapter[] = [
             "2025-05-office",
             1280,
             720,
-            "Uriel Papa in a black suit and sunglasses in an office with blue cubicles and balloons",
-            "May 2025.",
-            // Placeholder story, written for Uriel to correct.
-            "The day we moved into our first real office. Someone brought balloons, and I couldn't stop smiling."
+            "Uriel Papa in a black suit and sunglasses at the opening of his agency's first office, with blue cubicles and balloons",
+            "Office opening, May 2025.",
+            "Opening day of our first office, back when we were Vercel Digital Marketing, the agency that soon became VITE SEO. We celebrated with balloons and soda."
           ),
           photo(
             "2025-05-mirror",
@@ -263,10 +263,9 @@ const years: Chapter[] = [
             "2026-07-taguig",
             1280,
             1707,
-            "Uriel Papa standing beside a colleague in an office",
-            "Taguig, July 2026.",
-            // Placeholder story, written for Uriel to correct.
-            "Working side by side with a teammate on our ERP. The best ideas came from the people who used it every day."
+            "Uriel Papa standing beside another attendee at the first App Builders PH event, in an office in Taguig",
+            "First App Builders PH event, Taguig, July 2026.",
+            'The first <a href="https://www.appbuildersph.com/" title="App Builders PH, the community for Filipino app builders" target="_blank" rel="noopener">App Builders PH</a> event, hosted by <a href="https://bryllim.com/" title="Bryl Lim, AI and software engineer and founder of App Builders PH" target="_blank" rel="noopener">Bryl Lim</a>. A room full of Filipino builders sharing what they were making.'
           ),
         ],
       },
@@ -526,9 +525,10 @@ const schema = [
                                     <figcaption>
                                       {ph.caption}
                                       {ph.story && (
-                                        <span class="snap__story">
-                                          {ph.story}
-                                        </span>
+                                        <span
+                                          class="snap__story"
+                                          set:html={ph.story}
+                                        />
                                       )}
                                     </figcaption>
                                   </figure>
