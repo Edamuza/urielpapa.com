@@ -372,11 +372,6 @@ const schema = [
           <p class="ident__role">{SITE.jobTitle}&nbsp;· {SITE.location}</p>
         </div>
         <div class="ident__body">
-          <p class="ident__creed">
-            <span>I see the problem.</span>
-            <span>I build the solution.</span>
-            <span>I grow the business.</span>
-          </p>
           <p class="ident__intro">
             I'm a technical leader who thinks strategically before anything gets
             built. I question the plan, find the real problem, then lead the
@@ -848,7 +843,7 @@ const schema = [
   }
   @media (min-width: 40rem) {
     .hero {
-      --plate-h: clamp(20rem, 50svh, 28rem);
+      --plate-h: clamp(22rem, 54svh, 30rem);
     }
     .plate {
       margin-inline: -1.5rem;
@@ -867,8 +862,8 @@ const schema = [
       margin-inline: 0;
     }
   }
-  /* Below desktop the hero reads top to bottom: name, role and creed first,
-     then the portrait, then the intro and the story link. The wrappers step
+  /* Below desktop the hero reads top to bottom: name and role first, then
+     the portrait, then the intro and the story link. The wrappers step
      aside so their children can be ordered in the hero's own grid. */
   @media (width < 64rem) {
     .hero .ident,
@@ -878,31 +873,29 @@ const schema = [
     .hero .ident__top {
       order: 1;
     }
-    .hero .ident__creed {
+    .hero .portrait {
       order: 2;
     }
-    .hero .portrait {
-      order: 3;
-    }
     .hero .ident__intro {
-      order: 4;
+      order: 3;
       margin-top: 0;
     }
     .hero .ident__cue {
-      order: 5;
+      order: 4;
       justify-self: center;
       margin-top: -0.75rem;
     }
   }
-  /* Phones: the whole hero (name to "Read the story") fits on the first
-     screen, sized for a phone browser with its toolbars showing (100svh). Type and gaps tighten, and the plate takes whatever height is
-     left of the small viewport, within a floor and a ceiling. */
+  /* Phones: type and gaps tighten, and the plate takes whatever height is
+     left of the small viewport (100svh, so with the browser toolbars
+     showing), within a floor and a ceiling. The floor keeps the portrait a
+     clear head-and-shoulders size even when the intro runs past the fold. */
   @media (width < 40rem) {
     .about-page :global(nav[aria-label="Breadcrumb"]) {
       margin-bottom: 0.75rem;
     }
     .hero {
-      --plate-h: clamp(9rem, calc(100svh - 37rem), 17rem);
+      --plate-h: clamp(13rem, calc(100svh - 31rem), 19rem);
       gap: 0.75rem;
     }
     .hero .ident__name {
@@ -911,10 +904,6 @@ const schema = [
     .hero .ident__role {
       margin-top: 0.375rem;
       font-size: var(--step--1);
-    }
-    .hero .ident__creed {
-      font-size: 1.3125rem;
-      line-height: 1.15;
     }
     .hero .plate__img {
       top: 2%;
@@ -964,14 +953,6 @@ const schema = [
     font-size: var(--step-1);
     font-weight: 500;
     line-height: 1.4;
-  }
-  .ident__creed {
-    display: grid;
-    font-family: var(--ff-display);
-    font-size: var(--step-3);
-    font-weight: 700;
-    line-height: 1.12;
-    letter-spacing: -0.02em;
   }
   .ident__intro {
     max-width: 34rem;
