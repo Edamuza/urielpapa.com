@@ -8,10 +8,9 @@ import { SITE, SOCIALS, WORK_WITH_ME_HREF } from "@/config";
 import { HUBS } from "@/data/hubs";
 import events from "@/data/events.json";
 import { BUILD_TOOLS, GROW_TOOLS } from "@/data/tech-stack";
-import { getHubs, getProjects, projectUrl } from "@/utils/content";
+import { getProjects, projectUrl } from "@/utils/content";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
 
-const hubs = await getHubs();
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
@@ -62,8 +61,9 @@ type Photo = {
    * trusted HTML written here, so it may hold links (each with a title). */
   story?: string;
 };
-/** One stop on a year's timeline, in month order. A stop with no `what` is
- * a photo moment: pictures from that month, placed where they happened. */
+/** One stop on a year's timeline, in month order. A stop with no `what` only
+ * carries photos. The page gathers each year's photos into one strip, in
+ * this order. */
 type Entry = {
   when: string;
   what?: string;
@@ -386,12 +386,12 @@ const schema = [
             <span>I grow the business.</span>
           </p>
           <p class="ident__intro">
-            Behind every business I've worked with is an owner doing too much at
-            once. I've been that owner, so I listen first, then build what
-            actually helps: a website people trust, a system your team will use,
-            or an automation that answers customers while you rest. My goal is
-            to help every business grow, and yours is part of that. Let's build
-            it together.
+            I'm a technical leader who thinks strategically before anything gets
+            built. I question the plan, find the real problem, then lead the
+            work until it ships. I'm hungry to grow, and I don't wait for luck.
+            I earn my place by giving a company or a client enough value that we
+            grow together. My motto is if you want to win the lottery, you've
+            got to make money to buy a ticket.
           </p>
           <a
             href="#story"
@@ -407,159 +407,8 @@ const schema = [
       </div>
     </section>
 
-    <section class="stack" aria-labelledby="stack-h">
-      <div class="app-layout stack__head">
-        <h2 id="stack-h" class="sec-h">What I build with</h2>
-        <p class="stack__intro">
-          The languages, frameworks, AI models and tools I've shipped with, from
-          code to search. <a
-            href="/stack"
-            title="How Uriel Papa uses each tool on the Stack page"
-            >How I use each one</a
-          >.
-        </p>
-      </div>
-      <StackMarquee
-        rows={[
-          { label: "Languages, frameworks and data", tools: BUILD_TOOLS },
-          {
-            label: "AI, automation, search and hosting",
-            tools: GROW_TOOLS,
-            reverse: true,
-          },
-        ]}
-      />
-    </section>
-
     <div class="app-layout">
-      <section class="sec" id="story" aria-labelledby="story-h">
-        <h2 id="story-h" class="sec-h">My story</h2>
-        <ol class="years">
-          {
-            years.map(y => (
-              <>
-                {y.year === "2025" && (
-                  <li class="interlude">
-                    <figure class="print">
-                      <img
-                        src="/images/uriel-papa.jpg"
-                        width="480"
-                        height="480"
-                        alt="Uriel Papa outdoors in black-framed glasses, with palm trees and a school building behind him"
-                        title="Uriel Papa, off the clock"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <figcaption>Off the clock.</figcaption>
-                    </figure>
-                    <p class="interlude__line">
-                      I started the agency with the clients who followed me from
-                      freelance work.
-                    </p>
-                  </li>
-                )}
-                <li class="year">
-                  <p class="year__num">{y.year}</p>
-                  <div class="year__body">
-                    {y.lead && (
-                      <div class="year__lead">
-                        {y.lead.map(l => (
-                          <p>{l}</p>
-                        ))}
-                        <p>
-                          Before it closed, we built 12 WordPress sites for
-                          clients like Noyona Cosmetics and Icamen Legal, and{" "}
-                          <a
-                            href="/blog/n8n-messenger-instagram-chatbot"
-                            title="How to Build an AI Chatbot for Messenger and Instagram with n8n"
-                          >
-                            an AI chatbot that answers 120 inquiries a month
-                          </a>
-                          . The sales process I designed took our close rate
-                          from 15% to 30%.
-                        </p>
-                      </div>
-                    )}
-                    <ol class="year__entries">
-                      {y.entries.map(e => (
-                        <li class:list={[!e.what && "year__moment"]}>
-                          {e.what ? (
-                            <p class="year__what">
-                              <span>{e.what}</span>
-                              <span class="year__when">{e.when}</span>
-                            </p>
-                          ) : (
-                            <p class="year__when year__when--alone">{e.when}</p>
-                          )}
-                          {e.note && <p class="year__note">{e.note}</p>}
-                          {e.photos && (
-                            <ul
-                              class="snaps"
-                              aria-label={`Photos from ${e.when} ${y.year}`}
-                            >
-                              {e.photos.map(ph => (
-                                <li
-                                  class="snap"
-                                  style={`--ar: ${ph.width / ph.height}`}
-                                >
-                                  <figure>
-                                    <picture>
-                                      <source
-                                        type="image/avif"
-                                        srcset={`${ph.src}-640.avif 640w, ${ph.src}-1280.avif ${ph.width}w`}
-                                        sizes="(min-width: 64rem) 420px, 90vw"
-                                      />
-                                      <img
-                                        src={`${ph.src}-640.webp`}
-                                        srcset={`${ph.src}-640.webp 640w, ${ph.src}-1280.webp ${ph.width}w`}
-                                        sizes="(min-width: 64rem) 420px, 90vw"
-                                        width={ph.width}
-                                        height={ph.height}
-                                        alt={ph.alt}
-                                        title={ph.caption.replace(/\.$/, "")}
-                                        loading="lazy"
-                                        decoding="async"
-                                      />
-                                    </picture>
-                                    <figcaption>
-                                      {ph.caption}
-                                      {ph.story && (
-                                        <span
-                                          class="snap__story"
-                                          set:html={ph.story}
-                                        />
-                                      )}
-                                    </figcaption>
-                                  </figure>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </li>
-                      ))}
-                    </ol>
-                    {y.year === "2026" && (
-                      <p class="year__close">
-                        The agency closed after financial losses. I'm
-                        rebuilding, and writing down what I learned:{" "}
-                        <a
-                          href="/blog/closing-my-agency"
-                          title="What Losing My Agency Taught Me as a Founder"
-                        >
-                          What Losing My Agency Taught Me as a Founder
-                        </a>
-                        .
-                      </p>
-                    )}
-                  </div>
-                </li>
-              </>
-            ))
-          }
-        </ol>
-      </section>
-
-      <section class="sec" aria-labelledby="work-h">
+      <section class="sec sec--first" aria-labelledby="work-h">
         <div class="work__head">
           <h2 id="work-h" class="sec-h">What I've built</h2>
           <a
@@ -623,10 +472,164 @@ const schema = [
         </ol>
       </section>
 
+      <section class="sec" id="story" aria-labelledby="story-h">
+        <h2 id="story-h" class="sec-h">My story</h2>
+        <ol class="years">
+          {
+            years.map(y => (
+              <>
+                {y.year === "2025" && (
+                  <li class="interlude">
+                    <figure class="print">
+                      <img
+                        src="/images/uriel-papa.jpg"
+                        width="480"
+                        height="480"
+                        alt="Uriel Papa outdoors in black-framed glasses, with palm trees and a school building behind him"
+                        title="Uriel Papa, off the clock"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <figcaption>Off the clock.</figcaption>
+                    </figure>
+                    <p class="interlude__line">
+                      I started the agency with the clients who followed me from
+                      freelance work.
+                    </p>
+                  </li>
+                )}
+                <li class="year">
+                  <p class="year__num">{y.year}</p>
+                  <div class="year__body">
+                    {y.lead && (
+                      <div class="year__lead">
+                        {y.lead.map(l => (
+                          <p>{l}</p>
+                        ))}
+                        <p>
+                          Before it closed, we built 12 WordPress sites for
+                          clients like Noyona Cosmetics and Icamen Legal, and{" "}
+                          <a
+                            href="/blog/n8n-messenger-instagram-chatbot"
+                            title="How to Build an AI Chatbot for Messenger and Instagram with n8n"
+                          >
+                            an AI chatbot that answers 120 inquiries a month
+                          </a>
+                          . The sales process I designed took our close rate
+                          from 15% to 30%.
+                        </p>
+                      </div>
+                    )}
+                    <ol class="year__entries">
+                      {y.entries
+                        .filter(e => e.what)
+                        .map(e => (
+                          <li>
+                            <p class="year__what">
+                              <span>{e.what}</span>
+                              <span class="year__when">{e.when}</span>
+                            </p>
+                            {e.note && <p class="year__note">{e.note}</p>}
+                          </li>
+                        ))}
+                    </ol>
+                    {y.entries.some(e => e.photos) && (
+                      <ul
+                        class="snaps"
+                        aria-label={`Photos from ${y.year}`}
+                        tabindex="0"
+                      >
+                        {y.entries
+                          .flatMap(e => e.photos ?? [])
+                          .map(ph => (
+                            <li
+                              class="snap"
+                              style={`--ar: ${ph.width / ph.height}`}
+                            >
+                              <figure>
+                                <picture>
+                                  <source
+                                    type="image/avif"
+                                    srcset={`${ph.src}-640.avif 640w, ${ph.src}-1280.avif ${ph.width}w`}
+                                    sizes="(min-width: 48rem) 360px, 290px"
+                                  />
+                                  <img
+                                    src={`${ph.src}-640.webp`}
+                                    srcset={`${ph.src}-640.webp 640w, ${ph.src}-1280.webp ${ph.width}w`}
+                                    sizes="(min-width: 48rem) 360px, 290px"
+                                    width={ph.width}
+                                    height={ph.height}
+                                    alt={ph.alt}
+                                    title={ph.caption.replace(/\.$/, "")}
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
+                                </picture>
+                                <figcaption>
+                                  {ph.caption}
+                                  {ph.story && (
+                                    <span
+                                      class="snap__story"
+                                      set:html={ph.story}
+                                    />
+                                  )}
+                                </figcaption>
+                              </figure>
+                            </li>
+                          ))}
+                      </ul>
+                    )}
+                    {y.year === "2026" && (
+                      <p class="year__close">
+                        The agency closed after financial losses. I'm
+                        rebuilding, and writing down what I learned:{" "}
+                        <a
+                          href="/blog/closing-my-agency"
+                          title="What Losing My Agency Taught Me as a Founder"
+                        >
+                          What Losing My Agency Taught Me as a Founder
+                        </a>
+                        .
+                      </p>
+                    )}
+                  </div>
+                </li>
+              </>
+            ))
+          }
+        </ol>
+      </section>
+    </div>
+
+    <section class="stack" aria-labelledby="stack-h">
+      <div class="app-layout stack__head">
+        <h2 id="stack-h" class="sec-h">What I build with</h2>
+        <p class="stack__intro">
+          The languages, frameworks, AI models and tools I've shipped with, from
+          code to search. <a
+            href="/stack"
+            title="How Uriel Papa uses each tool on the Stack page"
+            >How I use each one</a
+          >.
+        </p>
+      </div>
+      <StackMarquee
+        rows={[
+          { label: "Languages, frameworks and data", tools: BUILD_TOOLS },
+          {
+            label: "AI, automation, search and hosting",
+            tools: GROW_TOOLS,
+            reverse: true,
+          },
+        ]}
+      />
+    </section>
+
+    <div class="app-layout">
       <section class="sec more" aria-label="Writing, training and languages">
         <div>
           <h2 class="sub-h">What I write about</h2>
-          <ul class="more__list">
+          <ul class="more__topics">
             {
               HUBS.map(h => (
                 <li>
@@ -637,9 +640,6 @@ const schema = [
                   >
                     {h.name}
                   </a>
-                  <p class="more__note">
-                    {hubs.find(e => e.id === h.id)?.data.summary}
-                  </p>
                 </li>
               ))
             }
@@ -653,17 +653,21 @@ const schema = [
               >notes from seminars</a
             >.
           </p>
+          <h2 class="sub-h sub-h--next">Languages</h2>
+          <p class="more__lang">
+            Filipino (native) and English (professional working proficiency).
+          </p>
         </div>
         <div>
           <h2 class="sub-h">Seminars and training</h2>
           <ul class="more__list">
             {
               events.attended.map(e => (
-                <li>
+                <li class="more__event">
                   <span class="font-semibold">{e.name}</span>
-                  <p class="more__note">
+                  <span class="more__note">
                     {e.organizer} · {e.dateLabel}
-                  </p>
+                  </span>
                 </li>
               ))
             }
@@ -684,10 +688,6 @@ const schema = [
               </p>
             ))
           }
-          <h2 class="sub-h sub-h--next">Languages</h2>
-          <p class="more__lang">
-            Filipino (native) and English (professional working proficiency).
-          </p>
         </div>
         <div class="more__certs">
           <h2 class="sub-h">Certifications</h2>
@@ -803,6 +803,16 @@ const schema = [
   .sec > .sec-h {
     margin-bottom: var(--space-head);
   }
+  /* The hero's own bottom padding is the space above the first section. */
+  .sec--first {
+    padding-top: 0;
+  }
+  /* Jumps inside the page ("Read the story") glide instead of cutting. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html:has(.about-page)) {
+      scroll-behavior: smooth;
+    }
+  }
 
   /* Hero: the portrait plate leads; the identity sits beside it on wide
      screens and under it on phones. On phones the plate is a head-and-
@@ -900,7 +910,7 @@ const schema = [
       margin-bottom: 0.75rem;
     }
     .hero {
-      --plate-h: clamp(9rem, calc(100svh - 27.75rem), 17rem);
+      --plate-h: clamp(9rem, calc(100svh - 37rem), 17rem);
       gap: 0.75rem;
     }
     .hero .ident__name {
@@ -1006,8 +1016,10 @@ const schema = [
     }
   }
 
-  /* What I build with: a full-width breather on the tile tone. */
+  /* What I build with: a full-width breather on the tile tone, between the
+     story and the reference section. */
   .stack {
+    margin-top: var(--space-section);
     padding-block: clamp(1.25rem, 3vw, 2rem);
     background: var(--tile);
     overflow: hidden;
@@ -1051,6 +1063,12 @@ const schema = [
   @media (min-width: 48rem) {
     .year,
     .interlude {
+      grid-template-columns: 10rem minmax(0, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .year,
+    .interlude {
       grid-template-columns: 14rem minmax(0, 1fr);
     }
   }
@@ -1069,6 +1087,10 @@ const schema = [
       align-self: start;
     }
   }
+  /* The photo strip scrolls inside the column; it must not widen it. */
+  .year__body {
+    min-width: 0;
+  }
   .year__lead {
     display: grid;
     gap: 0.75rem;
@@ -1078,14 +1100,14 @@ const schema = [
     line-height: 1.5;
   }
   .year__entries > li {
-    padding-block: 1rem;
+    padding-block: 0.75rem;
     border-bottom: 1px solid var(--rule);
   }
   .year__entries > li:first-child {
     padding-top: 0.25rem;
   }
   .year__lead + .year__entries > li:first-child {
-    padding-top: 1rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--rule);
   }
   .year__what {
@@ -1122,21 +1144,15 @@ const schema = [
     letter-spacing: -0.01em;
   }
 
-  /* Each chapter's photos: a justified strip. Every photo keeps its own
-     shape, and photos in the same row share one height (each grows in
-     proportion to its aspect ratio). */
+  /* Each year's photos, gathered after its entries: framed prints with
+     their caption and story inside the frame. */
   .snaps {
     display: flex;
     gap: 0.875rem;
     padding-top: 0.875rem;
   }
-  .year__moment .snaps {
-    padding-top: 0.5rem;
-  }
-  /* A photo-only stop: just the month above its pictures. */
-  .year__when--alone {
-    display: block;
-    text-align: right;
+  .snaps:focus-visible {
+    outline-offset: 2px;
   }
   .snap {
     min-width: 0;
@@ -1169,7 +1185,7 @@ const schema = [
     line-height: 1.5;
   }
 
-  /* Phones: a month's photos sit in one row you swipe through, every photo
+  /* Phones: a year's photos sit in one row you swipe through, every photo
      the same height, so the story stays short instead of stacking. The
      next print peeks in from the edge to show there is more. */
   @media (max-width: 47.99rem) {
@@ -1224,7 +1240,7 @@ const schema = [
      growing in proportion to its photo. */
   @media (min-width: 48rem) {
     .snaps {
-      --snap-h: 12.5rem;
+      --snap-h: 10rem;
       flex-wrap: wrap;
     }
     .snaps::after {
@@ -1306,7 +1322,7 @@ const schema = [
     text-decoration: none;
     transition: background-color 200ms var(--ease-out);
   }
-  @media (min-width: 48rem) {
+  @media (min-width: 64rem) {
     .work__row {
       grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) 3rem;
       align-items: start;
@@ -1375,7 +1391,31 @@ const schema = [
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
-  @media (min-width: 48rem) {
+  /* Phones and tablets: the figure and its label share one line, every row
+     is the same size, and the year (all 2025 or 2026) steps aside. */
+  @media (width < 64rem) {
+    .work__row {
+      gap: 0.375rem;
+      padding-block: 1rem;
+    }
+    .work__result {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 0.5rem;
+    }
+    .work__row--lead .work__figure {
+      font-size: var(--step-4);
+      letter-spacing: -0.03em;
+    }
+    .work__label {
+      margin-top: 0;
+    }
+    .work__year {
+      display: none;
+    }
+  }
+  @media (min-width: 64rem) {
     .work__year {
       padding-top: 0.2rem;
       text-align: right;
@@ -1434,8 +1474,37 @@ const schema = [
   }
   .more__list {
     display: grid;
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-top: 0.75rem;
+  }
+  /* The topics are a wrapped row of links; each topic page explains itself. */
+  .more__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-top: 0.75rem;
+  }
+  /* A seminar is one line: its name, then who ran it and when. */
+  .more__event {
+    line-height: 1.45;
+  }
+  .more__event > :first-child {
+    margin-right: 0.375rem;
+  }
+  .more__event .more__note {
+    display: inline-block;
+    margin-top: 0;
+  }
+  /* Phones: the certificate thumbnail sits beside its details. */
+  @media (width < 40rem) {
+    .more__certs :global(li) {
+      flex-direction: row;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+    .more__certs :global(li > a) {
+      width: 5.5rem;
+    }
   }
   /* Padding makes the topic links 44px tall without spreading the list. */
   .more__link {
