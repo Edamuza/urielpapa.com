@@ -15,7 +15,7 @@ export function htmlMessage(title: string, message: string, status = 200) {
       c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!
     );
   return new Response(
-    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)}</title><style>body{font:18px/1.6 system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem;color:#0a0a0a;background:#fff}a{color:inherit}</style></head><body><h1>${esc(title)}</h1><p>${esc(message)}</p><p><a href="javascript:history.back()">Go back</a> · <a href="/">Home</a></p></body></html>`,
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${esc(title)}</title><style>body{font:18px/1.6 system-ui,sans-serif;max-width:40rem;margin:4rem auto;padding:0 1rem;color:#0a0a0a;background:#fff}a{color:inherit}</style></head><body><h1>${esc(title)}</h1><p>${esc(message)}</p><p><a href="javascript:history.back()" title="Go back to the form you sent">Go back</a> · <a href="/" title="Go to the urielpapa.com home page">Home</a></p></body></html>`,
     { status, headers: { "Content-Type": "text/html; charset=utf-8" } }
   );
 }

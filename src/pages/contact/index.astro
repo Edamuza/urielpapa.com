@@ -1252,6 +1252,7 @@ const schema = [
     postUrlInput.value = e.url;
     postLink.textContent = e.title;
     postLink.href = e.url;
+    postLink.title = `Open “${e.title}” in a new tab`;
     postSection.querySelector("[data-post-picked-kind]")!.textContent = meta(e);
     closeList();
     postBox.hidden = true;

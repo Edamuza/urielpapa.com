@@ -62,7 +62,7 @@ export const GET: APIRoute = async () => {
         description: e.description,
         pubDate: e.date,
         categories: [hubName(e.hub)],
-        content: `${takeaways}${html}<p><a href="${url}">Read on urielpapa.com</a></p>`,
+        content: `${takeaways}${html}<p><a href="${url}" title="${escapeHtml(`Read “${e.title}” on urielpapa.com`)}">Read on urielpapa.com</a></p>`,
       };
     })
   );
