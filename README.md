@@ -96,7 +96,7 @@ The button needs these secrets in Vercel (Settings → Environment Variables, ty
 
 A source without its key, or one that fails, keeps its previous numbers. Vercel stops the function after 60 seconds, so each refresh inspects as many pages as fit (oldest checks first) and the next refresh continues; URL Inspection allows 2,000 checks a day per property. Clarity allows 10 reads a day and a refresh uses 3, and it only gives the last 3 days.
 
-The Clarity tracking script itself (project ID in `src/config.ts`, `CLARITY_PROJECT_ID`) loads on every public page after the first interaction or 4 seconds, and never on the dashboard.
+The Clarity tracking script itself (project ID in `src/config.ts`, `CLARITY_PROJECT_ID`) loads on every public page after the first scroll, tap, key press or mouse move (or when the visitor switches away from the tab), never on a timer, and never on the dashboard. Plerdy heatmaps (`src/components/Plerdy.astro`) load the same way, on production builds only, and also never on the dashboard. Both are listed on `/privacy`; update that page if either changes.
 
 ### Editing on the live site (Keystatic GitHub mode)
 

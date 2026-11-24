@@ -11,12 +11,12 @@ const crumbs = [
   { name: "Privacy", href: "/privacy" },
 ];
 /** Change this date whenever the policy text changes. */
-const updated = new Date("2026-10-28");
+const updated = new Date("2026-11-24");
 ---
 
 <Layout
   title="Privacy Policy"
-  description="What urielpapa.com collects and why: Google Analytics, the contact form, the Buttondown newsletter, Vercel hosting, and YouTube, X and Threads embeds. No ads, no data sold."
+  description="What urielpapa.com collects and why: Google Analytics, Microsoft Clarity and Plerdy, the contact form, the Buttondown newsletter, Vercel hosting, and YouTube, X and Threads embeds. No ads, no data sold."
   modifiedTime={updated}
   schema={[breadcrumbNode(crumbs)]}
   webPage={{ about: { "@id": WEBSITE_ID } }}
@@ -49,6 +49,16 @@ const updated = new Date("2026-10-28");
         Ad storage and ad personalisation are always off. In the EEA, the UK and
         Switzerland, analytics cookies are off by default, so Google receives
         only cookieless measurements.
+      </p>
+      <p>
+        I also use Microsoft Clarity and Plerdy to see how pages are used, so I
+        can fix what is confusing. Both record clicks, taps, scrolling and mouse
+        movement to build heatmaps, and Clarity also records sessions: a replay
+        of what happened on the page, with what you type in form fields masked
+        by default. Like Google Analytics, both load only after your first
+        scroll, tap or key press (Clarity also when you switch away from the
+        tab). In the EEA, the UK and Switzerland, Clarity runs without cookies
+        unless you consent. Neither runs on the site's private admin pages.
       </p>
 
       <h2 id="contact">The contact form</h2>
