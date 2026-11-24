@@ -10,6 +10,7 @@ Built with [Astro](https://astro.build) and Tailwind CSS 4, started from the [As
 pnpm install
 pnpm dev          # http://localhost:4321, drafts are visible in dev
 pnpm build        # type-check, build, Vercel routes, Pagefind search index
+pnpm test         # unit tests (node --test, files in tests/)
 ```
 
 Open the CMS at <http://localhost:4321/keystatic> while `pnpm dev` runs. In local mode it edits the files in `src/content/` directly; commit and push them like code.

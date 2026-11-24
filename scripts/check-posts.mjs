@@ -5,13 +5,11 @@
 // Runs on the MDX sources, before `astro build`.
 /* eslint-disable no-console -- a build check; its output is the build log. */
 import { readdirSync, readFileSync } from "node:fs";
+import { readEntry } from "./lib/content-file.mjs";
 
 const DIR = "src/content/blog";
 // The day the daily news take started to require photos and an X or Threads embed.
 const STANDARD_FROM = "2026-11-04";
-
-const field = (front, name) =>
-  front.match(new RegExp(`^${name}:\\s*['"]?([^'"\\n]*)`, "m"))?.[1].trim();
 
 // A credit line: an italic caption that links the photo's page and its license.
 const LICENSE = /creativecommons\.org\/(licenses|publicdomain)\/|public domain|Unsplash License|Pexels License/i;
@@ -22,14 +20,14 @@ const problems = [];
 let checked = 0;
 for (const name of readdirSync(DIR).filter(f => f.endsWith(".mdx"))) {
   const text = readFileSync(`${DIR}/${name}`, "utf8");
-  const [, front = "", body = ""] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/) ?? [];
-  const published = field(front, "published") ?? "";
-  if (field(front, "frame") !== "news-take" || field(front, "draft") === "true") continue;
+  const { data, body } = readEntry(text);
+  const published = String(data.published ?? "");
+  if (data.frame !== "news-take" || data.draft === "true") continue;
   if (published < STANDARD_FROM) continue;
   checked++;
   // Philippine briefs (docs/content-500.md) need 1 to 3 photos; the agency's own
   // post is embedded when there is one, so the embed is not required.
-  const phBrief = field(front, "phBrief") === "true";
+  const phBrief = data.phBrief === "true";
   const [minPhotos, maxPhotos] = phBrief ? [1, 3] : [2, 3];
 
   const lines = body.split("\n");

@@ -20,6 +20,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { entryFor } from "./content-urls.mjs";
+import { field } from "./lib/content-file.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SITE = "https://urielpapa.com";
@@ -69,17 +70,6 @@ function saveQueue(queue) {
   queue.items.sort((a, b) => a.dueAt.localeCompare(b.dueAt) || a.id.localeCompare(b.id));
   if (dryRun) return;
   writeFileSync(QUEUE_FILE, JSON.stringify(queue, null, 2) + "\n");
-}
-
-/** One top-level frontmatter value, unquoted. Folded (>-) values are not needed here. */
-function field(text, key) {
-  const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? "";
-  const m = fm.match(new RegExp(`^${key}:[ \\t]*(.*)$`, "m"));
-  if (!m) return undefined;
-  const v = m[1].trim();
-  if (/^".*"$/.test(v)) return JSON.parse(v);
-  if (/^'.*'$/.test(v)) return v.slice(1, -1).replace(/''/g, "'");
-  return v;
 }
 
 /** Published, non-draft posts and notes with a publish date up to today. */

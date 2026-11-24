@@ -3,23 +3,10 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readEntry } from "./lib/content-file.mjs";
 
 // fileURLToPath decodes %20 and friends, so checkouts with spaces in the path work.
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
-
-/**
- * Reads `key: value` lines from a file's YAML frontmatter (top-level scalars only).
- * Tolerates CRLF line endings (files saved on Windows).
- */
-function frontmatter(text) {
-  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  const data = {};
-  for (const line of (match?.[1] ?? "").split(/\r?\n/)) {
-    const m = line.match(/^([A-Za-z]+):\s*['"]?([^'"]*)['"]?\s*$/);
-    if (m) data[m[1]] = m[2].trim();
-  }
-  return data;
-}
 
 function blogPath(slug, frame) {
   if (frame === "news-take") return `/news/${slug}`;
@@ -50,7 +37,7 @@ export function entryFor(file, text) {
   const collection = COLLECTIONS.find(c => c.dir === dir);
   if (!collection || !/\.(md|mdx)$/.test(name) || name.startsWith("_")) return undefined;
   const slug = name.replace(/\.(md|mdx)$/, "");
-  const data = frontmatter(text);
+  const { data } = readEntry(text);
   const date = data.updated || data.lastChecked || data.published;
   return {
     file,
