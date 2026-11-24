@@ -5,58 +5,65 @@
  */
 import {
   getAllBlogEntries,
+  getAnswers,
   getHubs,
   getNewsletterIssues,
   getNewsTakes,
   getNotes,
   getPosts,
   getProjects,
-  noteUrl,
-  postUrl,
-  projectUrl,
+  getReleases,
+  getTerms,
 } from "@/utils/content";
-import { pageCount, pageHref } from "@/utils/pagination";
+import { getCollection } from "astro:content";
+import { publicPages } from "@/lib/routes.mjs";
 
 export const LAUNCH_DATE = "2026-10-17";
 
-/** Routes that never appear in the sitemap (keep in step with SITEMAP_EXCLUDE in astro.config.ts). */
-const NOT_IN_SITEMAP = [
-  "/404",
-  "/search",
-  "/contact/thanks",
-  "/newsletter/thanks",
-  "/dashboard",
-];
-
-/** Public pages, listed the way the sitemap lists them. */
+/** Public pages, listed the way the sitemap lists them (src/lib/routes.mjs). */
 export async function listPages(): Promise<Set<string>> {
-  const paths = new Set<string>();
   // Fixed pages: every .astro file in src/pages without a [param] in its path.
-  for (const file of Object.keys(import.meta.glob("/src/pages/**/*.astro"))) {
-    if (file.includes("[")) continue;
-    const path =
-      file
-        .replace(/^\/src\/pages/, "")
-        .replace(/\.astro$/, "")
-        .replace(/\/index$/, "") || "/";
-    // The private dashboard (and its sign-in page) is never a public page.
-    if (!NOT_IN_SITEMAP.includes(path) && !path.startsWith("/dashboard"))
-      paths.add(path);
-  }
-  for (const p of await getAllBlogEntries()) paths.add(postUrl(p));
-  for (const n of await getNotes()) paths.add(noteUrl(n));
-  for (const p of await getProjects()) paths.add(projectUrl(p));
-  for (const h of await getHubs()) paths.add(`/topics/${h.id}`);
-  for (const i of await getNewsletterIssues()) paths.add(`/newsletter/${i.id}`);
-  // Listing pages after the first: /blog/page/2, /news/page/2 and so on.
-  const listings = [
-    ["/blog", (await getPosts()).length],
-    ["/news", (await getNewsTakes()).length],
-  ] as const;
-  for (const [base, total] of listings)
-    for (let page = 2; page <= pageCount(total); page++)
-      paths.add(pageHref(base, page));
-  return paths;
+  const staticPages = Object.keys(import.meta.glob("/src/pages/**/*.astro"))
+    .filter(file => !file.includes("["))
+    .map(
+      file =>
+        file
+          .replace(/^\/src\/pages/, "")
+          .replace(/\.astro$/, "")
+          .replace(/\/index$/, "") || "/"
+    );
+  const entries = [
+    ...(await getAllBlogEntries()).map(e => ({
+      collection: "blog",
+      id: e.id,
+      frame: e.data.frame,
+    })),
+    ...(await getNotes()).map(e => ({ collection: "notes", id: e.id })),
+    ...(await getProjects()).map(e => ({ collection: "projects", id: e.id })),
+    ...(await getHubs()).map(e => ({ collection: "hubs", id: e.id })),
+    ...(await getNewsletterIssues()).map(e => ({
+      collection: "newsletter",
+      id: e.id,
+    })),
+    ...(await getAnswers()).map(e => ({ collection: "answers", id: e.id })),
+    ...(await getTerms()).map(e => ({ collection: "glossary", id: e.id })),
+    ...(await getReleases()).map(e => ({ collection: "releases", id: e.id })),
+    ...(await getCollection("stack")).map(e => ({
+      collection: "stack",
+      id: e.id,
+      about: e.data.about,
+    })),
+  ];
+  return publicPages({
+    staticPages,
+    entries,
+    listingTotals: {
+      "/blog": (await getPosts()).length,
+      "/news": (await getNewsTakes()).length,
+      "/answers": (await getAnswers()).length,
+      "/releases": (await getReleases()).length,
+    },
+  });
 }
 
 /** Public pages, counted at build the way the sitemap lists them. */

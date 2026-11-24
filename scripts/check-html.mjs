@@ -8,6 +8,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { STATIC_DIR } from "./lib/output.mjs";
 import { linkProblems } from "../src/utils/linkTitles.mjs";
+import { isPrivate } from "../src/lib/routes.mjs";
 
 const ROOT = STATIC_DIR;
 
@@ -25,13 +26,12 @@ const attr = (tag, name) =>
 // Links inside scripts and styles are code, not links on the page.
 const withoutCode = html => html.replace(/<(script|style|template|textarea)\b[\s\S]*?<\/\1\s*>/gi, "");
 
-// Routes that only exist on the server (src/pages with prerender = false, and Keystatic).
-const ON_DEMAND = ["/api/", "/preview/", "/keystatic", "/dashboard"];
 
 /** True when an internal href resolves to a built file. */
 const resolves = href => {
   const path = decodeURI(href.split(/[?#]/)[0]).replace(/\/$/, "") || "/";
-  if (ON_DEMAND.some(p => path.startsWith(p))) return true;
+  // Private routes only exist on the server (prerender = false, and Keystatic).
+  if (isPrivate(path)) return true;
   return [path, `${path}.html`, join(path, "index.html")].some(p => existsSync(join(ROOT, p)));
 };
 

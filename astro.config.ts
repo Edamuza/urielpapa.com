@@ -22,22 +22,12 @@ import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeImageTitles } from "./src/utils/rehype/imageTitles";
 import { rehypeImageSizes } from "./src/utils/rehype/imageSizes";
 import { contentEntries } from "./scripts/content-urls.mjs";
+import { inSitemap } from "./src/lib/routes.mjs";
 
 const SITE_URL = "https://urielpapa.com";
 
 /** DEPLOY_TARGET=vps builds for the Node server on the VPS (deploy/README.md); otherwise Vercel. */
 const VPS = process.env.DEPLOY_TARGET === "vps";
-
-/** Pages kept out of the sitemap (schema-and-technical.md §3, "Routes for machines"). */
-const SITEMAP_EXCLUDE = [
-  "/search",
-  "/contact/thanks",
-  "/newsletter/thanks",
-  "/keystatic",
-  "/preview",
-  "/404",
-  "/dashboard",
-];
 
 /** Drafts never belong in the sitemap, even on preview builds that render them. */
 const DRAFTS = new Set(
@@ -155,8 +145,8 @@ export default defineConfig({
       ),
       filter: page => {
         const path = new URL(page).pathname.replace(/\/$/, "");
-        if (DRAFTS.has(path)) return false;
-        return !SITEMAP_EXCLUDE.some(p => path === p || path.startsWith(p));
+        // Private and noindex routes are listed in src/lib/routes.mjs.
+        return !DRAFTS.has(path) && inSitemap(path || "/");
       },
       // lastmod tells search engines which pages changed; only entries with a real date get one.
       serialize: item => {
