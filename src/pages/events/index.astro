@@ -204,7 +204,10 @@ const schema = [
     }
 
     <section aria-labelledby="attended-h">
-      <h2 id="attended-h" class="h2 mb-4">Events I attended</h2>
+      <h2 id="attended-h" class="h2 mb-2">Events I attended</h2>
+      <p class="meta mb-4">
+        {events.attended.length} events so far: expos, seminars, trainings and a hackathon.
+      </p>
       <div class="overflow-x-auto">
         <table class="w-full min-w-[36rem] text-left text-[0.95rem]">
           <thead>
@@ -226,7 +229,10 @@ const schema = [
                     <td class="py-2 pe-4">{e.organizer}</td>
                     <td class="py-2">
                       {note ? (
-                        <a href={postUrl(note)}>
+                        <a
+                          href={postUrl(note)}
+                          title={`Read Uriel Papa's notes from ${e.name}`}
+                        >
                           {note.data.draft ? "Draft note" : "Read my notes"}
                         </a>
                       ) : (

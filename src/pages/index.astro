@@ -1,4 +1,5 @@
 ---
+import eventsData from "@/data/events.json";
 import { getEntries, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import { PERSON_ID } from "@/utils/schema";
@@ -46,8 +47,8 @@ const allNotes = await getNotes();
 // /projects) in a looping carousel: featured ones first, then the rest in their
 // set order. The full list lives on /projects.
 const projects = await getProjects();
-// Proof-of-work values with {years} or {projects} are filled in here, so
-// the numbers stay true as time passes and projects are added.
+// Proof-of-work values with {years}, {projects} or {events} are filled in
+// here, so the numbers stay true as time passes and work is added.
 const careerYears = Math.floor(
   (Date.now() - new Date(CAREER_START).getTime()) / (365.25 * 86_400_000)
 );
@@ -55,7 +56,8 @@ const proof = PROOF.map(item => ({
   ...item,
   value: item.value
     .replace("{years}", String(careerYears))
-    .replace("{projects}", String(projects.length)),
+    .replace("{projects}", String(projects.length))
+    .replace("{events}", String(eventsData.attended.length)),
 }));
 const homeProjects = projects.filter(p => p.data.showOnHome);
 const topProjects = [

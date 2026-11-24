@@ -282,9 +282,10 @@ export const CAREER_START = "2023-02-01";
  * Proof-of-work tiles on the home page, from the résumé. `{years}` and
  * `{projects}` in a value are filled in at build time (years since
  * CAREER_START, and the number of published projects), so they stay true.
+ * `{events}` is the number of events attended in src/data/events.json.
  * "50+ people" is Uriel's own count (12 Nov 2026) of everyone led, freelance
- * teams and the agency together. "8 events": the résumé's 7 seminars and
- * expos plus the AppBuildersPH hackathon; update it after each new event.
+ * teams and the agency together; /about states it in the 2025 story.
+ * Each tile links to a page that states the same figure (PRODUCT.md).
  */
 export const PROOF = [
   {
@@ -306,7 +307,7 @@ export const PROOF = [
     title: "Read about the teams Uriel Papa has led",
   },
   {
-    value: "8 events",
+    value: "{events} events",
     label: "expos, seminars and a hackathon where I keep learning",
     href: "/events",
     title: "See Uriel Papa's notes from seminars and events",
