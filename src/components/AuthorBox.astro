@@ -12,17 +12,26 @@ const linkedin = SOCIALS.find(s => s.name === "linkedin");
   <Avatar size={56} />
   <div>
     <p class="font-semibold">
-      Written by <a href="/about" rel="author">{SITE.name}</a>
+      Written by{" "}
+      <a href="/about" rel="author" title={`About ${SITE.name}, the author`}>
+        {SITE.name}
+      </a>
     </p>
     <p class="mt-1 text-[0.95rem]">
       {SITE.jobTitle} in the {SITE.location}. I write about what I build and
       learn, for anyone interested in the same topics.
     </p>
     <p class="meta mt-2 flex flex-wrap gap-x-4">
-      <a href="/about">More about me</a>
+      <a href="/about" title={`More about ${SITE.name}: story, work and talks`}>
+        More about me
+      </a>
       {
         linkedin && (
-          <a href={linkedin.url} rel="me noopener">
+          <a
+            href={linkedin.url}
+            rel="me noopener"
+            title={`${SITE.name} on LinkedIn`}
+          >
             LinkedIn
           </a>
         )

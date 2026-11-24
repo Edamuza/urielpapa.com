@@ -100,8 +100,22 @@ const schema = [
                     <td class="py-2 pe-4">{t.event}</td>
                     <td class="py-2 pe-4">{t.topic}</td>
                     <td class="py-2">
-                      {t.slides && <a href={t.slides}>Slides</a>}{" "}
-                      {t.video && <a href={t.video}>Video</a>}
+                      {t.slides && (
+                        <a
+                          href={t.slides}
+                          title={`Slides from “${t.topic}” at ${t.event}`}
+                        >
+                          Slides
+                        </a>
+                      )}{" "}
+                      {t.video && (
+                        <a
+                          href={t.video}
+                          title={`Video of “${t.topic}” at ${t.event}`}
+                        >
+                          Video
+                        </a>
+                      )}
                     </td>
                   </tr>
                 ))}

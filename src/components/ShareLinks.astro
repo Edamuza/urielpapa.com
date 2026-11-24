@@ -40,7 +40,12 @@ const links = [
     {
       links.map(l => (
         <li>
-          <a href={l.href} rel="noopener" target="_blank">
+          <a
+            href={l.href}
+            rel="noopener"
+            target="_blank"
+            title={`Share “${title}” on ${l.name}`}
+          >
             {l.name}
           </a>
         </li>

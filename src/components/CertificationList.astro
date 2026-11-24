@@ -14,6 +14,7 @@ const items = [...CERTIFICATIONS].sort((a, b) => b.date.localeCompare(a.date));
           href={c.pdf ?? c.image.src}
           class="block shrink-0 sm:w-56"
           rel="noopener"
+          title={`View the ${c.name} certificate`}
         >
           <Image
             src={c.image}
@@ -31,13 +32,26 @@ const items = [...CERTIFICATIONS].sort((a, b) => b.date.localeCompare(a.date));
           <p class="mt-1.5 text-[0.95rem]">{c.detail}</p>
           <p class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[0.95rem]">
             {c.verifyUrl && (
-              <a href={c.verifyUrl} rel="noopener">
+              <a
+                href={c.verifyUrl}
+                rel="noopener"
+                title={`Verify the ${c.name} certificate with ${c.issuer}`}
+              >
                 Verify on {new URL(c.verifyUrl).hostname} ↗
               </a>
             )}
-            {c.pdf && <a href={c.pdf}>View the PDF</a>}
+            {c.pdf && (
+              <a href={c.pdf} title={`Open the ${c.name} certificate as a PDF`}>
+                View the PDF
+              </a>
+            )}
             {c.project && (
-              <a href={`/projects/${c.project}`}>See the project</a>
+              <a
+                href={`/projects/${c.project}`}
+                title={`See the project behind the ${c.name} certificate`}
+              >
+                See the project
+              </a>
             )}
           </p>
           {c.verifyHint && <p class="meta mt-1">{c.verifyHint}</p>}
