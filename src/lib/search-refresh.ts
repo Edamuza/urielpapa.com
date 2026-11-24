@@ -29,6 +29,16 @@ import type {
   PageInspection,
   SearchConsole,
 } from "@/lib/dashboard";
+import {
+  inspectionOrder,
+  mergeInspections,
+  pool,
+  refreshSearchData as runRefresh,
+  type RefreshPorts,
+  type RefreshStep,
+} from "@/lib/refresh-core";
+
+export type { RefreshStep };
 
 const PROPERTY = `${SITE.url}/`;
 const REPO = "Edamuza/urielpapa.com";
@@ -65,40 +75,9 @@ const manilaDay = (offsetDays = 0) =>
 
 const b64url = (s: string | Buffer) => Buffer.from(s).toString("base64url");
 
-/**
- * Runs `fn` over `items`, `limit` at a time, starting no new item after
- * `until` (a Date.now() time). Items never started stay undefined.
- */
-async function pool<T, R>(
-  items: T[],
-  limit: number,
-  fn: (t: T) => Promise<R>,
-  until = Infinity
-) {
-  const out: (R | undefined)[] = new Array(items.length);
-  let next = 0;
-  await Promise.all(
-    Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (next < items.length && Date.now() < until) {
-        const i = next++;
-        out[i] = await fn(items[i]);
-      }
-    })
-  );
-  return out;
-}
-
 /* ------------------------------------------------------------------ */
 /* Google Search Console                                              */
 /* ------------------------------------------------------------------ */
-
-/** One step of a refresh, for the dashboard's progress bar. */
-export type RefreshStep = {
-  /** What is happening now, in plain words. */
-  label: string;
-  /** Rough share of the whole refresh that is done, 0 to 100. */
-  percent: number;
-};
 
 /**
  * The service account from GSC_SERVICE_ACCOUNT_JSON, with a plain-words error
@@ -281,11 +260,7 @@ async function readGoogle(
   });
   // The URL Inspections are most of the wait (12% to 85% of the bar). Pages
   // never checked come first, then the ones checked longest ago.
-  const order = [...pages].sort((a, b) =>
-    (previousInspections[a]?.checked ?? "").localeCompare(
-      previousInspections[b]?.checked ?? ""
-    )
-  );
+  const order = inspectionOrder(pages, previousInspections);
   const started = Date.now();
   let checked = 0;
   const report = () =>
@@ -315,14 +290,11 @@ async function readGoogle(
   );
   // Keep earlier results for pages not checked (or failed) this time; drop
   // pages no longer in the sitemap.
-  const inspections: Record<string, PageInspection> = {};
-  let checkedNow = 0;
-  order.forEach((p, i) => {
-    const fresh = results[i];
-    if (fresh) checkedNow++;
-    const kept = fresh ?? previousInspections[p];
-    if (kept) inspections[p] = kept;
-  });
+  const { inspections, checkedNow } = mergeInspections(
+    order,
+    results,
+    previousInspections
+  );
   const known = Object.entries(inspections);
   const reasons = new Map<
     string,
@@ -796,80 +768,32 @@ async function commitSnapshot(data: SearchConsole) {
   return ((await res.json()) as { commit?: { sha?: string } }).commit?.sha;
 }
 
-/** A source's error message, cut short for the result note. */
-const why = (e: unknown) =>
-  String(e instanceof Error ? e.message : e).slice(0, 220);
+/** The real sources (those with a key), GitHub as the store, and the clock. */
+export function livePorts(): RefreshPorts {
+  return {
+    sources: {
+      google: GSC_SERVICE_ACCOUNT_JSON
+        ? ({ pages, previous, inspections, step, until }) =>
+            readGoogle(pages, previous, inspections, step, until)
+        : undefined,
+      bing: BING_WEBMASTER_API_KEY ? readBing : undefined,
+      clarity: CLARITY_API_TOKEN ? readClarity : undefined,
+    },
+    save: commitSnapshot,
+    now: Date.now,
+    budgetMs: INSPECT_BUDGET_MS,
+  };
+}
 
 /**
- * Reads every source that has a key, at the same time, commits the snapshot,
- * and says what changed. A source that fails keeps its previous numbers and
- * is listed in `failed`. `step` hears about each stage, for the dashboard's
- * progress bar.
+ * Refreshes from the live services (see src/lib/refresh-core.ts for the
+ * rules). `ports` defaults to the real ones.
  */
-export async function refreshSearchData(
+export function refreshSearchData(
   pages: string[],
   previous: SearchConsole,
-  step: (s: RefreshStep) => void = () => {}
+  step: (s: RefreshStep) => void = () => {},
+  ports: RefreshPorts = livePorts()
 ) {
-  const until = Date.now() + INSPECT_BUDGET_MS;
-  const notes: string[] = [];
-  const failed: string[] = [];
-  const next: SearchConsole = { ...previous };
-
-  const google = GSC_SERVICE_ACCOUNT_JSON
-    ? readGoogle(
-        pages,
-        previous.google,
-        previous.inspections ?? {},
-        step,
-        until
-      )
-    : undefined;
-  const bing = BING_WEBMASTER_API_KEY
-    ? readBing(pages, previous.bing)
-    : undefined;
-  const clarity = CLARITY_API_TOKEN ? readClarity() : undefined;
-
-  const [g, b, c] = await Promise.allSettled([google, bing, clarity]);
-  step({ label: "Saving the new numbers to GitHub", percent: 94 });
-
-  if (!google) notes.push("Google skipped: no key.");
-  else if (g.status === "rejected") failed.push(`Google: ${why(g.reason)}`);
-  else if (g.value) {
-    next.google = g.value.google;
-    next.inspections = g.value.inspections;
-    const known = Object.keys(g.value.inspections).length;
-    notes.push(
-      `Google: checked ${g.value.checkedNow} pages this time; ${g.value.google.indexing.indexed} of ${pages.length} indexed` +
-        (known < pages.length
-          ? `, ${pages.length - known} not checked yet (the next refresh continues).`
-          : ".")
-    );
-  }
-  if (!bing) notes.push("Bing skipped: no key.");
-  else if (b.status === "rejected") failed.push(`Bing: ${why(b.reason)}`);
-  else if (b.value) {
-    next.bing = b.value;
-    notes.push(
-      `Bing: ${b.value.clicks} clicks, ${b.value.indexed ?? "–"} indexed.`,
-      ...(b.value.actions ?? [])
-    );
-  }
-  if (!clarity) notes.push("Clarity skipped: no CLARITY_API_TOKEN.");
-  else if (c.status === "rejected") failed.push(`Clarity: ${why(c.reason)}`);
-  else if (c.value) {
-    next.clarity = c.value;
-    const sessions =
-      c.value.metrics.find(m => /traffic/i.test(m.name))?.values
-        .totalSessionCount ?? 0;
-    notes.push(`Clarity: ${sessions} sessions in the last 3 days.`);
-  }
-
-  const read = [google && g, bing && b, clarity && c].filter(
-    r => r && r.status === "fulfilled"
-  ).length;
-  if (!read)
-    throw new Error(failed.join(" ") || "No source has a key in Vercel.");
-  const commit = await commitSnapshot(next);
-  return { notes, failed, commit };
+  return runRefresh(pages, previous, ports, step);
 }
