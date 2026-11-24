@@ -226,6 +226,22 @@ for (const r of entries.filter(e => e.type === "releases")) {
   }
 }
 
+// Site rule, every collection: images need alt text (the title falls back to
+// it, see src/utils/rehype/imageTitles.ts), and a hero image needs its alt
+// text. Caught here, before the two-minute astro build.
+for (const dir of readdirSync("src/content", { withFileTypes: true }).filter(d => d.isDirectory())) {
+  const root = `src/content/${dir.name}`;
+  for (const name of readdirSync(root).filter(f => /\.mdx?$/.test(f) && !f.startsWith("_"))) {
+    const file = `${root}/${name}`;
+    const { data, body } = readEntry(readFileSync(file, "utf8"));
+    const say = msg => report(data.draft === "true", `${file}: ${msg}`);
+    if (data.hero && !data.heroAlt) say("has a hero image without alt text (heroAlt)");
+    for (const [img, alt] of body.matchAll(/!\[([^\]]*)\]\(([^\s)]+)(?:\s+"([^"]*)")?\)/g)) {
+      if (!alt.trim()) say(`image ${img.slice(0, 60)} needs alt text`);
+    }
+  }
+}
+
 for (const w of warnings) console.warn(`  draft: ${w}`);
 if (errors.length) {
   console.error(`Short pages that fail the quality gates (${errors.length}):`);

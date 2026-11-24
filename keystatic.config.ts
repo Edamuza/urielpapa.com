@@ -83,7 +83,7 @@ const mdxComponents = {
             defaultValue: "photo",
           }),
           src: fields.url({ label: "Image URL (pbs.twimg.com)" }),
-          alt: fields.text({ label: "Alt text" }),
+          alt: fields.text({ label: "Alt text", description: "Required. Describe what the photo shows.", validation: { length: { min: 1 } } }),
           width: fields.integer({ label: "Width (px)" }),
           height: fields.integer({ label: "Height (px)" }),
         }),
@@ -96,7 +96,7 @@ const mdxComponents = {
           description: fields.text({ label: "Description", multiline: true }),
           domain: fields.text({ label: "Domain, e.g. anthropic.com" }),
           image: fields.text({ label: "Preview image URL" }),
-          imageAlt: fields.text({ label: "Preview image alt text" }),
+          imageAlt: fields.text({ label: "Preview image alt text", description: "Required when there is a preview image." }),
         },
         { label: "Link preview" }
       ),
@@ -109,7 +109,15 @@ const body = (label = "Body") =>
     label,
     components: mdxComponents,
     options: {
-      image: { directory: "src/assets/images/content", publicPath: "../../assets/images/content/" },
+      image: {
+        directory: "src/assets/images/content",
+        publicPath: "../../assets/images/content/",
+        // Site rule: every image needs alt text and a title.
+        schema: {
+          alt: fields.text({ label: "Alt text", description: "Required. Describe what the image shows.", validation: { length: { min: 1 } } }),
+          title: fields.text({ label: "Title", description: "Required. Shown on hover; say what the image is.", validation: { length: { min: 1 } } }),
+        },
+      },
     },
   });
 
@@ -229,7 +237,9 @@ export default config({
           { label: "FAQ (optional)", description: "Only if the body really answers these.", itemLabel: p => p.fields.q.value }
         ),
         hero: fields.image({ label: "Hero image", directory: "src/assets/images/blog", publicPath: "../../assets/images/blog/" }),
-        heroAlt: fields.text({ label: "Hero image alt text", description: "Required when there is a hero image." }),
+        // Keystatic can't make one field required only when another is filled, so
+        // the build (content.config.ts) and check-content.mjs enforce this one.
+        heroAlt: fields.text({ label: "Hero image alt text", description: "Required when there is a hero image: saving works, but the build fails without it." }),
         event: fields.object(
           {
             name: fields.text({ label: "Event name" }),
