@@ -13,11 +13,14 @@
 import { execFileSync } from "node:child_process";
 import { readdirSync } from "node:fs";
 import { entryFor } from "./content-urls.mjs";
+import { LISTINGS, SITE_URL } from "../src/lib/routes.mjs";
 
-const SITE = "https://urielpapa.com";
+const SITE = SITE_URL;
 const HOST = new URL(SITE).host;
 const ENDPOINT = "https://api.indexnow.org/indexnow";
-const LIST_PAGES = ["/", "/blog", "/news", "/events", "/notes", "/projects", "/topics"];
+// Every listing page (src/lib/routes.mjs), so answers, glossary, releases and
+// /stack are resubmitted when their entries change.
+const LIST_PAGES = LISTINGS.map(l => l.path);
 
 const keyFile = readdirSync(new URL("../public", import.meta.url)).find(f =>
   /^[a-f0-9]{32}\.txt$/.test(f),

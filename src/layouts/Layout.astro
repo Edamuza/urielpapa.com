@@ -258,7 +258,12 @@ const robots =
 
     <slot name="head" />
 
-    {import.meta.env.PROD && <Plerdy />}
+    {
+      // Like Clarity, never on the private dashboard.
+      import.meta.env.PROD && !Astro.url.pathname.startsWith("/dashboard") && (
+        <Plerdy />
+      )
+    }
 
     <!-- Set the theme before first paint to avoid a flash of the wrong theme. -->
     <script is:inline>
@@ -313,7 +318,7 @@ const robots =
     >
       <!-- One inline box, so flex layout keeps the spaces between the parts. -->
       <span
-        ><q>It’s Showtime, folks!</q> — <cite>All That Jazz</cite> (1979)</span
+        ><q>It’s Showtime, folks!</q> · <cite>All That Jazz</cite> (1979)</span
       >
     </p>
     <script>

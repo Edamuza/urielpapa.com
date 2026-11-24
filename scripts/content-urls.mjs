@@ -3,40 +3,16 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readEntry } from "./lib/content-file.mjs";
+import { pathFor } from "../src/lib/routes.mjs";
 
 // fileURLToPath decodes %20 and friends, so checkouts with spaces in the path work.
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
-/**
- * Reads `key: value` lines from a file's YAML frontmatter (top-level scalars only).
- * Tolerates CRLF line endings (files saved on Windows).
- */
-function frontmatter(text) {
-  const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  const data = {};
-  for (const line of (match?.[1] ?? "").split(/\r?\n/)) {
-    const m = line.match(/^([A-Za-z]+):\s*['"]?([^'"]*)['"]?\s*$/);
-    if (m) data[m[1]] = m[2].trim();
-  }
-  return data;
-}
-
-function blogPath(slug, frame) {
-  if (frame === "news-take") return `/news/${slug}`;
-  if (frame === "event-note") return `/events/${slug}`;
-  return `/blog/${slug}`;
-}
-
-const COLLECTIONS = [
-  { dir: "src/content/blog", url: (slug, d) => blogPath(slug, d.frame) },
-  { dir: "src/content/notes", url: slug => `/notes/${slug}` },
-  { dir: "src/content/projects", url: slug => `/projects/${slug}` },
-  { dir: "src/content/hubs", url: slug => `/topics/${slug}` },
-  { dir: "src/content/pages", url: slug => `/${slug}` },
-  { dir: "src/content/answers", url: slug => `/answers/${slug}` },
-  { dir: "src/content/glossary", url: slug => `/glossary/${slug}` },
-  { dir: "src/content/releases", url: slug => `/releases/${slug}` },
-];
+// Content folders and their collection names; URLs come from the route catalogue.
+const COLLECTIONS = ["blog", "notes", "projects", "hubs", "pages", "answers", "glossary", "releases"].map(
+  name => ({ dir: `src/content/${name}`, name }),
+);
 
 /**
  * The content entry for one source file (path relative to the repo root, e.g.
@@ -50,11 +26,11 @@ export function entryFor(file, text) {
   const collection = COLLECTIONS.find(c => c.dir === dir);
   if (!collection || !/\.(md|mdx)$/.test(name) || name.startsWith("_")) return undefined;
   const slug = name.replace(/\.(md|mdx)$/, "");
-  const data = frontmatter(text);
+  const { data } = readEntry(text);
   const date = data.updated || data.lastChecked || data.published;
   return {
     file,
-    path: collection.url(slug, data),
+    path: pathFor(collection.name, { id: slug, frame: data.frame, about: data.about }),
     lastmod: date && !Number.isNaN(Date.parse(date)) ? new Date(date) : undefined,
     draft: data.draft === "true",
     hub: data.hub || undefined,

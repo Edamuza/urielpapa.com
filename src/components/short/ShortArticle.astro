@@ -119,7 +119,9 @@ const shown = groups.filter(g => g.items.length > 0);
     More in <a
       href={`/topics/${hub}`}
       title={`Everything on ${hubName(hub)} on this site`}>{hubName(hub)}</a
-    > · <a href={index.href} title={index.label}>{index.label}</a>
+    > · <a href={index.href} title={`${index.label} on urielpapa.com`}
+      >{index.label}</a
+    >
   </p>
   <ShareLinks url={url} title={heading} />
 </article>

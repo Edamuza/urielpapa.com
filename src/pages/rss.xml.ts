@@ -7,6 +7,8 @@ import { SITE } from "@/config";
 import { hubName } from "@/data/hubs";
 import { mdxComponents } from "@/components/mdx";
 import { getAllBlogEntries, getNotes, noteUrl, postUrl } from "@/utils/content";
+import { addLinkTitles } from "@/utils/linkTitles.mjs";
+import { pageTitles, titleOf } from "@/lib/page-titles";
 
 /** Escapes text for HTML inside the feed's content. */
 const escapeHtml = (text: string) =>
@@ -19,6 +21,7 @@ const escapeHtml = (text: string) =>
 /** Full-content feed of posts and notes. Drafts are never included. */
 export const GET: APIRoute = async () => {
   const container = await AstroContainer.create();
+  const titles = await pageTitles();
   container.addServerRenderer({ renderer: mdxRenderer, name: "@astrojs/mdx" });
 
   const posts = (await getAllBlogEntries()).filter(p => !p.data.draft);
@@ -49,9 +52,13 @@ export const GET: APIRoute = async () => {
   const items = await Promise.all(
     entries.map(async e => {
       const { Content } = await render(e.entry);
-      const html = await container.renderToString(Content, {
-        props: { components: mdxComponents },
-      });
+      // Feed readers get the same descriptive link titles as the pages.
+      const html = addLinkTitles(
+        await container.renderToString(Content, {
+          props: { components: mdxComponents },
+        }),
+        (path: string) => titleOf(titles, path)
+      );
       const takeaways = e.takeaways.length
         ? `<h2>Key takeaways</h2><ul>${e.takeaways.map(t => `<li>${escapeHtml(t)}</li>`).join("")}</ul>`
         : "";
@@ -62,7 +69,7 @@ export const GET: APIRoute = async () => {
         description: e.description,
         pubDate: e.date,
         categories: [hubName(e.hub)],
-        content: `${takeaways}${html}<p><a href="${url}">Read on urielpapa.com</a></p>`,
+        content: `${takeaways}${html}<p><a href="${url}" title="${escapeHtml(`Read “${e.title}” on urielpapa.com`)}">Read on urielpapa.com</a></p>`,
       };
     })
   );

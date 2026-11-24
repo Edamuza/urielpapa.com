@@ -29,6 +29,7 @@ import {
 } from "@/lib/dashboard";
 import { formatDate } from "@/utils/content";
 import { CLARITY_PROJECT_ID } from "@/config";
+import { pageTitles, titleOf } from "@/lib/page-titles";
 
 export const prerender = false;
 
@@ -41,6 +42,14 @@ if (blocked) return blocked;
 const signedInAs = dashboardSession(Astro.request);
 
 const today = todayManila();
+const titles = await pageTitles();
+/** A link title that names the page, not just its path. */
+const openTitle = (path: string) => {
+  const title = titleOf(titles, path);
+  return title
+    ? `Open “${title}” (${path}) on the site`
+    : `Open the page at ${path} on the site`;
+};
 const totals = await contentTotals();
 const pages = await listPages();
 const sources = await countSources();
@@ -547,7 +556,7 @@ const sections = [
                 {requestToday.map(i => (
                   <tr>
                     <td>
-                      <a href={i.path} title={`Open ${i.path} on the site`}>
+                      <a href={i.path} title={openTitle(i.path)}>
                         {i.path}
                       </a>
                     </td>
@@ -582,7 +591,7 @@ const sections = [
             <ul class="mt-2 text-sm">
               {indexLater.map(i => (
                 <li>
-                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                  <a href={i.path} title={openTitle(i.path)}>
                     {i.path}
                   </a>{" "}
                   <span class="meta">
@@ -603,7 +612,7 @@ const sections = [
             <ul class="mt-2 text-sm">
               {requested.map(i => (
                 <li>
-                  <a href={i.path} title={`Open ${i.path} on the site`}>
+                  <a href={i.path} title={openTitle(i.path)}>
                     {i.path}
                   </a>{" "}
                   <span class="meta">requested {day(i.requestedOn)}</span>
@@ -856,7 +865,7 @@ const sections = [
                 .map(p => (
                   <tr>
                     <td>
-                      <a href={p.path} title={`Open ${p.path} on the site`}>
+                      <a href={p.path} title={openTitle(p.path)}>
                         {p.path}
                       </a>
                     </td>

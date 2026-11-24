@@ -10,6 +10,7 @@ Built with [Astro](https://astro.build) and Tailwind CSS 4, started from the [As
 pnpm install
 pnpm dev          # http://localhost:4321, drafts are visible in dev
 pnpm build        # type-check, build, Vercel routes, Pagefind search index
+pnpm test         # unit tests (node --test, files in tests/)
 ```
 
 Open the CMS at <http://localhost:4321/keystatic> while `pnpm dev` runs. In local mode it edits the files in `src/content/` directly; commit and push them like code.
@@ -29,7 +30,7 @@ To preview drafts in a build (for example a Vercel preview deployment), set `PUB
 | `src/content/notes/`, `projects/`, `hubs/`, `stack/`, `newsletter/`, `pages/now.md` | The other collections                                                                                                                                                                                                     |
 | `src/layouts/ArticleLayout.astro`                                                   | The post template: takeaways, "From the build", business box, FAQ, author box, share links, keep reading, newsletter, work-with-me                                                                                        |
 | `src/styles/theme.css`                                                              | Black and white tokens for light and dark mode                                                                                                                                                                            |
-| `src/pages/api/`                                                                    | The only server routes: contact form and newsletter signup                                                                                                                                                                |
+| `src/pages/api/`                                                                    | On-demand API routes: contact form, newsletter signup and free call slots (`/api/slots`). `/dashboard/*` and `/preview/*` also run on demand                                                                              |
 | `scripts/vercel-routes.mjs`                                                         | Adds the www → apex redirect and the headers for `.md` copies to Vercel's build output                                                                                                                                    |
 | `deploy/`                                                                           | VPS hosting: Nginx vhost, systemd unit, server setup and release activation scripts (`deploy/README.md`)                                                                                                                  |
 
@@ -66,6 +67,7 @@ Short note, tip or warning.
 | `PUBLIC_GA4_ID`                                                    | Optional GA4; loads after the first interaction. Events sent: `newsletter_signup`, `contact_submit`, `work_with_me_click`, `fromthebuild_click`, `next_post_click`, `outbound_profile_click` |
 | `PUBLIC_GOOGLE_SITE_VERIFICATION`, `PUBLIC_BING_SITE_VERIFICATION` | Search Console and Bing Webmaster Tools verification                                                                                                                                         |
 | `PUBLIC_SHOW_DRAFTS`                                               | `true` on preview deployments only                                                                                                                                                           |
+| `GITHUB_TOKEN`                                                     | Optional, read at build: fresh description, stars and license for the repo cards on project pages (`src/data/repos.ts`); without it the saved snapshot in `src/data/repos.json` is used      |
 
 Until the Resend and Buttondown keys are set, the forms answer with a polite message pointing to email or RSS.
 
@@ -95,7 +97,7 @@ The button needs these secrets in Vercel (Settings → Environment Variables, ty
 
 A source without its key, or one that fails, keeps its previous numbers. Vercel stops the function after 60 seconds, so each refresh inspects as many pages as fit (oldest checks first) and the next refresh continues; URL Inspection allows 2,000 checks a day per property. Clarity allows 10 reads a day and a refresh uses 3, and it only gives the last 3 days.
 
-The Clarity tracking script itself (project ID in `src/config.ts`, `CLARITY_PROJECT_ID`) loads on every public page after the first interaction or 4 seconds, and never on the dashboard.
+The Clarity tracking script itself (project ID in `src/config.ts`, `CLARITY_PROJECT_ID`) loads on every public page after the first scroll, tap, key press or mouse move (or when the visitor switches away from the tab), never on a timer, and never on the dashboard. Plerdy heatmaps (`src/components/Plerdy.astro`) load the same way, on production builds only, and also never on the dashboard. Both are listed on `/privacy`; update that page if either changes.
 
 ### Editing on the live site (Keystatic GitHub mode)
 

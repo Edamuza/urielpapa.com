@@ -14,6 +14,7 @@ const { base, page, pages, label } = Astro.props;
             <a
               href={pageHref(base, page - 1)}
               rel="prev"
+              title={`Newer ${label.toLowerCase()}, page ${page - 1}`}
               class="border-border block rounded-lg border px-3 py-2 font-medium no-underline hover:underline"
             >
               ← Newer
@@ -33,6 +34,7 @@ const { base, page, pages, label } = Astro.props;
               <a
                 href={pageHref(base, n)}
                 aria-label={`${label}, page ${n}`}
+                title={`${label}, page ${n}`}
                 class="border-border block rounded-lg border px-3 py-2 no-underline hover:underline"
               >
                 {n}
@@ -45,6 +47,7 @@ const { base, page, pages, label } = Astro.props;
             <a
               href={pageHref(base, page + 1)}
               rel="next"
+              title={`Older ${label.toLowerCase()}, page ${page + 1}`}
               class="border-border block rounded-lg border px-3 py-2 font-medium no-underline hover:underline"
             >
               Older →

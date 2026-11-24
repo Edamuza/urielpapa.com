@@ -12,17 +12,14 @@ import {
 } from "@/config";
 import SocialIcon from "@/components/SocialIcon.astro";
 import { abs, breadcrumbNode, PERSON_ID } from "@/utils/schema";
+import { TOPICS } from "@/lib/contact.mjs";
 
 const crumbs = [
   { name: "Home", href: "/" },
   { name: "Contact", href: "/contact" },
 ];
-const topics = [
-  { value: "work", label: "Work together" },
-  { value: "speaking", label: "Speaking or event" },
-  { value: "question", label: "Question about a post" },
-  { value: "other", label: "Something else" },
-];
+// Shared with the API route, so the form and the server agree (src/lib/contact.mjs).
+const topics = TOPICS;
 const steps = [
   {
     title: "Tell me about it",
@@ -699,6 +696,7 @@ const schema = [
 <script>
   import { track } from "@/scripts/events";
   import { loadTurnstileOnInteraction } from "@/scripts/turnstile";
+  import { fieldError } from "@/lib/contact.mjs";
 
   loadTurnstileOnInteraction();
 
@@ -752,16 +750,11 @@ const schema = [
 
   // The three required fields, checked when you leave them (only once
   // something is typed) and cleared as soon as they're right.
+  // The same rules and messages as the server (src/lib/contact.mjs).
   const rules: Record<string, (el: HTMLInputElement) => string> = {
-    name: el => (el.value.trim() ? "" : "Please enter your name."),
-    email: el =>
-      el.value.trim() && el.checkValidity()
-        ? ""
-        : "Please enter a valid email address.",
-    message: el =>
-      el.value.trim().length >= 10
-        ? ""
-        : "Please write a little more (at least 10 characters).",
+    name: el => fieldError("name", el.value),
+    email: el => fieldError("email", el.value),
+    message: el => fieldError("message", el.value),
   };
   function setError(name: string, text: string) {
     const out = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
@@ -1252,6 +1245,7 @@ const schema = [
     postUrlInput.value = e.url;
     postLink.textContent = e.title;
     postLink.href = e.url;
+    postLink.title = `Open “${e.title}” in a new tab`;
     postSection.querySelector("[data-post-picked-kind]")!.textContent = meta(e);
     closeList();
     postBox.hidden = true;

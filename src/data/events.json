@@ -127,6 +127,13 @@
   ],
   "attended": [
     {
+      "name": "AppBuildersPH Hackathon 2026",
+      "organizer": "App Builders PH",
+      "date": "2026-10",
+      "dateLabel": "October 2026",
+      "hub": "tech-stacks"
+    },
+    {
       "name": "Level-Up Leadership: Agile, Able, Adapt",
       "organizer": "Francis Kong",
       "date": "2026-06",

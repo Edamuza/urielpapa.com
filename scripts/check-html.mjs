@@ -1,11 +1,14 @@
 // Fails the build when any image on any page is missing alt text or a title,
-// any link is missing a title or points to a page on this site that does not
-// exist, or a page has no valid Schema.org JSON-LD with its own page node.
-// Runs after `astro build` on the built pages.
+// any link is missing a title, has one that only repeats its text or URL, or
+// points to a page on this site that does not exist, or a page has no valid
+// Schema.org JSON-LD with its own page node. The RSS feed's item bodies get
+// the same link check. Runs after `astro build` on the built pages.
 /* eslint-disable no-console -- a build check; its output is the build log. */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { STATIC_DIR } from "./lib/output.mjs";
+import { linkProblems } from "../src/utils/linkTitles.mjs";
+import { isPrivate } from "../src/lib/routes.mjs";
 
 const ROOT = STATIC_DIR;
 
@@ -23,13 +26,12 @@ const attr = (tag, name) =>
 // Links inside scripts and styles are code, not links on the page.
 const withoutCode = html => html.replace(/<(script|style|template|textarea)\b[\s\S]*?<\/\1\s*>/gi, "");
 
-// Routes that only exist on the server (src/pages with prerender = false, and Keystatic).
-const ON_DEMAND = ["/api/", "/preview/", "/keystatic", "/dashboard"];
 
 /** True when an internal href resolves to a built file. */
 const resolves = href => {
   const path = decodeURI(href.split(/[?#]/)[0]).replace(/\/$/, "") || "/";
-  if (ON_DEMAND.some(p => path.startsWith(p))) return true;
+  // Private routes only exist on the server (prerender = false, and Keystatic).
+  if (isPrivate(path)) return true;
   return [path, `${path}.html`, join(path, "index.html")].some(p => existsSync(join(ROOT, p)));
 };
 
@@ -54,12 +56,12 @@ for (const file of htmlFiles(ROOT)) {
     }
   }
   const html = withoutCode(raw);
+  for (const { href, problem } of linkProblems(html)) {
+    problems.push(`${name}: link to ${href} ${problem}`);
+  }
   for (const [tag] of html.matchAll(/<a\b[^>]*>/g)) {
     links++;
     const href = attr(tag, "href");
-    if (!attr(tag, "title")?.trim()) {
-      problems.push(`${file.slice(ROOT.length)}: link to ${href} is missing a title`);
-    }
     if (href?.startsWith("/") && !href.startsWith("//") && !resolves(href)) {
       problems.push(`${file.slice(ROOT.length)}: link to ${href} goes to a page that does not exist`);
     }
@@ -73,11 +75,31 @@ for (const file of htmlFiles(ROOT)) {
   }
 }
 
+// The RSS feed: feed readers show post bodies without the site's pages around
+// them, so their links need the same titles.
+const feed = join(ROOT, "rss.xml");
+if (existsSync(feed)) {
+  const decode = text =>
+    text.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&");
+  const bodies = [...readFileSync(feed, "utf8").matchAll(/<content:encoded>([\s\S]*?)<\/content:encoded>/g)].map(([, b]) =>
+    b.startsWith("<![CDATA[") ? b.slice(9, -3) : decode(b),
+  );
+  for (const body of bodies) {
+    links += body.match(/<a\b/g)?.length ?? 0;
+    for (const { href, problem } of linkProblems(body)) {
+      problems.push(`/rss.xml: link to ${href} ${problem}`);
+    }
+  }
+  if (!bodies.length) problems.push("/rss.xml: has no item bodies to check");
+} else {
+  problems.push("/rss.xml: was not built");
+}
+
 if (problems.length) {
   console.error(`Pages that fail the HTML check (${problems.length}):`);
   for (const p of problems) console.error(`  ${p}`);
   process.exit(1);
 }
 console.log(
-  `HTML check: all ${count} images have alt text and a title, all ${links} links have a title and every internal link resolves, and all ${pages} pages have Schema.org data.`,
+  `HTML check: all ${count} images have alt text and a title, all ${links} links have a descriptive title (RSS feed included) and every internal link resolves, and all ${pages} pages have Schema.org data.`,
 );

@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { SHOW_DRAFTS, SITE } from "@/config";
+import { pathFor } from "@/lib/routes.mjs";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -93,23 +94,23 @@ export async function getNewsletterIssues() {
   return (await getCollection("newsletter")).filter(visible).sort(byNewest);
 }
 
+// URLs come from the route catalogue (src/lib/routes.mjs), shared with the scripts.
+
 /** Posts stay flat under /blog; news takes and event notes get their own sections. */
-export function postUrl(post: Pick<Post, "id" | "data">): string {
-  if (post.data.frame === "news-take") return `/news/${post.id}`;
-  if (post.data.frame === "event-note") return `/events/${post.id}`;
-  return `/blog/${post.id}`;
-}
+export const postUrl = (post: Pick<Post, "id" | "data">): string =>
+  pathFor("blog", { id: post.id, frame: post.data.frame });
 
-export const noteUrl = (note: Pick<Note, "id">) => `/notes/${note.id}`;
+export const noteUrl = (note: Pick<Note, "id">) => pathFor("notes", note);
 export const projectUrl = (project: Pick<Project, "id">) =>
-  `/projects/${project.id}`;
+  pathFor("projects", project);
+export const hubUrl = (hub: Pick<Hub, "id">) => pathFor("hubs", hub);
 
-export const answerUrl = (a: Pick<Answer, "id">) => `/answers/${a.id}`;
-export const termUrl = (t: Pick<Term, "id">) => `/glossary/${t.id}`;
-export const releaseUrl = (r: Pick<Release, "id">) => `/releases/${r.id}`;
+export const answerUrl = (a: Pick<Answer, "id">) => pathFor("answers", a);
+export const termUrl = (t: Pick<Term, "id">) => pathFor("glossary", t);
+export const releaseUrl = (r: Pick<Release, "id">) => pathFor("releases", r);
 /** The tool's own page when it has one, else its row on /stack. */
 export const toolUrl = (t: Pick<Tool, "id" | "data">) =>
-  t.data.about ? `/stack/${t.id}` : `/stack#${t.id}`;
+  pathFor("stack", { id: t.id, about: t.data.about });
 
 export function readingTime(body: string | undefined): number {
   const words = (body ?? "")

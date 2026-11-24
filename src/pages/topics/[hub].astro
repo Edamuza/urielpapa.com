@@ -56,6 +56,7 @@ const shortBlocks = [
     items: hubAnswers.slice(0, SHORT_LIMIT).map(a => ({
       href: answerUrl(a),
       title: a.data.question,
+      linkTitle: a.data.question,
     })),
   },
   {
@@ -66,6 +67,7 @@ const shortBlocks = [
     items: hubTerms.slice(0, SHORT_LIMIT).map(t => ({
       href: termUrl(t),
       title: t.data.term,
+      linkTitle: `What “${t.data.term}” means, in the glossary`,
     })),
   },
   {
@@ -76,6 +78,7 @@ const shortBlocks = [
     items: hubReleases.slice(0, SHORT_LIMIT).map(r => ({
       href: releaseUrl(r),
       title: r.data.title,
+      linkTitle: r.data.title,
     })),
   },
 ].filter(b => b.items.length > 0);
@@ -227,14 +230,14 @@ const schema = [
           <ul class="space-y-2">
             {b.items.map(i => (
               <li>
-                <a href={i.href} title={i.title}>
+                <a href={i.href} title={i.linkTitle}>
                   {i.title}
                 </a>
               </li>
             ))}
           </ul>
           <p class="meta mt-3">
-            <a href={b.all.href} title={b.all.label}>
+            <a href={b.all.href} title={`${b.all.label} by Uriel Papa`}>
               {b.all.label}
             </a>
             {b.total > b.items.length && ` (${b.total} on this topic)`}
@@ -252,7 +255,13 @@ const schema = [
           <ul class="space-y-2">
             {projects.map(p => (
               <li>
-                <a href={projectUrl(p)}>{p.data.title}</a>: {p.data.outcome}
+                <a
+                  href={projectUrl(p)}
+                  title={`Read the ${p.data.title} case study`}
+                >
+                  {p.data.title}
+                </a>
+                : {p.data.outcome}
               </li>
             ))}
           </ul>

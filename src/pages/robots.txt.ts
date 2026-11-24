@@ -6,6 +6,8 @@ import { SITE } from "@/config";
  * Search engines may crawl everything: pages that must stay out of results (search,
  * thank-you pages, admin, API, previews) say noindex, which Google only sees if it can
  * crawl them. Blocking them here made Google index a blocked URL anyway.
+ * The AI groups below keep AI fetchers off /keystatic, /preview/ and /api/: those
+ * have nothing to cite, and they never reach Google's index through these bots.
  */
 const body = `# urielpapa.com: search and AI answer engines are welcome
 User-agent: *

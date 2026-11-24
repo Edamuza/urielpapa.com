@@ -62,7 +62,7 @@ const parts = (p: string): Part[] =>
         ? {
             text: t.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""),
             href: t,
-            title: `Link in ${author}'s post: ${t}`,
+            title: `Link shared in ${author}'s post, opens ${new URL(t).hostname.replace(/^www\./, "")}`,
           }
         : /^@\w+$/.test(t)
           ? { text: t, href: profile(t.slice(1)), title: `${t} on ${site}` }

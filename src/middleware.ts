@@ -1,5 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { addLinkTitles } from "@/utils/linkTitles.mjs";
+import { pageTitles, titleOf } from "@/lib/page-titles";
 
 // Every link needs a title, like every image needs alt text and a title.
 // Runs on each page as it is prerendered at build time and on every request
@@ -7,8 +8,10 @@ import { addLinkTitles } from "@/utils/linkTitles.mjs";
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
   const path = context.url.pathname;
-  // The admin and API stay crawlable (robots.txt) so search engines can see
-  // this noindex; blocking them made Google index the bare URLs instead.
+  // The admin and API stay crawlable for search engines (robots.txt's `*`
+  // group) so they see this noindex; blocking them made Google index the bare
+  // URLs instead. robots.txt still keeps AI fetchers off /api/, /keystatic and
+  // /preview/, which have nothing to cite.
   if (path.startsWith("/keystatic") || path.startsWith("/api/")) {
     const headers = new Headers(response.headers);
     headers.set("X-Robots-Tag", "noindex, nofollow");
@@ -21,7 +24,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (!response.headers.get("content-type")?.includes("text/html")) {
     return response;
   }
-  const html = addLinkTitles(await response.text());
+  const titles = await pageTitles();
+  const html = addLinkTitles(await response.text(), (path: string) =>
+    titleOf(titles, path)
+  );
   const headers = new Headers(response.headers);
   // The private dashboard never belongs in search results or shared caches.
   if (path.startsWith("/dashboard")) {

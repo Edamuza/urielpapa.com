@@ -19,7 +19,11 @@ const names: Record<string, string> = {
       {links.map((l, i) => (
         <>
           {i > 0 && " · "}
-          <a href={l.url} rel="syndication noopener">
+          <a
+            href={l.url}
+            rel="syndication noopener"
+            title={`Read this post on ${names[l.network] ?? l.network}`}
+          >
             {names[l.network] ?? l.network}
           </a>
         </>

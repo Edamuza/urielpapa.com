@@ -5,6 +5,7 @@
 // pages. Drafts are reported as warnings so work in progress never blocks a deploy.
 /* eslint-disable no-console -- a build check; its output is the build log. */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readEntry } from "./lib/content-file.mjs";
 
 const TYPES = {
   answers: { dir: "src/content/answers", words: [250, 700], sources: 2, lead: "answer" },
@@ -49,34 +50,6 @@ export const BANNED = [
   "plays a pivotal role",
 ];
 
-/** Top-level `key: value` frontmatter fields and simple lists, without a YAML parser. */
-function parse(text) {
-  const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!m) return { data: {}, body: text };
-  const data = {};
-  let key;
-  for (const line of m[1].split(/\r?\n/)) {
-    const kv = line.match(/^([A-Za-z]+):\s*(.*)$/);
-    if (kv) {
-      key = kv[1];
-      const v = kv[2].trim();
-      data[key] = v === "" || v === ">-" || v === "|" ? "" : v.replace(/^['"]|['"]$/g, "");
-      continue;
-    }
-    if (!key) continue;
-    const item = line.match(/^\s*-\s+(?:url:\s*)?(.*)$/);
-    if (item && /^\s*-/.test(line)) {
-      data[key] = Array.isArray(data[key]) ? data[key] : [];
-      data[key].push(item[1].replace(/^['"]|['"]$/g, ""));
-    } else if (/^\s+url:\s*/.test(line) && Array.isArray(data[key])) {
-      data[key].push(line.replace(/^\s+url:\s*/, "").replace(/^['"]|['"]$/g, ""));
-    } else if (/^\s+\S/.test(line) && typeof data[key] === "string") {
-      data[key] = `${data[key]} ${line.trim()}`.trim();
-    }
-  }
-  return { data, body: m[2] };
-}
-
 const words = s =>
   s
     .replace(/```[\s\S]*?```/g, " ")
@@ -117,7 +90,7 @@ for (const [type, rule] of Object.entries(TYPES)) {
   for (const name of readdirSync(rule.dir).filter(f => /\.mdx?$/.test(f) && !f.startsWith("_"))) {
     const file = `${rule.dir}/${name}`;
     const text = readFileSync(file, "utf8");
-    const { data, body } = parse(text);
+    const { data, body } = readEntry(text);
     const draft = data.draft === "true";
     const id = name.replace(/\.mdx?$/, "");
     const title = data.question || data.term || data.title || id;
@@ -198,7 +171,7 @@ for (const [type, rule] of Object.entries(TYPES)) {
 const blogTitles = existsSync("src/content/blog")
   ? readdirSync("src/content/blog")
       .filter(f => /\.mdx?$/.test(f))
-      .map(f => ({ file: `src/content/blog/${f}`, title: parse(readFileSync(`src/content/blog/${f}`, "utf8")).data.title ?? "" }))
+      .map(f => ({ file: `src/content/blog/${f}`, title: readEntry(readFileSync(`src/content/blog/${f}`, "utf8")).data.title ?? "" }))
   : [];
 const seenTerms = new Map();
 const seenVersions = new Map();
@@ -249,6 +222,22 @@ for (const r of entries.filter(e => e.type === "releases")) {
     const sameTool = norm(p.title).join(" ").includes(String(r.data.tool ?? "").replace(/-/g, " "));
     if (sameVersion && sameTool) {
       report(r.draft, `${r.file}: ${p.file} already covers this version; update that post instead`);
+    }
+  }
+}
+
+// Site rule, every collection: images need alt text (the title falls back to
+// it, see src/utils/rehype/imageTitles.ts), and a hero image needs its alt
+// text. Caught here, before the two-minute astro build.
+for (const dir of readdirSync("src/content", { withFileTypes: true }).filter(d => d.isDirectory())) {
+  const root = `src/content/${dir.name}`;
+  for (const name of readdirSync(root).filter(f => /\.mdx?$/.test(f) && !f.startsWith("_"))) {
+    const file = `${root}/${name}`;
+    const { data, body } = readEntry(readFileSync(file, "utf8"));
+    const say = msg => report(data.draft === "true", `${file}: ${msg}`);
+    if (data.hero && !data.heroAlt) say("has a hero image without alt text (heroAlt)");
+    for (const [img, alt] of body.matchAll(/!\[([^\]]*)\]\(([^\s)]+)(?:\s+"([^"]*)")?\)/g)) {
+      if (!alt.trim()) say(`image ${img.slice(0, 60)} needs alt text`);
     }
   }
 }
