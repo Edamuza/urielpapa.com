@@ -8,8 +8,10 @@ import { pageTitles, titleOf } from "@/lib/page-titles";
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
   const path = context.url.pathname;
-  // The admin and API stay crawlable (robots.txt) so search engines can see
-  // this noindex; blocking them made Google index the bare URLs instead.
+  // The admin and API stay crawlable for search engines (robots.txt's `*`
+  // group) so they see this noindex; blocking them made Google index the bare
+  // URLs instead. robots.txt still keeps AI fetchers off /api/, /keystatic and
+  // /preview/, which have nothing to cite.
   if (path.startsWith("/keystatic") || path.startsWith("/api/")) {
     const headers = new Headers(response.headers);
     headers.set("X-Robots-Tag", "noindex, nofollow");

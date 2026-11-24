@@ -5,6 +5,7 @@
 // build also asks the GitHub API for fresh details and falls back to the
 // snapshot if that fails. The README glimpse always comes from the snapshot.
 // Refresh the snapshot with `node scripts/update-repos.mjs`.
+import { GITHUB_TOKEN } from "astro:env/server";
 import snapshot from "./repos.json";
 
 export type RepoInfo = {
@@ -34,7 +35,7 @@ const saved = new Map(
 const cache = new Map<string, Promise<RepoInfo>>();
 
 async function fetchLive(repo: string): Promise<Snapshot | undefined> {
-  const token = process.env.GITHUB_TOKEN;
+  const token = GITHUB_TOKEN;
   if (!token) return undefined;
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}`, {

@@ -39,6 +39,13 @@ const SITEMAP_EXCLUDE = [
   "/dashboard",
 ];
 
+/** Drafts never belong in the sitemap, even on preview builds that render them. */
+const DRAFTS = new Set(
+  contentEntries()
+    .filter(e => e.draft)
+    .map(e => e.path)
+);
+
 /** Last-changed date per content URL, for the sitemap's lastmod. */
 const PUBLISHED = contentEntries().filter(e => e.lastmod && !e.draft);
 const LASTMOD = new Map(PUBLISHED.map(e => [e.path, e.lastmod as Date]));
@@ -148,6 +155,7 @@ export default defineConfig({
       ),
       filter: page => {
         const path = new URL(page).pathname.replace(/\/$/, "");
+        if (DRAFTS.has(path)) return false;
         return !SITEMAP_EXCLUDE.some(p => path === p || path.startsWith(p));
       },
       // lastmod tells search engines which pages changed; only entries with a real date get one.
@@ -283,6 +291,12 @@ export default defineConfig({
         access: "secret",
         context: "server",
         default: "primary",
+      }),
+      /** Optional, build time: fresh repo details for project pages (src/data/repos.ts). */
+      GITHUB_TOKEN: envField.string({
+        access: "secret",
+        context: "server",
+        optional: true,
       }),
       DASHBOARD_PASSWORD: envField.string({
         access: "secret",
