@@ -11,19 +11,15 @@ import {
   isBookable,
 } from "@/lib/calendar";
 import { SITE } from "@/config";
-import { EMAIL_RE, rateLimited, reply, verifyTurnstile } from "@/lib/forms";
+import { rateLimited, reply, verifyTurnstile } from "@/lib/forms";
+import {
+  answerText,
+  businessOf,
+  composeEmail,
+  parseContact,
+} from "@/lib/contact.mjs";
 
 export const prerender = false;
-
-/** A post picked in the form's "Which post?" search: a blog, news or event page. */
-const POST_PATH = /^\/(blog|news|events)\/[\w-]+$/;
-
-const TOPICS: Record<string, string> = {
-  work: "Work together",
-  speaking: "Speaking or event",
-  question: "Question about a post",
-  other: "Something else",
-};
 
 /** Contact form handler (ux-ui-spec.md §5.9): validates, filters spam, emails Uriel via Resend. */
 export const POST: APIRoute = async ({ request, clientAddress }) => {
@@ -31,89 +27,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (!form)
     return reply(request, 400, { message: "The form could not be read." });
 
+  // Topics, parsing, validation and the email itself: src/lib/contact.mjs.
+  const contact = parseContact(key => form.get(key), SITE.url);
+  const { name, email, topicKey, slot, errors } = contact;
+
   // Bots fill the hidden field; pretend it worked.
-  if (String(form.get("website") ?? ""))
+  if (contact.spam)
     return reply(request, 200, { message: "Thanks!" }, "/contact/thanks");
 
-  // Strip control characters (CR/LF etc.) so the name can't break the subject line.
-  const name = String(form.get("name") ?? "")
-    // eslint-disable-next-line no-control-regex -- matching control characters is the point
-    .replace(/[\x00-\x1f\x7f]/g, "")
-    .trim()
-    .slice(0, 120);
-  const email = String(form.get("email") ?? "")
-    .trim()
-    .slice(0, 200);
-  const rawTopic = String(form.get("topic") ?? "other");
-  const topicKey = Object.hasOwn(TOPICS, rawTopic) ? rawTopic : "other";
-  const topic = TOPICS[topicKey];
-  const message = String(form.get("message") ?? "")
-    .trim()
-    .slice(0, 5000);
-  // Topic questions, all optional: for "Work together", one set for a
-  // business with a project and one for an employer hiring for a role; for
-  // "Speaking or event", the event; for "Question about a post", the post.
-  // Plus good call times when there is no booking page.
-  const field = (key: string, max = 300) =>
-    String(form.get(key) ?? "")
-      // eslint-disable-next-line no-control-regex -- one line per answer
-      .replace(/[\x00-\x1f\x7f]/g, " ")
-      .trim()
-      .slice(0, max);
-  const workKind = topicKey === "work" ? field("workKind") : "";
-  const answers: [string, string][] =
-    workKind === "client"
-      ? [
-          ["Sender", "Business with a project"],
-          ["Business", field("company", 160)],
-          ["Website", field("site")],
-          ["Industry", field("industry", 120)],
-          ["Needs", field("need", 120)],
-          ["Budget", field("budget", 120)],
-          ["Timeline", field("timeline", 120)],
-        ]
-      : workKind === "employer"
-        ? [
-            ["Sender", "Employer hiring for a role"],
-            ["Company", field("employer", 160)],
-            ["Role", field("role", 160)],
-            ["Employment type", field("employmentType", 120)],
-            ["Work setup", field("workSetup", 120)],
-            ["Salary range", field("salary", 120)],
-            ["Job post", field("jobPost")],
-          ]
-        : topicKey === "speaking"
-          ? [
-              ["Event", field("eventName", 160)],
-              ["Event date", field("eventDate", 20)],
-              ["Format", field("eventFormat", 60)],
-              ["Location", field("eventLocation", 160)],
-            ]
-          : topicKey === "question"
-            ? [
-                ["Post", field("post", 300)],
-                [
-                  "Link",
-                  POST_PATH.test(field("postUrl"))
-                    ? new URL(field("postUrl"), SITE.url).href
-                    : "",
-                ],
-              ]
-            : [];
-  // Work and speaking messages can book the free call.
-  const callTopic = topicKey === "work" || topicKey === "speaking";
-  if (callTopic) answers.push(["Good times for a call", field("callTimes")]);
-  const answerText = answers
-    .filter(([, v]) => v)
-    .map(([k, v]) => `${k}: ${v}`)
-    .join("\n");
-
-  const errors: Record<string, string> = {};
-  if (!name) errors.name = "Please enter your name.";
-  if (!EMAIL_RE.test(email))
-    errors.email = "Please enter a valid email address.";
-  if (message.length < 10)
-    errors.message = "Please write a little more (at least 10 characters).";
   if (Object.keys(errors).length) {
     return reply(request, 422, {
       message: "Please fix the highlighted fields.",
@@ -148,7 +69,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   // The free discovery call: book the slot picked on the form straight into
   // Uriel's Google Calendar (with a Meet link and an invite to the sender).
-  const slot = callTopic ? field("slot", 40) : "";
   let booked = "";
   let bookingNote = "";
   if (slot && calendarEnabled) {
@@ -158,10 +78,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return reply(request, 409, { message: taken, errors: { slot: taken } });
     }
     const when = `${formatSlot(slot)} (Philippine time)`;
-    const business =
-      topicKey === "speaking"
-        ? field("eventName", 160)
-        : field("company", 160) || field("employer", 160);
+    const business = businessOf(contact);
     const kind = topicKey === "speaking" ? "Speaking call" : "Discovery call";
     try {
       if (free === null) throw new Error("free/busy check failed");
@@ -171,8 +88,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         email,
         summary: `${kind}: ${name}${business ? ` (${business})` : ""}`,
         description: `Booked from urielpapa.com/contact\n\n${
-          answerText ? `${answerText}\n\n` : ""
-        }${message}`,
+          answerText(contact) ? `${answerText(contact)}\n\n` : ""
+        }${contact.message}`,
       });
       booked = slot;
       bookingNote = `Booked call: ${when}${event.meet ? `\nMeet: ${event.meet}` : ""}`;
@@ -191,16 +108,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       from: CONTACT_FROM_EMAIL,
       to: [CONTACT_TO_EMAIL],
       reply_to: email,
-      subject: `[urielpapa.com] ${topic}${
-        workKind === "employer"
-          ? " (hiring)"
-          : workKind === "client"
-            ? " (project)"
-            : ""
-      }: ${name}`,
-      text: `Topic: ${topic}\nName: ${name}\nEmail: ${email}${
-        bookingNote ? `\n${bookingNote}` : ""
-      }${answerText ? `\n${answerText}` : ""}\n\n${message}`,
+      ...composeEmail(contact, bookingNote),
     }),
     signal: AbortSignal.timeout(8000),
   })

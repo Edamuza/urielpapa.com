@@ -6,7 +6,7 @@ import { formReplyHtml } from "./form-page.mjs";
 export const wantsJson = (request: Request) =>
   (request.headers.get("accept") ?? "").includes("application/json");
 
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export { EMAIL_RE } from "./contact.mjs";
 
 /** Plain HTML reply for browsers that submitted the form without JavaScript. */
 export function htmlMessage(title: string, message: string, status = 200) {
