@@ -1,5 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { addLinkTitles } from "@/utils/linkTitles.mjs";
+import { pageTitles, titleOf } from "@/lib/page-titles";
 
 // Every link needs a title, like every image needs alt text and a title.
 // Runs on each page as it is prerendered at build time and on every request
@@ -21,7 +22,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (!response.headers.get("content-type")?.includes("text/html")) {
     return response;
   }
-  const html = addLinkTitles(await response.text());
+  const titles = await pageTitles();
+  const html = addLinkTitles(await response.text(), (path: string) =>
+    titleOf(titles, path)
+  );
   const headers = new Headers(response.headers);
   // The private dashboard never belongs in search results or shared caches.
   if (path.startsWith("/dashboard")) {
