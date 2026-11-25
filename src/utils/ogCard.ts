@@ -1,5 +1,5 @@
 import satori from "satori";
-import sharp from "sharp";
+import sharp, { type OverlayOptions } from "sharp";
 
 /**
  * The 1200×630 social card, drawn from plain inputs so it can be rendered
@@ -110,7 +110,7 @@ function background(glowX?: number) {
 
 export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
   const { art } = input;
-  const layers: sharp.OverlayOptions[] = [];
+  const layers: OverlayOptions[] = [];
   const overlays: Node[] = [];
   let base: Buffer;
   let textRight: number;
