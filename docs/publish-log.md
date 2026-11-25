@@ -43,3 +43,4 @@ A skipped or failed run commits only this line (no post), so the dashboard can s
 - 2026-11-23 | news | published | php-session-flaw-phpaftershell |
 - 2026-11-24 | news | published | dict-startup-grant-fund-applications |
 - 2026-11-25 | news | skipped | - | Weekly cap reached: 3 takes already published this week (23 to 29 Nov).
+- 2026-11-26 | news | skipped | - | Weekly cap reached: 3 takes already published this week (23 to 29 Nov).
