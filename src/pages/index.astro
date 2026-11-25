@@ -86,6 +86,8 @@ const [city, country] = SITE.location.split(", ");
 ---
 
 <Layout
+  ogImage="/og/home.png"
+  ogImageAlt={`${SITE.name}, ${SITE.jobTitle.toLowerCase()} in the ${SITE.location}, beside the words "I see the problem. I build the solution. I grow the business."`}
   description="Uriel Papa helps businesses in the Philippines get more customers and spend less time on manual work, with business websites, business systems, AI automation and SEO, and writes about what he learns."
   webPage={{ about: { "@id": PERSON_ID }, mainEntity: { "@id": PERSON_ID } }}
 >

@@ -75,7 +75,15 @@ const path =
 const canonicalURL = canonical ?? new URL(path, SITE.url).href;
 const isHome = path === "/";
 const socialImageURL = new URL(ogImage, SITE.url).href;
-const socialImageAlt = ogImageAlt || (title ?? fullTitle);
+// The default card shows a laptop with code; generated post cards show the
+// post's title beside a photo from the post.
+const socialImageAlt =
+  ogImageAlt ||
+  (ogImage === "/og.png"
+    ? `urielpapa.com by ${SITE.name}: "What I learn building with AI, automation and SEO." beside a black and white photo of a laptop showing code`
+    : ogImage.startsWith("/og/")
+      ? `"${title ?? fullTitle}" by ${SITE.name}, on urielpapa.com`
+      : (title ?? fullTitle));
 // The default and generated OG images are always 1200×630; other images only
 // get size tags when the caller knows their real size.
 const isGeneratedOg = ogImage === "/og.png" || ogImage.startsWith("/og/");
