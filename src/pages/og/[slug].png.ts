@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getAllBlogEntries, type Post } from "@/utils/content";
 import { hubName } from "@/data/hubs";
-import { renderOgImage } from "@/utils/og";
+import { postPhoto, renderOgImage, SITE_PHOTO } from "@/utils/og";
 
 export async function getStaticPaths() {
   const posts = await getAllBlogEntries();
@@ -15,6 +15,8 @@ export const GET: APIRoute = ({ props, url }) => {
   return renderOgImage({
     title: post.data.title,
     label: hubName(post.data.hub),
+    // A freely licensed photo from the post itself; never Uriel's portrait.
+    art: postPhoto(post.body) ?? SITE_PHOTO,
     url,
   });
 };

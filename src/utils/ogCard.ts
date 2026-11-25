@@ -3,12 +3,14 @@ import sharp from "sharp";
 
 /**
  * The 1200×630 social card, drawn from plain inputs so it can be rendered
- * outside Astro too. src/utils/og.ts loads the fonts
- * and portrait and wraps the PNG in a Response.
+ * outside Astro too. src/utils/og.ts loads the fonts and images and wraps the
+ * PNG in a Response.
  *
- * Look: the home page hero on black. Headline on the left, the portrait cut-out
- * on the right with "URIEL PAPA" in outline type behind it, a soft light behind
- * the portrait and a faint dot grid.
+ * Two looks, both on black with the title on the left and a faint dot grid:
+ * - "portrait" (home page only): the hero portrait cut-out on the right with
+ *   "URIEL PAPA" in outline type and a soft light behind it.
+ * - "photo" (every other page): a freely licensed photo on the right half in
+ *   black and white, fading into the black, with its credit in the corner.
  */
 export type OgCardFonts = {
   /** Bricolage Grotesque 700 (woff). */
@@ -16,6 +18,18 @@ export type OgCardFonts = {
   /** Albert Sans 500 (woff). */
   body: ArrayBuffer;
 };
+
+export type OgCardArt =
+  /** Transparent PNG or WebP of the portrait. */
+  | { kind: "portrait"; image: Buffer }
+  /** Any photo; it is cropped to fill the right half. */
+  | {
+      kind: "photo";
+      image: Buffer;
+      credit?: string;
+      /** Crop anchor; defaults to the most interesting area. */
+      position?: "left" | "centre" | "right" | "attention";
+    };
 
 export type OgCardInput = {
   /** Big text. */
@@ -30,8 +44,7 @@ export type OgCardInput = {
   role: string;
   /** "urielpapa.com" */
   host: string;
-  /** Transparent PNG or WebP of the portrait. */
-  portrait: Buffer;
+  art: OgCardArt;
   fonts: OgCardFonts;
 };
 
@@ -44,6 +57,8 @@ const MUTED = "#a3a3a3";
 /** Portrait box, bottom-right. The image is scaled to this height. */
 const PORTRAIT_H = 586;
 const PORTRAIT_RIGHT = 60;
+/** Where the photo panel starts; it runs to the right edge. */
+const PHOTO_LEFT = 600;
 
 type Node = { type: string; props: Record<string, unknown> };
 const el = (
@@ -52,45 +67,151 @@ const el = (
   children?: unknown
 ): Node => ({ type, props: { style, children } });
 
+const svgBuf = (w: number, h: number, body: string) =>
+  Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">${body}</svg>`
+  );
+
 function titleSize(len: number) {
   if (len > 90) return 46;
-  if (len > 70) return 52;
-  if (len > 50) return 58;
-  if (len > 32) return 64;
-  if (len > 20) return 72;
-  return 84;
+  if (len > 70) return 50;
+  if (len > 50) return 56;
+  if (len > 32) return 62;
+  if (len > 20) return 70;
+  return 80;
+}
+
+/** Dark background with a dot grid, optionally with a light behind (cx, 330). */
+function background(glowX?: number) {
+  return svgBuf(
+    W,
+    H,
+    `<defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r="1.5" fill="#ffffff" fill-opacity="0.16"/>
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="${INK}" stop-opacity="1"/>
+      <stop offset="0.42" stop-color="${INK}" stop-opacity="0.9"/>
+      <stop offset="0.72" stop-color="${INK}" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="${glowX ?? 0}" cy="330" r="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="${INK}"/>
+  <rect width="100%" height="100%" fill="url(#dots)"/>
+  <rect width="100%" height="100%" fill="url(#fade)"/>
+  ${glowX === undefined ? "" : `<rect width="100%" height="100%" fill="url(#glow)"/>`}`
+  );
 }
 
 export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
-  const portrait = sharp(input.portrait).resize({ height: PORTRAIT_H });
-  const { data: portraitPng, info } = await portrait
-    .png()
-    .toBuffer({ resolveWithObject: true });
-  const portraitLeft = W - PORTRAIT_RIGHT - info.width;
-  const portraitCenter = portraitLeft + info.width / 2;
+  const { art } = input;
+  const layers: sharp.OverlayOptions[] = [];
+  const overlays: Node[] = [];
+  let base: Buffer;
+  let textRight: number;
 
-  // Outline name behind the portrait, like the home hero.
-  const outline = (text: string, top: number) =>
-    el(
-      "div",
-      {
-        position: "absolute",
-        top,
-        left: portraitCenter - 300,
-        width: 600,
-        display: "flex",
-        justifyContent: "center",
-        fontFamily: "Display",
-        fontSize: 158,
-        lineHeight: 1,
-        letterSpacing: "-0.02em",
-        // Satori skips text whose color is "transparent", so use a fill that
-        // is almost invisible and let the stroke draw the letters.
-        color: "rgba(10,10,10,0.01)",
-        WebkitTextStroke: "2px rgba(245,245,245,0.4)",
-      },
-      text
-    );
+  if (art.kind === "portrait") {
+    const { data: portraitPng, info } = await sharp(art.image)
+      .resize({ height: PORTRAIT_H })
+      .png()
+      .toBuffer({ resolveWithObject: true });
+    const left = W - PORTRAIT_RIGHT - info.width;
+    const center = left + info.width / 2;
+    textRight = left + 10;
+    base = background(center);
+
+    // Outline name behind the portrait, like the home hero.
+    const outline = (text: string, top: number) =>
+      el(
+        "div",
+        {
+          position: "absolute",
+          top,
+          left: center - 300,
+          width: 600,
+          display: "flex",
+          justifyContent: "center",
+          fontFamily: "Display",
+          fontSize: 158,
+          lineHeight: 1,
+          letterSpacing: "-0.02em",
+          // Satori skips text whose color is "transparent", so use a fill that
+          // is almost invisible and let the stroke draw the letters.
+          color: "rgba(10,10,10,0.01)",
+          WebkitTextStroke: "2px rgba(245,245,245,0.4)",
+        },
+        text
+      );
+    overlays.push(outline("URIEL", 118), outline("PAPA", 270));
+    layers.push({ input: portraitPng, top: H - info.height, left });
+    // A dark fade at the bottom of the portrait so the cut-off sits in shadow
+    layers.push({
+      input: svgBuf(
+        info.width,
+        140,
+        `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${INK}" stop-opacity="0"/><stop offset="1" stop-color="${INK}" stop-opacity="0.85"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/>`
+      ),
+      top: H - 140,
+      left,
+    });
+  } else {
+    const pw = W - PHOTO_LEFT;
+    const photo = await sharp(art.image)
+      .rotate()
+      .resize(pw, H, { fit: "cover", position: art.position ?? "attention" })
+      .grayscale()
+      .linear(1.12, -14)
+      .png()
+      .toBuffer();
+    textRight = PHOTO_LEFT + 70;
+    base = background();
+    layers.push({ input: photo, top: 0, left: PHOTO_LEFT });
+    // Fade the photo into the black on its left edge, and darken the bottom
+    // so the credit stays readable.
+    layers.push({
+      input: svgBuf(
+        pw,
+        H,
+        `<defs>
+        <linearGradient id="l" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="${INK}" stop-opacity="1"/>
+          <stop offset="0.12" stop-color="${INK}" stop-opacity="0.9"/>
+          <stop offset="0.45" stop-color="${INK}" stop-opacity="0.25"/>
+          <stop offset="1" stop-color="${INK}" stop-opacity="0.05"/>
+        </linearGradient>
+        <linearGradient id="b" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0.7" stop-color="${INK}" stop-opacity="0"/>
+          <stop offset="1" stop-color="${INK}" stop-opacity="0.75"/>
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#l)"/>
+      <rect width="100%" height="100%" fill="url(#b)"/>`
+      ),
+      top: 0,
+      left: PHOTO_LEFT,
+    });
+    if (art.credit) {
+      overlays.push(
+        el(
+          "div",
+          {
+            position: "absolute",
+            right: 28,
+            bottom: 22,
+            display: "flex",
+            fontSize: 16,
+            color: "rgba(245,245,245,0.72)",
+          },
+          art.credit
+        )
+      );
+    }
+  }
 
   // Hand-set lines are already short, so they get a fixed size that fits.
   const size = input.lines ? 66 : titleSize(input.title.length);
@@ -107,8 +228,7 @@ export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
       overflow: "hidden",
     },
     [
-      outline("URIEL", 118),
-      outline("PAPA", 270),
+      ...overlays,
       // Text column
       el(
         "div",
@@ -116,7 +236,7 @@ export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
           position: "absolute",
           top: 0,
           left: 0,
-          width: portraitLeft + 10,
+          width: textRight,
           height: H,
           display: "flex",
           flexDirection: "column",
@@ -157,6 +277,7 @@ export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
                     padding: "6px 18px",
                     fontSize: 22,
                     color: WHITE,
+                    background: INK,
                   },
                   input.label
                 )
@@ -219,45 +340,12 @@ export async function renderOgCard(input: OgCardInput): Promise<Buffer> {
       { name: "Body", data: input.fonts.body, weight: 500, style: "normal" },
     ],
   });
+  const text = { input: Buffer.from(svg), top: 0, left: 0 };
 
-  // Background drawn as plain SVG: satori's repeating radial gradients
-  // don't render small dots reliably.
-  const cx = portraitCenter;
-  const background = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <defs>
-    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
-      <circle cx="14" cy="14" r="1.5" fill="#ffffff" fill-opacity="0.16"/>
-    </pattern>
-    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="${INK}" stop-opacity="1"/>
-      <stop offset="0.42" stop-color="${INK}" stop-opacity="0.9"/>
-      <stop offset="0.72" stop-color="${INK}" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="${cx}" cy="330" r="380" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.07"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="100%" height="100%" fill="${INK}"/>
-  <rect width="100%" height="100%" fill="url(#dots)"/>
-  <rect width="100%" height="100%" fill="url(#fade)"/>
-  <rect width="100%" height="100%" fill="url(#glow)"/>
-</svg>`;
-
-  return sharp(Buffer.from(background))
-    .composite([
-      { input: Buffer.from(svg), top: 0, left: 0 },
-      { input: portraitPng, top: H - info.height, left: portraitLeft },
-      // A dark fade at the bottom of the portrait so the cut-off sits in shadow
-      {
-        input: Buffer.from(
-          `<svg xmlns="http://www.w3.org/2000/svg" width="${info.width}" height="140"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${INK}" stop-opacity="0"/><stop offset="1" stop-color="${INK}" stop-opacity="0.85"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/></svg>`
-        ),
-        top: H - 140,
-        left: portraitLeft,
-      },
-    ])
-    .png({ compressionLevel: 9, palette: false })
+  // The portrait goes over the text layer so the outline name sits behind it;
+  // a photo goes under it so the credit sits on top.
+  return sharp(base)
+    .composite(art.kind === "portrait" ? [text, ...layers] : [...layers, text])
+    .png({ compressionLevel: 9 })
     .toBuffer();
 }
