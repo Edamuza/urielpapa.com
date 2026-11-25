@@ -32,6 +32,10 @@ businessImpact:
     host to confirm it applied the November 19 PHP security release.
 sourceUrl: https://github.com/php/php-src/security/advisories/GHSA-fm2m-fjf5-v3cp
 published: 2026-11-23
+updated: 2026-11-23
+updateNote: >-
+  Corrected who named the flaw: the security firm depthfirst, which reported it,
+  named it phpAfterShell, not Cloudflare.
 related:
   - php2shell-critical-php-vulnerabilities
   - apache-mod-http2-flaw-update
@@ -46,7 +50,7 @@ syndication: []
 draft: false
 ---
 
-If your website runs on PHP, check its version this week. On November 19, 2026, the PHP project shipped security releases that fix phpAfterShell, a critical flaw in the default way PHP saves user sessions, which can lead to code running on the server. The fixed versions are PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36. That covers every WordPress and Laravel site, so ask your host or developer to confirm the update today.
+If your website runs on PHP, check its version this week. On November 19, 2026, the PHP project shipped security releases that fix phpAfterShell, a critical flaw in the default way PHP saves user sessions, which can lead to code running on the server. The fixed versions are PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36. WordPress and Laravel both run on PHP, so ask your host or developer to confirm the update today, even if you are not sure your site uses PHP sessions.
 
 This take is part of my [tech stacks](/topics/tech-stacks "Tech stacks articles") writing. It follows my take on [php2shell, two critical PHP flaws](/news/php2shell-critical-php-vulnerabilities "php2shell: two critical PHP flaws and what site owners should do") from October, and the [Apache mod_http2 flaw](/news/apache-mod-http2-flaw-update "Apache mod_http2 flaw: update to 2.4.71 now") from last week, which hit the same kind of servers.
 
@@ -58,7 +62,7 @@ On November 18, the PHP team posted an [early notice on php.net](https://www.php
 
 *The elePHPant is the mascot of PHP, the language behind WordPress and most small-business websites. Photo: [Atomic Taco](https://www.flickr.com/photos/25443792@N05/46989853155 "Atomic Taco's photo on Flickr"), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/ "Creative Commons Attribution-ShareAlike 2.0 license").*
 
-The most serious fix is described in [GitHub advisory GHSA-fm2m-fjf5-v3cp](https://github.com/php/php-src/security/advisories/GHSA-fm2m-fjf5-v3cp "PHP security advisory GHSA-fm2m-fjf5-v3cp on GitHub"), titled "Partially overwritten session files can lead to remote code execution." It is CVE-2026-126714, rated critical with a CVSS v4 score of 9.2. Cloudflare calls it [phpAfterShell](https://blog.cloudflare.com/phpaftershell-waf-protection/ "Cloudflare's post on how its WAF helps protect against phpAfterShell").
+The most serious fix is described in [GitHub advisory GHSA-fm2m-fjf5-v3cp](https://github.com/php/php-src/security/advisories/GHSA-fm2m-fjf5-v3cp "PHP security advisory GHSA-fm2m-fjf5-v3cp on GitHub"), titled "Partially overwritten session files can lead to remote code execution." It is CVE-2026-126714, rated critical with a CVSS v4 score of 9.2. The security firm depthfirst, which says it found and reported the flaw, named it phpAfterShell on [depthfirst's phpAfterShell disclosure page](https://depthfirst.com/phpaftershell "depthfirst's phpAfterShell disclosure page"). Cloudflare uses the same name in [Cloudflare's post on WAF protection for phpAfterShell](https://blog.cloudflare.com/phpaftershell-waf-protection/ "Cloudflare's post on how its WAF helps protect against phpAfterShell").
 
 ## Who is affected?
 
