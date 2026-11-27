@@ -86,7 +86,9 @@ const blog = defineCollection({
               endDate: optionalText,
               venue: optionalText,
               city: optionalText,
-              organizer: optionalText,
+              // Required: Google's Event rich result flags an Event with no organizer.
+              organizer: z.string().min(1, "An event needs its organizer"),
+              organizerUrl: optionalUrl,
               url: optionalUrl,
             })
             .optional()

@@ -247,7 +247,8 @@ export default config({
             endDate: fields.text({ label: "End date" }),
             venue: fields.text({ label: "Venue" }),
             city: fields.text({ label: "City" }),
-            organizer: fields.text({ label: "Organizer" }),
+            organizer: fields.text({ label: "Organizer", description: "Required for event notes: Google flags an event without one." }),
+            organizerUrl: fields.url({ label: "Organizer website", description: "Optional. Falls back to the event website." }),
             url: fields.url({ label: "Event website" }),
           },
           { label: "Event details", description: "Event notes only. Leave the name empty for other posts." }
