@@ -119,9 +119,15 @@ const article = {
           address: [data.event.city, "PH"].filter(Boolean).join(", "),
         },
       }),
-      ...(data.event.organizer && {
-        organizer: { "@type": "Organization", name: data.event.organizer },
-      }),
+      // Google's Event report flags a missing organizer or organizer url.
+      // The build requires the organizer name; the url falls back to the event site.
+      organizer: {
+        "@type": "Organization",
+        name: data.event.organizer,
+        ...((data.event.organizerUrl ?? data.event.url) && {
+          url: data.event.organizerUrl ?? data.event.url,
+        }),
+      },
       ...(data.event.url && { url: data.event.url }),
     },
   }),

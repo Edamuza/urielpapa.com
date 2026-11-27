@@ -44,6 +44,11 @@ const schema = [
     startDate: e.startDate,
     endDate: e.endDate,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    organizer: {
+      "@type": "Organization",
+      name: e.organizer,
+      url: e.organizerUrl ?? e.url,
+    },
     location: {
       "@type": "Place",
       name: e.venue,
