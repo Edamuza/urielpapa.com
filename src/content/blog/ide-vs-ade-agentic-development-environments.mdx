@@ -81,7 +81,7 @@ The difference between an IDE and an ADE is the unit of work. An IDE is organize
 | What you watch | The code you are writing | Agent status: working, blocked or done |
 | Parallel work | More windows or branches by hand | One Git worktree or sandbox per task |
 | Where the work ends | A saved file and a commit | A diff, branch or pull request to review |
-| Examples (Nov 2026) | Cursor, Antigravity Editor View, VS Code | T3 Code, Herdr, Orca, Antigravity Manager |
+| Examples (Nov 2026) | Cursor, Antigravity Editor View, VS Code | T3 Code, Herdr, Orca, Antigravity Agent Manager |
 
 ![Two programmers at an iMac, one pointing at the screen while the other works the mouse, in front of a wall of sticky notes and whiteboards](../../assets/images/content/ide-vs-ade-agentic-development-environments-1.jpg "Two programmers pair programming at one computer")
 
@@ -107,11 +107,13 @@ Cursor, Antigravity and VS Code are still the best IDEs in 2026 because each one
 
 ### Cursor
 
-Cursor, made by Anysphere, added parallel agents early. [Cursor 2.0 in October 2025 ran multiple agents in parallel using git worktrees or remote machines](https://en.wikipedia.org/wiki/Cursor_(code_editor) "Wikipedia's article on the Cursor code editor and its history"). Its [release notes](https://cursor.com/docs/release-notes "Cursor's versioned release notes for the IDE, Agents Window and CLI") now list a separate Agents Window, at version 3.27 on October 22, 2026. The [Cursor changelog](https://cursor.com/changelog "Cursor's changelog of new features, newest first") added voice chat with agents on November 6, 2026, and cloud agents that build and host web apps on November 5. Cursor stays my editor for quick edits when I am not working in Claude Code.
+Cursor, made by Anysphere, added parallel agents early. [Cursor 2.0 in October 2025 ran multiple agents in parallel using git worktrees or remote machines](https://en.wikipedia.org/wiki/Cursor_(code_editor) "Wikipedia's article on the Cursor code editor and its history"). Its [release notes](https://cursor.com/docs/release-notes "Cursor's versioned release notes for the IDE, Agents Window and CLI") now list a separate Agents Window, at version 3.27 on October 22, 2026.
+
+The [Cursor changelog](https://cursor.com/changelog "Cursor's changelog of new features, newest first") added voice chat with agents on November 6, 2026, and cloud agents that build and host web apps on November 5. Cursor stays my editor for quick edits when I am not working in Claude Code. In short, Cursor covers both modes well: typing code yourself and handing it to agents.
 
 ### Google Antigravity
 
-Google launched [Antigravity on November 18, 2025](https://antigravity.google/blog/introducing-google-antigravity "Google's introduction of Antigravity") with two surfaces. The [Editor View is "a state-of-the-art, AI-powered IDE"](https://developers.googleblog.com/en/build-with-google-antigravity-our-new-agentic-development-platform/ "Google Developers Blog: build with Google Antigravity"), and the Manager lets you "spawn, orchestrate, and observe" several agents. Agents report through Artifacts such as task lists, plans, screenshots and browser recordings. At I/O on May 19, 2026, [Google added a standalone desktop app, the Antigravity CLI and an SDK](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/ "Google I/O 2026 developer highlights"). Higher limits came with a Google AI Ultra plan from $100.
+Google launched [Antigravity on November 18, 2025](https://antigravity.google/blog/introducing-google-antigravity "Google's introduction of Antigravity") with two surfaces. The [Editor View is "a state-of-the-art, AI-powered IDE"](https://developers.googleblog.com/en/build-with-google-antigravity-our-new-agentic-development-platform/ "Google Developers Blog: build with Google Antigravity"), and the Agent Manager lets you "spawn, orchestrate, and observe" several agents. Agents report through Artifacts such as task lists, plans, screenshots and browser recordings. At I/O on May 19, 2026, [Google added a standalone desktop app, the Antigravity CLI and an SDK](https://blog.google/innovation-and-ai/technology/developers-tools/google-io-2026-developer-highlights/ "Google I/O 2026 developer highlights"). Higher limits came with a Google AI Ultra plan from $100.
 
 Kevin Hou, who leads product engineering for Antigravity, walks through its editor, browser and Agent Manager in this AI Engineer talk:
 
@@ -119,7 +121,9 @@ Kevin Hou, who leads product engineering for Antigravity, walks through its edit
 
 ### VS Code
 
-VS Code's [January 2026 release (version 1.109)](https://code.visualstudio.com/updates/v1_109 "VS Code January 2026 release notes, version 1.109") set the goal of making it "the home for multi-agent development." By July 2026, you could [start Copilot, Claude or Codex sessions in a Git worktree](https://github.blog/changelog/2026-07-30-github-copilot-in-visual-studio-code-july-2026-releases/ "GitHub Changelog: Copilot in VS Code, July 2026 releases"), each in an isolated copy of the repo. The [October 28, 2026 update](https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases/ "GitHub Changelog: Copilot in VS Code, Universe releases") starts cloud agent sessions from the Agents window, so the work continues after you close your laptop.
+VS Code's [January 2026 release (version 1.109)](https://code.visualstudio.com/updates/v1_109 "VS Code January 2026 release notes, version 1.109") set the goal of making it "the home for multi-agent development." By July 2026, you could [start Copilot, Claude or Codex sessions in a Git worktree](https://github.blog/changelog/2026-07-30-github-copilot-in-visual-studio-code-july-2026-releases/ "GitHub Changelog: Copilot in VS Code, July 2026 releases"), each in an isolated copy of the repo.
+
+The [October 28, 2026 update](https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases/ "GitHub Changelog: Copilot in VS Code, Universe releases") starts cloud agent sessions from the Agents window, so the work continues after you close your laptop. The same update added an Agent Host that keeps sessions running on a remote machine over SSH. VS Code is now the most open of the three, because it runs GitHub's, Anthropic's and OpenAI's agents side by side.
 
 All three are now IDEs with an ADE inside. That is why I do not see the new tools as replacements for them.
 
@@ -135,15 +139,21 @@ The three ADEs I am testing are T3 Code, Herdr and Orca. Each takes a different 
 
 ### T3 Code
 
-[T3 Code](https://github.com/pingdotgg/t3code "T3 Code's source code and README on GitHub") calls itself "the open-source control plane for coding agents." It comes from Theo's team at T3, and the desktop app is labeled T3 Code (Beta). It runs the agents on your machine behind one interface, and each thread can work in its own worktree. You review the diff, then commit, push and open a pull request with one button. I am checking whether switching between Claude Code and Codex in one thread beats keeping two terminals open.
+[T3 Code](https://github.com/pingdotgg/t3code "T3 Code's source code and README on GitHub") calls itself "the open-source control plane for coding agents." It comes from Theo's team at T3, and the desktop app is labeled T3 Code (Beta). It runs the agents on your machine behind one interface, and each thread can work in its own worktree.
+
+In T3 Code you review the diff, then commit, push and open a pull request with one button. On a Mac it installs with `brew install --cask t3-code`, and a `t3` command starts the same app in a browser. I am checking whether switching between Claude Code and Codex in one thread beats keeping two terminals open. T3 Code is the chat-style ADE of the three, with one conversation view across every agent.
 
 ### Herdr
 
-[Herdr](https://herdr.dev/ "Herdr, a native app for running coding agents") calls itself "a native app for running coding agents." The original [Herdr TUI](https://herdr.dev/tui/ "Herdr TUI, the terminal runtime for coding agents") is "the runtime your coding agents live on." Agents run in a background server, so closing the window does not stop them. The sidebar shows each agent as working, done or blocked, and it can reach other machines over SSH. Its [agent docs](https://herdr.dev/tui/docs/agents/ "Herdr's list of supported coding agents") list 23 agent CLIs, from Claude Code and Codex to Gemini CLI. I am checking whether persistent sessions change how long I can leave agents alone.
+[Herdr](https://herdr.dev/ "Herdr, a native app for running coding agents") calls itself "a native app for running coding agents." The original [Herdr TUI](https://herdr.dev/tui/ "Herdr TUI, the terminal runtime for coding agents") is "the runtime your coding agents live on." Agents run in a background server, so closing the window does not stop them.
+
+The Herdr sidebar shows each agent as working, done or blocked, and it can reach other machines over SSH. Its [agent docs](https://herdr.dev/tui/docs/agents/ "Herdr's list of supported coding agents") list 23 agent CLIs, from Claude Code and Codex to Gemini CLI. I am checking whether persistent sessions change how long I can leave agents alone. Herdr is the most terminal-native ADE of the three, built for people who already work in a terminal.
 
 ### Orca
 
-[Orca](https://github.com/stablyai/orca "Orca's source code and README on GitHub") lets you "run a fleet of coding agents" with your own subscription, each in its own worktree. Its README lists diff review with notes on exact changed lines, and an orchestration mode where one agent splits a task and starts workers. It also has a browser design mode and mobile apps that notify you when an agent needs input. I am checking whether line-level review notes make agent output faster to accept or reject.
+[Orca](https://github.com/stablyai/orca "Orca's source code and README on GitHub") lets you "run a fleet of coding agents" with your own subscription, each in its own worktree. It is MIT-licensed and had about 124,000 GitHub stars on November 28, 2026. Its README lists diff review with notes on exact changed lines, and an orchestration mode where one agent splits a task and starts workers.
+
+Orca also has a browser design mode and mobile apps that notify you when an agent needs input. I am checking whether line-level review notes make agent output faster to accept or reject. Orca is the most orchestration-heavy ADE of the three, closest to running a small team of agents.
 
 ## How does the shift from IDE to ADE affect programmers?
 
@@ -171,7 +181,7 @@ The choice between an IDE and an ADE depends on how much of your work you can de
 - **You work on one feature at a time:** Cursor or VS Code with agent mode is enough. A separate ADE adds tabs without saving time.
 - **You run two or more agents in parallel:** try an ADE. Orca and T3 Code both give each task its own worktree, which stops agents from editing the same files.
 - **You leave agents running for hours or on a remote box:** Herdr's background server and SSH support are built for that.
-- **You want one vendor for both halves:** Antigravity pairs an editor with a Manager, and Google optimizes its SDK for Gemini models.
+- **You want one vendor for both halves:** Antigravity pairs an editor with an Agent Manager, and Google optimizes its SDK for Gemini models.
 
 My own setup stays IDE-first for now: Cursor, Antigravity or VS Code for reading and finishing code, with one ADE on trial next to it. If an ADE saves me review time on real work, it earns the center of the screen.
 
